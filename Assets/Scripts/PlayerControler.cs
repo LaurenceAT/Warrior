@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class PlayerControler : MonoBehaviour
 {
+    //COMPONENTES
     private Rigidbody2D m_rigitbody2D;
     private GatherInput m_gatherInput;
     private Transform m_transform;
+    private Animator m_animator;
+
+    //VALORES
     [SerializeField] private float speed;
     private int direction = 1;
+    private int idSpeed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -16,6 +21,18 @@ public class PlayerControler : MonoBehaviour
         m_gatherInput = GetComponent<GatherInput>();
         m_transform = GetComponent<Transform>();
         m_rigitbody2D = GetComponent<Rigidbody2D>();
+        m_animator = GetComponent<Animator>();
+        idSpeed = Animator.StringToHash("Speed");
+    }
+
+    private void Update()
+    {
+        SetAnumatorValues();
+    }
+
+    private void SetAnumatorValues()
+    {
+        m_animator.SetFloat(idSpeed, Mathf.Abs(m_rigitbody2D.linearVelocityX));
     }
 
     // Update is called once per frame
