@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - EntranceDoor
+  - ExitDoor
   layers:
   - Default
   - TransparentFX
@@ -13,9 +15,9 @@ TagManager:
   - UI
   - Player
   - Ground
-  - 
-  - 
-  - 
+  - Ignore
+  - Items
+  - Traps
   - 
   - 
   - 
@@ -46,6 +48,9 @@ TagManager:
     locked: 0
   - name: Middleground
     uniqueID: 842307151
+    locked: 0
+  - name: Items
+    uniqueID: 2949506875
     locked: 0
   - name: Player
     uniqueID: 2234119747

@@ -1,22 +1,29 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+// Lee los inputs del jugador (movimiento y salto) usando el Input System
+// y los expone como propiedades para que otros scripts (PlayerControler) los consuman.
 public class GatherInput : MonoBehaviour
 {
     private Controls controls;
-    [SerializeField]private Vector2 _value;
 
+    // Valor del input de movimiento (eje X e Y), normalizado.
+    [SerializeField] private Vector2 _value;
     public Vector2 Value { get => _value; }
 
+    // Indica si se presionó el botón de salto este frame.
     [SerializeField] private bool _isJumping;
-    public bool IsJumping { get => _isJumping; set => _isJumping=value; }
+    public bool IsJumping { get => _isJumping; set => _isJumping = value; }
 
+    #region Unity Lifecycle
 
+    // Crea la instancia del sistema de controles generado por el Input System.
     private void Awake()
     {
         controls = new Controls();
     }
 
+    // Suscribe los callbacks de movimiento/salto y habilita el mapa de acciones "Player".
     private void OnEnable()
     {
         controls.Player.Move.performed += StartMove;
@@ -26,26 +33,7 @@ public class GatherInput : MonoBehaviour
         controls.Player.Enable();
     }
 
-    private void StartMove(InputAction.CallbackContext context)
-    {
-        _value = context.ReadValue<Vector2>().normalized;
-    }
-
-    private void StopMove(InputAction.CallbackContext context)
-    {
-        _value = Vector2.zero;
-    }
-
-    private void StartJump(InputAction.CallbackContext context)
-    { 
-        _isJumping = true;
-    }
-
-    private void StopJump(InputAction.CallbackContext context)
-    {
-        _isJumping =false;
-    }
-
+    // Desuscribe los callbacks y deshabilita el mapa de acciones "Player".
     private void OnDisable()
     {
         controls.Player.Move.performed -= StartMove;
@@ -54,4 +42,34 @@ public class GatherInput : MonoBehaviour
         controls.Player.Jump.canceled += StopJump;
         controls.Player.Disable();
     }
+
+    #endregion
+
+    #region Input Callbacks
+
+    // Captura el valor del input de movimiento cuando se presiona/mantiene.
+    private void StartMove(InputAction.CallbackContext context)
+    {
+        _value = context.ReadValue<Vector2>().normalized;
+    }
+
+    // Resetea el movimiento a cero cuando se suelta el input.
+    private void StopMove(InputAction.CallbackContext context)
+    {
+        _value = Vector2.zero;
+    }
+
+    // Marca el salto como activo cuando se presiona el botón.
+    private void StartJump(InputAction.CallbackContext context)
+    {
+        _isJumping = true;
+    }
+
+    // Marca el salto como inactivo cuando se suelta el botón.
+    private void StopJump(InputAction.CallbackContext context)
+    {
+        _isJumping = false;
+    }
+
+    #endregion
 }
