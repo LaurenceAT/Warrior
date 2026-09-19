@@ -43,6 +43,16 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private Vector2 edgeCheckOffset = new Vector2(0.45f, -0.3f);
     [SerializeField] private float edgeCheckDistance = 0.4f;
 
+    [Header("Trampas")]
+    // Si está marcado, el enemigo se da la vuelta al ver una trampa delante en vez de
+    // meterse en ella. Sigue recibiendo daño si acaba tocándola.
+    [SerializeField] private bool avoidTraps = true;
+    // Capa de las trampas a esquivar. Si se deja vacía se usa automáticamente "Traps".
+    [SerializeField] private LayerMask trapLayer;
+    // Zona por delante de los pies donde se comprueba si hay trampa.
+    [SerializeField] private Vector2 trapCheckOffset = new Vector2(0.55f, -0.25f);
+    [SerializeField] private float trapCheckRadius = 0.35f;
+
     private static readonly int IdAttack = Animator.StringToHash("attack");
     private static readonly int IdSpeed = Animator.StringToHash("Speed");
 
@@ -69,6 +79,9 @@ public class EnemyController : MonoBehaviour
 
         if (wallLayer.value == 0)
             wallLayer = LayerMask.GetMask("Ground", "Enemies");
+
+        if (trapLayer.value == 0)
+            trapLayer = LayerMask.GetMask("Traps");
 
         BuscarJugador();
     }
@@ -106,8 +119,10 @@ public class EnemyController : MonoBehaviour
         }
         else if (playerDetected)
         {
-            // Persigue hasta quedar a distancia de golpe.
-            movement = distance > attackRange ? new Vector2(dirToPlayer.x, 0) : Vector2.zero;
+            // Persigue hasta quedar a distancia de golpe, pero se planta si tiene una trampa
+            // delante: sin esto se metería en los pinchos por seguir al player.
+            bool puedeAvanzar = distance > attackRange && !IsTrapAhead();
+            movement = puedeAvanzar ? new Vector2(dirToPlayer.x, 0) : Vector2.zero;
         }
         else
         {
@@ -141,6 +156,11 @@ public class EnemyController : MonoBehaviour
         Gizmos.color = Color.green;
         Vector2 edgeOrigin = GetEdgeCheckOrigin();
         Gizmos.DrawLine(edgeOrigin, edgeOrigin + new Vector2(0f, -edgeCheckDistance));
+
+        // Zona de detección de trampas.
+        if (!avoidTraps) return;
+        Gizmos.color = new Color(1f, 0.5f, 0f);
+        Gizmos.DrawWireSphere(GetTrapCheckOrigin(), trapCheckRadius);
     }
 
     #endregion
@@ -207,10 +227,26 @@ public class EnemyController : MonoBehaviour
     // o al llegar al borde de la plataforma (para no caerse).
     private Vector2 Patrol()
     {
-        if (IsWallAhead() || !IsGroundAhead())
+        if (IsWallAhead() || !IsGroundAhead() || IsTrapAhead())
             SetDirection(-direction);
 
         return new Vector2(direction, 0);
+    }
+
+    // Comprueba si hay una trampa justo delante de los pies.
+    // Las trampas son triggers, así que esto depende de que "Queries Hit Triggers"
+    // siga activo en Project Settings > Physics 2D.
+    private bool IsTrapAhead()
+    {
+        if (!avoidTraps || trapLayer.value == 0) return false;
+
+        return Physics2D.OverlapCircle(GetTrapCheckOrigin(), trapCheckRadius, trapLayer);
+    }
+
+    // Centro de la zona de comprobación de trampas, desplazada hacia donde camina el enemigo.
+    private Vector2 GetTrapCheckOrigin()
+    {
+        return (Vector2)transform.position + new Vector2(trapCheckOffset.x * direction, trapCheckOffset.y);
     }
 
     // Lanza un rayo horizontal al frente para detectar paredes u otros enemigos.

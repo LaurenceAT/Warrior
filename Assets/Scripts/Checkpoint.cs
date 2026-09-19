@@ -19,24 +19,23 @@ public class Checkpoint : MonoBehaviour
     // Detecta la colisión con el player: activa el checkpoint (una sola vez) y guarda el punto de respawn.
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Trigger con: " + other.name);
+        // Solo el player activa un checkpoint. Cualquier otro collider que pase por aquí
+        // (un enemigo patrullando, por ejemplo) no debe tocar el punto de reaparición.
+        if (!other.CompareTag("Player")) return;
 
         // EVITA ACTIVAR EL CHECKPOINT MÁS DE UNA VEZ
         if (isActive) return;
 
-        // ACTIVA EL CHECKPOINT AL ENTRAR EL PLAYER
-        if (other.CompareTag("Player"))
-            ActiveCheckpoint();
-
-        // GUARDA LA POSICIÓN DEL CHECKPOINT COMO NUEVO PUNTO DE REAPARICIÓN
-        GameManager.Instance.hasCheckPointActive = true;
-        GameManager.Instance.checkpointRespawnPosition = transform.position;
+        ActiveCheckpoint();
     }
 
-    // Activa la animación y cambia el estado del checkpoint a activo.
+    // Activa la animación, marca el checkpoint como activo y guarda el punto de reaparición.
     private void ActiveCheckpoint()
     {
         isActive = true;
         animator.SetTrigger(IsActive);
+
+        GameManager.Instance.hasCheckPointActive = true;
+        GameManager.Instance.checkpointRespawnPosition = transform.position;
     }
 }
