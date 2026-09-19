@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 //using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,6 +13,7 @@ public class PlayerControler : MonoBehaviour
     private Rigidbody2D m_rigitbody2D;
     private GatherInput m_gatherInput;
     private Animator m_animator;
+    private SpriteRenderer m_spriteRenderer;
 
     //ANIMATOR IDS
     //VARIABLES HASH DEL AIMATOR
@@ -20,6 +22,7 @@ public class PlayerControler : MonoBehaviour
     private int idIsWallDetected;
     private int idKnockback;
     private static readonly int IdDoorIn = Animator.StringToHash("doorIn");
+    private static readonly int IdAttack = Animator.StringToHash("attack");
 
     [Header("Opciones de Movimiento y Salto")]
     [SerializeField] private float speed;
@@ -32,6 +35,8 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private int maxHealth = 5;
     [SerializeField] private int currentHealth;
     [SerializeField] private float invincibleTime = 1f;
+    // Cada cuánto parpadea el sprite mientras el player es invulnerable.
+    [SerializeField] private float blinkInterval = 0.1f;
     [SerializeField] private HealthBar healthBar;
 
     private bool isInvincible;
@@ -71,6 +76,15 @@ public class PlayerControler : MonoBehaviour
     [Header("Death VFX")]
     [SerializeField] private GameObject deathVFX;
 
+    //VARIABLES PARA EL SISTEMA DE ATAQUE
+    [Header("Opciones de Ataque")]
+    [SerializeField] private Transform attackPoint;
+    [SerializeField] private float attackRadius = 0.6f;
+    [SerializeField] private int attackDamage = 1;
+    [SerializeField] private float attackCooldown = 0.4f;
+    [SerializeField] private bool isAttacking;
+    private bool canAttack = true;
+
     #region Unity Lifecycle
 
     // Obtiene los componentes principales del player y define su estado inicial (respawn/checkpoint).
@@ -80,6 +94,7 @@ public class PlayerControler : MonoBehaviour
         m_transform = GetComponent<Transform>();
         m_rigitbody2D = GetComponent<Rigidbody2D>();
         m_animator = GetComponent<Animator>();
+        m_spriteRenderer = GetComponent<SpriteRenderer>();
         CheckPlayerRespawnState();
     }
 
@@ -117,12 +132,19 @@ public class PlayerControler : MonoBehaviour
         CheckCollision();
         Move();
         Jump();
+        Attack();
     }
 
-    // Dibuja en el editor la línea de detección de pared para depurar.
+    // Dibuja en el editor la línea de detección de pared y el radio de ataque para depurar.
     private void OnDrawGizmos()
     {
         Gizmos.DrawLine(m_transform.position, new Vector2(m_transform.position.x + (checkWallDistance * direction), m_transform.position.y));
+
+        if (attackPoint != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
+        }
     }
 
     #endregion
@@ -167,6 +189,7 @@ public class PlayerControler : MonoBehaviour
         if (!canMove) return;
         if (isWallDetected && !isGrounded) return;
         if (isWallJumping) return;
+        if (isAttacking) return;
 
         Flip();
         m_rigitbody2D.linearVelocity = new Vector2(speed * m_gatherInput.Value.x, m_rigitbody2D.linearVelocityY);
@@ -233,6 +256,50 @@ public class PlayerControler : MonoBehaviour
 
     #endregion
 
+    #region Ataque
+
+    // Procesa el input de ataque: dispara la animación si no está en cooldown, sin importar si hay un enemigo cerca.
+    private void Attack()
+    {
+        if (m_gatherInput.IsAttacking && canAttack)
+        {
+            m_animator.SetTrigger(IdAttack);
+            StartCoroutine(AttackRoutine());
+        }
+        m_gatherInput.IsAttacking = false;
+    }
+
+    // Bloquea el movimiento y los ataques nuevos mientras dura la animación de ataque.
+    private IEnumerator AttackRoutine()
+    {
+        canAttack = false;
+        isAttacking = true;
+        yield return new WaitForSeconds(attackCooldown);
+        isAttacking = false;
+        canAttack = true;
+    }
+
+    // Aplica daño a los enemigos dentro del radio de ataque.
+    // Se debe llamar mediante un Animation Event en el frame de "PlayerAttack" donde el golpe conecta.
+    public void DealAttackDamage()
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius);
+        HashSet<EnemyHealth> alreadyHit = new HashSet<EnemyHealth>();
+
+        foreach (Collider2D hit in hits)
+        {
+            if (!hit.CompareTag("Enemy")) continue;
+
+            EnemyHealth enemyHealth = hit.GetComponent<EnemyHealth>();
+            // Un mismo enemigo puede tener varios colliders (trigger de daño + sólido de suelo);
+            // alreadyHit.Add evita contarlo dos veces en el mismo golpe.
+            if (enemyHealth != null && alreadyHit.Add(enemyHealth))
+                enemyHealth.TakeDamage(attackDamage, m_transform.position);
+        }
+    }
+
+    #endregion
+
     #region Detección de Colisiones
 
     // Agrupa las comprobaciones de suelo, pared y deslizamiento en pared.
@@ -288,6 +355,10 @@ public class PlayerControler : MonoBehaviour
     // Aplica daño al player, actualiza la barra de vida, dispara el knockback y controla la muerte.
     public void TakeDamage(int damage)
     {
+        // Ignora el daño durante la invulnerabilidad. Esto evita recibir dos golpes a la vez
+        // (el contacto del cuerpo del enemigo y el espadazo de su animación).
+        if (isInvincible) return;
+
         currentHealth -= damage;
 
         healthBar.UpdateHealthBar(currentHealth, maxHealth);
@@ -300,7 +371,10 @@ public class PlayerControler : MonoBehaviour
         {
             Die();
             GameManager.Instance.RespawnPlayer();
+            return;
         }
+
+        StartCoroutine(InvincibleRoutine());
     }
 
     // Aplica el impulso de retroceso al recibir un golpe.
@@ -320,12 +394,23 @@ public class PlayerControler : MonoBehaviour
         m_animator.SetBool("isKnockback", isKnocked);
     }
 
-    // Activa temporalmente la invencibilidad del player (actualmente no se usa para bloquear daño).
+    // Hace invulnerable al player durante invincibleTime, parpadeando el sprite para que se note.
     private IEnumerator InvincibleRoutine()
     {
         isInvincible = true;
 
-        yield return new WaitForSeconds(invincibleTime);
+        float elapsed = 0f;
+        while (elapsed < invincibleTime)
+        {
+            if (m_spriteRenderer != null)
+                m_spriteRenderer.enabled = !m_spriteRenderer.enabled;
+
+            yield return new WaitForSeconds(blinkInterval);
+            elapsed += blinkInterval;
+        }
+
+        if (m_spriteRenderer != null)
+            m_spriteRenderer.enabled = true;
 
         isInvincible = false;
     }

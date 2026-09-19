@@ -8,6 +8,8 @@ public class Diamond : MonoBehaviour
     [SerializeField] private Rigidbody2D m_rigidbody2D;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Animator animator;
+    // Cuánto dura la animación DiamondVFX, tras la cual el diamante ya recogido se destruye.
+    [SerializeField] private float vfxDuration = 0.7f;
     private int idPickedDiamond;
     private int idDiamondIndex;
 
@@ -28,10 +30,11 @@ public class Diamond : MonoBehaviour
         SetRandomDiamond();
     }
 
-    // Elige al azar el índice de sprite/animación del diamante (una de 7 variantes).
+    // Elige al azar el color del diamante. El Blend Tree tiene 5 variantes (umbrales 0 a 4),
+    // así que el rango debe ser 0..4: valores mayores se recortarían al último color.
     private void SetRandomDiamond()
     {
-        var randomDiamondIndex = UnityEngine.Random.Range(0, 7);
+        var randomDiamondIndex = UnityEngine.Random.Range(0, 5);
         animator.SetFloat(idDiamondIndex, randomDiamondIndex);
     }
 
@@ -44,6 +47,10 @@ public class Diamond : MonoBehaviour
             m_rigidbody2D.simulated = false;
             gameManager.AddDiamond();
             animator.SetTrigger(idPickedDiamond);
+
+            // El estado DiamondVFX no tiene salida y su clip no loopea: sin esto el diamante
+            // recogido se quedaría para siempre congelado en el último frame del efecto.
+            Destroy(gameObject, vfxDuration);
         }
     }
 }

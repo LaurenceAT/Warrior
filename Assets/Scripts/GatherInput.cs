@@ -15,6 +15,10 @@ public class GatherInput : MonoBehaviour
     [SerializeField] private bool _isJumping;
     public bool IsJumping { get => _isJumping; set => _isJumping = value; }
 
+    // Indica si se presionó el botón de ataque este frame.
+    [SerializeField] private bool _isAttacking;
+    public bool IsAttacking { get => _isAttacking; set => _isAttacking = value; }
+
     #region Unity Lifecycle
 
     // Crea la instancia del sistema de controles generado por el Input System.
@@ -30,6 +34,8 @@ public class GatherInput : MonoBehaviour
         controls.Player.Move.canceled += StopMove;
         controls.Player.Jump.performed += StartJump;
         controls.Player.Jump.canceled += StopJump;
+        controls.Player.Attack.performed += StartAttack;
+        controls.Player.Attack.canceled += StopAttack;
         controls.Player.Enable();
     }
 
@@ -38,8 +44,10 @@ public class GatherInput : MonoBehaviour
     {
         controls.Player.Move.performed -= StartMove;
         controls.Player.Move.canceled -= StopMove;
-        controls.Player.Jump.performed += StartJump;
-        controls.Player.Jump.canceled += StopJump;
+        controls.Player.Jump.performed -= StartJump;
+        controls.Player.Jump.canceled -= StopJump;
+        controls.Player.Attack.performed -= StartAttack;
+        controls.Player.Attack.canceled -= StopAttack;
         controls.Player.Disable();
     }
 
@@ -69,6 +77,18 @@ public class GatherInput : MonoBehaviour
     private void StopJump(InputAction.CallbackContext context)
     {
         _isJumping = false;
+    }
+
+    // Marca el ataque como activo cuando se presiona el botón.
+    private void StartAttack(InputAction.CallbackContext context)
+    {
+        _isAttacking = true;
+    }
+
+    // Marca el ataque como inactivo cuando se suelta el botón.
+    private void StopAttack(InputAction.CallbackContext context)
+    {
+        _isAttacking = false;
     }
 
     #endregion

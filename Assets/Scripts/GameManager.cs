@@ -42,6 +42,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _diamondCollected;
     public int DiamondCollected { get => _diamondCollected; }
     [SerializeField] private int totalDiamonds;
+    public int TotalDiamonds { get => totalDiamonds; }
+    // True cuando ya se recogieron todos los diamantes del nivel (requisito para salir).
+    public bool AllDiamondsCollected => _diamondCollected >= totalDiamonds;
     [Header("Diamond UI")]
     [SerializeField] private TMP_Text diamondsText;
 
@@ -59,8 +62,9 @@ public class GameManager : MonoBehaviour
     // Calcula el total de diamantes de la escena y actualiza la UI.
     private void Start()
     {
+        // Solo cuenta diamantes activos: desactivar uno en el Inspector lo saca del total.
         Diamond[] diamonds = FindObjectsByType<Diamond>(FindObjectsSortMode.None);
-        totalDiamonds = diamonds.Length - 1;
+        totalDiamonds = diamonds.Length;
 
         UpdateDiamondUI();
     }
