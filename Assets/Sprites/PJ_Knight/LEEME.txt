@@ -1,0 +1,115 @@
+SPRITES DEL PERSONAJE "ADVENTURER" - ORDENADOS PARA WARRIOR
+===========================================================
+
+Las carpetas originales NO se han tocado. Todo esto son copias.
+
+
+QUE HAY AQUI
+------------
+
+1 - Adventurer 1.5 (RECOMENDADA)
+    Es la version mas completa para un juego de plataformas. Tiene todo lo de
+    la v2.1 salvo la natacion, y ademas ataques aereos y hechizos.
+    Sobre todo: tiene wall-slide, que la version Base no tiene y tu juego si usa.
+
+    Dentro, las 8 carpetas del primer nivel se llaman IGUAL que los estados de
+    tu Animator, para que sepas de un vistazo cual va donde.
+    Lo demas esta en "Acciones nuevas".
+
+2 - Otras versiones
+    v2.1 (con natacion) ....... si algun dia quieres nivel de agua
+    Base (sin wall-slide) ..... la mas antigua, no la uses
+    Arco ...................... disparo con arco, de pie y en salto
+    Combate cuerpo a cuerpo ... punetazos, patadas, correr por pared, derribos
+    Correr alternativo ........ otra animacion de correr
+
+
+EQUIVALENCIAS CON TU PROYECTO
+-----------------------------
+
+    Carpeta                Estado del Animator   Frames   Tu personaje actual
+    ---------------------  --------------------  -------  -------------------
+    PlayerIdle             PlayerIdle                 4   Idle (78x58)
+    PlayerRun              Run                        6   Run (78x58)
+    PlayerJump             Jump                       4   Jump (78x58)
+    PlayerFall             (no lo tienes aun)         2   Fall (78x58) sin usar
+    PlayerWallSlide        WallSlide                  2   WallSlide
+    PlayerAttack           PlayerAttack               5   Attack (78x58)
+    PlayerKnockBack        KnockBack                  3   Hit (78x58)
+    PlayerDeath            (lo usa PlayerDeath.anim)  7   Dead (78x58)
+
+    No hay equivalente para PlayerDoorIn ni PlayerDoorOut: esas animaciones son
+    propias del pack Pirate Bomb (el personaje entrando y saliendo por la puerta).
+    Tendras que resolverlo de otra forma, por ejemplo con un fundido, o
+    reutilizando Idle mientras la puerta se abre.
+
+
+LO QUE MAS TE VA A COSTAR: EL TAMANO
+------------------------------------
+
+    Adventurer .... 50 x 37 px por frame
+    King Human .... 78 x 58 px por frame
+
+    El personaje nuevo ocupa bastante menos lienzo. Eso significa que, al
+    cambiarlo, hay que reajustar en el prefab del Player:
+
+      - El collider (alto y ancho)
+      - Los transforms lFoot y rFoot, que son los que lanzan los rayos del suelo
+      - El rayLength (ahora 0.05)
+      - El checkWallDistance (ahora 0.27)
+      - La posicion del attackPoint y su attackRadius (ahora 0.6)
+
+    Es lo que mas tiempo lleva de todo el cambio. Hazlo con los Gizmos visibles
+    en la escena, que te dibujan los rayos y el circulo de ataque.
+
+    La fisica del salto NO cambia mientras no toques jumpForce (10), speed (5)
+    ni el Gravity Scale (3). Asi que tus niveles siguen siendo validos:
+    salto simple 1,70 tiles, doble salto 3,40 tiles.
+
+
+DOS COSAS QUE FALLAN EN SILENCIO
+--------------------------------
+
+    1. El Animation Event del ataque
+       El dano del espadazo sale de un evento colocado en un frame concreto del
+       clip PlayerAttack, que llama a DealAttackDamage(). Si creas un clip nuevo,
+       ESE EVENTO NO VIENE SOLO. Sin el, atacas y no pasa nada, y no aparece
+       ningun error en consola.
+
+    2. Los nombres de estado escritos en el codigo
+       PlayerControler.cs llama a Animator.Play("PlayerIdle") en dos sitios:
+       al reaparecer en un checkpoint y al entrar por la puerta.
+       Si renombras ese estado, esas dos llamadas dejan de funcionar sin avisar.
+       Por eso conviene mantener los nombres de estado tal cual estan.
+
+
+COMO IMPORTARLO
+---------------
+
+    1. Arrastra la carpeta "1 - Adventurer 1.5 (RECOMENDADA)" dentro de
+       Assets/Sprites/ de tu proyecto.
+
+    2. Selecciona todos los PNG de una accion y ponles:
+         Pixels Per Unit = 100   (el mismo que usas ahora)
+         Filter Mode = Point (no filter)
+         Compression = None
+       Sin esas dos ultimas, el pixel art se ve borroso.
+
+    3. Para crear cada clip: selecciona los frames de una carpeta EN ORDEN y
+       arrastralos a la ventana Scene sobre el personaje. Unity crea el clip solo.
+       Por eso los renombre como Idle_00, Idle_01...: para que el orden salga bien.
+
+    4. En el Animator, sustituye el Motion de cada estado por el clip nuevo.
+       No toques ni los nombres de estado ni las transiciones: ya funcionan.
+
+    5. Vuelve a colocar el Animation Event en el clip de ataque.
+
+
+CONSEJO
+-------
+
+    Haz esto en una rama aparte, no encima de lo que ya funciona:
+
+        git checkout -b nuevo-personaje
+
+    Si no te convence, lo descartas con un comando y no pierdes nada.
