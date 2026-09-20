@@ -177,9 +177,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7071962704352168682, guid: 30c67af5c838de6458910ca4e2fc197f, type: 3}
-      propertyPath: wayPoints.Array.size
-      value: 2
-      objectReference: {fileID: 0}
+      propertyPath: routeParent
+      value: 
+      objectReference: {fileID: 3628425259070856756}
     - target: {fileID: 7071962704352168682, guid: 30c67af5c838de6458910ca4e2fc197f, type: 3}
       propertyPath: 'wayPoints.Array.data[0]'
       value: 
@@ -188,10 +188,6 @@ PrefabInstance:
       propertyPath: 'wayPoints.Array.data[1]'
       value: 
       objectReference: {fileID: 7269937825510684391}
-    - target: {fileID: 7071962704352168682, guid: 30c67af5c838de6458910ca4e2fc197f, type: 3}
-      propertyPath: 'wayPoints.Array.data[2]'
-      value: 
-      objectReference: {fileID: 2599325644640094958}
     - target: {fileID: 8732931941295978574, guid: 30c67af5c838de6458910ca4e2fc197f, type: 3}
       propertyPath: m_Name
       value: "SawDa\xF1o"

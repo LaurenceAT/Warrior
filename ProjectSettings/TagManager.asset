@@ -56,6 +56,9 @@ TagManager:
   - name: Player
     uniqueID: 2234119747
     locked: 0
+  - name: traps
+    uniqueID: 2884674661
+    locked: 0
   - name: Ground
     uniqueID: 3453822685
     locked: 0
