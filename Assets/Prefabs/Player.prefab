@@ -261,6 +261,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   checkWallDistance: 0.27
+  wallCheckTop: 0.3
+  wallCheckBottom: -0.45
+  wallCheckRays: 3
   isWallDetected: 0
   wallDirection: 1
   canWallSlide: 0
@@ -272,6 +275,11 @@ MonoBehaviour:
   isLaunched: 0
   launchRestoresJumps: 1
   isKnocked: 0
+  knockDownInAir: 1
+  isKnockedDown: 0
+  knockDownMinAirTime: 0.15
+  knockDownMaxTime: 2.5
+  getUpDuration: 0.7
   knockedPower: {x: 5, y: 0}
   knockedDuration: 0.6
   deathVFX: {fileID: 7090040657197777121, guid: ccc34343e106b324e91a2912a76cf01c, type: 3}
@@ -282,7 +290,19 @@ MonoBehaviour:
   attackProfiles:
   - nombre: Ataque
     forma: 2
-    offset: {x: -0.84, y: 0.1}
+    offset: {x: -0.84, y: 0.05}
+    radio: 0.5
+    tamano: {x: 0.45, y: 1.07}
+    radioInterior: 0.4
+    radioExterior: 0.98
+    angulo: 204
+    anguloCentro: 4.69
+    afiladoPuntas: 1
+    puntaHacia: 1
+    dano: 1
+  - nombre: Ataque 2
+    forma: 2
+    offset: {x: -0.81, y: -0.1}
     radio: 0.5
     tamano: {x: 0.45, y: 1.07}
     radioInterior: 0.4
@@ -292,9 +312,26 @@ MonoBehaviour:
     afiladoPuntas: 1
     puntaHacia: 1
     dano: 1
-  gizmoProfileIndex: 0
-  attackCooldown: 0.4
+  - nombre: Ataque 3
+    forma: 2
+    offset: {x: -1.27, y: -0.11}
+    radio: 0.5
+    tamano: {x: 0.45, y: 1.07}
+    radioInterior: 0.6
+    radioExterior: 1.59
+    angulo: 58.1
+    anguloCentro: -4.49
+    afiladoPuntas: 1
+    puntaHacia: 1
+    dano: 1
+  gizmoProfileIndex: 1
+  attackCooldown: 0.03
   isAttacking: 0
+  comboLength: 3
+  comboWindow: 0.6
+  wallAttackProfileIndex: 2
+  comboIndex: 0
+  attackBufferTime: 0.15
 --- !u!114 &8415853499437379215
 MonoBehaviour:
   m_ObjectHideFlags: 0

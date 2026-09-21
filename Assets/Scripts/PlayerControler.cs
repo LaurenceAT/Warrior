@@ -68,9 +68,12 @@ public class PlayerControler : MonoBehaviour
     private int idIsWallSliding;
     private int idVerticalSpeed;
     private int idKnockback;
+    private int idKnockDown;
     private static readonly int IdDoorIn = Animator.StringToHash("doorIn");
     private static readonly int IdAttack = Animator.StringToHash("attack");
     private static readonly int IdDoubleJump = Animator.StringToHash("doubleJump");
+    private static readonly int IdComboIndex = Animator.StringToHash("comboIndex");
+    private static readonly int IdGetUp = Animator.StringToHash("getUp");
 
     [Header("Opciones de Movimiento y Salto")]
     [SerializeField] private float speed;
@@ -108,6 +111,12 @@ public class PlayerControler : MonoBehaviour
     //VARIABLES PARA DETECCION Y DESLIZAMIENTO EN LA PARED
     [Header("Opciones de la Pared")]
     [SerializeField] private float checkWallDistance;
+    // Alturas entre las que se reparten los rayos de pared, respecto al centro.
+    // Con un solo rayo a la altura del pecho, en la punta de una plataforma el rayo
+    // pasa por encima del borde y el muro no se detecta.
+    [SerializeField] private float wallCheckTop = 0.3f;
+    [SerializeField] private float wallCheckBottom = -0.45f;
+    [SerializeField] private int wallCheckRays = 3;
     [SerializeField] private bool isWallDetected;
     // Lado en el que está la pared (1 derecha, -1 izquierda). Es independiente de hacia
     // dónde mira el player, que puede girarse para atacar sin soltar el muro.
@@ -130,6 +139,18 @@ public class PlayerControler : MonoBehaviour
 
     [Header("Knock settings")]
     [SerializeField] private bool isKnocked;
+    // Si el golpe llega en el aire, en vez del empujon corto el player cae
+    // derribado y tiene que levantarse.
+    [SerializeField] private bool knockDownInAir = true;
+    [SerializeField] private bool isKnockedDown;
+    // Tiempo minimo en el aire antes de empezar a mirar si ya toco el suelo.
+    [SerializeField] private float knockDownMinAirTime = 0.15f;
+    // Tope de duracion del derribo. Red de seguridad: pase lo que pase, el player
+    // se levanta y recupera el control. Sin esto, cualquier fallo de deteccion
+    // deja la partida bloqueada sin salida.
+    [SerializeField] private float knockDownMaxTime = 2.5f;
+    // Lo que tarda en levantarse. Debe parecerse al largo del clip de levantarse.
+    [SerializeField] private float getUpDuration = 0.7f;
     //[SerializeField] private bool canBeKnocked;
     [SerializeField] private Vector2 knockedPower;
     [SerializeField] private float knockedDuration;
@@ -149,8 +170,31 @@ public class PlayerControler : MonoBehaviour
     // Cual de los perfiles se dibuja en la escena, para ajustarlos de uno en uno.
     [SerializeField] private int gizmoProfileIndex;
     [SerializeField] private float attackCooldown = 0.4f;
+    // Cuanto se protege la animacion de ataque de que otra la pise, sobre todo la
+    // de deslizamiento de pared. Va aparte del cooldown a proposito: asi puedes
+    // atacar muy rapido y seguir viendo el espadazo entero.
+    [SerializeField] private float attackAnimationTime = 0.3f;
+    private float attackAnimationTimer;
     [SerializeField] private bool isAttacking;
     private bool canAttack = true;
+
+    [Header("Combo")]
+    // Cuantos golpes encadena. Debe coincidir con el numero de estados de ataque
+    // del Animator y con el de perfiles de la lista de arriba.
+    [SerializeField] private int comboLength = 3;
+    // Margen para encadenar el siguiente golpe. Empieza a contar cuando termina el
+    // anterior, no cuando empieza. Si se agota, la cadena vuelve al primer golpe.
+    [SerializeField] private float comboWindow = 0.6f;
+    // Golpe que sale al atacar pegado a una pared: 0 el primero, 1 el segundo,
+    // 2 el tercero. Ahi no se encadena combo, siempre sale este.
+    [SerializeField] private int wallAttackProfileIndex;
+    // Golpe que saldra la proxima vez que ataques. Visible para depurar.
+    [SerializeField] private int comboIndex;
+    private float comboTimer;
+    // Cuanto se recuerda una pulsacion que llega durante el tiempo de recarga.
+    // Sin esto, al hacer clic rapido los golpes se pierden y la cadena se reinicia.
+    [SerializeField] private float attackBufferTime = 0.25f;
+    private float attackBuffer;
 
     #region Unity Lifecycle
 
@@ -174,6 +218,7 @@ public class PlayerControler : MonoBehaviour
         idIsWallSliding = Animator.StringToHash("isWallSliding");
         idVerticalSpeed = Animator.StringToHash("VerticalSpeed");
         idKnockback = Animator.StringToHash("knockback");
+        idKnockDown = Animator.StringToHash("knockDown");
         // CONFIGURA EL ESTADO DEL PLAYER AL REAPARECER
         counterExtraJumps = extraJumps;
         //vida
@@ -191,14 +236,20 @@ public class PlayerControler : MonoBehaviour
     private void Update()
     {
         SetAnimatorValues();
+        ActualizarCombo();
     }
 
     // Actualiza físicas, colisiones, movimiento y salto en el paso de física.
     void FixedUpdate()
     {
+        // La deteccion corre SIEMPRE, incluso sin control. Si no, durante la
+        // aparicion por la puerta o un derribo el Animator recibe isGrounded en
+        // falso y mete un fotograma de caida que no corresponde.
+        CheckCollision();
+
         if (!canMove) return;
         if (isKnocked) return;
-        CheckCollision();
+
         Move();
         Jump();
         Attack();
@@ -207,7 +258,15 @@ public class PlayerControler : MonoBehaviour
     // Dibuja en el editor la línea de detección de pared y el radio de ataque para depurar.
     private void OnDrawGizmos()
     {
-        Gizmos.DrawLine(m_transform.position, new Vector2(m_transform.position.x + (checkWallDistance * direction), m_transform.position.y));
+        // Rayos de deteccion de pared, a las dos alturas y hacia los dos lados.
+        Gizmos.color = Color.cyan;
+        int rayos = Mathf.Max(1, wallCheckRays);
+        for (int i = 0; i < rayos; i++)
+        {
+            Vector3 origen = OrigenDelRayoDePared(i, rayos);
+            Gizmos.DrawLine(origen, origen + Vector3.right * checkWallDistance);
+            Gizmos.DrawLine(origen, origen + Vector3.left * checkWallDistance);
+        }
 
         // Dibuja el area del perfil que estes ajustando, en su posicion real.
         AttackProfile perfil = PerfilDeAtaque(gizmoProfileIndex);
@@ -477,17 +536,48 @@ public class PlayerControler : MonoBehaviour
     // Procesa el input de ataque: dispara la animación si no está en cooldown, sin importar si hay un enemigo cerca.
     private void Attack()
     {
-        if (m_gatherInput.IsAttacking && canAttack)
-        {
-            // Pegado a una pared el golpe sale hacia fuera: atacar al muro no tiene
-            // sentido y encima el espadazo queda oculto dentro del tile.
-            bool desdePared = canWallSlide;
-            if (desdePared) SetFacing(-wallDirection);
+        // Recogemos la pulsacion aunque ahora mismo no se pueda atacar, y la
+        // guardamos un momento. Asi un clic que cae durante la recarga no se tira:
+        // se ejecuta en cuanto el personaje vuelve a estar listo.
+        if (m_gatherInput.IsAttacking) attackBuffer = attackBufferTime;
+        m_gatherInput.IsAttacking = false;
 
+        if (attackBuffer > 0f && canAttack)
+        {
+            attackBuffer = 0f;
+
+            bool desdePared = canWallSlide;
+            int golpe;
+
+            if (desdePared)
+            {
+                // Pegado a una pared el golpe sale hacia fuera: atacar al muro no
+                // tiene sentido y el espadazo queda oculto dentro del tile.
+                SetFacing(-wallDirection);
+
+                // Y aqui no se encadena combo: siempre sale el mismo golpe, el que
+                // elijas en el Inspector. Encadenar colgado de un muro daba saltos
+                // de animacion raros al hacer clic varias veces seguidas.
+                golpe = Mathf.Clamp(wallAttackProfileIndex, 0, Mathf.Max(0, comboLength - 1));
+                comboIndex = 0;
+            }
+            else
+            {
+                golpe = comboIndex;
+                // Deja preparado el siguiente golpe de la cadena. El margen para
+                // encadenarlo no arranca aqui, sino al terminar este ataque.
+                comboIndex = (comboIndex + 1) % Mathf.Max(1, comboLength);
+            }
+
+            // El Animator elige que ataque reproducir segun este numero.
+            m_animator.SetInteger(IdComboIndex, golpe);
             m_animator.SetTrigger(IdAttack);
+
+            attackAnimationTimer = attackAnimationTime;
+            comboTimer = 0f;
+
             StartCoroutine(AttackRoutine(desdePared));
         }
-        m_gatherInput.IsAttacking = false;
     }
 
     // Bloquea el movimiento y los ataques nuevos mientras dura la animación de ataque.
@@ -501,9 +591,34 @@ public class PlayerControler : MonoBehaviour
         isAttacking = false;
         canAttack = true;
 
+        // Ahora si empieza a correr el margen para encadenar el siguiente golpe.
+        comboTimer = comboWindow;
+
+        if (!volverAMirarLaPared) yield break;
+
         // Si sigue colgado del muro, vuelve a mirarlo para que el deslizamiento
-        // no se quede reproduciéndose del revés.
-        if (volverAMirarLaPared && canWallSlide) SetFacing(wallDirection);
+        // no se quede reproduciéndose del revés. Pero NO antes de que acabe la
+        // animación: el cooldown puede ser de centésimas, y girar aquí mismo hacía
+        // que el espadazo se viera contra el muro aunque hubiera salido hacia fuera.
+        while (attackAnimationTimer > 0f) yield return null;
+
+        if (canWallSlide && !isGrounded) SetFacing(wallDirection);
+    }
+
+    // Deshace la cadena si el jugador tarda demasiado en volver a atacar.
+    private void ActualizarCombo()
+    {
+        // La pulsacion guardada caduca: no queremos que un clic de hace un segundo
+        // dispare un golpe cuando el jugador ya se ha puesto a correr.
+        if (attackBuffer > 0f) attackBuffer -= Time.deltaTime;
+
+        // Ventana en la que la animacion de ataque manda sobre el deslizamiento de pared.
+        if (attackAnimationTimer > 0f) attackAnimationTimer -= Time.deltaTime;
+
+        if (comboIndex == 0 || comboTimer <= 0f) return;
+
+        comboTimer -= Time.deltaTime;
+        if (comboTimer <= 0f) comboIndex = 0;
     }
 
     // Aplica daño a los enemigos dentro del radio de ataque.
@@ -675,8 +790,8 @@ public class PlayerControler : MonoBehaviour
         // Lanzamos el rayo a los dos lados en vez de solo hacia donde mira el player.
         // Así puede girarse para atacar hacia fuera sin que el juego "pierda" la pared
         // que tiene a la espalda y lo deje caer.
-        bool paredDelante = Physics2D.Raycast(m_transform.position, Vector2.right * direction, checkWallDistance, groundLayer);
-        bool paredDetras = Physics2D.Raycast(m_transform.position, Vector2.right * -direction, checkWallDistance, groundLayer);
+        bool paredDelante = HayParedHacia(direction);
+        bool paredDetras = HayParedHacia(-direction);
 
         isWallDetected = paredDelante || paredDetras;
 
@@ -691,6 +806,28 @@ public class PlayerControler : MonoBehaviour
         }
     }
 
+    // Lanza varios rayos repartidos en altura hacia un lado. Basta con que uno
+    // toque para dar la pared por detectada: asi funciona tambien en las esquinas,
+    // donde solo las piernas del player quedan junto al muro.
+    private bool HayParedHacia(int lado)
+    {
+        int rayos = Mathf.Max(1, wallCheckRays);
+
+        for (int i = 0; i < rayos; i++)
+        {
+            Vector2 origen = OrigenDelRayoDePared(i, rayos);
+            if (Physics2D.Raycast(origen, Vector2.right * lado, checkWallDistance, groundLayer)) return true;
+        }
+
+        return false;
+    }
+
+    private Vector2 OrigenDelRayoDePared(int indice, int total)
+    {
+        float t = total <= 1 ? 0.5f : indice / (float)(total - 1);
+        return (Vector2)m_transform.position + new Vector2(0f, Mathf.Lerp(wallCheckBottom, wallCheckTop, t));
+    }
+
     // Reduce la velocidad de caída mientras el player está pegado a una pared (deslizamiento).
     private void HandleWallSlide()
     {
@@ -699,12 +836,20 @@ public class PlayerControler : MonoBehaviour
         canWallSlide = isWallDetected && !isGrounded;
 
         // El flag que lee el Animator excluye además el ataque, para que el espadazo
-        // se vea entero antes de volver al deslizamiento.
-        isWallSliding = canWallSlide && !isLaunched && !isAttacking;
+        // se vea entero, y el derribo, para que no se agarre al muro mientras cae
+        // sin control: si no, la animación de pared pisaría a la de derribo.
+        // También exige tener el control: durante la aparición por la puerta el
+        // player puede estar junto a un muro, y no queremos que salga deslizándose.
+        // Y respeta la ventana de animación del ataque: si volviera a activarse en
+        // cuanto acaba el cooldown, con cooldowns cortos el espadazo no se vería.
+        isWallSliding = canWallSlide && canMove && !isLaunched && !isKnocked
+                        && !isAttacking && attackAnimationTimer <= 0f;
 
         if (!canWallSlide) return;
         // Durante un impulso no frenamos la caída: si no, rozar una pared anularía el lanzamiento.
         if (isLaunched) return;
+        // Derribado tampoco se agarra: debe caer hasta el suelo y levantarse ahí.
+        if (isKnocked) return;
         canDoubleJump = true;
         slideSpeed = m_gatherInput.Value.y < 0 ? 1 : 0.5f;
         m_rigitbody2D.linearVelocity = new Vector2(m_rigitbody2D.linearVelocityX, m_rigitbody2D.linearVelocityY * slideSpeed);
@@ -742,8 +887,68 @@ public class PlayerControler : MonoBehaviour
     // Aplica el impulso de retroceso al recibir un golpe.
     public void Knockback()
     {
-        StartCoroutine(KnockbackRoutine());
+        // En el suelo es un empujon corto; en el aire el player cae derribado y
+        // tiene que levantarse, que se lee mucho mejor que un retroceso en el vacio.
+        if (knockDownInAir && !isGrounded)
+            StartCoroutine(KnockDownRoutine());
+        else
+            StartCoroutine(KnockbackRoutine());
+
         m_rigitbody2D.linearVelocity = new Vector2(knockedPower.x * -direction, knockedPower.y);
+    }
+
+    // Derribo: cae sin control, y al tocar el suelo se levanta antes de devolverle el mando.
+    private IEnumerator KnockDownRoutine()
+    {
+        isKnocked = true;
+        isKnockedDown = true;
+        m_animator.SetBool(idKnockDown, true);
+
+        // Margen para que no detecte como "aterrizaje" el suelo del que acaba de salir.
+        yield return new WaitForSeconds(knockDownMinAirTime);
+        yield return EsperarAterrizaje();
+
+        // Ya apoyado: frena la inercia y se levanta.
+        m_rigitbody2D.linearVelocity = new Vector2(0f, m_rigitbody2D.linearVelocityY);
+        m_animator.SetBool(idKnockDown, false);
+        m_animator.SetTrigger(IdGetUp);
+
+        yield return new WaitForSeconds(getUpDuration);
+
+        isKnockedDown = false;
+        isKnocked = false;
+    }
+
+    // Espera a que el player deje de caer tras un derribo.
+    //
+    // No vale con mirar isGrounded: esa comprobacion solo reconoce la capa Ground,
+    // asi que caer encima de un enemigo, una plataforma movil o una trampa no contaba
+    // y el player se quedaba colgado repitiendo el derribo sin forma de salir.
+    // Por eso tambien damos por aterrizado si lleva un rato sin velocidad vertical,
+    // y ademas hay un tiempo maximo como ultima red de seguridad.
+    private IEnumerator EsperarAterrizaje()
+    {
+        float transcurrido = 0f;
+        float quieto = 0f;
+
+        while (transcurrido < knockDownMaxTime)
+        {
+            if (isGrounded) yield break;
+
+            // Si ha dejado de caer es que esta apoyado en algo, sea lo que sea.
+            if (Mathf.Abs(m_rigitbody2D.linearVelocityY) < 0.05f)
+            {
+                quieto += Time.deltaTime;
+                if (quieto >= 0.12f) yield break;
+            }
+            else
+            {
+                quieto = 0f;
+            }
+
+            transcurrido += Time.deltaTime;
+            yield return null;
+        }
     }
 
     // Mantiene bloqueado el movimiento del player durante la animación/duración del knockback.

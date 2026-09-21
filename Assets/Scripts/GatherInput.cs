@@ -34,8 +34,10 @@ public class GatherInput : MonoBehaviour
         controls.Player.Move.canceled += StopMove;
         controls.Player.Jump.performed += StartJump;
         controls.Player.Jump.canceled += StopJump;
+        // El ataque solo escucha "performed". No se limpia al soltar el boton:
+        // de la otra forma, un clic mas corto que un paso de fisica se perdia entero.
+        // Quien consume la pulsacion es PlayerControler, poniendo IsAttacking a false.
         controls.Player.Attack.performed += StartAttack;
-        controls.Player.Attack.canceled += StopAttack;
         controls.Player.Enable();
     }
 
@@ -47,7 +49,6 @@ public class GatherInput : MonoBehaviour
         controls.Player.Jump.performed -= StartJump;
         controls.Player.Jump.canceled -= StopJump;
         controls.Player.Attack.performed -= StartAttack;
-        controls.Player.Attack.canceled -= StopAttack;
         controls.Player.Disable();
     }
 
@@ -83,12 +84,6 @@ public class GatherInput : MonoBehaviour
     private void StartAttack(InputAction.CallbackContext context)
     {
         _isAttacking = true;
-    }
-
-    // Marca el ataque como inactivo cuando se suelta el botón.
-    private void StopAttack(InputAction.CallbackContext context)
-    {
-        _isAttacking = false;
     }
 
     #endregion
