@@ -86,7 +86,7 @@ SpriteRenderer:
   m_SortingLayerID: -2060847549
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 4236677631525818213, guid: 8749f2f4e34374f458b0fb943d8e6303, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0ac094421ae6827419afb5f360e726e4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -158,8 +158,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.02, y: -0.048712343}
-  m_Size: {x: 0.4792633, y: 0.761795}
+  m_Offset: {x: -0.02000001, y: -0.103168726}
+  m_Size: {x: 0.4792633, y: 1.0429416}
   m_Direction: 0
 --- !u!95 &3316466015872541130
 Animator:
@@ -247,6 +247,7 @@ MonoBehaviour:
   maxHealth: 5
   currentHealth: 0
   invincibleTime: 1
+  blinkInterval: 0.1
   healthBar: {fileID: 0}
   jumpForce: 10
   extraJumps: 1
@@ -261,18 +262,37 @@ MonoBehaviour:
     m_Bits: 128
   checkWallDistance: 0.27
   isWallDetected: 0
+  wallDirection: 1
   canWallSlide: 0
+  isWallSliding: 0
   slideSpeed: 0
   wallJumpForce: {x: 5, y: 8}
   isWallJumping: 0
   wallJumpDuration: 0.3
+  isLaunched: 0
+  launchRestoresJumps: 1
   isKnocked: 0
   knockedPower: {x: 5, y: 0}
   knockedDuration: 0.6
   deathVFX: {fileID: 7090040657197777121, guid: ccc34343e106b324e91a2912a76cf01c, type: 3}
   attackPoint: {fileID: 8153383818050028627}
-  attackRadius: 0.6
-  attackDamage: 1
+  attackLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  attackProfiles:
+  - nombre: Ataque
+    forma: 2
+    offset: {x: -0.84, y: 0.1}
+    radio: 0.5
+    tamano: {x: 0.45, y: 1.07}
+    radioInterior: 0.4
+    radioExterior: 0.92
+    angulo: 204
+    anguloCentro: 4.69
+    afiladoPuntas: 1
+    puntaHacia: 1
+    dano: 1
+  gizmoProfileIndex: 0
   attackCooldown: 0.4
   isAttacking: 0
 --- !u!114 &8415853499437379215
@@ -314,7 +334,7 @@ Transform:
   m_GameObject: {fileID: 306997544179117387}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.243, y: -0.46, z: 0}
+  m_LocalPosition: {x: -0.151, y: -0.624, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -376,7 +396,7 @@ Transform:
   m_GameObject: {fileID: 8243429038807965390}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14, y: -0.46, z: 0}
+  m_LocalPosition: {x: 0.14, y: -0.614, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

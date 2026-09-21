@@ -7,6 +7,51 @@ using UnityEngine.SceneManagement;
 
 public class PlayerControler : MonoBehaviour
 {
+    // Forma del area de golpe del ataque.
+    // Arco es un trozo de anillo: sirve para espadazos en media luna.
+    public enum AttackShape { Circulo, Caja, Arco }
+
+    // Por donde se cierra la punta de la media luna.
+    // Interior: el borde de dentro se abre hacia fuera (punta hacia el exterior).
+    // Exterior: el borde de fuera se recoge hacia dentro (punta hacia el centro).
+    // Ambas: los dos se juntan a media altura, que es lo mas parecido a una hoja.
+    public enum ArcTip { Interior, Exterior, Ambas }
+
+    // Un golpe concreto: donde cae su area, que forma tiene y cuanto dana.
+    // Tener varios permite que cada ataque de un combo use su propia zona,
+    // ajustada a lo que hace el sprite en ese momento.
+    [System.Serializable]
+    public class AttackProfile
+    {
+        public string nombre = "Ataque";
+        public AttackShape forma = AttackShape.Caja;
+        // Desplazamiento respecto al AttackPoint. La X se invierte sola al girar
+        // el personaje, asi que basta con ajustarlo mirando a la derecha.
+        public Vector2 offset = Vector2.zero;
+        // Solo se usa con la forma Circulo.
+        public float radio = 0.4f;
+        // Ancho y alto, solo con la forma Caja.
+        public Vector2 tamano = new Vector2(0.8f, 0.5f);
+
+        // --- Solo con la forma Arco ---
+        // Hueco central de la media luna: lo que este mas cerca que esto no recibe golpe.
+        public float radioInterior = 0.15f;
+        // Hasta donde llega la hoja.
+        public float radioExterior = 0.8f;
+        // Apertura total del abanico en grados. 30 es una estocada, 180 media vuelta.
+        public float angulo = 120f;
+        // Hacia donde apunta el centro del abanico. 0 al frente, 90 arriba, -90 abajo.
+        // Se voltea solo al girar el personaje.
+        public float anguloCentro;
+        // Cuanto se afilan las puntas de la media luna. A 0 los extremos quedan
+        // rectos (media torta); a 1 el anillo se cierra y acaba en punta.
+        [Range(0f, 1f)] public float afiladoPuntas = 0.8f;
+        // Por donde se cierra esa punta.
+        public ArcTip puntaHacia = ArcTip.Ambas;
+
+        public int dano = 1;
+    }
+
     //COMPONENTES DE PLAYER
     [Header("Componentes")]
     [SerializeField] private Transform m_transform;
@@ -21,9 +66,11 @@ public class PlayerControler : MonoBehaviour
     private int idSpeed;
     private int idIsWallDetected;
     private int idIsWallSliding;
+    private int idVerticalSpeed;
     private int idKnockback;
     private static readonly int IdDoorIn = Animator.StringToHash("doorIn");
     private static readonly int IdAttack = Animator.StringToHash("attack");
+    private static readonly int IdDoubleJump = Animator.StringToHash("doubleJump");
 
     [Header("Opciones de Movimiento y Salto")]
     [SerializeField] private float speed;
@@ -92,9 +139,15 @@ public class PlayerControler : MonoBehaviour
 
     //VARIABLES PARA EL SISTEMA DE ATAQUE
     [Header("Opciones de Ataque")]
+    // Punto de referencia desde el que se mide el area de cada golpe.
     [SerializeField] private Transform attackPoint;
-    [SerializeField] private float attackRadius = 0.6f;
-    [SerializeField] private int attackDamage = 1;
+    // Capas que pueden recibir el golpe. Vacio = todas, como hasta ahora.
+    [SerializeField] private LayerMask attackLayers;
+    // Un perfil por golpe. El 0 es el ataque normal; los siguientes son para los
+    // combos, y se eligen desde el Animation Event con DealAttackCombo(n).
+    [SerializeField] private AttackProfile[] attackProfiles = { new AttackProfile() };
+    // Cual de los perfiles se dibuja en la escena, para ajustarlos de uno en uno.
+    [SerializeField] private int gizmoProfileIndex;
     [SerializeField] private float attackCooldown = 0.4f;
     [SerializeField] private bool isAttacking;
     private bool canAttack = true;
@@ -119,6 +172,7 @@ public class PlayerControler : MonoBehaviour
         idIsGrounded = Animator.StringToHash("isGrounded");
         idIsWallDetected = Animator.StringToHash("isWallDetected");
         idIsWallSliding = Animator.StringToHash("isWallSliding");
+        idVerticalSpeed = Animator.StringToHash("VerticalSpeed");
         idKnockback = Animator.StringToHash("knockback");
         // CONFIGURA EL ESTADO DEL PLAYER AL REAPARECER
         counterExtraJumps = extraJumps;
@@ -155,11 +209,69 @@ public class PlayerControler : MonoBehaviour
     {
         Gizmos.DrawLine(m_transform.position, new Vector2(m_transform.position.x + (checkWallDistance * direction), m_transform.position.y));
 
-        if (attackPoint != null)
+        // Dibuja el area del perfil que estes ajustando, en su posicion real.
+        AttackProfile perfil = PerfilDeAtaque(gizmoProfileIndex);
+        if (perfil == null) return;
+
+        Vector3 centro = CentroDelGolpe(perfil);
+
+        Gizmos.color = Color.red;
+        if (perfil.forma == AttackShape.Caja)
+            Gizmos.DrawWireCube(centro, perfil.tamano);
+        else if (perfil.forma == AttackShape.Arco)
+            DibujarArco(perfil, centro);
+        else
+            Gizmos.DrawWireSphere(centro, perfil.radio);
+
+        // Punto de referencia, para ver cuanto lo ha desplazado el offset.
+        if (attackPoint == null) return;
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(attackPoint.position, 0.05f);
+        Gizmos.DrawLine(attackPoint.position, centro);
+    }
+
+    // Dibuja la media luna: los dos arcos y los dos bordes que los cierran.
+    private void DibujarArco(AttackProfile perfil, Vector3 centro)
+    {
+        const int pasos = 24;
+
+        Vector2 frente = FrenteDelArco(perfil);
+        float anguloFrente = Mathf.Atan2(frente.y, frente.x) * Mathf.Rad2Deg;
+        float mitad = perfil.angulo * 0.5f;
+        float desde = anguloFrente - mitad;
+
+        Vector3 PuntoDelArco(float grados, float radio)
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
+            return centro + (Quaternion.Euler(0f, 0f, grados) * Vector3.right) * radio;
         }
+
+        // Los dos radios dependen del angulo, por eso se recalculan en cada paso.
+        float TEnPaso(int paso)
+        {
+            return mitad <= 0.0001f ? 0f : Mathf.Abs(paso / (float)pasos - 0.5f) * 2f;
+        }
+
+        Vector3 interiorPrevio = PuntoDelArco(desde, RadioInteriorEn(perfil, TEnPaso(0)));
+        Vector3 exteriorPrevio = PuntoDelArco(desde, RadioExteriorEn(perfil, TEnPaso(0)));
+
+        // Borde inicial.
+        Gizmos.DrawLine(interiorPrevio, exteriorPrevio);
+
+        for (int i = 1; i <= pasos; i++)
+        {
+            float grados = desde + perfil.angulo * i / pasos;
+            Vector3 interior = PuntoDelArco(grados, RadioInteriorEn(perfil, TEnPaso(i)));
+            Vector3 exterior = PuntoDelArco(grados, RadioExteriorEn(perfil, TEnPaso(i)));
+
+            Gizmos.DrawLine(interiorPrevio, interior);
+            Gizmos.DrawLine(exteriorPrevio, exterior);
+
+            interiorPrevio = interior;
+            exteriorPrevio = exterior;
+        }
+
+        // Borde final.
+        Gizmos.DrawLine(interiorPrevio, exteriorPrevio);
     }
 
     #endregion
@@ -190,8 +302,30 @@ public class PlayerControler : MonoBehaviour
     // Habilita el movimiento del player luego de un pequeño retraso (usado en el respawn inicial).
     private IEnumerator CanMoveRoutine()
     {
-        yield return new WaitForSeconds(moveDelay);
+        // Mientras aparece, el player se queda congelado en el sitio. Sin esto la
+        // gravedad lo hace caer mientras crece, y se ve como si bajara flotando y
+        // quieto hasta que arranca la animacion de caida.
+        float gravedadOriginal = m_rigitbody2D.gravityScale;
+        m_rigitbody2D.linearVelocity = Vector2.zero;
+        m_rigitbody2D.gravityScale = 0f;
+
+        // Aqui NO forzamos ninguna animacion: el Animator entra por PlayerDoorOut,
+        // cuyo Animation Event llama a DoorOut() y abre la puerta de entrada.
+        // Si lo sacamos de ese estado con un Play(), la puerta nunca se abre.
+
+        // Aparece creciendo desde la puerta. El personaje nuevo no tiene animacion
+        // propia de salir por la puerta, asi que la resolvemos con escala y alpha.
+        yield return TrapFx.ScaleAndFade(m_transform, m_spriteRenderer,
+            m_transform.localScale, ColorDelSprite(), 0f, 1f, moveDelay, true);
+
+        m_rigitbody2D.gravityScale = gravedadOriginal;
         canMove = true;
+    }
+
+    // Color actual del sprite, o blanco si por lo que sea no hay SpriteRenderer.
+    private Color ColorDelSprite()
+    {
+        return m_spriteRenderer != null ? m_spriteRenderer.color : Color.white;
     }
 
     #endregion
@@ -223,7 +357,13 @@ public class PlayerControler : MonoBehaviour
     // Invierte la escala del sprite y actualiza la dirección hacia la que mira el player.
     private void HandleDirection()
     {
-        m_transform.localScale = new Vector3(-m_transform.localScale.x, 1, 1);
+        // Solo invertimos la X y conservamos el resto de la escala. Antes se forzaba
+        // Y y Z a 1, asi que si el prefab estaba escalado (por ejemplo a 1.5 para que
+        // el personaje se viera mas grande) el primer giro lo dejaba deformado.
+        Vector3 escala = m_transform.localScale;
+        escala.x = -escala.x;
+        m_transform.localScale = escala;
+
         direction *= -1;
     }
 
@@ -277,6 +417,10 @@ public class PlayerControler : MonoBehaviour
     {
         m_rigitbody2D.linearVelocity = new Vector2(speed * m_gatherInput.Value.x, jumpForce);
         counterExtraJumps -= 1;
+
+        // El segundo salto usa su propia animacion (la voltereta) en lugar de repetir
+        // la del primero. Al llegar al punto mas alto, el Animator pasa solo a Fall.
+        m_animator.SetTrigger(IdDoubleJump);
     }
 
     #endregion
@@ -366,19 +510,134 @@ public class PlayerControler : MonoBehaviour
     // Se debe llamar mediante un Animation Event en el frame de "PlayerAttack" donde el golpe conecta.
     public void DealAttackDamage()
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius);
+        AplicarGolpe(0);
+    }
+
+    // Para los combos: se llama desde el Animation Event pasando el indice del perfil.
+    public void DealAttackCombo(int index)
+    {
+        AplicarGolpe(index);
+    }
+
+    // Aplica el golpe del perfil indicado a todo lo que haya en su area.
+    private void AplicarGolpe(int index)
+    {
+        AttackProfile perfil = PerfilDeAtaque(index);
+        if (perfil == null) return;
+
+        Collider2D[] hits = BuscarObjetivos(perfil);
+        Vector2 centro = CentroDelGolpe(perfil);
         HashSet<EnemyHealth> alreadyHit = new HashSet<EnemyHealth>();
 
         foreach (Collider2D hit in hits)
         {
             if (!hit.CompareTag("Enemy")) continue;
+            if (!EstaDentroDelArco(perfil, centro, hit)) continue;
 
             EnemyHealth enemyHealth = hit.GetComponent<EnemyHealth>();
             // Un mismo enemigo puede tener varios colliders (trigger de daño + sólido de suelo);
             // alreadyHit.Add evita contarlo dos veces en el mismo golpe.
             if (enemyHealth != null && alreadyHit.Add(enemyHealth))
-                enemyHealth.TakeDamage(attackDamage, m_transform.position);
+                enemyHealth.TakeDamage(perfil.dano, m_transform.position);
         }
+    }
+
+    // Devuelve el perfil pedido, o el mas cercano si el indice se sale del array.
+    private AttackProfile PerfilDeAtaque(int index)
+    {
+        if (attackProfiles == null || attackProfiles.Length == 0) return null;
+        return attackProfiles[Mathf.Clamp(index, 0, attackProfiles.Length - 1)];
+    }
+
+    // Centro del area de golpe: el AttackPoint mas el desplazamiento del perfil,
+    // con la X volteada segun hacia donde mire el player.
+    private Vector2 CentroDelGolpe(AttackProfile perfil)
+    {
+        Transform origen = attackPoint != null ? attackPoint : transform;
+        return (Vector2)origen.position + new Vector2(perfil.offset.x * direction, perfil.offset.y);
+    }
+
+    // Devuelve lo que hay dentro del area, segun la forma del perfil.
+    private Collider2D[] BuscarObjetivos(AttackProfile perfil)
+    {
+        // Si no se indican capas usamos todas, para no romper los prefabs de antes.
+        int capas = attackLayers.value == 0 ? ~0 : attackLayers.value;
+        Vector2 centro = CentroDelGolpe(perfil);
+
+        if (perfil.forma == AttackShape.Caja)
+            return Physics2D.OverlapBoxAll(centro, perfil.tamano, 0f, capas);
+
+        // Con Arco cogemos primero todo lo que cae dentro del radio exterior;
+        // el anillo y el abanico se recortan despues en EstaDentroDelArco.
+        if (perfil.forma == AttackShape.Arco)
+            return Physics2D.OverlapCircleAll(centro, perfil.radioExterior, capas);
+
+        return Physics2D.OverlapCircleAll(centro, perfil.radio, capas);
+    }
+
+    // Recorta el circulo hasta dejar la media luna. Con las otras formas no hace nada,
+    // porque OverlapBox y OverlapCircle ya son exactos.
+    private bool EstaDentroDelArco(AttackProfile perfil, Vector2 centro, Collider2D objetivo)
+    {
+        if (perfil.forma != AttackShape.Arco) return true;
+
+        // Medimos al punto del collider mas cercano, no a su transform: asi un enemigo
+        // grande se detecta por su cuerpo y no por donde tenga el origen.
+        Vector2 haciaObjetivo = objetivo.ClosestPoint(centro) - centro;
+        float distancia = haciaObjetivo.magnitude;
+
+        if (distancia > perfil.radioExterior) return false;
+        if (distancia <= 0.0001f) return perfil.radioInterior <= 0f;
+
+        // Fuera del abanico.
+        float mitad = perfil.angulo * 0.5f;
+        float desviacion = Vector2.Angle(FrenteDelArco(perfil), haciaObjetivo);
+        if (desviacion > mitad) return false;
+
+        // Los dos bordes se estrechan hacia la punta, asi que aqui se compara
+        // contra los radios de ESE angulo, no contra los fijos del perfil.
+        float t = mitad <= 0.0001f ? 0f : desviacion / mitad;
+        return distancia >= RadioInteriorEn(perfil, t)
+            && distancia <= RadioExteriorEn(perfil, t);
+    }
+
+    // Cuanto se ha cerrado el anillo a una desviacion t del centro del abanico.
+    // t va de 0 (centro del golpe) a 1 (punta). Al cuadrado para que el centro se
+    // mantenga ancho y solo adelgacen los ultimos grados.
+    private float Estrechamiento(AttackProfile perfil, float t)
+    {
+        return Mathf.Pow(Mathf.Clamp01(t), 2f) * perfil.afiladoPuntas;
+    }
+
+    private float RadioInteriorEn(AttackProfile perfil, float t)
+    {
+        if (perfil.puntaHacia == ArcTip.Exterior) return perfil.radioInterior;
+
+        float k = Estrechamiento(perfil, t);
+        // Con Ambas los dos bordes se encuentran a media altura del anillo.
+        float destino = perfil.puntaHacia == ArcTip.Ambas
+            ? (perfil.radioInterior + perfil.radioExterior) * 0.5f
+            : perfil.radioExterior;
+
+        return Mathf.Lerp(perfil.radioInterior, destino, k);
+    }
+
+    private float RadioExteriorEn(AttackProfile perfil, float t)
+    {
+        if (perfil.puntaHacia == ArcTip.Interior) return perfil.radioExterior;
+
+        float k = Estrechamiento(perfil, t);
+        float destino = perfil.puntaHacia == ArcTip.Ambas
+            ? (perfil.radioInterior + perfil.radioExterior) * 0.5f
+            : perfil.radioInterior;
+
+        return Mathf.Lerp(perfil.radioExterior, destino, k);
+    }
+
+    // Direccion a la que mira el centro del abanico, ya volteada segun el personaje.
+    private Vector2 FrenteDelArco(AttackProfile perfil)
+    {
+        return Quaternion.Euler(0f, 0f, perfil.anguloCentro * direction) * new Vector2(direction, 0f);
     }
 
     #endregion
@@ -543,7 +802,11 @@ public class PlayerControler : MonoBehaviour
     // Espera a que termine la animación de la puerta y carga el siguiente nivel.
     private IEnumerator DoorInRoutine()
     {
-        yield return new WaitForSeconds(moveDelay);
+        // Se encoge y se desvanece al entrar por la puerta, en lugar de desaparecer
+        // de golpe al cambiar de escena.
+        yield return TrapFx.ScaleAndFade(m_transform, m_spriteRenderer,
+            m_transform.localScale, ColorDelSprite(), 1f, 0f, moveDelay, false);
+
         GameManager.Instance.LoadNextLevel();
     }
 
@@ -558,6 +821,8 @@ public class PlayerControler : MonoBehaviour
         m_animator.SetBool(idIsGrounded, isGrounded);
         m_animator.SetBool(idIsWallDetected, isWallDetected);
         m_animator.SetBool(idIsWallSliding, isWallSliding);
+        // Velocidad vertical: distingue subida (Jump) de caida (Fall) en el Animator.
+        m_animator.SetFloat(idVerticalSpeed, m_rigitbody2D.linearVelocityY);
     }
 
     #endregion
