@@ -4,6 +4,7 @@ using System.Collections.Generic;
 //using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Unity.Cinemachine;
 
 public class PlayerControler : MonoBehaviour
 {
@@ -50,6 +51,27 @@ public class PlayerControler : MonoBehaviour
         public ArcTip puntaHacia = ArcTip.Ambas;
 
         public int dano = 1;
+
+        // Duracion real del clip de este golpe, en segundos. Es lo que decide
+        // cuanto se protege la animacion y cuando se admite el siguiente golpe.
+        public float duracion = 0.4f;
+        // Segundo a partir del cual se acepta encadenar. Los fotogramas de
+        // recuperacion se cortan solo si el jugador sigue atacando, que es lo que
+        // hace que una cadena se sienta fluida en vez de a trompicones.
+        public float encadenarDesde = 0.3f;
+        // Empujon hacia delante al lanzar el golpe. Da sensacion de peso.
+        public float avance = 1.5f;
+
+        // --- Impacto propio de este golpe ---
+        // Congelacion al conectar. En negativo usa la del Inspector general.
+        // Subirla solo en el remate del combo es lo que hace que se note
+        // mas fuerte que los dos primeros.
+        public float congelacion = -1f;
+        // Fuerza de la sacudida de camara. A 0 este golpe no sacude.
+        public float sacudida = 0.15f;
+        // Efecto que aparece en el punto del golpe (un corte, chispas...).
+        // Se puede dejar vacio.
+        public GameObject efectoGolpe;
     }
 
     //COMPONENTES DE PLAYER
@@ -184,14 +206,30 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private AttackProfile[] attackProfiles = { new AttackProfile() };
     // Cual de los perfiles se dibuja en la escena, para ajustarlos de uno en uno.
     [SerializeField] private int gizmoProfileIndex;
+    // Respaldo: solo se usa si un perfil se deja con duracion 0. Lo normal es
+    // que mande la duracion del propio golpe, que es lo que dura su clip.
     [SerializeField] private float attackCooldown = 0.4f;
-    // Cuanto se protege la animacion de ataque de que otra la pise, sobre todo la
-    // de deslizamiento de pared. Va aparte del cooldown a proposito: asi puedes
-    // atacar muy rapido y seguir viendo el espadazo entero.
-    [SerializeField] private float attackAnimationTime = 0.3f;
     private float attackAnimationTimer;
     [SerializeField] private bool isAttacking;
     private bool canAttack = true;
+    // Se guarda para poder cortarla cuando un golpe encadena con el siguiente:
+    // si no, la corrutina del golpe viejo apagaria isAttacking a media animacion.
+    private Coroutine attackRoutine;
+
+    [Header("Impacto")]
+    // Congelacion al conectar un golpe. Es el truco que mas sensacion de fuerza
+    // da por lo poco que cuesta. A 0 queda desactivado.
+    [SerializeField] private float hitStopDuration = 0.06f;
+    [Range(0f, 1f)] [SerializeField] private float hitStopScale = 0.05f;
+    // Cuanto frena el avance del golpe. Sin esto el personaje derraparia.
+    [SerializeField] private float attackDrag = 14f;
+    private bool enHitStop;
+
+    // Fuente de sacudida de camara. Si se deja vacia se busca en el propio
+    // player al arrancar; sin ella los golpes simplemente no sacuden.
+    [SerializeField] private CinemachineImpulseSource impulseSource;
+    // Cuanto vive el efecto de corte antes de borrarse solo.
+    [SerializeField] private float efectoDuracion = 0.5f;
 
     [Header("Combo")]
     // Cuantos golpes encadena. Debe coincidir con el numero de estados de ataque
@@ -236,6 +274,7 @@ public class PlayerControler : MonoBehaviour
         idKnockDown = Animator.StringToHash("knockDown");
         idIsSprinting = Animator.StringToHash("isSprinting");
         currentSpeed = speed;
+        if (impulseSource == null) impulseSource = GetComponent<CinemachineImpulseSource>();
         // CONFIGURA EL ESTADO DEL PLAYER AL REAPARECER
         counterExtraJumps = extraJumps;
         //vida
@@ -418,6 +457,13 @@ public class PlayerControler : MonoBehaviour
         {
             isSprinting = false;
             currentSpeed = speed;
+
+            // El empujon del golpe se frena solo, para que no derrape.
+            if (isAttacking && isGrounded)
+            {
+                float vx = Mathf.MoveTowards(m_rigitbody2D.linearVelocityX, 0f, attackDrag * Time.fixedDeltaTime);
+                m_rigitbody2D.linearVelocity = new Vector2(vx, m_rigitbody2D.linearVelocityY);
+            }
             return;
         }
 
@@ -624,23 +670,43 @@ public class PlayerControler : MonoBehaviour
             m_animator.SetInteger(IdComboIndex, golpe);
             m_animator.SetTrigger(IdAttack);
 
-            attackAnimationTimer = attackAnimationTime;
+            // Cada golpe manda sobre su propio tiempo: mientras dura, ni se puede
+            // lanzar otro ni el deslizamiento de pared puede pisar la animacion.
+            // Eso es lo que impide que a base de clics salgan medios espadazos.
+            AttackProfile perfil = PerfilDeAtaque(golpe);
+            float duracion = (perfil != null && perfil.duracion > 0f) ? perfil.duracion : attackCooldown;
+            float encadenar = (perfil != null) ? perfil.encadenarDesde : duracion;
+
+            attackAnimationTimer = duracion;
             comboTimer = 0f;
 
-            StartCoroutine(AttackRoutine(desdePared));
+            // Un pasito adelante al golpear. Solo en suelo: en el aire estropearia
+            // la trayectoria del salto, y en la pared despegaria al personaje.
+            if (isGrounded && !desdePared && perfil != null && perfil.avance != 0f)
+                m_rigitbody2D.linearVelocity = new Vector2(direction * perfil.avance, m_rigitbody2D.linearVelocityY);
+
+            if (attackRoutine != null) StopCoroutine(attackRoutine);
+            attackRoutine = StartCoroutine(AttackRoutine(desdePared, duracion, encadenar));
         }
     }
 
     // Bloquea el movimiento y los ataques nuevos mientras dura la animación de ataque.
-    private IEnumerator AttackRoutine(bool volverAMirarLaPared)
+    private IEnumerator AttackRoutine(bool volverAMirarLaPared, float duracion, float encadenarDesde)
     {
         canAttack = false;
         isAttacking = true;
 
-        yield return new WaitForSeconds(attackCooldown);
+        // Primer tramo: la animacion es intocable. Aqui un clic no lanza otro
+        // golpe, se queda guardado en el buffer.
+        float ventana = Mathf.Clamp(encadenarDesde, 0f, duracion);
+        yield return new WaitForSeconds(ventana);
+
+        // Segundo tramo: los fotogramas de recuperacion. Si hay un clic guardado,
+        // el siguiente golpe entra ya y se los come. Si no, la animacion termina.
+        canAttack = true;
+        yield return new WaitForSeconds(duracion - ventana);
 
         isAttacking = false;
-        canAttack = true;
 
         // Ahora si empieza a correr el margen para encadenar el siguiente golpe.
         comboTimer = comboWindow;
@@ -706,6 +772,62 @@ public class PlayerControler : MonoBehaviour
             if (enemyHealth != null && alreadyHit.Add(enemyHealth))
                 enemyHealth.TakeDamage(perfil.dano, m_transform.position);
         }
+
+        // Todo lo de abajo solo si el golpe ha conectado: al aire no aporta nada
+        // y sacudir la camara por fallar marea.
+        if (alreadyHit.Count == 0) return;
+
+        float congelacion = perfil.congelacion >= 0f ? perfil.congelacion : hitStopDuration;
+        StartCoroutine(HitStop(congelacion));
+
+        Sacudir(perfil.sacudida);
+        MostrarEfecto(perfil, centro);
+    }
+
+    // Sacude la camara a traves de Cinemachine. La direccion sale del propio
+    // golpe para que el tirón vaya en el sentido del espadazo.
+    private void Sacudir(float fuerza)
+    {
+        if (impulseSource == null || fuerza <= 0f) return;
+
+        impulseSource.GenerateImpulseWithVelocity(new Vector3(direction * fuerza, -fuerza * 0.5f, 0f));
+    }
+
+    // Coloca el efecto de corte en el punto del golpe, girado hacia donde mira
+    // el personaje y con el angulo del perfil si es un arco.
+    private void MostrarEfecto(AttackProfile perfil, Vector2 centro)
+    {
+        if (perfil.efectoGolpe == null) return;
+
+        float angulo = perfil.anguloCentro * direction;
+        GameObject efecto = Instantiate(perfil.efectoGolpe, centro, Quaternion.Euler(0f, 0f, angulo));
+
+        // Se voltea con el personaje para que el corte no salga del reves.
+        Vector3 escala = efecto.transform.localScale;
+        escala.x = Mathf.Abs(escala.x) * direction;
+        efecto.transform.localScale = escala;
+
+        Destroy(efecto, efectoDuracion);
+    }
+
+    // Congela un instante el juego al conectar. Es lo que hace que un golpe se
+    // sienta solido en vez de atravesar al enemigo como si nada.
+    private IEnumerator HitStop(float duracion)
+    {
+        // Si el juego ya esta parado (pausa, muerte...) no se toca nada: al
+        // restaurar pondriamos el tiempo en marcha en mitad de una pausa.
+        if (duracion <= 0f || enHitStop || Time.timeScale < 0.99f) yield break;
+
+        enHitStop = true;
+        float escalaPrevia = Time.timeScale;
+        Time.timeScale = hitStopScale;
+
+        // En tiempo real: con el timeScale bajado, una espera normal duraria
+        // lo que no es.
+        yield return new WaitForSecondsRealtime(duracion);
+
+        Time.timeScale = escalaPrevia;
+        enHitStop = false;
     }
 
     // Devuelve el perfil pedido, o el mas cercano si el indice se sale del array.

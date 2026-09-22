@@ -19,6 +19,7 @@ public class EnemyHealth : MonoBehaviour
     private Animator animator;
     private Rigidbody2D rb;
     private EnemyController enemyController;
+    private HitFlash hitFlash;
 
     // Obtiene los componentes necesarios e inicializa la vida al máximo.
     private void Awake()
@@ -26,6 +27,7 @@ public class EnemyHealth : MonoBehaviour
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         enemyController = GetComponent<EnemyController>();
+        hitFlash = GetComponent<HitFlash>();
         currentHealth = maxHealth;
     }
 
@@ -33,6 +35,10 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(int damage, Vector2 attackerPosition)
     {
         currentHealth -= damage;
+
+        // El destello sale siempre, tanto si sobrevive como si muere: es la
+        // confirmacion de que el golpe ha entrado.
+        if (hitFlash != null) hitFlash.Flash();
 
         if (currentHealth <= 0)
         {

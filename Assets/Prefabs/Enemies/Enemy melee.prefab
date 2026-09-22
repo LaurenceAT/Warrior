@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -8927120801491865496}
   - component: {fileID: 8809201098292569166}
   - component: {fileID: 4582322111654452619}
+  - component: {fileID: 1799905128074051289}
   m_Layer: 11
   m_Name: Enemy melee
   m_TagString: Enemy
@@ -62,7 +63,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: e259e35f95170c14db9d0892a2d5fe1f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -296,3 +297,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 1
+--- !u!114 &1799905128074051289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4623148209465566883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5af8ec0ab5ea4194fbd26763c8798782, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers: []
+  flashColor: {r: 0.9622642, g: 0.027233727, b: 0.027233727, a: 1}
+  flashDuration: 0.08
+  flashCount: 2
+  colorSinShader: {r: 1, g: 0.3, b: 0.3, a: 1}
+  scalePunch: 0.15
+  punchDuration: 0.12
