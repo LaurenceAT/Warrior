@@ -228,6 +228,7 @@ MonoBehaviour:
   _value: {x: 0, y: 0}
   _isJumping: 0
   _isAttacking: 0
+  _isSprinting: 0
 --- !u!114 &2360815886447925532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,6 +245,9 @@ MonoBehaviour:
   speed: 5
   canMove: 0
   moveDelay: 0.8
+  sprintSpeed: 8.5
+  sprintAcceleration: 30
+  keepSprintInAir: 1
   maxHealth: 5
   currentHealth: 0
   invincibleTime: 1
@@ -326,10 +330,11 @@ MonoBehaviour:
     dano: 1
   gizmoProfileIndex: 1
   attackCooldown: 0.03
+  attackAnimationTime: 0.3
   isAttacking: 0
   comboLength: 3
   comboWindow: 0.6
-  wallAttackProfileIndex: 2
+  wallAttackProfileIndex: 0
   comboIndex: 0
   attackBufferTime: 0.15
 --- !u!114 &8415853499437379215

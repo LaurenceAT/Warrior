@@ -69,6 +69,7 @@ public class PlayerControler : MonoBehaviour
     private int idVerticalSpeed;
     private int idKnockback;
     private int idKnockDown;
+    private int idIsSprinting;
     private static readonly int IdDoorIn = Animator.StringToHash("doorIn");
     private static readonly int IdAttack = Animator.StringToHash("attack");
     private static readonly int IdDoubleJump = Animator.StringToHash("doubleJump");
@@ -80,6 +81,20 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private bool canMove;
     [SerializeField] private float moveDelay;
     private int direction = 1;
+
+    [Header("Carrera (Shift)")]
+    // Velocidad con el boton de correr pulsado. Si la dejas igual que "speed"
+    // la mecanica queda desactivada de hecho, sin tocar codigo.
+    [SerializeField] private float sprintSpeed = 8.5f;
+    // Unidades por segundo que gana o pierde al entrar y salir de la carrera.
+    // Sin esta rampa el cambio de velocidad se siente como un tiron.
+    [SerializeField] private float sprintAcceleration = 30f;
+    // Si esta marcado, soltar el boton en el aire no corta la carrera: el impulso
+    // se conserva hasta aterrizar, que es como se comportan la mayoria de plataformas.
+    [SerializeField] private bool keepSprintInAir = true;
+    // Velocidad horizontal actual, ya rampeada. Es la que se aplica al Rigidbody.
+    private float currentSpeed;
+    private bool isSprinting;
 
     //VIDA
     [Header("Health")]
@@ -219,6 +234,8 @@ public class PlayerControler : MonoBehaviour
         idVerticalSpeed = Animator.StringToHash("VerticalSpeed");
         idKnockback = Animator.StringToHash("knockback");
         idKnockDown = Animator.StringToHash("knockDown");
+        idIsSprinting = Animator.StringToHash("isSprinting");
+        currentSpeed = speed;
         // CONFIGURA EL ESTADO DEL PLAYER AL REAPARECER
         counterExtraJumps = extraJumps;
         //vida
@@ -394,14 +411,48 @@ public class PlayerControler : MonoBehaviour
     // Aplica la velocidad horizontal según el input y gira al player si cambia de dirección.
     private void Move()
     {
-        if (!canMove) return;
-        if (isWallDetected && !isGrounded) return;
-        if (isWallJumping) return;
-        if (isLaunched) return;
-        if (isAttacking) return;
+        // Cuando el movimiento no lo manda el input (muro, impulso, ataque) la
+        // carrera se apaga: si no, al recuperar el control el personaje saldria
+        // disparado a velocidad de sprint sin que el jugador lo haya pedido.
+        if (!canMove || (isWallDetected && !isGrounded) || isWallJumping || isLaunched || isAttacking)
+        {
+            isSprinting = false;
+            currentSpeed = speed;
+            return;
+        }
+
+        ActualizarCarrera();
 
         Flip();
-        m_rigitbody2D.linearVelocity = new Vector2(speed * m_gatherInput.Value.x, m_rigitbody2D.linearVelocityY);
+        m_rigitbody2D.linearVelocity = new Vector2(currentSpeed * m_gatherInput.Value.x, m_rigitbody2D.linearVelocityY);
+    }
+
+    // Decide si el personaje esta corriendo y lleva la velocidad hasta la que toca.
+    private void ActualizarCarrera()
+    {
+        // Correr solo cuenta si ademas se esta pidiendo movimiento: con el boton
+        // pulsado y el personaje quieto, no arranca solo.
+        bool hayInput = Mathf.Abs(m_gatherInput.Value.x) > 0.1f;
+        bool pideCorrer = m_gatherInput.IsSprinting && hayInput;
+
+        if (isGrounded)
+        {
+            // Con los pies en el suelo manda el boton, sin mas.
+            isSprinting = pideCorrer;
+        }
+        else
+        {
+            // En el aire la carrera NO se puede arrancar: pulsar el boton a media
+            // trayectoria no debe alargar un salto que salio andando. Solo se
+            // conserva la carrera que ya se traia al despegar.
+            isSprinting = isSprinting && hayInput && (keepSprintInAir || pideCorrer);
+        }
+
+        // La rampa evita el tiron de pasar de golpe de una velocidad a otra.
+        float objetivo = isSprinting ? sprintSpeed : speed;
+        currentSpeed = sprintAcceleration <= 0f
+            ? objetivo
+            : Mathf.MoveTowards(currentSpeed, objetivo, sprintAcceleration * Time.fixedDeltaTime);
     }
 
     // Detecta si el input de movimiento cambió de dirección respecto a la actual.
@@ -1023,6 +1074,9 @@ public class PlayerControler : MonoBehaviour
     private void SetAnimatorValues()
     {
         m_animator.SetFloat(idSpeed, Mathf.Abs(m_rigitbody2D.linearVelocityX));
+        // Solo se anuncia la carrera con los pies en el suelo: en el aire mandan
+        // los estados de salto y caida, no el de correr.
+        m_animator.SetBool(idIsSprinting, isSprinting && isGrounded && !isKnocked);
         m_animator.SetBool(idIsGrounded, isGrounded);
         m_animator.SetBool(idIsWallDetected, isWallDetected);
         m_animator.SetBool(idIsWallSliding, isWallSliding);

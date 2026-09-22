@@ -19,6 +19,12 @@ public class GatherInput : MonoBehaviour
     [SerializeField] private bool _isAttacking;
     public bool IsAttacking { get => _isAttacking; set => _isAttacking = value; }
 
+    // Indica si el jugador mantiene pulsada la tecla de correr. A diferencia del
+    // ataque, esto no es una pulsacion que se consume: es un estado sostenido,
+    // asi que aqui si escuchamos tambien el "canceled" para apagarlo al soltar.
+    [SerializeField] private bool _isSprinting;
+    public bool IsSprinting { get => _isSprinting; }
+
     #region Unity Lifecycle
 
     // Crea la instancia del sistema de controles generado por el Input System.
@@ -38,6 +44,8 @@ public class GatherInput : MonoBehaviour
         // de la otra forma, un clic mas corto que un paso de fisica se perdia entero.
         // Quien consume la pulsacion es PlayerControler, poniendo IsAttacking a false.
         controls.Player.Attack.performed += StartAttack;
+        controls.Player.Sprint.performed += StartSprint;
+        controls.Player.Sprint.canceled += StopSprint;
         controls.Player.Enable();
     }
 
@@ -49,6 +57,8 @@ public class GatherInput : MonoBehaviour
         controls.Player.Jump.performed -= StartJump;
         controls.Player.Jump.canceled -= StopJump;
         controls.Player.Attack.performed -= StartAttack;
+        controls.Player.Sprint.performed -= StartSprint;
+        controls.Player.Sprint.canceled -= StopSprint;
         controls.Player.Disable();
     }
 
@@ -84,6 +94,18 @@ public class GatherInput : MonoBehaviour
     private void StartAttack(InputAction.CallbackContext context)
     {
         _isAttacking = true;
+    }
+
+    // Mantiene la carrera activa mientras el boton siga pulsado.
+    private void StartSprint(InputAction.CallbackContext context)
+    {
+        _isSprinting = true;
+    }
+
+    // Y la apaga al soltarlo.
+    private void StopSprint(InputAction.CallbackContext context)
+    {
+        _isSprinting = false;
     }
 
     #endregion
