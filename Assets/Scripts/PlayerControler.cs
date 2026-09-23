@@ -130,6 +130,15 @@ public class PlayerControler : MonoBehaviour
 
     private bool isInvincible;
 
+    [Header("Curacion")]
+    // Parpadeo verde al recoger vida. Va por color y no por encender/apagar el
+    // sprite, asi que no choca con el parpadeo de invulnerabilidad.
+    [SerializeField] private Color healFlashColor = new Color(0.4f, 1f, 0.4f, 1f);
+    [SerializeField] private float healFlashDuration = 0.4f;
+    // Cuantos destellos caben en esa duracion.
+    [SerializeField] private int healFlashCount = 2;
+    private Coroutine healFlashRoutine;
+
     //VARIABLES PARA CONTROLAR LOS SALTOS DEL PLAYER EN UNITY
     [SerializeField] private float jumpForce;
     [SerializeField] private int extraJumps;
@@ -1472,6 +1481,51 @@ public class PlayerControler : MonoBehaviour
         yield return new WaitForSeconds(knockedDuration);
         isKnocked = false;
         m_animator.SetBool("isKnockback", isKnocked);
+    }
+
+    // Devuelve vida al player. Devuelve false si ya estaba lleno, para que quien
+    // cura (un corazon, por ejemplo) sepa que no ha hecho nada y no se gaste.
+    public bool Heal(int amount)
+    {
+        if (amount <= 0 || currentHealth <= 0 || currentHealth >= maxHealth) return false;
+
+        currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
+
+        if (healthBar != null) healthBar.AnimateHeal(currentHealth, maxHealth);
+
+        if (healFlashRoutine != null) StopCoroutine(healFlashRoutine);
+        healFlashRoutine = StartCoroutine(HealFlashRoutine());
+        return true;
+    }
+
+    // Tine el sprite de verde un par de veces. Solo toca el RGB y respeta el alfa
+    // que tenga en ese momento, por si coincide con un fundido (la puerta, por
+    // ejemplo, juega con la transparencia).
+    private IEnumerator HealFlashRoutine()
+    {
+        if (m_spriteRenderer == null) yield break;
+
+        Color original = m_spriteRenderer.color;
+        int veces = Mathf.Max(1, healFlashCount);
+        float paso = healFlashDuration / (veces * 2f);
+
+        for (int i = 0; i < veces; i++)
+        {
+            PintarRGB(healFlashColor);
+            yield return new WaitForSecondsRealtime(paso);
+            PintarRGB(original);
+            yield return new WaitForSecondsRealtime(paso);
+        }
+
+        PintarRGB(original);
+        healFlashRoutine = null;
+    }
+
+    private void PintarRGB(Color rgb)
+    {
+        Color c = m_spriteRenderer.color;
+        c.r = rgb.r; c.g = rgb.g; c.b = rgb.b;
+        m_spriteRenderer.color = c;
     }
 
     // Hace invulnerable al player durante invincibleTime, parpadeando el sprite para que se note.
