@@ -99,6 +99,10 @@ public class PlayerControler : MonoBehaviour
     private static readonly int IdDoubleJump = Animator.StringToHash("doubleJump");
     private static readonly int IdComboIndex = Animator.StringToHash("comboIndex");
     private static readonly int IdGetUp = Animator.StringToHash("getUp");
+    private static readonly int IdPlungePhase = Animator.StringToHash("plungePhase");
+    // La entrada va por trigger y no por plungePhase: una transicion desde Any State
+    // con plungePhase == 1 se volveria a disparar en cada fotograma mientras cae.
+    private static readonly int IdPlunge = Animator.StringToHash("plunge");
 
     [Header("Opciones de Movimiento y Salto")]
     [SerializeField] private float speed;
@@ -119,6 +123,54 @@ public class PlayerControler : MonoBehaviour
     // Velocidad horizontal actual, ya rampeada. Es la que se aplica al Rigidbody.
     private float currentSpeed;
     private bool isSprinting;
+
+    [Header("Ataques aereos")]
+    // Perfil del primer golpe aereo. El segundo usa el siguiente. Con 3 golpes
+    // de suelo (perfiles 0, 1 y 2), los aereos son el 3 y el 4. El Animator los
+    // recibe por el mismo parametro comboIndex.
+    [SerializeField] private int airAttackFirstProfile = 3;
+    [SerializeField] private int airComboLength = 2;
+    // Al atacar en el aire la caida se frena un poco (0 = se queda quieto, 1 = no
+    // se frena). Da tiempo a que el espadazo se vea sin convertirlo en un planeo.
+    [Range(0f, 1f)] [SerializeField] private float airAttackHang = 0.3f;
+    // Acertar a un enemigo en el aire devuelve el salto extra y los golpes
+    // aereos, asi se pueden encadenar enemigos sin tocar el suelo.
+    [SerializeField] private bool airHitRestoresJump = true;
+    private int airComboIndex;
+    private bool atacandoEnAire;
+
+    [Header("Estocada hacia abajo (S + ataque en el aire)")]
+    // Areas propias, relativas al centro del player (no al AttackPoint). Antes
+    // usaba los perfiles 5 y 6, y si no existian se cogia el ultimo de la lista:
+    // el golpe 3 de suelo, que esta DELANTE del personaje. La caida buscaba
+    // enemigos enfrente en vez de debajo y nunca les daba.
+    // Caja bajo los pies durante la caida. Si toca un enemigo, rebota.
+    [SerializeField] private Vector2 plungeHitOffset = new Vector2(0f, -0.7f);
+    [SerializeField] private Vector2 plungeHitSize = new Vector2(0.6f, 0.4f);
+    // Caja del impacto contra el suelo, mas ancha: pilla a los que estan al lado.
+    [SerializeField] private Vector2 plungeLandOffset = new Vector2(0f, -0.45f);
+    [SerializeField] private Vector2 plungeLandSize = new Vector2(2f, 0.6f);
+    [SerializeField] private int plungeDamage = 2;
+    // Cuanto mas lejos que un golpe normal sale despedido el enemigo.
+    [SerializeField] private float plungeKnockback = 2.5f;
+    [SerializeField] private float plungeHitStop = 0.08f;
+    [SerializeField] private bool showPlungeGizmos = true;
+    // Instante de suspension antes de caer: es lo que avisa del golpe y lo
+    // hace leerse como un ataque cargado y no como una caida sin mas.
+    [SerializeField] private float plungeWindup = 0.1f;
+    [SerializeField] private float plungeSpeed = 18f;
+    // Velocidad con la que sale despedido el enemigo al atravesarlo cayendo.
+    // X hacia fuera (el lado lo decide su posicion respecto al player), Y hacia
+    // arriba. Lo manda a volar sin sacarlo de la pantalla.
+    [SerializeField] private Vector2 plungeLaunch = new Vector2(3.5f, 7f);
+    // Cuanto se queda clavado tras impactar contra el suelo.
+    [SerializeField] private float plungeLandTime = 0.25f;
+    [SerializeField] private float plungeLandShake = 0.35f;
+    // Red de seguridad por si nunca llega a tocar suelo (un pozo sin fondo).
+    [SerializeField] private float plungeMaxTime = 1.5f;
+    [SerializeField] private bool isPlunging;
+    private Coroutine plungeRoutine;
+    private float gravedadAntesDeEstocada = -1f;
 
     [Header("Barrido (C)")]
     // Velocidad al arrancar el barrido.
@@ -465,6 +517,9 @@ public class PlayerControler : MonoBehaviour
         if (!canMove) return;
         if (isKnocked) return;
 
+        // La estocada lleva su propia velocidad de principio a fin.
+        if (isPlunging) return;
+
         // Durante el barrido no hay ni andar, ni saltar, ni atacar: se esta
         // comprometido con el, como en los Souls. Lo que se pulse mientras
         // tanto queda guardado y sale al terminar.
@@ -494,6 +549,16 @@ public class PlayerControler : MonoBehaviour
         Vector3 pies = OrigenDeLosPies();
         Gizmos.DrawLine(pies, pies + Vector3.right * checkWallDistance);
         Gizmos.DrawLine(pies, pies + Vector3.left * checkWallDistance);
+
+        // Areas de la estocada: naranja la de caida, amarilla la del impacto.
+        if (showPlungeGizmos && m_transform != null)
+        {
+            Vector3 p = m_transform.position;
+            Gizmos.color = new Color(1f, 0.5f, 0f);
+            Gizmos.DrawWireCube(p + (Vector3)plungeHitOffset, plungeHitSize);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(p + (Vector3)plungeLandOffset, plungeLandSize);
+        }
 
         // Dibuja el area del perfil que estes ajustando, en su posicion real.
         AttackProfile perfil = PerfilDeAtaque(gizmoProfileIndex);
@@ -825,7 +890,16 @@ public class PlayerControler : MonoBehaviour
         {
             attackBuffer = 0f;
 
+            // S + ataque en el aire: estocada hacia abajo. No necesita los golpes
+            // aereos anteriores, sale directa.
+            if (!isGrounded && !canWallSlide && !isWallRunning && m_gatherInput.Value.y < -0.5f)
+            {
+                IniciarEstocada();
+                return;
+            }
+
             bool desdePared = canWallSlide;
+            bool enAire = !isGrounded && !desdePared;
             int golpe;
 
             if (desdePared)
@@ -839,6 +913,21 @@ public class PlayerControler : MonoBehaviour
                 // de animacion raros al hacer clic varias veces seguidas.
                 golpe = Mathf.Clamp(wallAttackProfileIndex, 0, Mathf.Max(0, comboLength - 1));
                 comboIndex = 0;
+            }
+            else if (enAire)
+            {
+                // Los golpes aereos van por su propia cuenta. Se gastan en cada salto
+                // y se recargan al pisar suelo o al acertar a un enemigo: si no,
+                // con el frenado de caida se podria flotar a base de clics.
+                if (airComboIndex >= airComboLength) return;
+
+                golpe = airAttackFirstProfile + airComboIndex;
+                airComboIndex++;
+                comboIndex = 0;
+                atacandoEnAire = true;
+
+                if (m_rigitbody2D.linearVelocityY < 0f)
+                    m_rigitbody2D.linearVelocity = new Vector2(m_rigitbody2D.linearVelocityX, m_rigitbody2D.linearVelocityY * airAttackHang);
             }
             else
             {
@@ -889,6 +978,7 @@ public class PlayerControler : MonoBehaviour
         yield return new WaitForSeconds(duracion - ventana);
 
         isAttacking = false;
+        atacandoEnAire = false;
 
         // Ahora si empieza a correr el margen para encadenar el siguiente golpe.
         comboTimer = comboWindow;
@@ -902,6 +992,155 @@ public class PlayerControler : MonoBehaviour
         while (attackAnimationTimer > 0f) yield return null;
 
         if (canWallSlide && !isGrounded) SetFacing(wallDirection);
+    }
+
+    // Golpea todo lo que haya en una caja relativa al centro del player. Lo usa la
+    // estocada, que no tiene sentido atarla a los perfiles de ataque (esos van
+    // relativos al AttackPoint, que esta delante del personaje).
+    private int GolpearCaja(Vector2 offset, Vector2 tamano, int dano, float retroceso, HashSet<EnemyHealth> excluir = null)
+    {
+        Vector2 centro = (Vector2)m_transform.position + offset;
+        int capas = attackLayers.value == 0 ? ~0 : attackLayers.value;
+        Collider2D[] hits = Physics2D.OverlapBoxAll(centro, tamano, 0f, capas);
+        HashSet<EnemyHealth> tocados = new HashSet<EnemyHealth>();
+
+        foreach (Collider2D hit in hits)
+        {
+            if (!hit.CompareTag("Enemy")) continue;
+            EnemyHealth enemigo = hit.GetComponent<EnemyHealth>();
+            if (enemigo == null || (excluir != null && excluir.Contains(enemigo))) continue;
+            if (tocados.Add(enemigo))
+                enemigo.TakeDamage(dano, m_transform.position, retroceso);
+        }
+
+        if (tocados.Count > 0) StartCoroutine(HitStop(plungeHitStop));
+        return tocados.Count;
+    }
+
+    // Lanza por los aires a los enemigos que la caja de caida va atravesando. Cada
+    // uno solo una vez por estocada: siguen dentro de la caja varios fotogramas.
+    private void LanzarEnemigosAtravesados(HashSet<EnemyHealth> yaLanzados)
+    {
+        Vector2 centro = (Vector2)m_transform.position + plungeHitOffset;
+        int capas = attackLayers.value == 0 ? ~0 : attackLayers.value;
+        Collider2D[] hits = Physics2D.OverlapBoxAll(centro, plungeHitSize, 0f, capas);
+        bool alguno = false;
+
+        foreach (Collider2D hit in hits)
+        {
+            if (!hit.CompareTag("Enemy")) continue;
+            EnemyHealth enemigo = hit.GetComponent<EnemyHealth>();
+            if (enemigo == null || !yaLanzados.Add(enemigo)) continue;
+
+            // Sale hacia el lado en el que ya estaba. Si cae justo encima, hacia
+            // donde mira el player.
+            float dx = enemigo.transform.position.x - m_transform.position.x;
+            float lado = Mathf.Abs(dx) > 0.05f ? Mathf.Sign(dx) : direction;
+            enemigo.TakeDamage(plungeDamage, m_transform.position, new Vector2(plungeLaunch.x * lado, plungeLaunch.y));
+            alguno = true;
+        }
+
+        if (!alguno) return;
+        StartCoroutine(HitStop(plungeHitStop));
+        Sacudir(plungeLandShake * 0.5f);
+    }
+
+    // Devuelve el salto extra y los golpes aereos. Lo usa acertar en el aire.
+    private void RecuperarSaltoAereo()
+    {
+        counterExtraJumps = extraJumps;
+        canDoubleJump = true;
+        airComboIndex = 0;
+    }
+
+    private void IniciarEstocada()
+    {
+        if (isPlunging) return;
+        if (isAttacking) CancelarAtaque();
+        plungeRoutine = StartCoroutine(EstocadaRoutine());
+    }
+
+    // Suspension, caida en picado y, o rebote en un enemigo, o impacto en el suelo.
+    private IEnumerator EstocadaRoutine()
+    {
+        isPlunging = true;
+        isAttacking = true;
+        canAttack = false;
+        m_animator.SetInteger(IdPlungePhase, 1);
+        m_animator.SetTrigger(IdPlunge);
+
+        // Suspension: se queda quieto en el aire un instante.
+        gravedadAntesDeEstocada = m_rigitbody2D.gravityScale;
+        m_rigitbody2D.gravityScale = 0f;
+        float t = 0f;
+        while (t < plungeWindup)
+        {
+            m_rigitbody2D.linearVelocity = Vector2.zero;
+            yield return new WaitForFixedUpdate();
+            t += Time.fixedDeltaTime;
+        }
+        m_rigitbody2D.gravityScale = gravedadAntesDeEstocada;
+        gravedadAntesDeEstocada = -1f;
+
+        // Caida en picado, recta. Se atraviesa a los enemigos: la colision con
+        // ellos se desactiva hasta que acaba y ha salido de dentro de todos.
+        IgnorarEnemigos(true);
+        HashSet<EnemyHealth> atravesados = new HashSet<EnemyHealth>();
+        t = 0f;
+        while (!isGrounded && t < plungeMaxTime)
+        {
+            m_rigitbody2D.linearVelocity = new Vector2(0f, -plungeSpeed);
+
+            // Si cae encima de un enemigo no rebota: lo atraviesa y lo lanza por
+            // los aires, y sigue cayendo hasta el suelo.
+            LanzarEnemigosAtravesados(atravesados);
+
+            yield return new WaitForFixedUpdate();
+            t += Time.fixedDeltaTime;
+        }
+
+        if (isGrounded)
+        {
+            // Impacto: dano en area alrededor de los pies y sacudida fuerte.
+            m_rigitbody2D.linearVelocity = Vector2.zero;
+            m_animator.SetInteger(IdPlungePhase, 2);
+            // Los que ya salieron volando al atravesarlos no reciben otro golpe.
+            GolpearCaja(plungeLandOffset, plungeLandSize, plungeDamage, plungeKnockback, atravesados);
+            Sacudir(plungeLandShake);
+            yield return new WaitForSeconds(plungeLandTime);
+        }
+
+        FinalizarEstocada();
+    }
+
+    // Deja el estado limpio al acabar la estocada por su camino normal.
+    private void FinalizarEstocada()
+    {
+        if (gravedadAntesDeEstocada >= 0f)
+        {
+            m_rigitbody2D.gravityScale = gravedadAntesDeEstocada;
+            gravedadAntesDeEstocada = -1f;
+        }
+
+        plungeRoutine = null;
+        isPlunging = false;
+
+        // Vuelve a chocar con los enemigos, pero solo cuando ya no este dentro
+        // de ninguno: reactivarlo dentro lo expulsaria de golpe.
+        if (ignorandoEnemigos && isActiveAndEnabled) StartCoroutine(EsperarASalirDeEnemigos());
+        isAttacking = false;
+        canAttack = true;
+        m_animator.SetInteger(IdPlungePhase, 0);
+        m_animator.ResetTrigger(IdPlunge);
+    }
+
+    // La corta desde fuera, por ejemplo al recibir un golpe. Importante devolver
+    // la gravedad: si el golpe llega durante la suspension, se quedaria a cero y
+    // el personaje flotaria.
+    private void TerminarEstocada()
+    {
+        if (plungeRoutine != null) StopCoroutine(plungeRoutine);
+        FinalizarEstocada();
     }
 
     // Deshace la cadena si el jugador tarda demasiado en volver a atacar.
@@ -934,10 +1173,10 @@ public class PlayerControler : MonoBehaviour
     }
 
     // Aplica el golpe del perfil indicado a todo lo que haya en su area.
-    private void AplicarGolpe(int index)
+    private int AplicarGolpe(int index)
     {
         AttackProfile perfil = PerfilDeAtaque(index);
-        if (perfil == null) return;
+        if (perfil == null) return 0;
 
         Collider2D[] hits = BuscarObjetivos(perfil);
         Vector2 centro = CentroDelGolpe(perfil);
@@ -957,13 +1196,17 @@ public class PlayerControler : MonoBehaviour
 
         // Todo lo de abajo solo si el golpe ha conectado: al aire no aporta nada
         // y sacudir la camara por fallar marea.
-        if (alreadyHit.Count == 0) return;
+        if (alreadyHit.Count == 0) return 0;
+
+        // En el aire, acertar devuelve el salto extra.
+        if (!isGrounded && airHitRestoresJump) RecuperarSaltoAereo();
 
         float congelacion = perfil.congelacion >= 0f ? perfil.congelacion : hitStopDuration;
         StartCoroutine(HitStop(congelacion));
 
         Sacudir(perfil.sacudida);
         MostrarEfecto(perfil, centro);
+        return alreadyHit.Count;
     }
 
     // Sacude la camara a traves de Cinemachine. La direccion sale del propio
@@ -1133,6 +1376,11 @@ public class PlayerControler : MonoBehaviour
             isGrounded = true;
             counterExtraJumps = extraJumps;
             canDoubleJump = false;
+            airComboIndex = 0;
+
+            // Un golpe aereo no sigue en el suelo: se corta al aterrizar para que
+            // el personaje no se quede clavado terminando un espadazo de salto.
+            if (atacandoEnAire) CancelarAtaque();
         }
         else
         {
@@ -1462,6 +1710,8 @@ public class PlayerControler : MonoBehaviour
                         && m_rigitbody2D.linearVelocityY <= 0f;
 
         if (!canWallSlide) return;
+        // En plena estocada no se frena: rozar una pared cortaria el picado.
+        if (isPlunging) return;
         // Subiendo por el muro manda HandleWallRun: aqui solo estorbariamos
         // frenandole la velocidad vertical que acaba de fijar.
         if (isWallRunning) return;
@@ -1579,7 +1829,8 @@ public class PlayerControler : MonoBehaviour
             }
         }
 
-        IgnorarEnemigos(false);
+        // Si mientras tanto ha empezado otro barrido o estocada, ese ya se encarga.
+        if (!isDodging && !isPlunging) IgnorarEnemigos(false);
     }
 
     // Corta el barrido en seco. Lo usa el dano cuando el golpe entra fuera de
@@ -1604,6 +1855,7 @@ public class PlayerControler : MonoBehaviour
         canAttack = true;
         attackAnimationTimer = 0f;
         comboIndex = 0;
+        atacandoEnAire = false;
     }
 
     // Activa o restaura la colision entre las capas del player y los enemigos.
@@ -1678,6 +1930,10 @@ public class PlayerControler : MonoBehaviour
         // y trampas por igual; las zonas de muerte no pasan por aqui y siguen
         // matando.
         if (hasIFrames) return;
+        // La estocada es invulnerable de principio a fin. Al caer encima de un
+        // enemigo, este atacaba en el mismo instante y el golpe del jugador
+        // perdia; ademas el rebote tiene que salir limpio.
+        if (isPlunging) return;
 
         currentHealth -= damage;
 
@@ -1688,6 +1944,7 @@ public class PlayerControler : MonoBehaviour
         // Si el golpe entra con el barrido aun en marcha (fuera de la ventana de
         // invulnerabilidad), se corta: el retroceso tiene que mandar.
         if (isDodging) TerminarEsquiva();
+        if (isPlunging) TerminarEstocada();
 
         Knockback();
 

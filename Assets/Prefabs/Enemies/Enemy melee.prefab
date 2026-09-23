@@ -11,12 +11,10 @@ GameObject:
   - component: {fileID: 1152083443440269258}
   - component: {fileID: 2933704195293986663}
   - component: {fileID: 8297499070059325752}
-  - component: {fileID: 7808096404027295253}
   - component: {fileID: 4412530216998263897}
   - component: {fileID: 2540436576410838536}
   - component: {fileID: -8927120801491865496}
   - component: {fileID: 8809201098292569166}
-  - component: {fileID: 4582322111654452619}
   - component: {fileID: 1799905128074051289}
   m_Layer: 11
   m_Name: Enemy melee
@@ -117,43 +115,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!70 &7808096404027295253
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4623148209465566883}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0.06445646, y: -0.17188442}
-  m_Size: {x: 0.7125931, y: 0.7125931}
-  m_Direction: 0
 --- !u!50 &4412530216998263897
 Rigidbody2D:
   serializedVersion: 5
@@ -193,15 +154,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2764935368f9f8418ccf7275d1f1362, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRadius: 1.28
+  detectionRadius: 1.57
   speed: 2.07
   spriteFacesLeft: 1
-  attackRange: 0.55
-  attackCooldown: 0.78
-  attackDuration: 0.8
+  attackRange: 0.8
+  attackCooldown: 1.3
+  attackDuration: 0.55
   attackDamage: 1
-  attackOffset: {x: 0.63, y: -0.13}
-  attackRadius: 0.27
+  attackOffset: {x: 0.34, y: 0.06}
+  attackRadius: 0.32
   isAttacking: 0
   patrolSpeed: 1
   groundLayer:
@@ -210,16 +171,16 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 0
-  wallCheckHeight: -0.33
-  wallCheckDistance: 0.55
-  edgeCheckOffset: {x: 0.45, y: -0.3}
-  edgeCheckDistance: 0.4
+  wallCheckHeight: -0.2
+  wallCheckDistance: 0.3
+  edgeCheckOffset: {x: 0.3, y: -0.35}
+  edgeCheckDistance: 0.25
   avoidTraps: 1
   trapLayer:
     serializedVersion: 2
     m_Bits: 0
-  trapCheckOffset: {x: 0.55, y: -0.25}
-  trapCheckRadius: 0.35
+  trapCheckOffset: {x: 0.45, y: -0.3}
+  trapCheckRadius: 0.2
 --- !u!114 &-8927120801491865496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,8 +197,9 @@ MonoBehaviour:
   currentHealth: 0
   deathVFX: {fileID: 0}
   deathAnimDuration: 0.8
-  knockbackForce: {x: 1, y: 0}
+  knockbackForce: {x: 2.5, y: 1.5}
   knockbackDuration: 0.3
+  maxAirStunTime: 2.5
 --- !u!61 &8809201098292569166
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -272,7 +234,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.14709353, y: -0.32725668}
+  m_Offset: {x: 0.09, y: -0.17}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -282,21 +244,8 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.489017, y: 0.22284126}
+  m_Size: {x: 0.5, y: 0.52}
   m_EdgeRadius: 0
---- !u!114 &4582322111654452619
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4623148209465566883}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb12465f33076224faa9933f78a9ac81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 1
 --- !u!114 &1799905128074051289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -311,8 +260,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderers: []
   flashColor: {r: 0.9622642, g: 0.027233727, b: 0.027233727, a: 1}
-  flashDuration: 0.08
+  flashDuration: 0.16
   flashCount: 2
   colorSinShader: {r: 1, g: 0.3, b: 0.3, a: 1}
-  scalePunch: 0.15
+  scalePunch: 0
   punchDuration: 0.12

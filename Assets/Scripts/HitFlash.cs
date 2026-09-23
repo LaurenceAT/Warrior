@@ -134,12 +134,23 @@ public class HitFlash : MonoBehaviour
 
             // Sube de golpe y vuelve: un seno da justo esa forma.
             float extra = Mathf.Sin(k * Mathf.PI) * scalePunch;
-            transform.localScale = escalaOriginal * (1f + extra);
+            transform.localScale = EscalaConSigno(1f + extra);
             yield return null;
         }
 
-        transform.localScale = escalaOriginal;
+        transform.localScale = EscalaConSigno(1f);
         rutinaPunch = null;
+    }
+
+    // El enemigo se voltea invirtiendo su escala en X. Si el estiron partiera de
+    // la escala guardada al arrancar, un enemigo golpeado mirando al otro lado
+    // se quedaria girado al reves al terminar. Se conserva el signo actual.
+    private Vector3 EscalaConSigno(float factor)
+    {
+        float signo = transform.localScale.x < 0f ? -1f : 1f;
+        Vector3 e = escalaOriginal * factor;
+        e.x = Mathf.Abs(e.x) * signo;
+        return e;
     }
 
     // Si el enemigo muere a media animacion, hay que dejar el sprite como estaba:
@@ -147,7 +158,7 @@ public class HitFlash : MonoBehaviour
     private void OnDisable()
     {
         AplicarFlash(0f);
-        transform.localScale = escalaOriginal;
+        transform.localScale = EscalaConSigno(1f);
         rutinaFlash = null;
         rutinaPunch = null;
     }
