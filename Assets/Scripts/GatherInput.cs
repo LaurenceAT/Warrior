@@ -25,6 +25,15 @@ public class GatherInput : MonoBehaviour
     [SerializeField] private bool _isSprinting;
     public bool IsSprinting { get => _isSprinting; }
 
+    // Pulsacion del disparo con arco. Como el ataque: se marca al pulsar y la consume
+    // PlayerControler, asi un toque breve no se pierde entre pasos de fisica.
+    [SerializeField] private bool _isShooting;
+    public bool IsShooting { get => _isShooting; set => _isShooting = value; }
+    // Si el boton de disparo sigue pulsado. Sirve para cargar el disparo: la
+    // pulsacion de arriba se consume al empezar, esto dura mientras se mantenga.
+    [SerializeField] private bool _isShootHeld;
+    public bool IsShootHeld { get => _isShootHeld; }
+
     // Pulsacion de esquiva. Como el ataque: se marca al pulsar y la consume
     // PlayerControler, asi un toque breve no se pierde entre pasos de fisica.
     [SerializeField] private bool _isDodging;
@@ -51,6 +60,8 @@ public class GatherInput : MonoBehaviour
         controls.Player.Attack.performed += StartAttack;
         controls.Player.Sprint.performed += StartSprint;
         controls.Player.Sprint.canceled += StopSprint;
+        controls.Player.Shoot.performed += StartShoot;
+        controls.Player.Shoot.canceled += StopShoot;
         controls.Player.Dodge.performed += StartDodge;
         controls.Player.Enable();
     }
@@ -65,6 +76,8 @@ public class GatherInput : MonoBehaviour
         controls.Player.Attack.performed -= StartAttack;
         controls.Player.Sprint.performed -= StartSprint;
         controls.Player.Sprint.canceled -= StopSprint;
+        controls.Player.Shoot.performed -= StartShoot;
+        controls.Player.Shoot.canceled -= StopShoot;
         controls.Player.Dodge.performed -= StartDodge;
         controls.Player.Disable();
     }
@@ -113,6 +126,19 @@ public class GatherInput : MonoBehaviour
     private void StopSprint(InputAction.CallbackContext context)
     {
         _isSprinting = false;
+    }
+
+    // Marca el disparo al pulsar el boton.
+    private void StartShoot(InputAction.CallbackContext context)
+    {
+        _isShooting = true;
+        _isShootHeld = true;
+    }
+
+    // Suelta el boton de disparo: se acaba la carga.
+    private void StopShoot(InputAction.CallbackContext context)
+    {
+        _isShootHeld = false;
     }
 
     // Marca la esquiva al pulsar el boton.

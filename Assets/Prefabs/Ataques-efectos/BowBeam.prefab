@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6930482518168732861
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5985951359428211933}
+  - component: {fileID: 8460894114085598498}
+  - component: {fileID: 4172610507761915418}
+  m_Layer: 0
+  m_Name: BowBeam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5985951359428211933
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6930482518168732861}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -23.800144, y: 5.7760363, z: -0.82367134}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &8460894114085598498
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6930482518168732861}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a4ff5d3a52babd347ae284effe62e471, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: -695255933, guid: c12c507f508cbea4e8717eef8b53752b, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 2.2857144, y: 2.2857144}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!114 &4172610507761915418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6930482518168732861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e24bf4835900b894ab11a9fde9a38e12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  formFrames:
+  - {fileID: 2291270967926626937, guid: c12c507f508cbea4e8717eef8b53752b, type: 3}
+  - {fileID: -3272134961859198940, guid: c12c507f508cbea4e8717eef8b53752b, type: 3}
+  - {fileID: 2298599853602208663, guid: c12c507f508cbea4e8717eef8b53752b, type: 3}
+  loopFrames:
+  - {fileID: -695255933, guid: c12c507f508cbea4e8717eef8b53752b, type: 3}
+  - {fileID: -1428627190, guid: c12c507f508cbea4e8717eef8b53752b, type: 3}
+  - {fileID: 2112202729, guid: c12c507f508cbea4e8717eef8b53752b, type: 3}
+  - {fileID: 846475261, guid: c12c507f508cbea4e8717eef8b53752b, type: 3}
+  formFps: 40
+  loopFps: 20
+  thickness: 1.8
+  pulseAmount: 0.12
+  pulseSpeed: 28
+  extendTime: 0.06
+  collapseTime: 0.18
+  collapseSwell: 1.15
+  coreMaterial: {fileID: 2100000, guid: a4ff5d3a52babd347ae284effe62e471, type: 2}
+  coreColor: {r: 1, g: 1, b: 1, a: 1}
+  coreThickness: 0.45
+  rings: 1
+  ringColor: {r: 0.8, g: 1, b: 1, a: 1}
+  ringWidth: 0.07
+  ringTime: 0.3
+  ringSize: {x: 0.45, y: 1.5}
+  sparks: 1
+  sparkCount: 12
+  sparkColorA: {r: 0.6, g: 1, b: 1, a: 1}
+  sparkColorB: {r: 1, g: 1, b: 1, a: 1}
+  sparkSize: {x: 0.07, y: 0.11}
+  sparkSpeed: {x: 3, y: 8}
+  sortingLayer: VFX
+  sortingOrder: 5

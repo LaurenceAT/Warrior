@@ -233,6 +233,8 @@ MonoBehaviour:
   _isJumping: 0
   _isAttacking: 0
   _isSprinting: 0
+  _isShooting: 0
+  _isDodging: 0
 --- !u!114 &2360815886447925532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,11 +254,66 @@ MonoBehaviour:
   sprintSpeed: 8.5
   sprintAcceleration: 30
   keepSprintInAir: 1
+  bowBeamPrefab: {fileID: 4172610507761915418, guid: 3b316857f51c31d4fae46c8b4d91916d, type: 3}
+  bowDamage: 1
+  bowTicks: 3
+  bowTickInterval: 0.1
+  bowFirstTickDelay: 0.08
+  bowTickKnockback: 0.2
+  bowCooldown: 1.2
+  bowRange: 60
+  bowHitHeight: 1.1
+  bowMuzzleOffset: {x: 0.45, y: 0}
+  bowGroundDuration: 0.6
+  bowGroundRelease: 0.467
+  bowAirDuration: 0.4
+  bowAirRelease: 0.267
+  bowShake: 0.25
+  bowHitStop: 0.06
+  bowTargetLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  isShooting: 0
+  airAttackFirstProfile: 3
+  airComboLength: 2
+  airAttackHang: 0.3
+  airHitRestoresJump: 1
+  plungeHitOffset: {x: 0, y: -0.7}
+  plungeHitSize: {x: 0.6, y: 0.4}
+  plungeLandOffset: {x: 0, y: -0.45}
+  plungeLandSize: {x: 2, y: 0.6}
+  plungeDamage: 2
+  plungeKnockback: 2.5
+  plungeHitStop: 0.08
+  showPlungeGizmos: 1
+  plungeWindup: 0.1
+  plungeSpeed: 18
+  plungeLaunch: {x: 3.5, y: 7}
+  plungeLandTime: 0.25
+  plungeLandShake: 0.35
+  plungeMaxTime: 1.5
+  isPlunging: 0
+  dodgeSpeed: 10
+  dodgeDuration: 0.4
+  dodgeSlowdown: 0.5
+  iFrameStart: 0.03
+  iFrameDuration: 0.25
+  dodgeCooldown: 0.45
+  dodgeBufferTime: 0.15
+  passThroughEnemies: 1
+  passThroughMaxExtra: 0.4
+  isDodging: 0
+  hasIFrames: 0
+  slideColliderHeight: 0.55
+  slideMaxExtraUnderCeiling: 0.6
   maxHealth: 5
   currentHealth: 0
   invincibleTime: 1
   blinkInterval: 0.1
   healthBar: {fileID: 0}
+  healFlashColor: {r: 0.4, g: 1, b: 0.4, a: 1}
+  healFlashDuration: 0.4
+  healFlashCount: 2
   jumpForce: 10
   extraJumps: 1
   counterExtraJumps: 0
@@ -274,6 +331,7 @@ MonoBehaviour:
   wallCheckRays: 3
   wallCheckMinRays: 2
   wallMinNormalX: 0.8
+  wallCheckRequireFeet: 1
   isWallDetected: 0
   wallDirection: 1
   canWallSlide: 0
@@ -289,6 +347,9 @@ MonoBehaviour:
   wallRunStick: 0.2
   wallRunGraceTime: 0.12
   wallRunProbeExtra: 0.15
+  wallRunLedgePush: 2.5
+  wallRunLedgeUpKeep: 0.45
+  wallRunLedgeTime: 0.25
   isWallRunning: 0
   isWallJumping: 0
   wallJumpDuration: 0.3
@@ -370,7 +431,79 @@ MonoBehaviour:
     congelacion: 0.1
     sacudida: 0.3
     efectoGolpe: {fileID: 0}
-  gizmoProfileIndex: 1
+  - nombre: "A\xE9reo 1"
+    forma: 2
+    offset: {x: -1.22, y: 0.21}
+    radio: -3.86
+    tamano: {x: 0.45, y: 1.07}
+    radioInterior: 0.35
+    radioExterior: 1.46
+    angulo: 92.6
+    anguloCentro: -8.3
+    afiladoPuntas: 1
+    puntaHacia: 1
+    dano: 1
+    duracion: 0.27
+    encadenarDesde: 0.18
+    avance: 3
+    congelacion: 0.1
+    sacudida: 0.3
+    efectoGolpe: {fileID: 0}
+  - nombre: "A\xE9reo 2"
+    forma: 2
+    offset: {x: -0.86, y: -0.54}
+    radio: -3.86
+    tamano: {x: 0.45, y: 1.07}
+    radioInterior: 0.61
+    radioExterior: 1.32
+    angulo: 115
+    anguloCentro: 59.8
+    afiladoPuntas: 1
+    puntaHacia: 1
+    dano: 1
+    duracion: 0.2
+    encadenarDesde: 0.14
+    avance: 3
+    congelacion: 0.1
+    sacudida: 0.3
+    efectoGolpe: {fileID: 0}
+  - nombre: "Estocada ca\xEDda"
+    forma: 1
+    offset: {x: -0.67, y: 0.03}
+    radio: 0.5
+    tamano: {x: 0.6, y: 1.21}
+    radioInterior: 0.61
+    radioExterior: 1.32
+    angulo: 115
+    anguloCentro: 59.8
+    afiladoPuntas: 1
+    puntaHacia: 1
+    dano: 2
+    duracion: 0.2
+    encadenarDesde: 0.14
+    avance: 3
+    congelacion: 0.1
+    sacudida: 0.3
+    efectoGolpe: {fileID: 0}
+  - nombre: Estocada impacto
+    forma: 2
+    offset: {x: -1.18, y: 0.8}
+    radio: 2.12
+    tamano: {x: 6.77, y: 1.21}
+    radioInterior: 0.74
+    radioExterior: 1.58
+    angulo: 119.5
+    anguloCentro: -72
+    afiladoPuntas: 0.944
+    puntaHacia: 1
+    dano: 2
+    duracion: 0.2
+    encadenarDesde: 0.14
+    avance: 3
+    congelacion: 0.1
+    sacudida: 0.3
+    efectoGolpe: {fileID: 0}
+  gizmoProfileIndex: 6
   attackCooldown: 0.03
   isAttacking: 0
   hitStopDuration: 0.06

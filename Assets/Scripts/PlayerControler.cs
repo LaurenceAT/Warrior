@@ -103,6 +103,10 @@ public class PlayerControler : MonoBehaviour
     // La entrada va por trigger y no por plungePhase: una transicion desde Any State
     // con plungePhase == 1 se volveria a disparar en cada fotograma mientras cae.
     private static readonly int IdPlunge = Animator.StringToHash("plunge");
+    private static readonly int IdShoot = Animator.StringToHash("shoot");
+    // Mantiene la pose del arco mientras duran los ticks, que acaban despues que el clip.
+    private static readonly int IdIsShooting = Animator.StringToHash("isShooting");
+    private bool animatorTieneIsShooting;
 
     [Header("Opciones de Movimiento y Salto")]
     [SerializeField] private float speed;
@@ -123,6 +127,68 @@ public class PlayerControler : MonoBehaviour
     // Velocidad horizontal actual, ya rampeada. Es la que se aplica al Rigidbody.
     private float currentSpeed;
     private bool isSprinting;
+
+    [Header("Arco (clic derecho)")]
+    // Prefab con el efecto del haz (BowBeam). Sin el, el dano funciona igual.
+    [SerializeField] private BowBeam bowBeamPrefab;
+    // Dano de cada tick. Con 3 ticks, 3 en total.
+    [SerializeField] private int bowDamage = 1;
+    [SerializeField] private int bowTicks = 3;
+    [SerializeField] private float bowTickInterval = 0.1f;
+    // Lo que tarda el haz en formarse antes del primer tick (fogonazo del arco).
+    [SerializeField] private float bowFirstTickDelay = 0.08f;
+    // Retroceso de los ticks intermedios. Con el normal, el primero ya levantaba al
+    // enemigo fuera de la franja y los otros dos no le daban. El ultimo empuja entero.
+    [SerializeField] private float bowTickKnockback = 0.2f;
+    // Un cerdo tiene 4 de vida y esto quita 3, frente a 1 de un espadazo: sin un
+    // freno serio el arco seria la unica arma que valdria la pena.
+    [SerializeField] private float bowCooldown = 1.2f;
+    // Alcance del haz. Atraviesa enemigos y paredes, asi que basta con que sea mas
+    // largo que el nivel mas ancho (ahora rondan los 50 tiles).
+    [SerializeField] private float bowRange = 60f;
+    // Alto de la franja que golpea. El haz se ve de 0.79 de grosor.
+    [SerializeField] private float bowHitHeight = 0.7f;
+    // Punta del arco respecto al centro del player (la X se voltea sola).
+    [SerializeField] private Vector2 bowMuzzleOffset = new Vector2(0.45f, 0f);
+    // Duracion de cada clip y momento en que se suelta la flecha, a 15 fps:
+    // en el suelo son 9 fotogramas y suelta en el 7; en el aire 6 y suelta en el 4.
+    // El disparo sale por tiempo, no por Animation Event, para no depender de
+    // que el evento este bien puesto en el clip.
+    [SerializeField] private float bowGroundDuration = 0.6f;
+    [SerializeField] private float bowGroundRelease = 0.467f;
+    [SerializeField] private float bowAirDuration = 0.4f;
+    [SerializeField] private float bowAirRelease = 0.267f;
+    [SerializeField] private float bowShake = 0.25f;
+    [SerializeField] private float bowHitStop = 0.06f;
+    // Capas que recibe el haz. Vacio = la capa Enemies.
+    [SerializeField] private LayerMask bowTargetLayers;
+    [Header("Arco: retroceso, destello y carga")]
+    // Empujon hacia atras al soltar la flecha. Pocos pixeles, pero vende la potencia.
+    [SerializeField] private float bowRecoilSpeed = 6f;
+    [SerializeField] private float bowRecoilTime = 0.12f;
+    // Cuanto mas recula a carga completa (1 = igual que un disparo normal).
+    [SerializeField] private float bowChargeRecoil = 2.2f;
+    // Fogonazo de pantalla al disparar.
+    [SerializeField] private Color bowFlashColor = new Color(0.45f, 0.9f, 1f, 0.3f);
+    [SerializeField] private float bowFlashTime = 0.12f;
+    // Mantener el clic derecho carga el disparo. Se congela la pose justo antes
+    // de soltar la flecha y se va cargando; al soltar el boton (o al llenarse)
+    // dispara. Un toque normal sale igual que siempre.
+    [SerializeField] private bool bowChargeEnabled = true;
+    // Tiempo para la carga completa. Llena, dispara sola.
+    [SerializeField] private float bowChargeTime = 1f;
+    // A carga completa: ticks extra y grosor del haz.
+    [SerializeField] private int bowChargeExtraTicks = 2;
+    [SerializeField] private float bowChargeThickness = 1.4f;
+    // Color al que va tinendo al personaje mientras carga.
+    [SerializeField] private Color bowChargeTint = new Color(0.5f, 0.95f, 1f, 1f);
+    [SerializeField] private bool isShooting;
+    private bool cargandoArco;
+    private Color colorAntesDeCargar;
+    private float grosorDisparo = 1f;
+    private float bowCooldownTimer;
+    private Coroutine bowRoutine;
+    private float gravedadAntesDelDisparo = -1f;
 
     [Header("Ataques aereos")]
     // Perfil del primer golpe aereo. El segundo usa el siguiente. Con 3 golpes
@@ -365,6 +431,23 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private ParticleSystem wallRunDust;
     [SerializeField] private Vector2 wallRunDustOffset = new Vector2(0.18f, -0.35f);
 
+    [Header("Polvo: ajustes")]
+    // Los tres sistemas se configuran por codigo al arrancar con estos valores, asi
+    // que tocar el Particle System a mano no sirve: se ajusta aqui.
+    [SerializeField] private DustFx.Preset sprintDustPreset = DustFx.Preset.Carrera();
+    [SerializeField] private DustFx.Preset wallSlideDustPreset = DustFx.Preset.DeslizarPared();
+    [SerializeField] private DustFx.Preset wallRunDustPreset = DustFx.Preset.CorrerPared();
+    // Caida minima (u/s) para que aterrizar levante polvo.
+    [SerializeField] private float landingDustSpeed = 7f;
+    // Cada cuanto da un "paso" corriendo por la pared.
+    [SerializeField] private float wallRunStepInterval = 0.09f;
+    private bool polvoCarreraAntes;
+    private bool polvoBarridoAntes;
+    private int direccionAntes = 1;
+    private bool enSueloAntes = true;
+    private float velYAntes;
+    private float pasoParedTimer;
+
     //IMPULSO EXTERNO (flechas giratorias, trampolines...)
     [Header("Opciones de Impulso")]
     [SerializeField] private bool isLaunched;
@@ -484,8 +567,13 @@ public class PlayerControler : MonoBehaviour
         idIsSprinting = Animator.StringToHash("isSprinting");
         idIsWallRunning = Animator.StringToHash("isWallRunning");
         idIsDodging = Animator.StringToHash("isDodging");
+        foreach (AnimatorControllerParameter p in m_animator.parameters)
+            if (p.nameHash == IdIsShooting) { animatorTieneIsShooting = true; break; }
         currentSpeed = speed;
         if (impulseSource == null) impulseSource = GetComponent<CinemachineImpulseSource>();
+        DustFx.Configurar(sprintDust, sprintDustPreset, "VFX", 1);
+        DustFx.Configurar(wallSlideDust, wallSlideDustPreset, "VFX", 1);
+        DustFx.Configurar(wallRunDust, wallRunDustPreset, "VFX", 1);
         // CONFIGURA EL ESTADO DEL PLAYER AL REAPARECER
         counterExtraJumps = extraJumps;
         //vida
@@ -520,6 +608,10 @@ public class PlayerControler : MonoBehaviour
         // La estocada lleva su propia velocidad de principio a fin.
         if (isPlunging) return;
 
+        // El disparo con arco es potente y compromete: se hace entero, sin moverse.
+        Disparo();
+        if (isShooting) return;
+
         // Durante el barrido no hay ni andar, ni saltar, ni atacar: se esta
         // comprometido con el, como en los Souls. Lo que se pulse mientras
         // tanto queda guardado y sale al terminar.
@@ -549,6 +641,15 @@ public class PlayerControler : MonoBehaviour
         Vector3 pies = OrigenDeLosPies();
         Gizmos.DrawLine(pies, pies + Vector3.right * checkWallDistance);
         Gizmos.DrawLine(pies, pies + Vector3.left * checkWallDistance);
+
+        // Punta del arco y arranque de la franja que golpea el haz.
+        if (m_transform != null)
+        {
+            Gizmos.color = new Color(0.3f, 0.8f, 1f);
+            Vector3 boca = BocaDelArco();
+            Gizmos.DrawWireSphere(boca, 0.06f);
+            Gizmos.DrawWireCube(boca + Vector3.right * direction, new Vector3(2f, bowHitHeight, 0f));
+        }
 
         // Areas de la estocada: naranja la de caida, amarilla la del impacto.
         if (showPlungeGizmos && m_transform != null)
@@ -1645,46 +1746,91 @@ public class PlayerControler : MonoBehaviour
         currentSpeed = Mathf.Max(currentSpeed, sprintSpeed);
     }
 
-    // Enciende y apaga los tres sistemas de polvo segun lo que este haciendo
-    // el personaje, y los coloca donde toca.
+    // Enciende y apaga el polvo segun lo que este haciendo el personaje, lo orienta
+    // y suelta las rafagas de los momentos fuertes.
     private void ActualizarPolvo()
     {
-        // Roce de pared: solo bajando de verdad. Quieto contra el muro no hay
-        // friccion que mostrar.
+        float vy = m_rigitbody2D.linearVelocityY;
+        bool enSuelo = isGrounded;
+
+        // --- Carrera por el suelo (y el barrido) ---
+        bool corre = (isSprinting || isDodging) && enSuelo && Mathf.Abs(m_rigitbody2D.linearVelocityX) > 0.1f;
+        ColocarPolvo(sprintDust, sprintDustPreset, corre,
+            new Vector3(sprintDustOffset.x, sprintDustOffset.y, 0f), -direction, 1f);
+
+        // Arrancar a correr: una bocanada hacia atras.
+        bool carrera = isSprinting && enSuelo;
+        if (carrera && !polvoCarreraAntes)
+            DustFx.Rafaga(sprintDust, 6, Rango(0.8f, 2f, -direction), new Vector2(0.3f, 1f));
+
+        // Empezar un barrido: rafaga mas larga y rasante.
+        if (isDodging && !polvoBarridoAntes)
+            DustFx.Rafaga(sprintDust, 10, Rango(1f, 2.8f, -direction), new Vector2(0.1f, 0.6f));
+
+        // Derrapar: cambiar de sentido corriendo levanta polvo hacia donde iba.
+        if (carrera && polvoCarreraAntes && direction != direccionAntes)
+            DustFx.Rafaga(sprintDust, 8, Rango(1f, 2.5f, direccionAntes), new Vector2(0.4f, 1.2f));
+
+        // Aterrizar fuerte: nube a los dos lados de los pies, mas grande cuanto
+        // mas rapido caia.
+        if (enSuelo && !enSueloAntes && velYAntes < -landingDustSpeed && sprintDust != null)
+        {
+            int cantidad = Mathf.RoundToInt(Mathf.Lerp(8f, 16f, Mathf.InverseLerp(landingDustSpeed, landingDustSpeed * 2.5f, -velYAntes)));
+            sprintDust.transform.localPosition = new Vector3(0f, sprintDustOffset.y, 0f);
+            DustFx.Rafaga(sprintDust, cantidad, new Vector2(-2.2f, 2.2f), new Vector2(0.2f, 0.9f));
+        }
+
+        // --- Deslizarse por la pared ---
+        // Solo bajando de verdad, y con mas polvo cuanto mas rapido baja.
+        bool roza = isWallSliding && vy < -0.1f;
+        float intensidad = Mathf.Lerp(0.6f, 2.2f, Mathf.InverseLerp(0f, wallSlideFastSpeed, -vy));
         // La posicion es local y el player voltea su escala en X al girar. Con
-        // wallDirection * direction el offset apunta al muro tanto si mira hacia
-        // el como si acaba de atacar y mira al lado contrario.
-        ColocarPolvo(wallSlideDust,
-            isWallSliding && m_rigitbody2D.linearVelocityY < -0.1f,
-            new Vector3(wallSlideDustOffset.x * wallDirection * direction, wallSlideDustOffset.y, 0f));
+        // wallDirection * direction el offset apunta al muro mire hacia donde mire.
+        ColocarPolvo(wallSlideDust, wallSlideDustPreset, roza,
+            new Vector3(wallSlideDustOffset.x * wallDirection * direction, wallSlideDustOffset.y, 0f),
+            -wallDirection, intensidad);
 
-        // Carrera por el suelo: hace falta ir de verdad a esa velocidad, no solo
-        // tener el boton pulsado.
-        ColocarPolvo(sprintDust,
-            (isSprinting || isDodging) && isGrounded && Mathf.Abs(m_rigitbody2D.linearVelocityX) > 0.1f,
-            new Vector3(sprintDustOffset.x, sprintDustOffset.y, 0f));
+        // --- Correr por la pared ---
+        ColocarPolvo(wallRunDust, wallRunDustPreset, isWallRunning,
+            new Vector3(wallRunDustOffset.x * wallDirection * direction, wallRunDustOffset.y, 0f),
+            -wallDirection, 1f);
 
-        // Carrera vertical: subiendo el personaje siempre mira al muro, asi que
-        // basta con el offset tal cual.
-        ColocarPolvo(wallRunDust, isWallRunning,
-            new Vector3(wallRunDustOffset.x * wallDirection * direction, wallRunDustOffset.y, 0f));
+        // Cada paso contra el muro suelta un punado de polvo hacia abajo.
+        if (isWallRunning)
+        {
+            pasoParedTimer -= Time.deltaTime;
+            if (pasoParedTimer <= 0f)
+            {
+                pasoParedTimer = wallRunStepInterval;
+                DustFx.Rafaga(wallRunDust, 3, Rango(0.8f, 1.8f, -wallDirection), new Vector2(-1.8f, -0.6f));
+            }
+        }
+        else pasoParedTimer = 0f;
+
+        polvoCarreraAntes = carrera;
+        polvoBarridoAntes = isDodging;
+        direccionAntes = direction;
+        enSueloAntes = enSuelo;
+        velYAntes = vy;
     }
 
-    // Enciende, apaga y recoloca un sistema de particulas.
-    private void ColocarPolvo(ParticleSystem sistema, bool activo, Vector3 posicionLocal)
+    // Abre o cierra el goteo de un sistema, lo coloca y lo orienta. El sistema
+    // sigue en marcha aunque no gotee, para que las rafagas funcionen siempre y las
+    // particulas que ya estan en el aire terminen su vida en vez de cortarse.
+    private void ColocarPolvo(ParticleSystem sistema, DustFx.Preset preset, bool activo,
+        Vector3 posicionLocal, int ladoHaciaFuera, float intensidad)
     {
         if (sistema == null) return;
 
-        if (activo)
-        {
-            sistema.transform.localPosition = posicionLocal;
-            if (!sistema.isEmitting) sistema.Play();
-        }
-        else if (sistema.isEmitting)
-        {
-            // Deja morir las que ya estan en el aire en vez de borrarlas de golpe.
-            sistema.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-        }
+        if (activo) sistema.transform.localPosition = posicionLocal;
+        DustFx.Orientar(sistema, preset, ladoHaciaFuera);
+        DustFx.Emitir(sistema, preset, activo, intensidad);
+    }
+
+    // Rango de velocidad en X hacia el lado dado.
+    private static Vector2 Rango(float min, float max, int lado)
+    {
+        return lado >= 0 ? new Vector2(min, max) : new Vector2(-max, -min);
     }
 
     // Reduce la velocidad de caída mientras el player está pegado a una pared (deslizamiento).
@@ -1732,6 +1878,220 @@ public class PlayerControler : MonoBehaviour
         float tope = m_gatherInput.Value.y < 0f ? wallSlideFastSpeed : wallSlideSpeed;
         if (m_rigitbody2D.linearVelocityY < -tope)
             m_rigitbody2D.linearVelocity = new Vector2(m_rigitbody2D.linearVelocityX, -tope);
+    }
+
+    #endregion
+
+    #region Arco
+
+    // Lee el clic derecho y arranca el disparo si se puede.
+    private void Disparo()
+    {
+        if (bowCooldownTimer > 0f) bowCooldownTimer -= Time.fixedDeltaTime;
+
+        bool pulsado = m_gatherInput.IsShooting;
+        m_gatherInput.IsShooting = false;
+
+        if (!pulsado || isShooting || bowCooldownTimer > 0f) return;
+        // Ni barriendo, ni pegado a una pared.
+        if (isDodging || isWallRunning || canWallSlide) return;
+        // Un espadazo solo se puede cancelar en su recuperacion, como con el barrido.
+        if (isAttacking && !canAttack) return;
+        if (isAttacking) CancelarAtaque();
+
+        // Si se pulsa una direccion, dispara hacia alli; si no, hacia donde mira.
+        if (Mathf.Abs(m_gatherInput.Value.x) > 0.1f) SetFacing((int)Mathf.Sign(m_gatherInput.Value.x));
+
+        bowCooldownTimer = bowCooldown;
+        bowRoutine = StartCoroutine(DisparoRoutine(isGrounded));
+    }
+
+    private IEnumerator DisparoRoutine(bool enSuelo)
+    {
+        isShooting = true;
+        isSprinting = false;
+        m_animator.SetTrigger(IdShoot);
+
+        float suelta = enSuelo ? bowGroundRelease : bowAirRelease;
+        float duracionClip = enSuelo ? bowGroundDuration : bowAirDuration;
+        // La carga congela la pose un pelin antes de soltar: en ese instante el clip
+        // muestra el arco tensado del todo.
+        float puntoDeCarga = suelta - 0.05f;
+
+        // En el aire se queda suspendido mientras dispara (y mientras carga).
+        if (!enSuelo)
+        {
+            gravedadAntesDelDisparo = m_rigitbody2D.gravityScale;
+            m_rigitbody2D.gravityScale = 0f;
+        }
+
+        BowBeam haz = null;
+        bool disparado = false;
+        float carga = 0f;
+        int ticks = Mathf.Max(1, bowTicks);
+        int tickActual = 0;
+        float primerTick = 0f;
+        float duracion = duracionClip;
+        float retroceso = 0f;
+        float fuerzaRetroceso = 1f;
+        float t = 0f;
+
+        while (t < duracion)
+        {
+            // --- Carga: con el boton pulsado, el tiempo del disparo no avanza ---
+            bool cargar = bowChargeEnabled && !disparado && t >= puntoDeCarga
+                          && m_gatherInput.IsShootHeld && carga < 1f;
+            if (cargar)
+            {
+                if (!cargandoArco) EmpezarCarga();
+                carga = Mathf.Min(1f, carga + Time.fixedDeltaTime / Mathf.Max(0.05f, bowChargeTime));
+                MostrarCarga(carga, t);
+                m_rigitbody2D.linearVelocity = enSuelo ? new Vector2(0f, m_rigitbody2D.linearVelocityY) : Vector2.zero;
+                yield return new WaitForFixedUpdate();
+                continue;
+            }
+            if (cargandoArco) TerminarCarga();
+
+            // --- Quieto, salvo el retroceso justo despues de soltar ---
+            Vector2 v = enSuelo ? new Vector2(0f, m_rigitbody2D.linearVelocityY) : Vector2.zero;
+            if (retroceso > 0f)
+            {
+                v.x = -direction * bowRecoilSpeed * fuerzaRetroceso * (retroceso / bowRecoilTime);
+                retroceso -= Time.fixedDeltaTime;
+            }
+            m_rigitbody2D.linearVelocity = v;
+
+            // --- Suelta la flecha ---
+            if (!disparado && t >= suelta)
+            {
+                disparado = true;
+                ticks = Mathf.Max(1, bowTicks) + Mathf.RoundToInt(carga * bowChargeExtraTicks);
+                primerTick = t + bowFirstTickDelay;
+                float ultimoTick = primerTick + (ticks - 1) * bowTickInterval;
+
+                // Se queda quieto hasta el ultimo tick, aunque el clip acabe antes.
+                duracion = Mathf.Max(duracionClip, ultimoTick + 0.05f);
+
+                grosorDisparo = Mathf.Lerp(1f, bowChargeThickness, carga);
+                haz = SoltarFlecha(ultimoTick - primerTick, carga);
+
+                retroceso = bowRecoilTime;
+                fuerzaRetroceso = Mathf.Lerp(1f, bowChargeRecoil, carga);
+            }
+
+            // --- Ticks de dano ---
+            if (disparado && tickActual < ticks && t >= primerTick + tickActual * bowTickInterval)
+            {
+                TickDelHaz(tickActual, ticks, haz);
+                tickActual++;
+            }
+
+            yield return new WaitForFixedUpdate();
+            t += Time.fixedDeltaTime;
+        }
+
+        // Si algo se ha saltado por redondeo de tiempos, se completa aqui.
+        if (!disparado) haz = SoltarFlecha(0f, carga);
+        while (tickActual < ticks) { TickDelHaz(tickActual, ticks, haz); tickActual++; }
+        FinalizarDisparo();
+    }
+
+    // El momento en que se suelta la flecha: sale el haz, la sacudida gorda y el
+    // fogonazo de pantalla. Cuanto mas cargado, mas fuerte todo.
+    private BowBeam SoltarFlecha(float tiempoActivo, float carga)
+    {
+        Sacudir(bowShake * Mathf.Lerp(1f, 1.6f, carga));
+
+        Color fogonazo = bowFlashColor;
+        fogonazo.a = Mathf.Clamp01(bowFlashColor.a * Mathf.Lerp(1f, 1.6f, carga));
+        ScreenFlash.Destello(fogonazo, bowFlashTime);
+
+        if (bowBeamPrefab == null) return null;
+        BowBeam haz = Instantiate(bowBeamPrefab);
+        haz.Disparar(BocaDelArco(), direction, bowRange, tiempoActivo, grosorDisparo);
+        return haz;
+    }
+
+    // Congela la pose del arco tensado y guarda el color para devolverlo luego.
+    private void EmpezarCarga()
+    {
+        cargandoArco = true;
+        m_animator.speed = 0f;
+        colorAntesDeCargar = m_spriteRenderer != null ? m_spriteRenderer.color : Color.white;
+    }
+
+    // El personaje late en cian cada vez mas rapido segun se llena la carga.
+    private void MostrarCarga(float carga, float t)
+    {
+        if (m_spriteRenderer == null) return;
+        float frecuencia = Mathf.Lerp(6f, 22f, carga);
+        float latido = 0.5f + 0.5f * Mathf.Sin(Time.time * frecuencia);
+        PintarRGB(Color.Lerp(colorAntesDeCargar, bowChargeTint, carga * latido));
+    }
+
+    private void TerminarCarga()
+    {
+        if (!cargandoArco) return;
+        cargandoArco = false;
+        m_animator.speed = 1f;
+        if (m_spriteRenderer != null) PintarRGB(colorAntesDeCargar);
+    }
+
+    // Un tick de dano a lo largo de todo el alcance.
+    private void TickDelHaz(int indice, int total, BowBeam haz)
+    {
+        Vector2 boca = BocaDelArco();
+        int lado = direction;
+        bool ultimo = indice >= total - 1;
+
+        // Una sola consulta por tick. Cada enemigo recibe el dano una vez por tick
+        // aunque siga dentro de la franja o tenga varios colliders.
+        int capas = bowTargetLayers.value != 0 ? bowTargetLayers.value : LayerMask.GetMask("Enemies");
+        Vector2 centro = boca + Vector2.right * (lado * bowRange * 0.5f);
+        Collider2D[] hits = Physics2D.OverlapBoxAll(centro, new Vector2(bowRange, bowHitHeight * grosorDisparo), 0f, capas);
+        HashSet<EnemyHealth> tocados = new HashSet<EnemyHealth>();
+
+        foreach (Collider2D hit in hits)
+        {
+            EnemyHealth enemigo = hit.GetComponentInParent<EnemyHealth>();
+            if (enemigo == null || !tocados.Add(enemigo)) continue;
+
+            enemigo.TakeDamage(bowDamage, m_transform.position, ultimo ? 1f : bowTickKnockback);
+            if (haz != null) haz.Impacto(hit.bounds.center);
+        }
+
+        if (tocados.Count == 0) return;
+        StartCoroutine(HitStop(ultimo ? bowHitStop : bowHitStop * 0.5f));
+        if (indice > 0) Sacudir(bowShake * 0.4f);
+    }
+
+    private Vector3 BocaDelArco()
+    {
+        return m_transform.position + new Vector3(bowMuzzleOffset.x * direction, bowMuzzleOffset.y, 0f);
+    }
+
+    private void FinalizarDisparo()
+    {
+        if (gravedadAntesDelDisparo >= 0f)
+        {
+            m_rigitbody2D.gravityScale = gravedadAntesDelDisparo;
+            gravedadAntesDelDisparo = -1f;
+        }
+
+        // Importante si se corta a mitad de carga: el Animator se quedaria congelado.
+        TerminarCarga();
+        grosorDisparo = 1f;
+
+        isShooting = false;
+        bowRoutine = null;
+    }
+
+    // Lo corta desde fuera (un golpe recibido). Devolver la gravedad es lo
+    // importante: si el golpe llega en el aire, se quedaria flotando.
+    private void TerminarDisparo()
+    {
+        if (bowRoutine != null) StopCoroutine(bowRoutine);
+        FinalizarDisparo();
     }
 
     #endregion
@@ -1945,6 +2305,7 @@ public class PlayerControler : MonoBehaviour
         // invulnerabilidad), se corta: el retroceso tiene que mandar.
         if (isDodging) TerminarEsquiva();
         if (isPlunging) TerminarEstocada();
+        if (isShooting) TerminarDisparo();
 
         Knockback();
 
@@ -2147,6 +2508,7 @@ public class PlayerControler : MonoBehaviour
         m_animator.SetBool(idIsSprinting, isSprinting && isGrounded && !isKnocked);
         m_animator.SetBool(idIsWallRunning, isWallRunning);
         m_animator.SetBool(idIsDodging, isDodging);
+        if (animatorTieneIsShooting) m_animator.SetBool(IdIsShooting, isShooting);
         ActualizarPolvo();
         m_animator.SetBool(idIsGrounded, isGrounded);
         m_animator.SetBool(idIsWallDetected, isWallDetected);
