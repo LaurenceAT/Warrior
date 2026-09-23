@@ -93,6 +93,7 @@ public class PlayerControler : MonoBehaviour
     private int idKnockDown;
     private int idIsSprinting;
     private int idIsWallRunning;
+    private int idIsDodging;
     private static readonly int IdDoorIn = Animator.StringToHash("doorIn");
     private static readonly int IdAttack = Animator.StringToHash("attack");
     private static readonly int IdDoubleJump = Animator.StringToHash("doubleJump");
@@ -118,6 +119,50 @@ public class PlayerControler : MonoBehaviour
     // Velocidad horizontal actual, ya rampeada. Es la que se aplica al Rigidbody.
     private float currentSpeed;
     private bool isSprinting;
+
+    [Header("Barrido (C)")]
+    // Velocidad al arrancar el barrido.
+    [SerializeField] private float dodgeSpeed = 10f;
+    [SerializeField] private float dodgeDuration = 0.4f;
+    // Cuanto frena hacia el final (0 = velocidad constante, 1 = acaba parado).
+    // Arrancar rapido y frenar es lo que da la sensacion de peso de Dark Souls.
+    [Range(0f, 1f)] [SerializeField] private float dodgeSlowdown = 0.5f;
+    // Ventana de invulnerabilidad dentro del barrido. Es mas corta que el
+    // barrido entero a proposito: esquivar pide acertar el momento, no solo
+    // pulsar el boton cuando viene el golpe.
+    [SerializeField] private float iFrameStart = 0.03f;
+    [SerializeField] private float iFrameDuration = 0.25f;
+    [SerializeField] private float dodgeCooldown = 0.45f;
+    // Margen para pulsar la esquiva un poco antes de poder hacerla.
+    [SerializeField] private float dodgeBufferTime = 0.15f;
+    // Atravesar enemigos durante el barrido, para cambiar de lado.
+    [SerializeField] private bool passThroughEnemies = true;
+    // Si al acabar sigue metido dentro de un enemigo, cuanto se le deja seguir
+    // atravesandolo antes de volver a chocar. Evita que la fisica lo expulse de
+    // golpe o que el trigger de dano del enemigo le de al reactivar la colision.
+    [SerializeField] private float passThroughMaxExtra = 0.4f;
+    [SerializeField] private bool isDodging;
+    [SerializeField] private bool hasIFrames;
+    private float dodgeCooldownTimer;
+    private float dodgeBuffer;
+    private Coroutine dodgeRoutine;
+    private Collider2D m_collider;
+    private int capaPlayer = -1;
+    private int capaEnemigos = -1;
+    private bool colisionEnemigosOriginal;
+    private bool ignorandoEnemigos;
+    private readonly Collider2D[] solapes = new Collider2D[4];
+
+    // Altura del collider mientras se desliza. El sprite de barrido mide la mitad
+    // que de pie (15 px frente a 29), asi que el cuerpo tambien: es lo que deja
+    // pasar por debajo de sierras, techos bajos o enemigos altos.
+    [SerializeField] private float slideColliderHeight = 0.55f;
+    // Si al acabar hay techo encima, sigue deslizandose hasta salir de debajo
+    // (con este tope). Levantarse ahi dejaria el cuerpo metido en el techo.
+    [SerializeField] private float slideMaxExtraUnderCeiling = 0.6f;
+    private CapsuleCollider2D capsula;
+    private Vector2 capsulaSize;
+    private Vector2 capsulaOffset;
 
     //VIDA
     [Header("Health")]
@@ -173,6 +218,11 @@ public class PlayerControler : MonoBehaviour
     // Cuanto de vertical tiene que ser la superficie (1 = pared perfecta).
     // Sin esto se agarraba al canto de un suelo o a una rampa.
     [Range(0f, 1f)] [SerializeField] private float wallMinNormalX = 0.8f;
+    // Ademas del minimo, el rayo mas bajo (el de las piernas) tiene que tocar.
+    // Sin esto, bajo el canto inferior de una plataforma tocaban el rayo del
+    // medio y el de arriba, y el personaje se agarraba con las piernas colgando
+    // en el vacio.
+    [SerializeField] private bool wallCheckRequireFeet = true;
     [SerializeField] private bool isWallDetected;
     // Lado en el que está la pared (1 derecha, -1 izquierda). Es independiente de hacia
     // dónde mira el player, que puede girarse para atacar sin soltar el muro.
@@ -355,6 +405,17 @@ public class PlayerControler : MonoBehaviour
         m_rigitbody2D = GetComponent<Rigidbody2D>();
         m_animator = GetComponent<Animator>();
         m_spriteRenderer = GetComponent<SpriteRenderer>();
+        m_collider = GetComponent<Collider2D>();
+        capsula = GetComponent<CapsuleCollider2D>();
+        if (capsula != null)
+        {
+            capsulaSize = capsula.size;
+            capsulaOffset = capsula.offset;
+        }
+        capaPlayer = gameObject.layer;
+        capaEnemigos = LayerMask.NameToLayer("Enemies");
+        if (capaEnemigos >= 0)
+            colisionEnemigosOriginal = Physics2D.GetIgnoreLayerCollision(capaPlayer, capaEnemigos);
         CheckPlayerRespawnState();
     }
 
@@ -370,6 +431,7 @@ public class PlayerControler : MonoBehaviour
         idKnockDown = Animator.StringToHash("knockDown");
         idIsSprinting = Animator.StringToHash("isSprinting");
         idIsWallRunning = Animator.StringToHash("isWallRunning");
+        idIsDodging = Animator.StringToHash("isDodging");
         currentSpeed = speed;
         if (impulseSource == null) impulseSource = GetComponent<CinemachineImpulseSource>();
         // CONFIGURA EL ESTADO DEL PLAYER AL REAPARECER
@@ -403,6 +465,12 @@ public class PlayerControler : MonoBehaviour
         if (!canMove) return;
         if (isKnocked) return;
 
+        // Durante el barrido no hay ni andar, ni saltar, ni atacar: se esta
+        // comprometido con el, como en los Souls. Lo que se pulse mientras
+        // tanto queda guardado y sale al terminar.
+        Dodge();
+        if (isDodging) return;
+
         Move();
         Jump();
         Attack();
@@ -420,6 +488,12 @@ public class PlayerControler : MonoBehaviour
             Gizmos.DrawLine(origen, origen + Vector3.right * checkWallDistance);
             Gizmos.DrawLine(origen, origen + Vector3.left * checkWallDistance);
         }
+
+        // Rayo de los pies, el que decide cuando termina la subida por la pared.
+        Gizmos.color = Color.magenta;
+        Vector3 pies = OrigenDeLosPies();
+        Gizmos.DrawLine(pies, pies + Vector3.right * checkWallDistance);
+        Gizmos.DrawLine(pies, pies + Vector3.left * checkWallDistance);
 
         // Dibuja el area del perfil que estes ajustando, en su posicion real.
         AttackProfile perfil = PerfilDeAtaque(gizmoProfileIndex);
@@ -1124,17 +1198,49 @@ public class PlayerControler : MonoBehaviour
         {
             Vector2 origen = OrigenDelRayoDePared(i, rayos);
             RaycastHit2D hit = Physics2D.Raycast(origen, Vector2.right * lado, alcance, groundLayer);
-            if (!hit) continue;
 
             // Solo cuentan superficies verticales de verdad. El canto de un suelo
             // o una rampa devuelven una normal casi vertical y quedan descartados.
-            if (Mathf.Abs(hit.normal.x) < wallMinNormalX) continue;
+            bool valido = hit && Mathf.Abs(hit.normal.x) >= wallMinNormalX;
+
+            // El rayo 0 es el de las piernas. Si es obligatorio y falla, no hay
+            // pared que valga, toquen los que toquen por encima.
+            if (i == 0 && wallCheckRequireFeet && !valido) return false;
+            if (!valido) continue;
 
             tocados++;
             if (tocados >= minimo) return true;
         }
 
         return false;
+    }
+
+    // Un rayo a ras del fondo del capsule. El rayo mas bajo de los normales va a
+    // -0.45 del centro, pero los pies estan a -0.62: cuando ese rayo deja de ver
+    // la pared, el cuerpo aun sobresale 0.17 por debajo del borde, y el empujon
+    // de coronar estrellaba esa esquina contra el labio del muro. Con este rayo
+    // la subida sigue hasta que los pies de verdad estan por encima.
+    private bool PiesContraPared(int lado, float alcance)
+    {
+        Vector2 origen = OrigenDeLosPies();
+        RaycastHit2D hit = Physics2D.Raycast(origen, Vector2.right * lado, alcance, groundLayer);
+        return hit && Mathf.Abs(hit.normal.x) >= wallMinNormalX;
+    }
+
+    private Vector2 OrigenDeLosPies()
+    {
+        // Un pelin por encima del fondo, para que el rayo no roce el suelo. Se usa
+        // la forma original del capsule, no la encogida del barrido. En el editor
+        // (sin Awake) se lee del componente, para que el gizmo salga bien.
+        float pies;
+        if (capsula != null) pies = capsulaOffset.y - capsulaSize.y * 0.5f;
+        else
+        {
+            CapsuleCollider2D c = GetComponent<CapsuleCollider2D>();
+            pies = c != null ? c.offset.y - c.size.y * 0.5f : wallCheckBottom;
+        }
+        pies += 0.05f;
+        return (Vector2)m_transform.position + new Vector2(0f, pies);
     }
 
     private Vector2 OrigenDelRayoDePared(int indice, int total)
@@ -1168,7 +1274,7 @@ public class PlayerControler : MonoBehaviour
         // tienen pared, hay pared que correr. Exigiendo dos, la subida se cortaba
         // con los pies medio tile por debajo del borde, sin llegar a coronar.
         bool paredParaSubir = isWallRunning
-            ? HayParedHacia(wallDirection, checkWallDistance, 1)
+            ? PiesContraPared(wallDirection, checkWallDistance) || HayParedHacia(wallDirection, checkWallDistance, 1)
             : isWallDetected;
 
         // Los rayos pierden la pared con facilidad: entre el borde del capsule y
@@ -1184,7 +1290,8 @@ public class PlayerControler : MonoBehaviour
             // Se comprueba con un rayo mas largo: si ni asi hay pared, es que se
             // ha acabado (ha coronado el borde) y la salida es inmediata, sin
             // quedarse corriendo en el aire.
-            bool paredCerca = HayParedHacia(wallDirection, checkWallDistance + wallRunProbeExtra, 1);
+            bool paredCerca = PiesContraPared(wallDirection, checkWallDistance + wallRunProbeExtra)
+                              || HayParedHacia(wallDirection, checkWallDistance + wallRunProbeExtra, 1);
             wallRunGraceTimer = paredCerca ? wallRunGraceTimer - Time.fixedDeltaTime : 0f;
         }
 
@@ -1306,7 +1413,7 @@ public class PlayerControler : MonoBehaviour
         // Carrera por el suelo: hace falta ir de verdad a esa velocidad, no solo
         // tener el boton pulsado.
         ColocarPolvo(sprintDust,
-            isSprinting && isGrounded && Mathf.Abs(m_rigitbody2D.linearVelocityX) > 0.1f,
+            (isSprinting || isDodging) && isGrounded && Mathf.Abs(m_rigitbody2D.linearVelocityX) > 0.1f,
             new Vector3(sprintDustOffset.x, sprintDustOffset.y, 0f));
 
         // Carrera vertical: subiendo el personaje siempre mira al muro, asi que
@@ -1379,6 +1486,186 @@ public class PlayerControler : MonoBehaviour
 
     #endregion
 
+    #region Esquiva
+
+    // Lee la pulsacion y lanza el barrido si se puede.
+    private void Dodge()
+    {
+        if (dodgeCooldownTimer > 0f) dodgeCooldownTimer -= Time.fixedDeltaTime;
+
+        if (m_gatherInput.IsDodging) dodgeBuffer = dodgeBufferTime;
+        m_gatherInput.IsDodging = false;
+
+        if (dodgeBuffer <= 0f) return;
+        dodgeBuffer -= Time.fixedDeltaTime;
+
+        if (isDodging || dodgeCooldownTimer > 0f) return;
+        // Solo en el suelo: es un deslizamiento, en el aire no tiene donde apoyarse.
+        if (!isGrounded || isWallRunning || isLaunched || isWallJumping) return;
+        // Se puede cancelar un ataque, pero solo en sus fotogramas de
+        // recuperacion. En plena estocada no: hay que comprometerse con el golpe.
+        if (isAttacking && !canAttack) return;
+
+        dodgeBuffer = 0f;
+        if (isAttacking) CancelarAtaque();
+
+        // Hacia donde se pulse; sin direccion, hacia donde mira.
+        int lado = Mathf.Abs(m_gatherInput.Value.x) > 0.1f ? (int)Mathf.Sign(m_gatherInput.Value.x) : direction;
+        SetFacing(lado);
+
+        dodgeRoutine = StartCoroutine(DodgeRoutine(lado));
+    }
+
+    private IEnumerator DodgeRoutine(int lado)
+    {
+        isDodging = true;
+        isSprinting = false;
+        if (passThroughEnemies) IgnorarEnemigos(true);
+        Agacharse(true);
+
+        float t = 0f;
+        while (t < dodgeDuration)
+        {
+            float k = t / dodgeDuration;
+            hasIFrames = t >= iFrameStart && t < iFrameStart + iFrameDuration;
+
+            // Arranca a tope y va frenando.
+            float velocidad = dodgeSpeed * (1f - dodgeSlowdown * k);
+            m_rigitbody2D.linearVelocity = new Vector2(lado * velocidad, m_rigitbody2D.linearVelocityY);
+
+            yield return new WaitForFixedUpdate();
+            t += Time.fixedDeltaTime;
+        }
+
+        hasIFrames = false;
+
+        // Con techo encima no se puede levantar: sigue deslizandose a la velocidad
+        // con la que acabo hasta salir de debajo. Ya sin invulnerabilidad.
+        float velocidadFinal = dodgeSpeed * (1f - dodgeSlowdown);
+        float bajoTecho = 0f;
+        while (HayTechoEncima() && bajoTecho < slideMaxExtraUnderCeiling)
+        {
+            m_rigitbody2D.linearVelocity = new Vector2(lado * velocidadFinal, m_rigitbody2D.linearVelocityY);
+            yield return new WaitForFixedUpdate();
+            bajoTecho += Time.fixedDeltaTime;
+        }
+
+        Agacharse(false);
+        isDodging = false;
+        dodgeCooldownTimer = dodgeCooldown;
+        currentSpeed = speed;
+
+        // Si acaba dentro de un enemigo, se le deja terminar de atravesarlo.
+        if (passThroughEnemies) yield return EsperarASalirDeEnemigos();
+        dodgeRoutine = null;
+    }
+
+    // Mantiene la colision con los enemigos desactivada mientras siga solapado
+    // con alguno, con un tope. Reactivarla estando dentro haria que la fisica
+    // lo expulsara de golpe, y que el trigger de dano del enemigo le golpeara.
+    private IEnumerator EsperarASalirDeEnemigos()
+    {
+        if (m_collider != null && capaEnemigos >= 0)
+        {
+            ContactFilter2D filtro = new ContactFilter2D();
+            filtro.SetLayerMask(1 << capaEnemigos);
+            filtro.useTriggers = true;
+
+            float extra = 0f;
+            while (extra < passThroughMaxExtra && m_collider.Overlap(filtro, solapes) > 0)
+            {
+                yield return new WaitForFixedUpdate();
+                extra += Time.fixedDeltaTime;
+            }
+        }
+
+        IgnorarEnemigos(false);
+    }
+
+    // Corta el barrido en seco. Lo usa el dano cuando el golpe entra fuera de
+    // la ventana de invulnerabilidad.
+    private void TerminarEsquiva()
+    {
+        if (dodgeRoutine != null) StopCoroutine(dodgeRoutine);
+        dodgeRoutine = null;
+        isDodging = false;
+        hasIFrames = false;
+        dodgeCooldownTimer = dodgeCooldown;
+        IgnorarEnemigos(false);
+        Agacharse(false);
+    }
+
+    // Deja el ataque en curso sin terminar, para que el barrido pueda salir.
+    private void CancelarAtaque()
+    {
+        if (attackRoutine != null) StopCoroutine(attackRoutine);
+        attackRoutine = null;
+        isAttacking = false;
+        canAttack = true;
+        attackAnimationTimer = 0f;
+        comboIndex = 0;
+    }
+
+    // Activa o restaura la colision entre las capas del player y los enemigos.
+    // Es un ajuste global de la fisica, asi que al restaurar se vuelve al valor
+    // que tenia el proyecto, no a uno fijo.
+    private void IgnorarEnemigos(bool ignorar)
+    {
+        if (capaEnemigos < 0 || ignorandoEnemigos == ignorar) return;
+
+        Physics2D.IgnoreLayerCollision(capaPlayer, capaEnemigos, ignorar || colisionEnemigosOriginal);
+        ignorandoEnemigos = ignorar;
+    }
+
+    // Si el player muere o se desactiva a mitad de barrido, la colision con los
+    // enemigos tiene que volver. Es global: si no, se quedaria desactivada para
+    // el siguiente player que aparezca, e incluso en el editor tras salir de Play.
+    private void OnDisable()
+    {
+        IgnorarEnemigos(false);
+    }
+
+    // Encoge el capsule a la altura del barrido o lo devuelve a su forma. Encoge
+    // desde arriba: los pies se quedan donde estan, asi no se levanta del suelo.
+    private void Agacharse(bool agachado)
+    {
+        if (capsula == null) return;
+
+        if (!agachado)
+        {
+            capsula.size = capsulaSize;
+            capsula.offset = capsulaOffset;
+            return;
+        }
+
+        float pies = capsulaOffset.y - capsulaSize.y * 0.5f;
+        float alto = Mathf.Min(slideColliderHeight, capsulaSize.y);
+        capsula.size = new Vector2(capsulaSize.x, alto);
+        capsula.offset = new Vector2(capsulaOffset.x, pies + alto * 0.5f);
+    }
+
+    // Mira si en el hueco que ocuparia la cabeza al levantarse hay suelo o techo.
+    // Solo comprueba esa franja, no el cuerpo entero, para no confundir el suelo
+    // que se esta pisando con un techo.
+    private bool HayTechoEncima()
+    {
+        if (capsula == null) return false;
+
+        float pies = capsulaOffset.y - capsulaSize.y * 0.5f;
+        float altoAgachado = Mathf.Min(slideColliderHeight, capsulaSize.y);
+        float franja = capsulaSize.y - altoAgachado;
+        if (franja <= 0.01f) return false;
+
+        Vector2 centroLocal = new Vector2(capsulaOffset.x, pies + altoAgachado + franja * 0.5f);
+        Vector2 centro = capsula.transform.TransformPoint(centroLocal);
+        Vector3 escala = capsula.transform.lossyScale;
+        Vector2 tamano = new Vector2(capsulaSize.x * 0.9f * Mathf.Abs(escala.x), franja * Mathf.Abs(escala.y));
+
+        return Physics2D.OverlapBox(centro, tamano, 0f, groundLayer) != null;
+    }
+
+    #endregion
+
     #region Vida y Daño
 
     // Aplica daño al player, actualiza la barra de vida, dispara el knockback y controla la muerte.
@@ -1387,12 +1674,20 @@ public class PlayerControler : MonoBehaviour
         // Ignora el daño durante la invulnerabilidad. Esto evita recibir dos golpes a la vez
         // (el contacto del cuerpo del enemigo y el espadazo de su animación).
         if (isInvincible) return;
+        // Ventana de invulnerabilidad del barrido. Esquiva golpes de enemigo
+        // y trampas por igual; las zonas de muerte no pasan por aqui y siguen
+        // matando.
+        if (hasIFrames) return;
 
         currentHealth -= damage;
 
         healthBar.UpdateHealthBar(currentHealth, maxHealth);
 
         Debug.Log("Vida actual: " + currentHealth);
+
+        // Si el golpe entra con el barrido aun en marcha (fuera de la ventana de
+        // invulnerabilidad), se corta: el retroceso tiene que mandar.
+        if (isDodging) TerminarEsquiva();
 
         Knockback();
 
@@ -1594,6 +1889,7 @@ public class PlayerControler : MonoBehaviour
         // los estados de salto y caida, no el de correr.
         m_animator.SetBool(idIsSprinting, isSprinting && isGrounded && !isKnocked);
         m_animator.SetBool(idIsWallRunning, isWallRunning);
+        m_animator.SetBool(idIsDodging, isDodging);
         ActualizarPolvo();
         m_animator.SetBool(idIsGrounded, isGrounded);
         m_animator.SetBool(idIsWallDetected, isWallDetected);

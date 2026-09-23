@@ -25,6 +25,11 @@ public class GatherInput : MonoBehaviour
     [SerializeField] private bool _isSprinting;
     public bool IsSprinting { get => _isSprinting; }
 
+    // Pulsacion de esquiva. Como el ataque: se marca al pulsar y la consume
+    // PlayerControler, asi un toque breve no se pierde entre pasos de fisica.
+    [SerializeField] private bool _isDodging;
+    public bool IsDodging { get => _isDodging; set => _isDodging = value; }
+
     #region Unity Lifecycle
 
     // Crea la instancia del sistema de controles generado por el Input System.
@@ -46,6 +51,7 @@ public class GatherInput : MonoBehaviour
         controls.Player.Attack.performed += StartAttack;
         controls.Player.Sprint.performed += StartSprint;
         controls.Player.Sprint.canceled += StopSprint;
+        controls.Player.Dodge.performed += StartDodge;
         controls.Player.Enable();
     }
 
@@ -59,6 +65,7 @@ public class GatherInput : MonoBehaviour
         controls.Player.Attack.performed -= StartAttack;
         controls.Player.Sprint.performed -= StartSprint;
         controls.Player.Sprint.canceled -= StopSprint;
+        controls.Player.Dodge.performed -= StartDodge;
         controls.Player.Disable();
     }
 
@@ -106,6 +113,12 @@ public class GatherInput : MonoBehaviour
     private void StopSprint(InputAction.CallbackContext context)
     {
         _isSprinting = false;
+    }
+
+    // Marca la esquiva al pulsar el boton.
+    private void StartDodge(InputAction.CallbackContext context)
+    {
+        _isDodging = true;
     }
 
     #endregion
