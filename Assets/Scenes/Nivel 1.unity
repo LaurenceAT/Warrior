@@ -359,6 +359,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!198 &116731911 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4268800702132916087, guid: 1a101dafec2c09f419f2cdb738c3f0fa, type: 3}
+  m_PrefabInstance: {fileID: 1003526856428021236}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &172376762
 GameObject:
   m_ObjectHideFlags: 0
@@ -9785,7 +9790,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 00000000dd26ddcdc7707d6c4f96343243f629853be7cdaf
+  m_ApplyToSortingLayers: 00000000dd26ddcdc7707d6c4f96343243f629853be7cdaf67954cfa
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -13133,6 +13138,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!198 &2026162946 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 5525889230618205488, guid: 1a101dafec2c09f419f2cdb738c3f0fa, type: 3}
+  m_PrefabInstance: {fileID: 1003526856428021236}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2037675478 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4432574334321500677, guid: 2dbd63d99d79ed94090f4ebbe6028b67, type: 3}
@@ -13579,6 +13589,18 @@ PrefabInstance:
       propertyPath: healthBar
       value: 
       objectReference: {fileID: 280463791}
+    - target: {fileID: 2360815886447925532, guid: 1a101dafec2c09f419f2cdb738c3f0fa, type: 3}
+      propertyPath: sprintDust
+      value: 
+      objectReference: {fileID: 116731911}
+    - target: {fileID: 2360815886447925532, guid: 1a101dafec2c09f419f2cdb738c3f0fa, type: 3}
+      propertyPath: wallRunDust
+      value: 
+      objectReference: {fileID: 2026162946}
+    - target: {fileID: 2360815886447925532, guid: 1a101dafec2c09f419f2cdb738c3f0fa, type: 3}
+      propertyPath: wallRunLedgePush
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8745591629479740634, guid: 1a101dafec2c09f419f2cdb738c3f0fa, type: 3}
       propertyPath: m_LocalPosition.x
       value: -25.84

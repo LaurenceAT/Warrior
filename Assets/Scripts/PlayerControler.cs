@@ -92,6 +92,7 @@ public class PlayerControler : MonoBehaviour
     private int idKnockback;
     private int idKnockDown;
     private int idIsSprinting;
+    private int idIsWallRunning;
     private static readonly int IdDoorIn = Animator.StringToHash("doorIn");
     private static readonly int IdAttack = Animator.StringToHash("attack");
     private static readonly int IdDoubleJump = Animator.StringToHash("doubleJump");
@@ -154,6 +155,15 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private float wallCheckTop = 0.3f;
     [SerializeField] private float wallCheckBottom = -0.45f;
     [SerializeField] private int wallCheckRays = 3;
+    // Cuantos de esos rayos tienen que tocar para dar la pared por buena.
+    // Con uno solo bastaba, y eso hacia que en la cresta de un muro se agarrara
+    // tocando solo con los pies: el cuerpo quedaba por encima del muro y parecia
+    // que se colgaba del aire. Pidiendo dos, el torso tiene que estar contra la
+    // pared. Tambien descarta bloques de un solo tile.
+    [SerializeField] private int wallCheckMinRays = 2;
+    // Cuanto de vertical tiene que ser la superficie (1 = pared perfecta).
+    // Sin esto se agarraba al canto de un suelo o a una rampa.
+    [Range(0f, 1f)] [SerializeField] private float wallMinNormalX = 0.8f;
     [SerializeField] private bool isWallDetected;
     // Lado en el que está la pared (1 derecha, -1 izquierda). Es independiente de hacia
     // dónde mira el player, que puede girarse para atacar sin soltar el muro.
@@ -162,10 +172,87 @@ public class PlayerControler : MonoBehaviour
     // Verdadero solo cuando el player está realmente deslizándose: pegado a la pared,
     // en el aire y sin estar atacando. Es lo que lee el Animator.
     [SerializeField] private bool isWallSliding;
-    [SerializeField] private float slideSpeed;
+    // Velocidad maxima de bajada pegado al muro. Antes esto era un multiplicador
+    // sobre la velocidad vertical, que daba una caida de 0.59 u/s (practicamente
+    // pegado) o caida libre, sin nada en medio. Un tope es predecible: el numero
+    // que pongas aqui es lo que baja.
+    [SerializeField] private float wallSlideSpeed = 2.5f;
+    // Tope con la direccion hacia abajo pulsada, para bajar a proposito.
+    [SerializeField] private float wallSlideFastSpeed = 7f;
     [SerializeField] private Vector2 wallJumpForce;
+
+    [Header("Correr por la pared")]
+    [SerializeField] private bool wallRunEnabled = true;
+    // Velocidad de subida. Sustituye a la gravedad mientras dura.
+    [SerializeField] private float wallRunSpeed = 7f;
+    // Tope de subida por pared. Sin el, el jugador treparia sin fin y se
+    // saltaria niveles enteros. Se recarga al pisar suelo.
+    [SerializeField] private float wallRunDuration = 0.7f;
+    // Margen antes de poder volver a engancharse tras soltar. Va a 0 porque no
+    // hace falta: wallRunTimer solo se recarga pisando suelo, asi que encadenar
+    // subidas ya es imposible. Cualquier valor aqui solo mete pausas raras.
+    [SerializeField] private float wallRunCooldown;
+    // Con esto, llegar a una pared corriendo por el suelo engancha la subida
+    // sin tener que saltar primero.
+    [SerializeField] private bool wallRunFromGroundSprint = true;
+    // Empuje contra el muro mientras sube, para que los rayos lo sigan viendo.
+    [SerializeField] private float wallRunStick = 0.5f;
+    // Margen de gracia cuando los rayos pierden la pared. Entre el capsule y el
+    // alcance del rayo hay centesimas, y el cuerpo vibra contra el muro, asi que
+    // un fotograma suelto sin deteccion es normal. Sin este respiro cada uno de
+    // esos fotogramas cortaba la subida: eso eran los tirones.
+    [SerializeField] private float wallRunGraceTime = 0.12f;
+    // Cuanto se alarga el rayo para confirmar si la pared se ha acabado de
+    // verdad o solo ha sido un fotograma de temblor. Es lo que separa los dos
+    // casos, y sin ello coronar un muro dejaba al personaje corriendo en el aire.
+    [SerializeField] private float wallRunProbeExtra = 0.15f;
+    // Empujon horizontal al coronar el muro, hacia la cornisa. Sin el, Move()
+    // pone la velocidad en X a cero en cuanto se pierde la pared y el personaje
+    // sube en vertical y vuelve a bajar rozando la cara del muro sin llegar a
+    // pisar arriba, en animacion de caida todo el rato.
+    [SerializeField] private float wallRunLedgePush = 6f;
+    // Que parte de la subida se conserva al coronar. Lo demas se cambia por
+    // avance. Con 1 el personaje salia disparado en vertical y volvia a bajar
+    // rozando la cara del muro sin llegar a pisar arriba: de ahi que se quedara
+    // en animacion de caida. Con medio, el remate es un arco hacia delante.
+    [Range(0f, 1f)] [SerializeField] private float wallRunLedgeUpKeep = 0.45f;
+    // Cuanto dura ese empujon sin que el input pueda pisarlo. Se corta antes si
+    // toca suelo, para devolver el control en cuanto aterriza.
+    [SerializeField] private float wallRunLedgeTime = 0.25f;
+    private float wallRunLedgeTimer;
+    [SerializeField] private bool isWallRunning;
+    private float wallRunTimer;
+    private float wallRunCooldownTimer;
+    private float wallRunGraceTimer;
     [SerializeField] private bool isWallJumping;
     [SerializeField] private float wallJumpDuration;
+    // Margen tras despegarse del muro en el que el salto de pared sigue valiendo.
+    // Encadenando paredes es facil pulsar un fotograma tarde y perder el salto;
+    // con esto el juego perdona ese desfase sin que se note.
+    [SerializeField] private float wallCoyoteTime = 0.12f;
+    private float wallCoyoteTimer;
+    // Si se marca, solo se desliza mientras se empuja hacia el muro. Evita
+    // agarres sin querer al caer rozando una pared, a cambio de ser menos
+    // indulgente. Va desactivado: cambia el tacto y ahora mismo funciona sin el.
+    [SerializeField] private bool wallSlideNeedsInput;
+
+    [Header("Polvo")]
+    // Particulas en el punto de contacto mientras baja pegado al muro. Es lo
+    // que hace que el deslizamiento se lea como friccion y no como flotar.
+    [SerializeField] private ParticleSystem wallSlideDust;
+    // Posicion respecto al centro del player. La X se orienta sola hacia el muro.
+    // Se queda por dentro del borde del capsule (0.24) a proposito: justo en el
+    // borde, media particula nace dentro del tile y el muro la tapa.
+    [SerializeField] private Vector2 wallSlideDustOffset = new Vector2(0.18f, -0.4f);
+
+    // Polvo de la carrera por el suelo, a la altura de los pies y por detras.
+    [SerializeField] private ParticleSystem sprintDust;
+    // X negativa = detras del personaje. Se voltea sola al girar.
+    [SerializeField] private Vector2 sprintDustOffset = new Vector2(-0.22f, -0.45f);
+
+    // Polvo de la carrera vertical. Sale hacia abajo, que es de donde viene.
+    [SerializeField] private ParticleSystem wallRunDust;
+    [SerializeField] private Vector2 wallRunDustOffset = new Vector2(0.18f, -0.35f);
 
     //IMPULSO EXTERNO (flechas giratorias, trampolines...)
     [Header("Opciones de Impulso")]
@@ -273,6 +360,7 @@ public class PlayerControler : MonoBehaviour
         idKnockback = Animator.StringToHash("knockback");
         idKnockDown = Animator.StringToHash("knockDown");
         idIsSprinting = Animator.StringToHash("isSprinting");
+        idIsWallRunning = Animator.StringToHash("isWallRunning");
         currentSpeed = speed;
         if (impulseSource == null) impulseSource = GetComponent<CinemachineImpulseSource>();
         // CONFIGURA EL ESTADO DEL PLAYER AL REAPARECER
@@ -453,7 +541,8 @@ public class PlayerControler : MonoBehaviour
         // Cuando el movimiento no lo manda el input (muro, impulso, ataque) la
         // carrera se apaga: si no, al recuperar el control el personaje saldria
         // disparado a velocidad de sprint sin que el jugador lo haya pedido.
-        if (!canMove || (isWallDetected && !isGrounded) || isWallJumping || isLaunched || isAttacking)
+        if (!canMove || (isWallDetected && !isGrounded) || isWallJumping || isLaunched || isAttacking
+            || isWallRunning || wallRunLedgeTimer > 0f)
         {
             isSprinting = false;
             currentSpeed = speed;
@@ -544,7 +633,14 @@ public class PlayerControler : MonoBehaviour
                 m_rigitbody2D.linearVelocity = new Vector2(speed * m_gatherInput.Value.x, jumpForce);
                 canDoubleJump = true;
             }
-            else if (isWallDetected) WallJump();
+            else if (isWallDetected || wallCoyoteTimer > 0f)
+            {
+                // Saltar siempre corta la subida, aunque se siga pulsando Shift.
+                // Sin cortar el impulso: WallJump fija su propia velocidad justo
+                // despues y tocarla aqui solo restaria altura al salto.
+                TerminarWallRun(false);
+                WallJump();
+            }
             else if (counterExtraJumps > 0 && canDoubleJump) DoubleJump();
         }
         m_gatherInput.IsJumping = false;
@@ -557,6 +653,9 @@ public class PlayerControler : MonoBehaviour
         // player: si acaba de atacar hacia fuera, seguiría saltando en la dirección correcta.
         m_rigitbody2D.linearVelocity = new Vector2(wallJumpForce.x * -wallDirection, wallJumpForce.y);
         SetFacing(-wallDirection);
+
+        // Se gasta el margen: si no, un solo despegue daria varios saltos de pared.
+        wallCoyoteTimer = 0f;
         StartCoroutine(WallJumpRoutine());
     }
 
@@ -937,6 +1036,7 @@ public class PlayerControler : MonoBehaviour
     {
         HandleGround();
         HandleWall();
+        HandleWallRun();
         HandleWallSlide();
     }
 
@@ -977,6 +1077,12 @@ public class PlayerControler : MonoBehaviour
             counterExtraJumps = extraJumps;
             canDoubleJump = true;
         }
+
+        // Margen de coyote. Pisar suelo lo anula: ahi manda el salto normal y no
+        // queremos saltos de pared saliendo del suelo.
+        if (isGrounded) wallCoyoteTimer = 0f;
+        else if (isWallDetected) wallCoyoteTimer = wallCoyoteTime;
+        else if (wallCoyoteTimer > 0f) wallCoyoteTimer -= Time.fixedDeltaTime;
     }
 
     // Lanza varios rayos repartidos en altura hacia un lado. Basta con que uno
@@ -984,12 +1090,39 @@ public class PlayerControler : MonoBehaviour
     // donde solo las piernas del player quedan junto al muro.
     private bool HayParedHacia(int lado)
     {
+        return HayParedHacia(lado, checkWallDistance);
+    }
+
+    // Con alcance explicito: la carrera por la pared lo usa mas largo para
+    // distinguir un fallo de deteccion de haberse acabado el muro.
+    private bool HayParedHacia(int lado, float alcance)
+    {
+        return HayParedHacia(lado, alcance, wallCheckMinRays);
+    }
+
+    // Con el minimo de rayos tambien explicito. Agarrarse a una pared y seguir
+    // subiendo por ella no piden lo mismo: para agarrarse hace falta el torso
+    // contra el muro, pero para seguir subiendo basta con que los pies tengan
+    // pared debajo.
+    private bool HayParedHacia(int lado, float alcance, int minimoRayos)
+    {
         int rayos = Mathf.Max(1, wallCheckRays);
+
+        int minimo = Mathf.Clamp(minimoRayos, 1, rayos);
+        int tocados = 0;
 
         for (int i = 0; i < rayos; i++)
         {
             Vector2 origen = OrigenDelRayoDePared(i, rayos);
-            if (Physics2D.Raycast(origen, Vector2.right * lado, checkWallDistance, groundLayer)) return true;
+            RaycastHit2D hit = Physics2D.Raycast(origen, Vector2.right * lado, alcance, groundLayer);
+            if (!hit) continue;
+
+            // Solo cuentan superficies verticales de verdad. El canto de un suelo
+            // o una rampa devuelven una normal casi vertical y quedan descartados.
+            if (Mathf.Abs(hit.normal.x) < wallMinNormalX) continue;
+
+            tocados++;
+            if (tocados >= minimo) return true;
         }
 
         return false;
@@ -1001,12 +1134,202 @@ public class PlayerControler : MonoBehaviour
         return (Vector2)m_transform.position + new Vector2(0f, Mathf.Lerp(wallCheckBottom, wallCheckTop, t));
     }
 
+    // Carrera vertical por la pared. Se engancha con el boton de correr y dura
+    // mientras quede tiempo en el contador, que se recarga al pisar suelo.
+    private void HandleWallRun()
+    {
+        if (wallRunCooldownTimer > 0f) wallRunCooldownTimer -= Time.fixedDeltaTime;
+        // El bloqueo del remate se cae solo al pisar suelo: a partir de ahi el
+        // jugador tiene que poder seguir corriendo con normalidad.
+        if (wallRunLedgeTimer > 0f)
+            wallRunLedgeTimer = isGrounded ? 0f : wallRunLedgeTimer - Time.fixedDeltaTime;
+
+        // Tocar suelo devuelve la subida entera. Es lo que impide encadenar
+        // paredes para subir sin limite.
+        if (isGrounded && !isWallRunning) wallRunTimer = wallRunDuration;
+
+        if (!wallRunEnabled)
+        {
+            isWallRunning = false;
+            return;
+        }
+
+        // Para ENGANCHAR la subida vale la deteccion normal, la de dos rayos. Pero
+        // para SEGUIRLA basta con que toque el rayo mas bajo: si los pies aun
+        // tienen pared, hay pared que correr. Exigiendo dos, la subida se cortaba
+        // con los pies medio tile por debajo del borde, sin llegar a coronar.
+        bool paredParaSubir = isWallRunning
+            ? HayParedHacia(wallDirection, checkWallDistance, 1)
+            : isWallDetected;
+
+        // Los rayos pierden la pared con facilidad: entre el borde del capsule y
+        // su alcance hay centesimas. Mientras sube, se le conceden unos
+        // fotogramas de margen antes de dar la pared por perdida.
+        if (paredParaSubir)
+        {
+            wallRunGraceTimer = wallRunGraceTime;
+        }
+        else if (wallRunGraceTimer > 0f)
+        {
+            // Pero ese margen es solo para el temblor del cuerpo contra el muro.
+            // Se comprueba con un rayo mas largo: si ni asi hay pared, es que se
+            // ha acabado (ha coronado el borde) y la salida es inmediata, sin
+            // quedarse corriendo en el aire.
+            bool paredCerca = HayParedHacia(wallDirection, checkWallDistance + wallRunProbeExtra, 1);
+            wallRunGraceTimer = paredCerca ? wallRunGraceTimer - Time.fixedDeltaTime : 0f;
+        }
+
+        bool hayPared = paredParaSubir || (isWallRunning && wallRunGraceTimer > 0f);
+
+        // Subir pide el boton de correr MAS la direccion hacia el muro. Con solo
+        // el boton, el personaje podia estar rozando la pared sin empujar contra
+        // ella y la deteccion iba y venia entre fotogramas. Exigiendo la tecla de
+        // direccion, el cuerpo se mantiene apoyado y la subida es fiable.
+        bool empujaAlMuro = m_gatherInput.Value.x * wallDirection > 0f;
+
+        // Desde el suelo, ademas, no basta con detectar el muro: los rayos lo ven
+        // un poco antes de tocarlo, y enganchar ahi lanzaba al personaje hacia
+        // arriba en plena carrera. Se pide que la pared le haya frenado de verdad,
+        // que es lo que significa haber chocado con ella.
+        bool frenadoPorElMuro = Mathf.Abs(m_rigitbody2D.linearVelocityX) < 0.5f;
+        bool puedeArrancarDesdeSuelo = wallRunFromGroundSprint && isGrounded
+                                       && isSprinting && frenadoPorElMuro;
+
+        bool condiciones = hayPared
+                           && empujaAlMuro
+                           && canMove
+                           && !isKnocked
+                           && !isLaunched
+                           && !isAttacking
+                           && wallRunTimer > 0f
+                           && wallRunCooldownTimer <= 0f
+                           && wallRunLedgeTimer <= 0f
+                           && (!isGrounded || puedeArrancarDesdeSuelo);
+
+        // Shift + la direccion hacia el muro. Ni una cosa ni la otra por separado.
+        if (!m_gatherInput.IsSprinting || !condiciones)
+        {
+            // Si la pared sigue ahi, lo que ha pasado es que ha soltado el boton
+            // o se ha agotado el tiempo: se corta el impulso para que no siga
+            // subiendo solo. Si la pared se ha acabado, se conserva, y asi la
+            // subida remata coronando el borde en vez de frenar en seco.
+            TerminarWallRun(hayPared);
+            return;
+        }
+
+        isWallRunning = true;
+        wallRunTimer -= Time.fixedDeltaTime;
+
+        // Mirando al muro, como en el deslizamiento: asi la animacion de subir
+        // y la de deslizarse encajan cuando se pasa de una a otra.
+        SetFacing(wallDirection);
+
+        // La X empuja contra la pared para que los rayos no la pierdan; la Y se
+        // fija a pelo, que es lo que anula la gravedad mientras sube.
+        m_rigitbody2D.linearVelocity = new Vector2(wallDirection * wallRunStick, wallRunSpeed);
+
+        // Subir por la pared tambien devuelve el doble salto, igual que el
+        // deslizamiento: si no, rematar la subida con un salto seria imposible.
+        canDoubleJump = true;
+    }
+
+    // Corta la subida. Si sigue en el aire y pegado al muro, HandleWallSlide
+    // toma el relevo en el mismo paso de fisica y entra el deslizamiento.
+    private void TerminarWallRun(bool cortarImpulso)
+    {
+        if (!isWallRunning) return;
+
+        isWallRunning = false;
+        wallRunCooldownTimer = wallRunCooldown;
+        wallRunGraceTimer = 0f;
+
+        // Corta el impulso hacia arriba para que la caida empiece ya. Sin esto
+        // el personaje seguiria subiendo por inercia con la animacion de
+        // deslizamiento puesta, que queda fatal.
+        if (cortarImpulso)
+        {
+            if (m_rigitbody2D.linearVelocityY > 0f)
+                m_rigitbody2D.linearVelocity = new Vector2(m_rigitbody2D.linearVelocityX, 0f);
+
+            return;
+        }
+
+        // Aqui la pared se ha acabado: el personaje esta coronando. Se le empuja
+        // hacia la cornisa para que aterrice encima en vez de quedarse subiendo
+        // en vertical pegado a la cara del muro. El temporizador bloquea a Move()
+        // esos fotogramas: si no, sin tocar ninguna tecla la X se pondria a cero
+        // al instante y el empujon no serviria de nada.
+        if (wallRunLedgePush <= 0f) return;
+
+        // Parte de la velocidad de subida se cambia por avance, asi que en vez de
+        // frenar en el borde el personaje sale despedido por encima y aterriza
+        // corriendo. Es el mismo trato que el arranque desde el suelo, al reves.
+        float subidaRestante = Mathf.Max(0f, m_rigitbody2D.linearVelocityY) * wallRunLedgeUpKeep;
+        m_rigitbody2D.linearVelocity = new Vector2(wallDirection * wallRunLedgePush, subidaRestante);
+        wallRunLedgeTimer = wallRunLedgeTime;
+
+        // Y se gasta la subida entera. Es lo que impide el bucle del borde: el
+        // empujon acerca de nuevo al muro, los rayos vuelven a tocarlo y, con
+        // tiempo restante, la carrera se reenganchaba y volvia a lanzar al
+        // personaje hacia arriba. Asi se corona una vez y hay que pisar suelo
+        // para volver a tener subida, que es como ya funcionaba el contador.
+        wallRunTimer = 0f;
+
+        // Y se mantiene la carrera puesta: al aterrizar sigue corriendo en lugar
+        // de caer a Idle y tener que arrancar otra vez.
+        isSprinting = true;
+        currentSpeed = Mathf.Max(currentSpeed, sprintSpeed);
+    }
+
+    // Enciende y apaga los tres sistemas de polvo segun lo que este haciendo
+    // el personaje, y los coloca donde toca.
+    private void ActualizarPolvo()
+    {
+        // Roce de pared: solo bajando de verdad. Quieto contra el muro no hay
+        // friccion que mostrar.
+        // La posicion es local y el player voltea su escala en X al girar. Con
+        // wallDirection * direction el offset apunta al muro tanto si mira hacia
+        // el como si acaba de atacar y mira al lado contrario.
+        ColocarPolvo(wallSlideDust,
+            isWallSliding && m_rigitbody2D.linearVelocityY < -0.1f,
+            new Vector3(wallSlideDustOffset.x * wallDirection * direction, wallSlideDustOffset.y, 0f));
+
+        // Carrera por el suelo: hace falta ir de verdad a esa velocidad, no solo
+        // tener el boton pulsado.
+        ColocarPolvo(sprintDust,
+            isSprinting && isGrounded && Mathf.Abs(m_rigitbody2D.linearVelocityX) > 0.1f,
+            new Vector3(sprintDustOffset.x, sprintDustOffset.y, 0f));
+
+        // Carrera vertical: subiendo el personaje siempre mira al muro, asi que
+        // basta con el offset tal cual.
+        ColocarPolvo(wallRunDust, isWallRunning,
+            new Vector3(wallRunDustOffset.x * wallDirection * direction, wallRunDustOffset.y, 0f));
+    }
+
+    // Enciende, apaga y recoloca un sistema de particulas.
+    private void ColocarPolvo(ParticleSystem sistema, bool activo, Vector3 posicionLocal)
+    {
+        if (sistema == null) return;
+
+        if (activo)
+        {
+            sistema.transform.localPosition = posicionLocal;
+            if (!sistema.isEmitting) sistema.Play();
+        }
+        else if (sistema.isEmitting)
+        {
+            // Deja morir las que ya estan en el aire en vez de borrarlas de golpe.
+            sistema.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        }
+    }
+
     // Reduce la velocidad de caída mientras el player está pegado a una pared (deslizamiento).
     private void HandleWallSlide()
     {
         // Solo hay deslizamiento pegado a una pared y en el aire. De pie junto a un muro
         // el rayo también lo detecta, pero ahí no se desliza nada.
-        canWallSlide = isWallDetected && !isGrounded;
+        canWallSlide = isWallDetected && !isGrounded
+                       && (!wallSlideNeedsInput || m_gatherInput.Value.x * wallDirection > 0f);
 
         // El flag que lee el Animator excluye además el ataque, para que el espadazo
         // se vea entero, y el derribo, para que no se agarre al muro mientras cae
@@ -1015,17 +1338,34 @@ public class PlayerControler : MonoBehaviour
         // player puede estar junto a un muro, y no queremos que salga deslizándose.
         // Y respeta la ventana de animación del ataque: si volviera a activarse en
         // cuanto acaba el cooldown, con cooldowns cortos el espadazo no se vería.
+        // Y cede ante la carrera vertical: mientras sube no se desliza, y en
+        // cuanto suelta el boton vuelve aqui, que es justo lo que se quiere ver.
+        // Y solo cayendo: subiendo pegado al muro no se desliza nada, se sube.
         isWallSliding = canWallSlide && canMove && !isLaunched && !isKnocked
-                        && !isAttacking && attackAnimationTimer <= 0f;
+                        && !isAttacking && attackAnimationTimer <= 0f && !isWallRunning
+                        && m_rigitbody2D.linearVelocityY <= 0f;
 
         if (!canWallSlide) return;
+        // Subiendo por el muro manda HandleWallRun: aqui solo estorbariamos
+        // frenandole la velocidad vertical que acaba de fijar.
+        if (isWallRunning) return;
         // Durante un impulso no frenamos la caída: si no, rozar una pared anularía el lanzamiento.
         if (isLaunched) return;
         // Derribado tampoco se agarra: debe caer hasta el suelo y levantarse ahí.
         if (isKnocked) return;
+
+        // Subiendo no se toca la velocidad. Antes el multiplicador se aplicaba
+        // tambien al subir, asi que el impulso del salto de pared pasaba por el
+        // varias veces seguidas y llegaba arriba con una fraccion de su fuerza.
+        if (m_rigitbody2D.linearVelocityY > 0f) return;
+
         canDoubleJump = true;
-        slideSpeed = m_gatherInput.Value.y < 0 ? 1 : 0.5f;
-        m_rigitbody2D.linearVelocity = new Vector2(m_rigitbody2D.linearVelocityX, m_rigitbody2D.linearVelocityY * slideSpeed);
+
+        // Tope de bajada, no multiplicador: la velocidad se recorta solo si se
+        // pasa del limite, asi que la caida es constante y se puede ajustar a ojo.
+        float tope = m_gatherInput.Value.y < 0f ? wallSlideFastSpeed : wallSlideSpeed;
+        if (m_rigitbody2D.linearVelocityY < -tope)
+            m_rigitbody2D.linearVelocity = new Vector2(m_rigitbody2D.linearVelocityX, -tope);
     }
 
     #endregion
@@ -1199,6 +1539,8 @@ public class PlayerControler : MonoBehaviour
         // Solo se anuncia la carrera con los pies en el suelo: en el aire mandan
         // los estados de salto y caida, no el de correr.
         m_animator.SetBool(idIsSprinting, isSprinting && isGrounded && !isKnocked);
+        m_animator.SetBool(idIsWallRunning, isWallRunning);
+        ActualizarPolvo();
         m_animator.SetBool(idIsGrounded, isGrounded);
         m_animator.SetBool(idIsWallDetected, isWallDetected);
         m_animator.SetBool(idIsWallSliding, isWallSliding);
