@@ -15,7 +15,7 @@ using UnityEngine.UI;
 //  - La barra de vida tiembla con los golpes fuertes.
 //  - El HUD se desvanece si no pasa nada durante un rato y vuelve al instante.
 //  - Numeros exactos opcionales (desactivados por defecto).
-//  - Un indicador dentro del rombo que se enciende con la estamina baja.
+//  - El borde del rombo late con la estamina baja; en el centro va el icono.
 //  - La estela de dano baja rapido al principio y frena al final.
 //
 // Nota: el relleno no usa Image tipo Filled porque Filled no funciona sin sprite.
@@ -32,13 +32,14 @@ public class PlayerHud : MonoBehaviour
     [SerializeField] private Color boxBorderColor = new Color(0.78f, 0.72f, 0.58f, 0.9f);
     [SerializeField] private Color boxFillColor = new Color(0.08f, 0.07f, 0.06f, 0.75f);
 
+    [Header("Rombo: icono")]
+    // Lado del icono en pixeles. Va recto aunque el rombo este girado. A 38 cabe
+    // entero dentro de un rombo de 54 (la mitad de su diagonal).
+    [SerializeField] private float iconSize = 38f;
+
     [Header("Rombo: aviso de estamina")]
-    // Una gema dentro del rombo que se enciende al quedarse sin estamina. Desmarcalo
-    // si prefieres el rombo vacio para otra cosa.
+    // El borde del rombo late cuando queda poca estamina. El centro es para el icono.
     [SerializeField] private bool staminaWarningInBox = true;
-    // Tamano de la gema respecto al rombo.
-    [Range(0.1f, 0.9f)] [SerializeField] private float warningSize = 0.42f;
-    [SerializeField] private Color warningOffColor = new Color(0.16f, 0.15f, 0.12f, 0.9f);
     [SerializeField] private Color warningLowColor = new Color(0.95f, 0.78f, 0.25f, 1f);
     [SerializeField] private Color warningExhaustedColor = new Color(0.75f, 0.2f, 0.15f, 1f);
 
@@ -102,6 +103,7 @@ public class PlayerHud : MonoBehaviour
     private RectTransform estaminaRelleno;
     private Image estaminaImagen;
     private Image aviso;
+    private Image icono;
     private Text textoVida;
     private Text textoEstamina;
 
@@ -132,6 +134,14 @@ public class PlayerHud : MonoBehaviour
             instancia = new GameObject("PlayerHud").AddComponent<PlayerHud>();
 
         return instancia;
+    }
+
+    // Pone el icono del rombo. null lo deja vacio.
+    public void SetIcon(Sprite sprite)
+    {
+        if (icono == null) return;
+        icono.sprite = sprite;
+        icono.enabled = sprite != null;
     }
 
     // Activa o quita los numeros en marcha (por ejemplo desde un menu de opciones).
@@ -294,9 +304,9 @@ public class PlayerHud : MonoBehaviour
             if (estamina.Exhausted)
                 aviso.color = warningExhaustedColor;
             else if (poca)
-                aviso.color = Color.Lerp(warningOffColor, warningLowColor, parpadeo);
+                aviso.color = Color.Lerp(boxBorderColor, warningLowColor, parpadeo);
             else
-                aviso.color = warningOffColor;
+                aviso.color = boxBorderColor;
         }
     }
 
@@ -384,7 +394,8 @@ public class PlayerHud : MonoBehaviour
         float altoBarras = healthHeight + barGap + staminaHeight;
         float centroY = -visible * 0.5f;
 
-        RectTransform borde = Rect("Rombo", raiz, boxBorderColor, out _);
+        RectTransform borde = Rect("Rombo", raiz, boxBorderColor, out Image bordeImagen);
+        if (staminaWarningInBox) aviso = bordeImagen;
         borde.anchorMin = borde.anchorMax = new Vector2(0f, 1f);
         borde.sizeDelta = new Vector2(boxSize, boxSize);
         borde.anchoredPosition = new Vector2(visible * 0.5f, centroY);
@@ -396,14 +407,13 @@ public class PlayerHud : MonoBehaviour
         interior.offsetMin = new Vector2(boxBorder, boxBorder);
         interior.offsetMax = new Vector2(-boxBorder, -boxBorder);
 
-        if (staminaWarningInBox)
-        {
-            // Hija del rombo, asi va girada con el: una gema pequena en el centro.
-            RectTransform gema = Rect("AvisoEstamina", borde, warningOffColor, out aviso);
-            gema.anchorMin = gema.anchorMax = new Vector2(0.5f, 0.5f);
-            gema.sizeDelta = Vector2.one * (boxSize * warningSize);
-            gema.anchoredPosition = Vector2.zero;
-        }
+        // Icono: hermano del rombo y no hijo, para que no gire con el.
+        RectTransform ico = Rect("Icono", raiz, Color.white, out icono);
+        ico.anchorMin = ico.anchorMax = new Vector2(0f, 1f);
+        ico.sizeDelta = new Vector2(iconSize, iconSize);
+        ico.anchoredPosition = borde.anchoredPosition;
+        icono.preserveAspect = true;
+        icono.enabled = false;
 
         float x = visible;
         float yVida = centroY + altoBarras * 0.5f;

@@ -109,6 +109,12 @@ public class PlayerControler : MonoBehaviour
     private static readonly int IdShoot = Animator.StringToHash("shoot");
     // Mantiene la pose del arco mientras duran los ticks, que acaban despues que el clip.
     private static readonly int IdIsShooting = Animator.StringToHash("isShooting");
+    // Postura de la espada. Es float (0 o 1) y no bool porque lo leen Blend Trees:
+    // Idle y Run eligen su clip con el, sin duplicar estados ni transiciones.
+    private static readonly int IdSwordDrawn = Animator.StringToHash("swordDrawn");
+    private static readonly int IdDrawSword = Animator.StringToHash("drawSword");
+    private static readonly int IdSheatheSword = Animator.StringToHash("sheatheSword");
+    private bool animatorTieneSwordDrawn;
     private bool animatorTieneIsShooting;
 
     [Header("Opciones de Movimiento y Salto")]
@@ -131,7 +137,29 @@ public class PlayerControler : MonoBehaviour
     private float currentSpeed;
     private bool isSprinting;
 
-    [Header("Arco (clic derecho)")]
+    public enum EstadoArma { Enfundada, Desenfundada }
+
+    [Header("Espada (E)")]
+    // Con la espada enfundada no hay golpes de espada: el clic queda libre para los
+    // ataques sin arma (AtaqueSinArma). Moverse, correr con Shift, el arco y el
+    // barrido funcionan igual en los dos estados; solo cambian las animaciones.
+    [SerializeField] private EstadoArma estadoArma = EstadoArma.Enfundada;
+    // Iconos del rombo del HUD.
+    [SerializeField] private Sprite swordIcon;
+    [SerializeField] private Sprite glovesIcon;
+    // El cambio lo termina el Animation Event del final del clip. Esto es solo una
+    // red de seguridad por si el evento falta: el clip dura unos 0.27 s.
+    [SerializeField] private float weaponToggleTimeout = 0.6f;
+    [SerializeField] private bool isTogglingWeapon;
+    private EstadoArma estadoDestino;
+    private float cambioArmaTimer;
+    // Se pulso Q en el aire (o en mitad de otra accion): se hace en cuanto se pueda.
+    private bool cambioArmaPendiente;
+    private bool avisoEventoArma;
+
+    public EstadoArma Arma => estadoArma;
+
+    [Header("Arco (R)")]
     // Prefab con el efecto del haz (BowBeam). Sin el, el dano funciona igual.
     [SerializeField] private BowBeam bowBeamPrefab;
     // Dano de cada tick. Con 3 ticks, 3 en total.
@@ -378,6 +406,11 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private bool wallRunFromGroundSprint = true;
     // Empuje contra el muro mientras sube, para que los rayos lo sigan viendo.
     [SerializeField] private float wallRunStick = 0.5f;
+    // Si la subida empieza con el cuerpo aun separado del muro (los rayos ven la
+    // pared un poco antes de tocarla, y llegando con las teclas ya pulsadas pasa
+    // justo eso), se acerca a esta velocidad hasta pegarse. Con el empuje normal
+    // tardaba medio segundo en cerrar el hueco y la deteccion iba al limite.
+    [SerializeField] private float wallRunSnapSpeed = 4f;
     // Margen de gracia cuando los rayos pierden la pared. Entre el capsule y el
     // alcance del rayo hay centesimas, y el cuerpo vibra contra el muro, asi que
     // un fotograma suelto sin deteccion es normal. Sin este respiro cada uno de
@@ -575,6 +608,8 @@ public class PlayerControler : MonoBehaviour
         idIsDodging = Animator.StringToHash("isDodging");
         foreach (AnimatorControllerParameter p in m_animator.parameters)
             if (p.nameHash == IdIsShooting) { animatorTieneIsShooting = true; break; }
+        foreach (AnimatorControllerParameter p in m_animator.parameters)
+            if (p.nameHash == IdSwordDrawn) { animatorTieneSwordDrawn = true; break; }
         currentSpeed = speed;
         if (impulseSource == null) impulseSource = GetComponent<CinemachineImpulseSource>();
         DustFx.Configurar(sprintDust, sprintDustPreset, "VFX", 1);
@@ -586,6 +621,7 @@ public class PlayerControler : MonoBehaviour
         currentHealth = maxHealth;
 
         PlayerHud.Get().SetHealth(currentHealth, maxHealth);
+        ActualizarIconoArma();
     }
 
     // Actualiza los parámetros del Animator cada frame.
@@ -608,6 +644,19 @@ public class PlayerControler : MonoBehaviour
 
         // La estocada lleva su propia velocidad de principio a fin.
         if (isPlunging) return;
+
+        // Enfundar o desenfundar: quieto y sin atacar, disparar ni barrer hasta
+        // que termine, para que no se corte a medias. Saltar si se puede, y lo cancela.
+        CambioDeArma();
+        if (isTogglingWeapon)
+        {
+            if (m_gatherInput.IsJumping && isGrounded) CancelarCambioArma(true);
+            else
+            {
+                m_rigitbody2D.linearVelocity = new Vector2(0f, m_rigitbody2D.linearVelocityY);
+                return;
+            }
+        }
 
         // El disparo con arco es potente y compromete: se hace entero, sin moverse.
         Disparo();
@@ -996,6 +1045,14 @@ public class PlayerControler : MonoBehaviour
         if (attackBuffer > 0f && canAttack)
         {
             attackBuffer = 0f;
+
+            // Sin la espada en la mano no hay golpes de espada: ni combo, ni pared, ni
+            // aereos, ni estocada.
+            if (estadoArma != EstadoArma.Desenfundada)
+            {
+                AtaqueSinArma();
+                return;
+            }
 
             // Agotado, ningun golpe de espada sale. (El arco va por otro camino
             // y no pasa por aqui: no gasta estamina.)
@@ -1684,7 +1741,10 @@ public class PlayerControler : MonoBehaviour
                            && wallRunTimer > 0f
                            && wallRunCooldownTimer <= 0f
                            && wallRunLedgeTimer <= 0f
-                           && (!isGrounded || puedeArrancarDesdeSuelo);
+                           // Ya subiendo, seguir tocando el suelo un par de fotogramas no la
+                           // corta: al arrancar, Move() apaga isSprinting y la condicion de
+                           // arranque desde el suelo dejaba de cumplirse antes de despegar.
+                           && (!isGrounded || isWallRunning || puedeArrancarDesdeSuelo);
 
         // Shift + la direccion hacia el muro. Ni una cosa ni la otra por separado.
         if (!m_gatherInput.IsSprinting || !condiciones)
@@ -1693,7 +1753,7 @@ public class PlayerControler : MonoBehaviour
             // o se ha agotado el tiempo: se corta el impulso para que no siga
             // subiendo solo. Si la pared se ha acabado, se conserva, y asi la
             // subida remata coronando el borde en vez de frenar en seco.
-            TerminarWallRun(hayPared);
+            TerminarWallRun(hayPared, !hayPared);
             return;
         }
 
@@ -1716,7 +1776,11 @@ public class PlayerControler : MonoBehaviour
 
         // La X empuja contra la pared para que los rayos no la pierdan; la Y se
         // fija a pelo, que es lo que anula la gravedad mientras sube.
-        m_rigitbody2D.linearVelocity = new Vector2(wallDirection * wallRunStick, wallRunSpeed);
+        float mitadCuerpo = capsula != null ? capsulaSize.x * 0.5f : 0.24f;
+        bool pegado = PiesContraPared(wallDirection, mitadCuerpo + 0.04f)
+                      || HayParedHacia(wallDirection, mitadCuerpo + 0.04f, 1);
+        float empuje = pegado ? wallRunStick : wallRunSnapSpeed;
+        m_rigitbody2D.linearVelocity = new Vector2(wallDirection * empuje, wallRunSpeed);
 
         // Subir por la pared tambien devuelve el doble salto, igual que el
         // deslizamiento: si no, rematar la subida con un salto seria imposible.
@@ -1725,7 +1789,13 @@ public class PlayerControler : MonoBehaviour
 
     // Corta la subida. Si sigue en el aire y pegado al muro, HandleWallSlide
     // toma el relevo en el mismo paso de fisica y entra el deslizamiento.
-    private void TerminarWallRun(bool cortarImpulso)
+    // cortarImpulso: frena la subida en seco (soltar el boton, quedarse sin estamina).
+    // corona: la pared se ha acabado por arriba y hay que rematar sobre la cornisa.
+    // Antes solo existia el primer parametro y "false" significaba coronar, asi que
+    // saltar desde la pared tambien disparaba el remate: empujon contra el muro,
+    // bloqueo y contador gastado. Si el salto se colaba al llegar a la pared, la
+    // subida se cortaba y no se podia volver a subir hasta pisar suelo.
+    private void TerminarWallRun(bool cortarImpulso, bool corona = false)
     {
         if (!isWallRunning) return;
 
@@ -1743,6 +1813,9 @@ public class PlayerControler : MonoBehaviour
 
             return;
         }
+
+        // Ni corta ni corona: por ejemplo al saltar, que pone su propia velocidad.
+        if (!corona) return;
 
         // Aqui la pared se ha acabado: el personaje esta coronando. Se le empuja
         // hacia la cornisa para que aterrice encima en vez de quedarse subiendo
@@ -1907,9 +1980,100 @@ public class PlayerControler : MonoBehaviour
 
     #endregion
 
+    #region Espada
+
+    // Lee la E y arranca el cambio cuando se pueda.
+    private void CambioDeArma()
+    {
+        if (m_gatherInput.IsTogglingWeapon)
+        {
+            m_gatherInput.IsTogglingWeapon = false;
+            // Pulsar otra vez antes de que empiece lo anula.
+            if (!isTogglingWeapon) cambioArmaPendiente = !cambioArmaPendiente;
+        }
+
+        if (isTogglingWeapon)
+        {
+            // Red de seguridad: si el clip no tiene su Animation Event, no se queda
+            // atascado para siempre.
+            cambioArmaTimer -= Time.fixedDeltaTime;
+            if (cambioArmaTimer <= 0f)
+            {
+                if (!avisoEventoArma)
+                {
+                    avisoEventoArma = true;
+                    Debug.LogWarning("[Espada] El clip de desenvainar o envainar no ha llamado a su Animation Event " +
+                                     "(OnSwordDrawn / OnSwordSheathed). Se termina por tiempo, pero el icono no va sincronizado.", this);
+                }
+                TerminarCambioArma(estadoDestino);
+            }
+            return;
+        }
+
+        if (!cambioArmaPendiente) return;
+
+        // Solo de pie y sin estar en mitad de otra cosa. En el aire, o atacando,
+        // espera: la pulsacion no se pierde.
+        if (!isGrounded || isAttacking || isShooting || isDodging || isWallRunning || canWallSlide) return;
+
+        cambioArmaPendiente = false;
+        isTogglingWeapon = true;
+        isSprinting = false;
+        estadoDestino = estadoArma == EstadoArma.Enfundada ? EstadoArma.Desenfundada : EstadoArma.Enfundada;
+        cambioArmaTimer = weaponToggleTimeout;
+        m_animator.SetTrigger(estadoDestino == EstadoArma.Desenfundada ? IdDrawSword : IdSheatheSword);
+    }
+
+    // Animation Event del ultimo fotograma de desenvainar: ya tiene la espada.
+    public void OnSwordDrawn()
+    {
+        TerminarCambioArma(EstadoArma.Desenfundada);
+    }
+
+    // Animation Event del ultimo fotograma de envainar: ya la ha guardado.
+    public void OnSwordSheathed()
+    {
+        TerminarCambioArma(EstadoArma.Enfundada);
+    }
+
+    private void TerminarCambioArma(EstadoArma nuevo)
+    {
+        // Un evento que llega tarde, con el cambio ya cancelado, no hace nada.
+        if (!isTogglingWeapon) return;
+
+        isTogglingWeapon = false;
+        estadoArma = nuevo;
+        ActualizarIconoArma();
+    }
+
+    // Deja el cambio a medias y se queda como estaba. volverAIdle saca al Animator
+    // del clip de transicion (al saltar); con un golpe no, porque manda el retroceso.
+    private void CancelarCambioArma(bool volverAIdle)
+    {
+        isTogglingWeapon = false;
+        m_animator.ResetTrigger(IdDrawSword);
+        m_animator.ResetTrigger(IdSheatheSword);
+
+        int idle = Animator.StringToHash("PlayerIdle");
+        if (volverAIdle && m_animator.HasState(0, idle)) m_animator.Play(idle, 0, 0f);
+    }
+
+    private void ActualizarIconoArma()
+    {
+        PlayerHud.Get().SetIcon(estadoArma == EstadoArma.Desenfundada ? swordIcon : glovesIcon);
+    }
+
+    // Clic con la espada enfundada. De momento no hace nada: aqui entraran los
+    // ataques sin arma.
+    private void AtaqueSinArma()
+    {
+    }
+
+    #endregion
+
     #region Arco
 
-    // Lee el clic derecho y arranca el disparo si se puede.
+    // Lee la R y arranca el disparo si se puede.
     private void Disparo()
     {
         if (bowCooldownTimer > 0f) bowCooldownTimer -= Time.fixedDeltaTime;
@@ -2335,6 +2499,7 @@ public class PlayerControler : MonoBehaviour
         if (isDodging) TerminarEsquiva();
         if (isPlunging) TerminarEstocada();
         if (isShooting) TerminarDisparo();
+        if (isTogglingWeapon) CancelarCambioArma(false);
 
         Knockback();
 
@@ -2538,6 +2703,7 @@ public class PlayerControler : MonoBehaviour
         m_animator.SetBool(idIsWallRunning, isWallRunning);
         m_animator.SetBool(idIsDodging, isDodging);
         if (animatorTieneIsShooting) m_animator.SetBool(IdIsShooting, isShooting);
+        if (animatorTieneSwordDrawn) m_animator.SetFloat(IdSwordDrawn, estadoArma == EstadoArma.Desenfundada ? 1f : 0f);
         ActualizarPolvo();
         m_animator.SetBool(idIsGrounded, isGrounded);
         m_animator.SetBool(idIsWallDetected, isWallDetected);

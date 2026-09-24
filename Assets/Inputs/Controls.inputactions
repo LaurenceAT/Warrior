@@ -43,6 +43,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "ToggleWeapon",
+                    "type": "Button",
+                    "id": "e4b7a91c-2d53-4f86-b0c9-7a1e5d3f8c24",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Shoot",
                     "type": "Button",
                     "id": "a7f3c2e1-9b84-4d6a-8e15-2c7b9f0d4a36",
@@ -152,8 +161,19 @@
                 },
                 {
                     "name": "",
+                    "id": "9c2f5e8a-4b16-4d73-a8e0-5f3b1c7d9e42",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "ToggleWeapon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "d2b8e6f4-1c93-47a5-9f02-6e4a8b3c7d19",
-                    "path": "<Mouse>/rightButton",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",

@@ -25,7 +25,12 @@ public class GatherInput : MonoBehaviour
     [SerializeField] private bool _isSprinting;
     public bool IsSprinting { get => _isSprinting; }
 
-    // Pulsacion del disparo con arco. Como el ataque: se marca al pulsar y la consume
+    // Pulsacion de enfundar o desenfundar la espada (E). Como el ataque: se marca al pulsar y la consume
+    // PlayerControler, asi un toque breve no se pierde entre pasos de fisica.
+    [SerializeField] private bool _isTogglingWeapon;
+    public bool IsTogglingWeapon { get => _isTogglingWeapon; set => _isTogglingWeapon = value; }
+
+    // Pulsacion del disparo con arco (R). Como el ataque: se marca al pulsar y la consume
     // PlayerControler, asi un toque breve no se pierde entre pasos de fisica.
     [SerializeField] private bool _isShooting;
     public bool IsShooting { get => _isShooting; set => _isShooting = value; }
@@ -60,6 +65,7 @@ public class GatherInput : MonoBehaviour
         controls.Player.Attack.performed += StartAttack;
         controls.Player.Sprint.performed += StartSprint;
         controls.Player.Sprint.canceled += StopSprint;
+        controls.Player.ToggleWeapon.performed += StartToggleWeapon;
         controls.Player.Shoot.performed += StartShoot;
         controls.Player.Shoot.canceled += StopShoot;
         controls.Player.Dodge.performed += StartDodge;
@@ -76,6 +82,7 @@ public class GatherInput : MonoBehaviour
         controls.Player.Attack.performed -= StartAttack;
         controls.Player.Sprint.performed -= StartSprint;
         controls.Player.Sprint.canceled -= StopSprint;
+        controls.Player.ToggleWeapon.performed -= StartToggleWeapon;
         controls.Player.Shoot.performed -= StartShoot;
         controls.Player.Shoot.canceled -= StopShoot;
         controls.Player.Dodge.performed -= StartDodge;
@@ -126,6 +133,12 @@ public class GatherInput : MonoBehaviour
     private void StopSprint(InputAction.CallbackContext context)
     {
         _isSprinting = false;
+    }
+
+    // Marca el cambio de arma al pulsar el boton.
+    private void StartToggleWeapon(InputAction.CallbackContext context)
+    {
+        _isTogglingWeapon = true;
     }
 
     // Marca el disparo al pulsar el boton.
