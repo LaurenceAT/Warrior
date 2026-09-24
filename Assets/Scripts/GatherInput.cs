@@ -25,6 +25,11 @@ public class GatherInput : MonoBehaviour
     [SerializeField] private bool _isSprinting;
     public bool IsSprinting { get => _isSprinting; }
 
+    // Pulsacion de patada (clic derecho, solo con la espada enfundada). Como el ataque: se marca al pulsar y la consume
+    // PlayerControler, asi un toque breve no se pierde entre pasos de fisica.
+    [SerializeField] private bool _isKicking;
+    public bool IsKicking { get => _isKicking; set => _isKicking = value; }
+
     // Pulsacion de enfundar o desenfundar la espada (E). Como el ataque: se marca al pulsar y la consume
     // PlayerControler, asi un toque breve no se pierde entre pasos de fisica.
     [SerializeField] private bool _isTogglingWeapon;
@@ -65,6 +70,7 @@ public class GatherInput : MonoBehaviour
         controls.Player.Attack.performed += StartAttack;
         controls.Player.Sprint.performed += StartSprint;
         controls.Player.Sprint.canceled += StopSprint;
+        controls.Player.Kick.performed += StartKick;
         controls.Player.ToggleWeapon.performed += StartToggleWeapon;
         controls.Player.Shoot.performed += StartShoot;
         controls.Player.Shoot.canceled += StopShoot;
@@ -82,6 +88,7 @@ public class GatherInput : MonoBehaviour
         controls.Player.Attack.performed -= StartAttack;
         controls.Player.Sprint.performed -= StartSprint;
         controls.Player.Sprint.canceled -= StopSprint;
+        controls.Player.Kick.performed -= StartKick;
         controls.Player.ToggleWeapon.performed -= StartToggleWeapon;
         controls.Player.Shoot.performed -= StartShoot;
         controls.Player.Shoot.canceled -= StopShoot;
@@ -133,6 +140,12 @@ public class GatherInput : MonoBehaviour
     private void StopSprint(InputAction.CallbackContext context)
     {
         _isSprinting = false;
+    }
+
+    // Marca la patada al pulsar el boton.
+    private void StartKick(InputAction.CallbackContext context)
+    {
+        _isKicking = true;
     }
 
     // Marca el cambio de arma al pulsar el boton.

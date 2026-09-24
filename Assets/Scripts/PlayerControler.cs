@@ -159,6 +159,27 @@ public class PlayerControler : MonoBehaviour
 
     public EstadoArma Arma => estadoArma;
 
+    [Header("Combate sin arma (espada enfundada)")]
+    // Tabla de golpes y de como se encadenan. Todo lo que define el moveset esta
+    // ahi: aqui solo se ejecuta.
+    [SerializeField] private UnarmedMoveset unarmedMoveset;
+    // Margen para pulsar un poco antes de poder encadenar.
+    [SerializeField] private float unarmedBufferTime = 0.2f;
+    // Indice del golpe cuya caja se dibuja en la escena (-1 = ninguno).
+    [SerializeField] private int unarmedGizmoMove = -1;
+    private UnarmedMoveset.Golpe golpeActual;
+    private UnarmedMoveset.Golpe golpeAnterior;
+    private bool golpeSinArmaActivo;
+    private float tGolpe;
+    private float ventanaComboSinArma;
+    private UnarmedMoveset.Entrada entradaGuardada;
+    private float bufferSinArma;
+    private readonly HashSet<EnemyHealth> tocadosSinArma = new HashSet<EnemyHealth>();
+    private bool picadoCayendo;
+    private float picadoAterrizo = -1f;
+    private float gravedadAntesDelPicado = -1f;
+    private bool avisoSinMoveset;
+
     [Header("Arco (R)")]
     // Prefab con el efecto del haz (BowBeam). Sin el, el dano funciona igual.
     [SerializeField] private BowBeam bowBeamPrefab;
@@ -658,6 +679,19 @@ public class PlayerControler : MonoBehaviour
             }
         }
 
+        // Espada enfundada: puños y patadas. Mientras dura un golpe, manda el golpe.
+        if (estadoArma == EstadoArma.Enfundada)
+        {
+            CombateSinArma();
+            if (golpeSinArmaActivo) return;
+        }
+        else
+        {
+            // Con la espada fuera el clic derecho no hace nada: se descarta para que
+            // no salga una patada vieja al enfundar.
+            m_gatherInput.IsKicking = false;
+        }
+
         // El disparo con arco es potente y compromete: se hace entero, sin moverse.
         Disparo();
         if (isShooting) return;
@@ -699,6 +733,14 @@ public class PlayerControler : MonoBehaviour
             Vector3 boca = BocaDelArco();
             Gizmos.DrawWireSphere(boca, 0.06f);
             Gizmos.DrawWireCube(boca + Vector3.right * direction, new Vector3(2f, bowHitHeight, 0f));
+        }
+
+        // Caja del golpe sin arma elegido en Unarmed Gizmo Move (verde).
+        if (unarmedMoveset != null && unarmedGizmoMove >= 0 && unarmedGizmoMove < unarmedMoveset.golpes.Count && m_transform != null)
+        {
+            UnarmedMoveset.Golpe g = unarmedMoveset.golpes[unarmedGizmoMove];
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(m_transform.position + new Vector3(g.offset.x * direction, g.offset.y, 0f), g.tamano);
         }
 
         // Areas de la estocada: naranja la de caida, amarilla la del impacto.
@@ -1956,6 +1998,7 @@ public class PlayerControler : MonoBehaviour
         if (!canWallSlide) return;
         // En plena estocada no se frena: rozar una pared cortaria el picado.
         if (isPlunging) return;
+        if (picadoCayendo) return;
         // Subiendo por el muro manda HandleWallRun: aqui solo estorbariamos
         // frenandole la velocidad vertical que acaba de fijar.
         if (isWallRunning) return;
@@ -2063,10 +2106,262 @@ public class PlayerControler : MonoBehaviour
         PlayerHud.Get().SetIcon(estadoArma == EstadoArma.Desenfundada ? swordIcon : glovesIcon);
     }
 
-    // Clic con la espada enfundada. De momento no hace nada: aqui entraran los
-    // ataques sin arma.
+    // Clic con la espada enfundada que llega hasta Attack(). No deberia pasar: el
+    // combate sin arma consume el clic antes (CombateSinArma).
     private void AtaqueSinArma()
     {
+    }
+
+    #endregion
+
+    #region Combate sin arma
+
+    // Lee puño y patada, hace avanzar el golpe en curso y arranca el siguiente
+    // segun la tabla del moveset.
+    private void CombateSinArma()
+    {
+        // Las pulsaciones se guardan un momento, por si llegan antes de poder encadenar.
+        if (m_gatherInput.IsAttacking) { entradaGuardada = UnarmedMoveset.Entrada.Puno; bufferSinArma = unarmedBufferTime; }
+        if (m_gatherInput.IsKicking) { entradaGuardada = UnarmedMoveset.Entrada.Patada; bufferSinArma = unarmedBufferTime; }
+        m_gatherInput.IsAttacking = false;
+        m_gatherInput.IsKicking = false;
+
+        float dt = Time.fixedDeltaTime;
+        if (bufferSinArma > 0f) bufferSinArma -= dt;
+        if (!golpeSinArmaActivo && ventanaComboSinArma > 0f)
+        {
+            ventanaComboSinArma -= dt;
+            if (ventanaComboSinArma <= 0f) golpeAnterior = null;   // se reinicia el combo
+        }
+
+        if (golpeSinArmaActivo) AvanzarGolpeSinArma(dt);
+        if (bufferSinArma <= 0f) return;
+
+        if (unarmedMoveset == null)
+        {
+            if (!avisoSinMoveset)
+            {
+                avisoSinMoveset = true;
+                Debug.LogWarning("[Sin arma] El Player no tiene asignado un Unarmed Moveset.", this);
+            }
+            bufferSinArma = 0f;
+            return;
+        }
+
+        UnarmedMoveset.Golpe siguiente = null;
+
+        if (golpeSinArmaActivo)
+        {
+            // Aun no se puede encadenar: la pulsacion espera en el buffer.
+            if (tGolpe < golpeActual.encadenarDesde) return;
+            siguiente = unarmedMoveset.Siguiente(golpeActual, entradaGuardada);
+            // Sin enlace para esta entrada, este golpe cierra la cadena: se ignora.
+            if (siguiente == null) { bufferSinArma = 0f; return; }
+        }
+        else
+        {
+            if (!PuedeEmpezarGolpeSinArma()) return;
+            // Dentro de la ventana del golpe anterior se sigue la cadena; si no, o si
+            // no hay enlace, empieza una nueva segun la situacion.
+            if (golpeAnterior != null) siguiente = unarmedMoveset.Siguiente(golpeAnterior, entradaGuardada);
+            if (siguiente == null) siguiente = unarmedMoveset.Inicial(entradaGuardada, ContextoSinArma());
+        }
+
+        bufferSinArma = 0f;
+        if (siguiente == null) return;
+        // Agotado no sale ningun golpe; sin gastar nada.
+        if (!estamina.CanSpend()) return;
+
+        EmpezarGolpeSinArma(siguiente);
+    }
+
+    private bool PuedeEmpezarGolpeSinArma()
+    {
+        return !isDodging && !isWallRunning && !canWallSlide && !isShooting && !isTogglingWeapon
+               && !isLaunched && !isWallJumping && !isKnocked && !isAttacking;
+    }
+
+    private UnarmedMoveset.Contexto ContextoSinArma()
+    {
+        if (!isGrounded)
+            return m_gatherInput.Value.y < -0.5f ? UnarmedMoveset.Contexto.AireAbajo : UnarmedMoveset.Contexto.Aire;
+
+        bool corriendo = isSprinting && Mathf.Abs(m_rigitbody2D.linearVelocityX) > 0.5f;
+        return corriendo ? UnarmedMoveset.Contexto.Corriendo : UnarmedMoveset.Contexto.Suelo;
+    }
+
+    private void EmpezarGolpeSinArma(UnarmedMoveset.Golpe g)
+    {
+        // Empezar una cadena nueva deja girarse hacia donde se pulse.
+        if (!golpeSinArmaActivo && Mathf.Abs(m_gatherInput.Value.x) > 0.1f)
+            SetFacing((int)Mathf.Sign(m_gatherInput.Value.x));
+
+        FinalizarPicado();
+        golpeActual = g;
+        golpeSinArmaActivo = true;
+        tGolpe = 0f;
+        tocadosSinArma.Clear();
+        picadoAterrizo = -1f;
+        ventanaComboSinArma = 0f;
+
+        // isAttacking hace que el resto del personaje respete el golpe: el
+        // deslizamiento de pared no pisa la animacion, no se cambia de arma, etc.
+        isAttacking = true;
+        attackAnimationTimer = g.duracion;
+
+        estamina.Spend(g.costeEstamina);
+        ReproducirEstado(g.estadoAnimator);
+
+        switch (g.tipo)
+        {
+            case UnarmedMoveset.Tipo.Normal:
+                if (isGrounded && g.avance != 0f)
+                    m_rigitbody2D.linearVelocity = new Vector2(direction * g.avance, m_rigitbody2D.linearVelocityY);
+                break;
+
+            case UnarmedMoveset.Tipo.Carrera:
+                // Sigue con el impulso que traia, como minimo el del golpe.
+                float vx = Mathf.Max(Mathf.Abs(m_rigitbody2D.linearVelocityX), g.avance);
+                m_rigitbody2D.linearVelocity = new Vector2(direction * vx, m_rigitbody2D.linearVelocityY);
+                break;
+
+            case UnarmedMoveset.Tipo.Picado:
+                gravedadAntesDelPicado = m_rigitbody2D.gravityScale;
+                m_rigitbody2D.gravityScale = 0f;
+                m_rigitbody2D.linearVelocity = Vector2.zero;
+                break;
+        }
+
+        isSprinting = false;
+    }
+
+    private void AvanzarGolpeSinArma(float dt)
+    {
+        UnarmedMoveset.Golpe g = golpeActual;
+        tGolpe += dt;
+
+        bool activo;
+        if (g.tipo == UnarmedMoveset.Tipo.Picado)
+        {
+            // Suspension, y luego en diagonal hasta tocar suelo.
+            if (picadoAterrizo >= 0f)
+            {
+                m_rigitbody2D.linearVelocity = Vector2.zero;
+                if (tGolpe - picadoAterrizo >= g.recuperacionAterrizaje) { FinalizarGolpeSinArma(); }
+                return;
+            }
+
+            picadoCayendo = tGolpe >= g.inicioPicado;
+            m_rigitbody2D.linearVelocity = picadoCayendo
+                ? new Vector2(direction * g.velocidadPicado.x, -g.velocidadPicado.y)
+                : Vector2.zero;
+
+            if (picadoCayendo && isGrounded)
+            {
+                picadoAterrizo = tGolpe;
+                FinalizarPicado();
+                Sacudir(g.sacudida);
+                return;
+            }
+
+            // Tope por si cae a un pozo sin fondo.
+            if (tGolpe >= g.duracion) { FinalizarGolpeSinArma(); return; }
+            activo = picadoCayendo;
+        }
+        else
+        {
+            // El empujon del golpe se frena solo.
+            if (isGrounded)
+            {
+                float vx = Mathf.MoveTowards(m_rigitbody2D.linearVelocityX, 0f, g.frenado * dt);
+                m_rigitbody2D.linearVelocity = new Vector2(vx, m_rigitbody2D.linearVelocityY);
+            }
+            activo = tGolpe >= g.activoDesde && tGolpe <= g.activoHasta;
+        }
+
+        if (activo && GolpearConCajaSinArma(g) && g.tipo == UnarmedMoveset.Tipo.Picado && g.rebote > 0f)
+        {
+            // Patada en picado que acierta: rebota y recupera el salto.
+            FinalizarGolpeSinArma();
+            m_rigitbody2D.linearVelocity = new Vector2(m_rigitbody2D.linearVelocityX * 0.3f, g.rebote);
+            RecuperarSaltoAereo();
+            return;
+        }
+
+        if (g.tipo != UnarmedMoveset.Tipo.Picado && tGolpe >= g.duracion) FinalizarGolpeSinArma();
+    }
+
+    // Aplica el dano de la caja. Cada enemigo, una sola vez por golpe: la caja sigue
+    // activa varios fotogramas. Devuelve true si ha tocado a alguien nuevo.
+    private bool GolpearConCajaSinArma(UnarmedMoveset.Golpe g)
+    {
+        Vector2 centro = (Vector2)m_transform.position + new Vector2(g.offset.x * direction, g.offset.y);
+        int capas = attackLayers.value == 0 ? ~0 : attackLayers.value;
+        bool nuevo = false;
+
+        foreach (Collider2D hit in Physics2D.OverlapBoxAll(centro, g.tamano, 0f, capas))
+        {
+            if (!hit.CompareTag("Enemy")) continue;
+            EnemyHealth enemigo = hit.GetComponentInParent<EnemyHealth>();
+            if (enemigo == null || !tocadosSinArma.Add(enemigo)) continue;
+
+            enemigo.TakeDamage(g.dano, m_transform.position, g.retroceso);
+            nuevo = true;
+        }
+
+        if (!nuevo) return false;
+        StartCoroutine(HitStop(g.congelacion));
+        Sacudir(g.sacudida);
+        if (!isGrounded) RecuperarSaltoAereo();
+        return true;
+    }
+
+    // Fin normal: abre la ventana para encadenar y devuelve el Animator a su sitio.
+    private void FinalizarGolpeSinArma()
+    {
+        FinalizarPicado();
+        golpeAnterior = golpeActual;
+        ventanaComboSinArma = golpeActual != null ? golpeActual.ventanaCombo : 0f;
+        golpeActual = null;
+        golpeSinArmaActivo = false;
+        isAttacking = false;
+        attackAnimationTimer = 0f;
+
+        // Los estados de golpe no tienen transicion de salida: se vuelve desde aqui,
+        // asi anadir un golpe nuevo es solo anadir su estado.
+        ReproducirEstado(isGrounded ? "PlayerIdle" : "Fall");
+    }
+
+    // Corte por un golpe recibido: sin ventana de combo y sin tocar la animacion,
+    // que la pone el retroceso.
+    private void CortarGolpeSinArma()
+    {
+        FinalizarPicado();
+        golpeActual = null;
+        golpeAnterior = null;
+        golpeSinArmaActivo = false;
+        isAttacking = false;
+        attackAnimationTimer = 0f;
+        ventanaComboSinArma = 0f;
+        bufferSinArma = 0f;
+    }
+
+    private void FinalizarPicado()
+    {
+        picadoCayendo = false;
+        if (gravedadAntesDelPicado >= 0f)
+        {
+            m_rigitbody2D.gravityScale = gravedadAntesDelPicado;
+            gravedadAntesDelPicado = -1f;
+        }
+    }
+
+    private void ReproducirEstado(string estado)
+    {
+        if (string.IsNullOrEmpty(estado)) return;
+        int id = Animator.StringToHash(estado);
+        if (m_animator.HasState(0, id)) m_animator.CrossFadeInFixedTime(id, 0.02f, 0);
+        else Debug.LogWarning($"[Sin arma] El Animator no tiene el estado '{estado}'.", this);
     }
 
     #endregion
@@ -2500,6 +2795,7 @@ public class PlayerControler : MonoBehaviour
         if (isPlunging) TerminarEstocada();
         if (isShooting) TerminarDisparo();
         if (isTogglingWeapon) CancelarCambioArma(false);
+        if (golpeSinArmaActivo) CortarGolpeSinArma();
 
         Knockback();
 

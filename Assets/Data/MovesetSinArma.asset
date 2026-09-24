@@ -1,0 +1,188 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29f76be8a5054a32d37dec7f907ed454, type: 3}
+  m_Name: MovesetSinArma
+  m_EditorClassIdentifier: 
+  golpes:
+  - nombre: Puno1
+    estadoAnimator: Punch1
+    tipo: 0
+    duracion: 0.2667
+    activoDesde: 0.12
+    activoHasta: 0.21
+    encadenarDesde: 0.2
+    ventanaCombo: 0.35
+    offset: {x: 0.45, y: 0.05}
+    tamano: {x: 0.5, y: 0.35}
+    dano: 1
+    retroceso: 1
+    costeEstamina: 8
+    avance: 1.2
+    frenado: 14
+    congelacion: 0.04
+    sacudida: 0.1
+    inicioPicado: 0.13
+    velocidadPicado: {x: 6, y: 12}
+    rebote: 7
+    recuperacionAterrizaje: 0.15
+    siguientes:
+    - entrada: 0
+      golpe: Puno2
+  - nombre: Puno2
+    estadoAnimator: Punch2
+    tipo: 0
+    duracion: 0.2667
+    activoDesde: 0.12
+    activoHasta: 0.21
+    encadenarDesde: 0.2
+    ventanaCombo: 0.35
+    offset: {x: 0.45, y: 0.05}
+    tamano: {x: 0.5, y: 0.35}
+    dano: 1
+    retroceso: 1
+    costeEstamina: 8
+    avance: 1.2
+    frenado: 14
+    congelacion: 0.04
+    sacudida: 0.1
+    inicioPicado: 0.13
+    velocidadPicado: {x: 6, y: 12}
+    rebote: 7
+    recuperacionAterrizaje: 0.15
+    siguientes:
+    - entrada: 0
+      golpe: Puno3
+  - nombre: Puno3
+    estadoAnimator: Punch3
+    tipo: 0
+    duracion: 0.3333
+    activoDesde: 0.12
+    activoHasta: 0.24
+    encadenarDesde: 0.3
+    ventanaCombo: 0.3
+    offset: {x: 0.4, y: 0.25}
+    tamano: {x: 0.55, y: 0.6}
+    dano: 2
+    retroceso: 1.5
+    costeEstamina: 12
+    avance: 2
+    frenado: 14
+    congelacion: 0.07
+    sacudida: 0.2
+    inicioPicado: 0.13
+    velocidadPicado: {x: 6, y: 12}
+    rebote: 7
+    recuperacionAterrizaje: 0.15
+    siguientes: []
+  - nombre: Patada1
+    estadoAnimator: Kick1
+    tipo: 0
+    duracion: 0.2667
+    activoDesde: 0.12
+    activoHasta: 0.21
+    encadenarDesde: 0.2
+    ventanaCombo: 0.35
+    offset: {x: 0.5, y: -0.15}
+    tamano: {x: 0.6, y: 0.4}
+    dano: 1
+    retroceso: 1
+    costeEstamina: 10
+    avance: 1
+    frenado: 14
+    congelacion: 0.04
+    sacudida: 0.12
+    inicioPicado: 0.13
+    velocidadPicado: {x: 6, y: 12}
+    rebote: 7
+    recuperacionAterrizaje: 0.15
+    siguientes:
+    - entrada: 1
+      golpe: Patada2
+  - nombre: Patada2
+    estadoAnimator: Kick2
+    tipo: 0
+    duracion: 0.2667
+    activoDesde: 0.06
+    activoHasta: 0.15
+    encadenarDesde: 0.2
+    ventanaCombo: 0.3
+    offset: {x: 0.55, y: -0.05}
+    tamano: {x: 0.7, y: 0.45}
+    dano: 2
+    retroceso: 1.6
+    costeEstamina: 14
+    avance: 1.5
+    frenado: 14
+    congelacion: 0.07
+    sacudida: 0.2
+    inicioPicado: 0.13
+    velocidadPicado: {x: 6, y: 12}
+    rebote: 7
+    recuperacionAterrizaje: 0.15
+    siguientes: []
+  - nombre: PunoCarrera
+    estadoAnimator: RunPunch
+    tipo: 1
+    duracion: 0.4667
+    activoDesde: 0.19
+    activoHasta: 0.27
+    encadenarDesde: 0.4
+    ventanaCombo: 0.3
+    offset: {x: 0.55, y: 0.05}
+    tamano: {x: 0.75, y: 0.4}
+    dano: 2
+    retroceso: 1.5
+    costeEstamina: 15
+    avance: 7
+    frenado: 12
+    congelacion: 0.06
+    sacudida: 0.18
+    inicioPicado: 0.13
+    velocidadPicado: {x: 6, y: 12}
+    rebote: 7
+    recuperacionAterrizaje: 0.15
+    siguientes: []
+  - nombre: PatadaPicado
+    estadoAnimator: DiveKickStart
+    tipo: 2
+    duracion: 1.5
+    activoDesde: 0
+    activoHasta: 0
+    encadenarDesde: 1.5
+    ventanaCombo: 0.2
+    offset: {x: 0.35, y: -0.45}
+    tamano: {x: 0.55, y: 0.45}
+    dano: 2
+    retroceso: 1.5
+    costeEstamina: 18
+    avance: 0
+    frenado: 0
+    congelacion: 0.06
+    sacudida: 0.25
+    inicioPicado: 0.13
+    velocidadPicado: {x: 6, y: 12}
+    rebote: 7
+    recuperacionAterrizaje: 0.15
+    siguientes: []
+  inicios:
+  - entrada: 0
+    contexto: 0
+    golpe: Puno1
+  - entrada: 1
+    contexto: 0
+    golpe: Patada1
+  - entrada: 0
+    contexto: 1
+    golpe: PunoCarrera
+  - entrada: 1
+    contexto: 3
+    golpe: PatadaPicado

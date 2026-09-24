@@ -43,6 +43,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Kick",
+                    "type": "Button",
+                    "id": "b3e9f1a7-5c28-4d64-9a0b-8f2d6e4c1a53",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "ToggleWeapon",
                     "type": "Button",
                     "id": "e4b7a91c-2d53-4f86-b0c9-7a1e5d3f8c24",
@@ -156,6 +165,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f6a1d4c8-7e35-4b92-8c1f-2a9e5b7d3c60",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Kick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
