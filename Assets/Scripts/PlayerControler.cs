@@ -51,6 +51,9 @@ public class PlayerControler : MonoBehaviour
         public ArcTip puntaHacia = ArcTip.Ambas;
 
         public int dano = 1;
+        // Estamina que gasta este golpe. Cada golpe tiene la suya: el remate del
+        // combo deberia costar mas que el primer tajo.
+        public float costeEstamina = 12f;
 
         // Duracion real del clip de este golpe, en segundos. Es lo que decide
         // cuanto se protege la animacion y cuando se admite el siguiente golpe.
@@ -289,7 +292,8 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private float invincibleTime = 1f;
     // Cada cuánto parpadea el sprite mientras el player es invulnerable.
     [SerializeField] private float blinkInterval = 0.1f;
-    [SerializeField] private HealthBar healthBar;
+    // Estamina. Si el prefab no la tiene, se anade sola al arrancar.
+    private PlayerStamina estamina;
 
     private bool isInvincible;
 
@@ -540,6 +544,8 @@ public class PlayerControler : MonoBehaviour
         m_rigitbody2D = GetComponent<Rigidbody2D>();
         m_animator = GetComponent<Animator>();
         m_spriteRenderer = GetComponent<SpriteRenderer>();
+        estamina = GetComponent<PlayerStamina>();
+        if (estamina == null) estamina = gameObject.AddComponent<PlayerStamina>();
         m_collider = GetComponent<Collider2D>();
         capsula = GetComponent<CapsuleCollider2D>();
         if (capsula != null)
@@ -579,12 +585,7 @@ public class PlayerControler : MonoBehaviour
         //vida
         currentHealth = maxHealth;
 
-        if (healthBar == null)
-        {
-            healthBar = FindFirstObjectByType<HealthBar>();
-        }
-
-        healthBar.UpdateHealthBar(currentHealth, maxHealth);
+        PlayerHud.Get().SetHealth(currentHealth, maxHealth);
     }
 
     // Actualiza los parámetros del Animator cada frame.
@@ -817,7 +818,8 @@ public class PlayerControler : MonoBehaviour
         // Correr solo cuenta si ademas se esta pidiendo movimiento: con el boton
         // pulsado y el personaje quieto, no arranca solo.
         bool hayInput = Mathf.Abs(m_gatherInput.Value.x) > 0.1f;
-        bool pideCorrer = m_gatherInput.IsSprinting && hayInput;
+        // Agotado no se puede arrancar a correr: se anda a velocidad normal.
+        bool pideCorrer = m_gatherInput.IsSprinting && hayInput && estamina.CanSpend();
 
         if (isGrounded)
         {
@@ -831,6 +833,10 @@ public class PlayerControler : MonoBehaviour
             // conserva la carrera que ya se traia al despegar.
             isSprinting = isSprinting && hayInput && (keepSprintInAir || pideCorrer);
         }
+
+        // Correr gasta estamina mientras dura. Al vaciarse, se vuelve a andar.
+        if (isSprinting && !estamina.SpendOverTime(estamina.SprintCostPerSecond, Time.fixedDeltaTime))
+            isSprinting = false;
 
         // La rampa evita el tiron de pasar de golpe de una velocidad a otra.
         float objetivo = isSprinting ? sprintSpeed : speed;
@@ -991,10 +997,15 @@ public class PlayerControler : MonoBehaviour
         {
             attackBuffer = 0f;
 
+            // Agotado, ningun golpe de espada sale. (El arco va por otro camino
+            // y no pasa por aqui: no gasta estamina.)
+            if (!estamina.CanSpend()) return;
+
             // S + ataque en el aire: estocada hacia abajo. No necesita los golpes
             // aereos anteriores, sale directa.
             if (!isGrounded && !canWallSlide && !isWallRunning && m_gatherInput.Value.y < -0.5f)
             {
+                estamina.Spend(estamina.PlungeCost);
                 IniciarEstocada();
                 return;
             }
@@ -1046,6 +1057,9 @@ public class PlayerControler : MonoBehaviour
             // lanzar otro ni el deslizamiento de pared puede pisar la animacion.
             // Eso es lo que impide que a base de clics salgan medios espadazos.
             AttackProfile perfil = PerfilDeAtaque(golpe);
+
+            // Cada golpe gasta lo de su perfil: combo de suelo, pared y aereos.
+            if (perfil != null) estamina.Spend(perfil.costeEstamina);
             float duracion = (perfil != null && perfil.duracion > 0f) ? perfil.duracion : attackCooldown;
             float encadenar = (perfil != null) ? perfil.encadenarDesde : duracion;
 
@@ -1662,6 +1676,7 @@ public class PlayerControler : MonoBehaviour
 
         bool condiciones = hayPared
                            && empujaAlMuro
+                           && estamina.CanSpend()
                            && canMove
                            && !isKnocked
                            && !isLaunched
@@ -1682,8 +1697,18 @@ public class PlayerControler : MonoBehaviour
             return;
         }
 
+        bool enganchando = !isWallRunning;
         isWallRunning = true;
         wallRunTimer -= Time.fixedDeltaTime;
+
+        // Engancharse cuesta un pico, y subir va gastando. Si se vacia, la
+        // subida se corta y entra el deslizamiento.
+        if (enganchando) estamina.Spend(estamina.WallRunEntryCost);
+        if (!estamina.SpendOverTime(estamina.WallRunCostPerSecond, Time.fixedDeltaTime))
+        {
+            TerminarWallRun(true);
+            return;
+        }
 
         // Mirando al muro, como en el deslizamiento: asi la animacion de subir
         // y la de deslizarse encajan cuando se pasa de una a otra.
@@ -2116,7 +2141,11 @@ public class PlayerControler : MonoBehaviour
         // recuperacion. En plena estocada no: hay que comprometerse con el golpe.
         if (isAttacking && !canAttack) return;
 
+        // Agotado no hay barrido.
+        if (!estamina.CanSpend()) return;
+
         dodgeBuffer = 0f;
+        estamina.Spend(estamina.DodgeCost);
         if (isAttacking) CancelarAtaque();
 
         // Hacia donde se pulse; sin direccion, hacia donde mira.
@@ -2297,7 +2326,7 @@ public class PlayerControler : MonoBehaviour
 
         currentHealth -= damage;
 
-        healthBar.UpdateHealthBar(currentHealth, maxHealth);
+        PlayerHud.Get().Damage(currentHealth, maxHealth);
 
         Debug.Log("Vida actual: " + currentHealth);
 
@@ -2404,7 +2433,7 @@ public class PlayerControler : MonoBehaviour
 
         currentHealth = Mathf.Min(currentHealth + amount, maxHealth);
 
-        if (healthBar != null) healthBar.AnimateHeal(currentHealth, maxHealth);
+        PlayerHud.Get().Heal(currentHealth, maxHealth);
 
         if (healFlashRoutine != null) StopCoroutine(healFlashRoutine);
         healFlashRoutine = StartCoroutine(HealFlashRoutine());
@@ -2465,7 +2494,7 @@ public class PlayerControler : MonoBehaviour
     // Actualiza la barra de vida a cero, instancia el VFX de muerte y destruye al player.
     public void Die()
     {
-        healthBar.UpdateHealthBar(0, maxHealth);
+        PlayerHud.Get().Damage(0, maxHealth);
         GameObject deathVFXPrefab = Instantiate(deathVFX, m_transform.position, Quaternion.identity);
         Destroy(gameObject);
     }

@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7571008507278084598
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2706196256662167677}
+  - component: {fileID: 3360354241160484539}
+  m_Layer: 0
+  m_Name: HUD
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2706196256662167677
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7571008507278084598}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -21.124796, y: 6.169433, z: -0.8434766}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3360354241160484539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7571008507278084598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63994d67d1842f9418b61822f1cd7631, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  margin: {x: 40, y: 40}
+  boxSize: 54
+  rotateBox: 1
+  boxBorder: 3
+  boxBorderColor: {r: 0.78, g: 0.72, b: 0.58, a: 0.9}
+  boxFillColor: {r: 0.08, g: 0.07, b: 0.06, a: 0.75}
+  staminaWarningInBox: 1
+  warningSize: 0.42
+  warningOffColor: {r: 0.16, g: 0.15, b: 0.12, a: 0.9}
+  warningLowColor: {r: 0.95, g: 0.78, b: 0.25, a: 1}
+  warningExhaustedColor: {r: 0.75, g: 0.2, b: 0.15, a: 1}
+  healthWidth: 420
+  healthHeight: 12
+  healthColor: {r: 0.62, g: 0.07, b: 0.07, a: 1}
+  trailColor: {r: 0.92, g: 0.86, b: 0.78, a: 0.9}
+  trailDelay: 0.6
+  trailSharpness: 3.5
+  healFlashColor: {r: 1, g: 0.55, b: 0.45, a: 1}
+  healDuration: 0.35
+  shakeMinDamage: 0.15
+  shakeDuration: 0.18
+  shakeStrength: 6
+  staminaWidth: 330
+  staminaHeight: 7
+  staminaColor: {r: 0.25, g: 0.55, b: 0.22, a: 1}
+  staminaExhaustedColor: {r: 0.33, g: 0.36, b: 0.3, a: 1}
+  lowStaminaThreshold: 0.2
+  staminaLowColor: {r: 0.4, g: 0.45, b: 0.18, a: 1}
+  lowStaminaBlinkSpeed: 9
+  autoFade: 1
+  fadeDelay: 4
+  fadedAlpha: 0.3
+  fadeOutSpeed: 1.5
+  fadeInSpeed: 8
+  stayVisibleBelowHealth: 0.35
+  showNumbers: 0
+  numberFontSize: 16
+  numberColor: {r: 1, g: 1, b: 1, a: 0.9}
+  backColor: {r: 0.05, g: 0.05, b: 0.05, a: 0.65}
+  barGap: 5

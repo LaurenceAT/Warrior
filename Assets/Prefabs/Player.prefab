@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 2360815886447925532}
   - component: {fileID: 8415853499437379215}
   - component: {fileID: 6754855231493566586}
+  - component: {fileID: 6245690450504146653}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -234,6 +235,7 @@ MonoBehaviour:
   _isAttacking: 0
   _isSprinting: 0
   _isShooting: 0
+  _isShootHeld: 0
   _isDodging: 0
 --- !u!114 &2360815886447925532
 MonoBehaviour:
@@ -273,6 +275,16 @@ MonoBehaviour:
   bowTargetLayers:
     serializedVersion: 2
     m_Bits: 0
+  bowRecoilSpeed: 6
+  bowRecoilTime: 0.12
+  bowChargeRecoil: 2.2
+  bowFlashColor: {r: 0.45, g: 0.9, b: 1, a: 0.3}
+  bowFlashTime: 0.12
+  bowChargeEnabled: 1
+  bowChargeTime: 1
+  bowChargeExtraTicks: 2
+  bowChargeThickness: 1.4
+  bowChargeTint: {r: 0.5, g: 0.95, b: 1, a: 1}
   isShooting: 0
   airAttackFirstProfile: 3
   airComboLength: 2
@@ -310,7 +322,6 @@ MonoBehaviour:
   currentHealth: 0
   invincibleTime: 1
   blinkInterval: 0.1
-  healthBar: {fileID: 0}
   healFlashColor: {r: 0.4, g: 1, b: 0.4, a: 1}
   healFlashDuration: 0.4
   healFlashCount: 2
@@ -361,6 +372,41 @@ MonoBehaviour:
   sprintDustOffset: {x: -0.22, y: -0.45}
   wallRunDust: {fileID: 5525889230618205488}
   wallRunDustOffset: {x: 0.18, y: -0.35}
+  sprintDustPreset:
+    colorA: {r: 0.937, g: 0.863, b: 0.745, a: 0.9}
+    colorB: {r: 0.82, g: 0.525, b: 0.475, a: 0.7}
+    tamano: {x: 0.05, y: 0.11}
+    vida: {x: 0.25, y: 0.45}
+    gravedad: 0.25
+    velX: {x: 0.4, y: 1.6}
+    velY: {x: 0.4, y: 1.3}
+    porSegundo: 0
+    porDistancia: 5
+    maxParticulas: 80
+  wallSlideDustPreset:
+    colorA: {r: 0.647, g: 0.761, b: 0.78, a: 0.85}
+    colorB: {r: 0.463, g: 0.557, b: 0.631, a: 0.7}
+    tamano: {x: 0.04, y: 0.09}
+    vida: {x: 0.2, y: 0.4}
+    gravedad: 0.6
+    velX: {x: 0.2, y: 0.9}
+    velY: {x: 0.3, y: 1}
+    porSegundo: 14
+    porDistancia: 0
+    maxParticulas: 80
+  wallRunDustPreset:
+    colorA: {r: 0.647, g: 0.761, b: 0.78, a: 0.9}
+    colorB: {r: 0.937, g: 0.863, b: 0.745, a: 0.8}
+    tamano: {x: 0.05, y: 0.1}
+    vida: {x: 0.2, y: 0.35}
+    gravedad: 0.8
+    velX: {x: 0.6, y: 1.6}
+    velY: {x: -1.5, y: -0.4}
+    porSegundo: 10
+    porDistancia: 0
+    maxParticulas: 80
+  landingDustSpeed: 7
+  wallRunStepInterval: 0.09
   isLaunched: 0
   launchRestoresJumps: 1
   isKnocked: 0
@@ -389,6 +435,7 @@ MonoBehaviour:
     afiladoPuntas: 1
     puntaHacia: 1
     dano: 1
+    costeEstamina: 12
     duracion: 0.4
     encadenarDesde: 0.28
     avance: 1.5
@@ -407,6 +454,7 @@ MonoBehaviour:
     afiladoPuntas: 1
     puntaHacia: 1
     dano: 1
+    costeEstamina: 14
     duracion: 0.4
     encadenarDesde: 0.28
     avance: 1.5
@@ -425,6 +473,7 @@ MonoBehaviour:
     afiladoPuntas: 1
     puntaHacia: 1
     dano: 1
+    costeEstamina: 20
     duracion: 0.4
     encadenarDesde: 0.32
     avance: 3
@@ -443,6 +492,7 @@ MonoBehaviour:
     afiladoPuntas: 1
     puntaHacia: 1
     dano: 1
+    costeEstamina: 12
     duracion: 0.27
     encadenarDesde: 0.18
     avance: 3
@@ -461,6 +511,7 @@ MonoBehaviour:
     afiladoPuntas: 1
     puntaHacia: 1
     dano: 1
+    costeEstamina: 14
     duracion: 0.2
     encadenarDesde: 0.14
     avance: 3
@@ -479,6 +530,7 @@ MonoBehaviour:
     afiladoPuntas: 1
     puntaHacia: 1
     dano: 2
+    costeEstamina: 12
     duracion: 0.2
     encadenarDesde: 0.14
     avance: 3
@@ -497,6 +549,7 @@ MonoBehaviour:
     afiladoPuntas: 0.944
     puntaHacia: 1
     dano: 2
+    costeEstamina: 12
     duracion: 0.2
     encadenarDesde: 0.14
     avance: 3
@@ -583,6 +636,29 @@ MonoBehaviour:
     DissipationDistance: 100
     PropagationSpeed: 343
   DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!114 &6245690450504146653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 25321102597521225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48c51ccf57b14d94a820b6974e8a965a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxStamina: 100
+  currentStamina: 100
+  regenRate: 40
+  regenDelay: 0.8
+  exhaustedRecoverFraction: 0.3
+  sprintCostPerSecond: 18
+  wallRunCostPerSecond: 30
+  wallRunEntryCost: 8
+  plungeCost: 25
+  dodgeCost: 15
+  exhausted: 0
 --- !u!1 &306997544179117387
 GameObject:
   m_ObjectHideFlags: 0
