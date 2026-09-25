@@ -19,7 +19,8 @@ public class UnarmedMoveset : ScriptableObject
 {
     public enum Entrada { Puno, Patada }
 
-    public enum Contexto { Suelo, Corriendo, Aire, AireAbajo }
+    // SueloArriba va al final para no mover los numeros de los que ya estaban.
+    public enum Contexto { Suelo, Corriendo, Aire, AireAbajo, SueloArriba }
 
     // Normal: el personaje se planta (con un pasito si se quiere).
     // Carrera: conserva el impulso de la carrera y frena poco a poco.
@@ -66,8 +67,18 @@ public class UnarmedMoveset : ScriptableObject
 
         [Header("Efecto")]
         public int dano = 1;
-        // 1 = retroceso normal del enemigo.
-        public float retroceso = 1f;
+        // Empuje al enemigo: X hacia fuera (el lado lo pone el codigo) e Y hacia
+        // arriba. Negativa = lo estampa contra el suelo. Los golpes sin arma empujan
+        // menos que la espada.
+        public Vector2 knockback = new Vector2(1.2f, 0.8f);
+        // Lanza al enemigo al aire y abre su combo aereo (ver EnemyHealth).
+        public bool lanza;
+        // Si lanza: cuanto sube, si va en diagonal (desplazamientoX) o recto, y cuanto
+        // dura la suspension.
+        public Elevacion elevacion = new Elevacion();
+        // En el aire, el personaje se queda suspendido mientras dura el golpe. Es lo
+        // que permite seguir a un enemigo lanzado.
+        public bool flotar;
         public float costeEstamina = 8f;
         // Empujon hacia delante al lanzarlo (en Carrera: velocidad minima que conserva).
         public float avance = 1.2f;
@@ -110,12 +121,21 @@ public class UnarmedMoveset : ScriptableObject
         return encontrado;
     }
 
-    // Golpe con el que empieza una cadena. Corriendo sin fila propia usa la del suelo.
+    // Golpe con el que empieza una cadena. Corriendo o con W, si no hay fila propia,
+    // se usa la del suelo.
     public Golpe Inicial(Entrada entrada, Contexto contexto)
     {
         Golpe g = BuscarInicio(entrada, contexto);
-        if (g == null && contexto == Contexto.Corriendo) g = BuscarInicio(entrada, Contexto.Suelo);
+        if (g == null && (contexto == Contexto.Corriendo || contexto == Contexto.SueloArriba))
+            g = BuscarInicio(entrada, Contexto.Suelo);
         return g;
+    }
+
+    // Inicio pedido con una direccion (W o S) para esta entrada, sin caer al del
+    // suelo. Sirve para que la direccion mande sobre la cadena en curso.
+    public Golpe InicioExacto(Entrada entrada, Contexto contexto)
+    {
+        return BuscarInicio(entrada, contexto);
     }
 
     // A que golpe lleva esta entrada desde el golpe actual. null = la cadena acaba.

@@ -51,6 +51,14 @@ public class PlayerControler : MonoBehaviour
         public ArcTip puntaHacia = ArcTip.Ambas;
 
         public int dano = 1;
+        // Empuje al enemigo: X hacia fuera, Y hacia arriba (negativa lo estampa).
+        // La espada empuja mas que los punos y patadas.
+        public Vector2 knockback = new Vector2(2.5f, 1.5f);
+        // Lanza al enemigo al aire para un combo aereo.
+        public bool lanza;
+        // Si lanza: cuanto sube, si va en diagonal (desplazamientoX) o recto, y cuanto
+        // dura la suspension. La espada lanza en vertical.
+        public Elevacion elevacion = new Elevacion();
         // Estamina que gasta este golpe. Cada golpe tiene la suya: el remate del
         // combo deberia costar mas que el primer tajo.
         public float costeEstamina = 12f;
@@ -167,6 +175,66 @@ public class PlayerControler : MonoBehaviour
     [SerializeField] private float unarmedBufferTime = 0.2f;
     // Indice del golpe cuya caja se dibuja en la escena (-1 = ninguno).
     [SerializeField] private int unarmedGizmoMove = -1;
+
+    [Header("Lanzador de espada (W + clic)")]
+    // Perfil de la lista de ataques que usa y su estado del Animator. Lanza al
+    // enemigo recto hacia arriba (su Elevacion va sin desplazamiento).
+    [SerializeField] private int swordLauncherProfile = 7;
+    [SerializeField] private string swordLauncherState = "SwordLauncher";
+
+    [Header("Bloqueo y parry (espada fuera, clic derecho)")]
+    [SerializeField] private string blockState = "Block";
+    // Como en Sekiro: el parry sale si el golpe llega en los primeros segundos
+    // de la guardia. Un toque rapido vale: la guardia dura al menos esto.
+    [SerializeField] private float parryWindow = 0.2f;
+    // Machacar el boton se castiga: si se vuelve a pulsar antes de este tiempo,
+    // la ventana de esa pulsacion se reduce a parryWindow x parrySpamFactor.
+    [SerializeField] private float parrySpamTime = 0.5f;
+    [Range(0f, 1f)] [SerializeField] private float parrySpamFactor = 0.35f;
+    // Bloqueo normal (fuera de la ventana): anula el dano a cambio de estamina.
+    // Sin estamina la guardia se rompe y el golpe entra.
+    [SerializeField] private float blockStaminaCost = 15f;
+    [SerializeField] private float blockPushback = 2f;
+    [SerializeField] private float blockHitStop = 0.05f;
+    [SerializeField] private float blockShake = 0.08f;
+    // Parry: cuanto queda aturdido el enemigo, y el impacto.
+    [SerializeField] private float parryStagger = 1f;
+    [SerializeField] private float parryHitStop = 0.12f;
+    [SerializeField] private float parryShake = 0.25f;
+    [SerializeField] private Color parryFlashColor = new Color(1f, 1f, 1f, 0.3f);
+    [SerializeField] private float parryFlashTime = 0.12f;
+    // Contraataque: tras el parry, el siguiente golpe que conecte hace mas dano.
+    [SerializeField] private float counterWindow = 1.2f;
+    [SerializeField] private float counterDamageMultiplier = 2f;
+    [SerializeField] private float counterHitStop = 0.12f;
+    [SerializeField] private float counterShake = 0.3f;
+    // Mientras el contraataque esta cargado, el personaje late en rojo.
+    [SerializeField] private Color counterGlowColor = new Color(1f, 0.25f, 0.25f, 1f);
+    [SerializeField] private float counterPulseSpeed = 18f;
+    // Chispas del parry, entre el player y el enemigo.
+    [SerializeField] private int parrySparkCount = 16;
+    [SerializeField] private Color parrySparkColorA = new Color(1f, 0.95f, 0.6f, 1f);
+    [SerializeField] private Color parrySparkColorB = new Color(1f, 0.35f, 0.2f, 1f);
+    private bool brillandoContra;
+    // true: solo brilla la hoja de la espada (y las estelas de los tajos).
+    // false: late todo el personaje en rojo, como antes.
+    [SerializeField] private bool counterGlowBladeOnly = true;
+    // Shader Sprites/BladeGlow. Se asigna en el prefab para que entre en la build.
+    [SerializeField] private Shader bladeGlowShader;
+    // Tonos de la hoja en los sprites (C2C8F0, A5AEEA, 85909F). Los guantes usan
+    // otros parecidos, por eso la tolerancia es pequena.
+    [SerializeField] private Color bladeColor1 = new Color(0.761f, 0.784f, 0.941f, 1f);
+    [SerializeField] private Color bladeColor2 = new Color(0.647f, 0.682f, 0.918f, 1f);
+    [SerializeField] private Color bladeColor3 = new Color(0.522f, 0.565f, 0.624f, 1f);
+    [Range(0f, 0.3f)] [SerializeField] private float bladeColorTolerance = 0.04f;
+    private SpriteRenderer brilloHoja;
+    private Material materialHoja;
+    [SerializeField] private bool isBlocking;
+    private float tBloqueo;
+    private float ventanaParryActual;
+    private float ultimaPulsacionBloqueo = -10f;
+    private float bufferBloqueo;
+    private float ventanaContra;
     private UnarmedMoveset.Golpe golpeActual;
     private UnarmedMoveset.Golpe golpeAnterior;
     private bool golpeSinArmaActivo;
@@ -255,7 +323,20 @@ public class PlayerControler : MonoBehaviour
     // aereos, asi se pueden encadenar enemigos sin tocar el suelo.
     [SerializeField] private bool airHitRestoresJump = true;
     private int airComboIndex;
+    // Cual de los golpes aereos toca (se alternan: 1, 2, 1, 2...). Va aparte del
+    // contador de arriba porque acertar recarga ese contador: si eligiera la
+    // animacion, tras acertar saldria siempre el primero.
+    private int pasoAereo;
+    private float ventanaPasoAereo;
     private bool atacandoEnAire;
+    // Al acertar un golpe aereo el personaje se queda suspendido mientras ataca,
+    // como en Silksong: encadenando golpes sigue arriba, y al dejar de atacar cae.
+    [SerializeField] private bool airHitHover = true;
+    // Margen suspendido tras acabar un golpe, para enlazar el siguiente sin caer.
+    [SerializeField] private float airHitHoverGrace = 0.12f;
+    private bool suspendidoPorGolpe;
+    private float graciaSuspension;
+    private float gravedadAntesDeSuspension = -1f;
 
     [Header("Estocada hacia abajo (S + ataque en el aire)")]
     // Areas propias, relativas al centro del player (no al AttackPoint). Antes
@@ -276,11 +357,21 @@ public class PlayerControler : MonoBehaviour
     // Instante de suspension antes de caer: es lo que avisa del golpe y lo
     // hace leerse como un ataque cargado y no como una caida sin mas.
     [SerializeField] private float plungeWindup = 0.1f;
+    // Golpe al empezar la estocada: caja delante y un poco abajo (relativa al
+    // centro, se voltea con el personaje). Asi remata al enemigo que tienes al
+    // lado tras los golpes aereos, sin esperar a caerle encima.
+    [SerializeField] private Vector2 plungeStartOffset = new Vector2(0.55f, -0.25f);
+    [SerializeField] private Vector2 plungeStartSize = new Vector2(1.1f, 1.2f);
+    // Empujon de ese golpe a un enemigo que esta en el suelo.
+    [SerializeField] private Vector2 plungeStartKnockback = new Vector2(2f, 1f);
     [SerializeField] private float plungeSpeed = 18f;
     // Velocidad con la que sale despedido el enemigo al atravesarlo cayendo.
     // X hacia fuera (el lado lo decide su posicion respecto al player), Y hacia
     // arriba. Lo manda a volar sin sacarlo de la pantalla.
     [SerializeField] private Vector2 plungeLaunch = new Vector2(3.5f, 7f);
+    // Si el enemigo esta suspendido en el aire, la estocada lo remata y lo estampa
+    // contra el suelo en vez de lanzarlo.
+    [SerializeField] private Vector2 plungeAirSpike = new Vector2(1f, -14f);
     // Cuanto se queda clavado tras impactar contra el suelo.
     [SerializeField] private float plungeLandTime = 0.25f;
     [SerializeField] private float plungeLandShake = 0.35f;
@@ -660,6 +751,8 @@ public class PlayerControler : MonoBehaviour
         // falso y mete un fotograma de caida que no corresponde.
         CheckCollision();
 
+        MantenerSuspensionAerea();
+
         if (!canMove) return;
         if (isKnocked) return;
 
@@ -687,9 +780,10 @@ public class PlayerControler : MonoBehaviour
         }
         else
         {
-            // Con la espada fuera el clic derecho no hace nada: se descarta para que
-            // no salga una patada vieja al enfundar.
-            m_gatherInput.IsKicking = false;
+            // Con la espada fuera el clic derecho es la guardia. Mientras se
+            // bloquea no se anda, ni se salta, ni se ataca.
+            Bloqueo();
+            if (isBlocking) return;
         }
 
         // El disparo con arco es potente y compromete: se hace entero, sin moverse.
@@ -751,6 +845,8 @@ public class PlayerControler : MonoBehaviour
             Gizmos.DrawWireCube(p + (Vector3)plungeHitOffset, plungeHitSize);
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireCube(p + (Vector3)plungeLandOffset, plungeLandSize);
+            Gizmos.color = new Color(1f, 0.2f, 0.2f);
+            Gizmos.DrawWireCube(p + new Vector3(plungeStartOffset.x * direction, plungeStartOffset.y, 0f), plungeStartSize);
         }
 
         // Dibuja el area del perfil que estes ajustando, en su posicion real.
@@ -1109,11 +1205,18 @@ public class PlayerControler : MonoBehaviour
                 return;
             }
 
+            // W + ataque en el suelo: el corte que lanza al enemigo recto hacia arriba.
+            bool lanzador = isGrounded && !canWallSlide && m_gatherInput.Value.y > 0.5f;
             bool desdePared = canWallSlide;
             bool enAire = !isGrounded && !desdePared;
             int golpe;
 
-            if (desdePared)
+            if (lanzador)
+            {
+                golpe = swordLauncherProfile;
+                comboIndex = 0;
+            }
+            else if (desdePared)
             {
                 // Pegado a una pared el golpe sale hacia fuera: atacar al muro no
                 // tiene sentido y el espadazo queda oculto dentro del tile.
@@ -1132,7 +1235,8 @@ public class PlayerControler : MonoBehaviour
                 // con el frenado de caida se podria flotar a base de clics.
                 if (airComboIndex >= airComboLength) return;
 
-                golpe = airAttackFirstProfile + airComboIndex;
+                golpe = airAttackFirstProfile + pasoAereo % Mathf.Max(1, airComboLength);
+                pasoAereo++;
                 airComboIndex++;
                 comboIndex = 0;
                 atacandoEnAire = true;
@@ -1149,8 +1253,14 @@ public class PlayerControler : MonoBehaviour
             }
 
             // El Animator elige que ataque reproducir segun este numero.
-            m_animator.SetInteger(IdComboIndex, golpe);
-            m_animator.SetTrigger(IdAttack);
+            // El lanzador no tiene transicion en el Animator: su estado se pone desde
+            // aqui y se vuelve a Idle al terminar, como los golpes sin arma.
+            if (lanzador) ReproducirEstado(swordLauncherState);
+            else
+            {
+                m_animator.SetInteger(IdComboIndex, golpe);
+                m_animator.SetTrigger(IdAttack);
+            }
 
             // Cada golpe manda sobre su propio tiempo: mientras dura, ni se puede
             // lanzar otro ni el deslizamiento de pared puede pisar la animacion.
@@ -1171,12 +1281,12 @@ public class PlayerControler : MonoBehaviour
                 m_rigitbody2D.linearVelocity = new Vector2(direction * perfil.avance, m_rigitbody2D.linearVelocityY);
 
             if (attackRoutine != null) StopCoroutine(attackRoutine);
-            attackRoutine = StartCoroutine(AttackRoutine(desdePared, duracion, encadenar));
+            attackRoutine = StartCoroutine(AttackRoutine(desdePared, duracion, encadenar, lanzador));
         }
     }
 
     // Bloquea el movimiento y los ataques nuevos mientras dura la animación de ataque.
-    private IEnumerator AttackRoutine(bool volverAMirarLaPared, float duracion, float encadenarDesde)
+    private IEnumerator AttackRoutine(bool volverAMirarLaPared, float duracion, float encadenarDesde, bool volverAIdle = false)
     {
         canAttack = false;
         isAttacking = true;
@@ -1196,6 +1306,8 @@ public class PlayerControler : MonoBehaviour
 
         // Ahora si empieza a correr el margen para encadenar el siguiente golpe.
         comboTimer = comboWindow;
+
+        if (volverAIdle && !isKnocked) ReproducirEstado(isGrounded ? "PlayerIdle" : "Fall");
 
         if (!volverAMirarLaPared) yield break;
 
@@ -1250,13 +1362,64 @@ public class PlayerControler : MonoBehaviour
             // donde mira el player.
             float dx = enemigo.transform.position.x - m_transform.position.x;
             float lado = Mathf.Abs(dx) > 0.05f ? Mathf.Sign(dx) : direction;
-            enemigo.TakeDamage(plungeDamage, m_transform.position, new Vector2(plungeLaunch.x * lado, plungeLaunch.y));
+            if (enemigo.IsAirborne)
+                enemigo.TakeHit(plungeDamage, m_transform.position, plungeAirSpike, false);
+            else
+                enemigo.TakeDamage(plungeDamage, m_transform.position, new Vector2(plungeLaunch.x * lado, plungeLaunch.y));
             alguno = true;
         }
 
         if (!alguno) return;
         StartCoroutine(HitStop(plungeHitStop));
         Sacudir(plungeLandShake * 0.5f);
+    }
+
+    private void EmpezarSuspensionAerea()
+    {
+        graciaSuspension = airHitHoverGrace;
+        if (!suspendidoPorGolpe)
+        {
+            suspendidoPorGolpe = true;
+            gravedadAntesDeSuspension = m_rigitbody2D.gravityScale;
+            m_rigitbody2D.gravityScale = 0f;
+        }
+        m_rigitbody2D.linearVelocity = Vector2.zero;
+    }
+
+    // Se mantiene mientras siga atacando en el aire (mas un pequeno margen).
+    private void MantenerSuspensionAerea()
+    {
+        if (!suspendidoPorGolpe) return;
+
+        // Cualquier otra cosa lo suelta: aterrizar, saltar (le da velocidad
+        // vertical), un golpe recibido, la estocada, el arco, la pared...
+        if (isGrounded || !canMove || isKnocked || isPlunging || isShooting || isDodging
+            || canWallSlide || isWallRunning || Mathf.Abs(m_rigitbody2D.linearVelocityY) > 0.5f)
+        {
+            SoltarSuspensionAerea();
+            return;
+        }
+
+        if (atacandoEnAire) graciaSuspension = airHitHoverGrace;
+        else
+        {
+            graciaSuspension -= Time.fixedDeltaTime;
+            if (graciaSuspension <= 0f) { SoltarSuspensionAerea(); return; }
+        }
+
+        // Quieto mientras golpea; en el margen entre golpes puede moverse de lado.
+        m_rigitbody2D.linearVelocity = new Vector2(atacandoEnAire ? 0f : m_rigitbody2D.linearVelocityX, 0f);
+    }
+
+    private void SoltarSuspensionAerea()
+    {
+        if (!suspendidoPorGolpe) return;
+        suspendidoPorGolpe = false;
+        if (gravedadAntesDeSuspension >= 0f)
+        {
+            m_rigitbody2D.gravityScale = gravedadAntesDeSuspension;
+            gravedadAntesDeSuspension = -1f;
+        }
     }
 
     // Devuelve el salto extra y los golpes aereos. Lo usa acertar en el aire.
@@ -1270,6 +1433,7 @@ public class PlayerControler : MonoBehaviour
     private void IniciarEstocada()
     {
         if (isPlunging) return;
+        SoltarSuspensionAerea();
         if (isAttacking) CancelarAtaque();
         plungeRoutine = StartCoroutine(EstocadaRoutine());
     }
@@ -1282,6 +1446,11 @@ public class PlayerControler : MonoBehaviour
         canAttack = false;
         m_animator.SetInteger(IdPlungePhase, 1);
         m_animator.SetTrigger(IdPlunge);
+
+        // Hace dano desde el primer instante. Los que toca aqui no reciben otro
+        // golpe al atravesarlos.
+        HashSet<EnemyHealth> atravesados = new HashSet<EnemyHealth>();
+        GolpeInicialEstocada(atravesados);
 
         // Suspension: se queda quieto en el aire un instante.
         gravedadAntesDeEstocada = m_rigitbody2D.gravityScale;
@@ -1299,7 +1468,6 @@ public class PlayerControler : MonoBehaviour
         // Caida en picado, recta. Se atraviesa a los enemigos: la colision con
         // ellos se desactiva hasta que acaba y ha salido de dentro de todos.
         IgnorarEnemigos(true);
-        HashSet<EnemyHealth> atravesados = new HashSet<EnemyHealth>();
         t = 0f;
         while (!isGrounded && t < plungeMaxTime)
         {
@@ -1325,6 +1493,32 @@ public class PlayerControler : MonoBehaviour
         }
 
         FinalizarEstocada();
+    }
+
+    // Golpe al arrancar la estocada. Al que esta en pleno combo aereo lo estampa
+    // contra el suelo; al que esta de pie, lo aparta.
+    private void GolpeInicialEstocada(HashSet<EnemyHealth> tocados)
+    {
+        Vector2 centro = (Vector2)m_transform.position + new Vector2(plungeStartOffset.x * direction, plungeStartOffset.y);
+        int capas = attackLayers.value == 0 ? ~0 : attackLayers.value;
+        bool alguno = false;
+
+        foreach (Collider2D hit in Physics2D.OverlapBoxAll(centro, plungeStartSize, 0f, capas))
+        {
+            if (!hit.CompareTag("Enemy")) continue;
+            EnemyHealth enemigo = hit.GetComponent<EnemyHealth>();
+            if (enemigo == null || !tocados.Add(enemigo)) continue;
+
+            int dano = DanoConContra(plungeDamage);
+            if (enemigo.IsAirborne) enemigo.TakeHit(dano, m_transform.position, plungeAirSpike, false);
+            else enemigo.TakeHit(dano, m_transform.position, plungeStartKnockback, false);
+            alguno = true;
+        }
+
+        if (!alguno) return;
+        float sacudida = plungeLandShake * 0.5f;
+        StartCoroutine(HitStop(ImpactoConContra(plungeHitStop, ref sacudida)));
+        Sacudir(sacudida);
     }
 
     // Deja el estado limpio al acabar la estocada por su camino normal.
@@ -1367,6 +1561,17 @@ public class PlayerControler : MonoBehaviour
         // Ventana en la que la animacion de ataque manda sobre el deslizamiento de pared.
         if (attackAnimationTimer > 0f) attackAnimationTimer -= Time.deltaTime;
 
+        // Sin atacar en el aire un rato, la cadena aerea vuelve al primer golpe.
+        if (atacandoEnAire) ventanaPasoAereo = comboWindow;
+        else if (ventanaPasoAereo > 0f)
+        {
+            ventanaPasoAereo -= Time.deltaTime;
+            if (ventanaPasoAereo <= 0f) pasoAereo = 0;
+        }
+
+        BrilloContraataque();
+        if (ventanaContra > 0f) ventanaContra -= Time.deltaTime;
+
         if (comboIndex == 0 || comboTimer <= 0f) return;
 
         comboTimer -= Time.deltaTime;
@@ -1405,7 +1610,7 @@ public class PlayerControler : MonoBehaviour
             // Un mismo enemigo puede tener varios colliders (trigger de daño + sólido de suelo);
             // alreadyHit.Add evita contarlo dos veces en el mismo golpe.
             if (enemyHealth != null && alreadyHit.Add(enemyHealth))
-                enemyHealth.TakeDamage(perfil.dano, m_transform.position);
+                enemyHealth.TakeHit(DanoConContra(perfil.dano), m_transform.position, perfil.knockback, perfil.lanza, perfil.elevacion);
         }
 
         // Todo lo de abajo solo si el golpe ha conectado: al aire no aporta nada
@@ -1414,11 +1619,14 @@ public class PlayerControler : MonoBehaviour
 
         // En el aire, acertar devuelve el salto extra.
         if (!isGrounded && airHitRestoresJump) RecuperarSaltoAereo();
+        // Y deja al personaje suspendido lo que dure el ataque.
+        if (!isGrounded && atacandoEnAire && airHitHover) EmpezarSuspensionAerea();
 
         float congelacion = perfil.congelacion >= 0f ? perfil.congelacion : hitStopDuration;
-        StartCoroutine(HitStop(congelacion));
+        float sacudida = perfil.sacudida;
+        StartCoroutine(HitStop(ImpactoConContra(congelacion, ref sacudida)));
 
-        Sacudir(perfil.sacudida);
+        Sacudir(sacudida);
         MostrarEfecto(perfil, centro);
         return alreadyHit.Count;
     }
@@ -1591,6 +1799,7 @@ public class PlayerControler : MonoBehaviour
             counterExtraJumps = extraJumps;
             canDoubleJump = false;
             airComboIndex = 0;
+            pasoAereo = 0;
 
             // Un golpe aereo no sigue en el suelo: se corta al aterrizar para que
             // el personaje no se quede clavado terminando un espadazo de salto.
@@ -2057,7 +2266,7 @@ public class PlayerControler : MonoBehaviour
 
         // Solo de pie y sin estar en mitad de otra cosa. En el aire, o atacando,
         // espera: la pulsacion no se pierde.
-        if (!isGrounded || isAttacking || isShooting || isDodging || isWallRunning || canWallSlide) return;
+        if (!isGrounded || isAttacking || isShooting || isDodging || isWallRunning || canWallSlide || isBlocking) return;
 
         cambioArmaPendiente = false;
         isTogglingWeapon = true;
@@ -2114,6 +2323,232 @@ public class PlayerControler : MonoBehaviour
 
     #endregion
 
+    #region Bloqueo y parry
+
+    // Clic derecho con la espada fuera. Al pulsar, la guardia sale al instante,
+    // incluso cortando un espadazo propio o en el aire: como en Sekiro, reaccionar
+    // al ver el golpe tiene que ser siempre posible. Se mantiene mientras siga
+    // pulsado, y como minimo la ventana de parry.
+    private void Bloqueo()
+    {
+        float dt = Time.fixedDeltaTime;
+        if (bufferBloqueo > 0f) bufferBloqueo -= dt;
+        if (m_gatherInput.IsKicking) { m_gatherInput.IsKicking = false; bufferBloqueo = attackBufferTime; }
+
+        if (isBlocking)
+        {
+            tBloqueo += dt;
+            // Una pulsacion nueva con la guardia alta la vuelve a levantar (con la
+            // penalizacion de machacar, si toca).
+            if (bufferBloqueo > 0f) { bufferBloqueo = 0f; LevantarGuardia(); }
+            if (!m_gatherInput.IsKickHeld && tBloqueo >= ventanaParryActual)
+            {
+                TerminarBloqueo();
+                return;
+            }
+            // Quieto, frenando lo que traia (el empujon de un golpe parado tambien).
+            float vx = Mathf.MoveTowards(m_rigitbody2D.linearVelocityX, 0f, attackDrag * dt);
+            m_rigitbody2D.linearVelocity = new Vector2(vx, m_rigitbody2D.linearVelocityY);
+            return;
+        }
+
+        if (bufferBloqueo <= 0f) return;
+        if (isShooting || isDodging || isWallRunning || canWallSlide || isLaunched || isPlunging) return;
+
+        // Corta el espadazo en curso: la guardia manda.
+        if (isAttacking) CancelarAtaque();
+
+        bufferBloqueo = 0f;
+        isBlocking = true;
+        isSprinting = false;
+        // Se puede encarar al enemigo en el mismo gesto.
+        if (Mathf.Abs(m_gatherInput.Value.x) > 0.1f) SetFacing((int)Mathf.Sign(m_gatherInput.Value.x));
+        LevantarGuardia();
+        ReproducirEstado(blockState);
+    }
+
+    // Abre la ventana de parry de esta pulsacion.
+    private void LevantarGuardia()
+    {
+        bool machacando = Time.time - ultimaPulsacionBloqueo < parrySpamTime;
+        ultimaPulsacionBloqueo = Time.time;
+        tBloqueo = 0f;
+        ventanaParryActual = machacando ? parryWindow * parrySpamFactor : parryWindow;
+    }
+
+    // volverAnimacion: con un golpe recibido no, que la animacion la pone el retroceso.
+    private void TerminarBloqueo(bool volverAnimacion = true)
+    {
+        if (!isBlocking) return;
+        isBlocking = false;
+        if (volverAnimacion) ReproducirEstado(isGrounded ? "PlayerIdle" : "Fall");
+    }
+
+    // Solo se para lo que viene de delante.
+    private bool GolpeDeFrente(Transform atacante)
+    {
+        float dx = atacante.position.x - m_transform.position.x;
+        return Mathf.Abs(dx) < 0.05f || (int)Mathf.Sign(dx) == direction;
+    }
+
+    // Parry: sin dano, el enemigo queda aturdido y se abre el contraataque.
+    private void Parry(Component atacante)
+    {
+        EnemyHealth enemigo = atacante.GetComponent<EnemyHealth>();
+        if (enemigo != null) enemigo.Stagger(parryStagger);
+
+        ventanaContra = counterWindow;
+        StartCoroutine(HitStop(parryHitStop));
+        Sacudir(parryShake);
+        ScreenFlash.Destello(parryFlashColor, parryFlashTime);
+
+        // Chispas en el choque de las armas, a medio camino entre los dos.
+        Vector2 choque = Vector2.Lerp(m_transform.position, atacante.transform.position, 0.5f);
+        ChispasParry(choque);
+
+        // Baja la guardia al momento para poder contraatacar ya. Pulsar justo
+        // despues no cuenta como machacar: un parry bueno no se castiga.
+        TerminarBloqueo();
+        ultimaPulsacionBloqueo = -10f;
+    }
+
+    // Bloqueo normal: sin dano, pero empuja hacia atras y gasta estamina.
+    private void GolpeBloqueado()
+    {
+        m_rigitbody2D.linearVelocity = new Vector2(-direction * blockPushback, m_rigitbody2D.linearVelocityY);
+        StartCoroutine(HitStop(blockHitStop));
+        Sacudir(blockShake);
+    }
+
+    // Mientras el contraataque esta cargado el personaje late en rojo, para saber
+    // que el siguiente golpe sera potente. Al gastarlo o caducar vuelve a su color.
+    private void BrilloContraataque()
+    {
+        if (m_spriteRenderer == null) return;
+        if (ventanaContra > 0f)
+        {
+            // En tiempo real: durante el hit stop tambien tiene que latir.
+            float pulso = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * counterPulseSpeed);
+            if (counterGlowBladeOnly && PrepararBrilloHoja())
+            {
+                brilloHoja.enabled = m_spriteRenderer.enabled;
+                materialHoja.SetColor("_GlowColor", counterGlowColor);
+                materialHoja.SetFloat("_Amount", 0.55f + 0.45f * pulso);
+            }
+            else
+                PintarRGB(Color.Lerp(Color.white, counterGlowColor, 0.35f + 0.65f * pulso));
+            brillandoContra = true;
+        }
+        else if (brillandoContra)
+        {
+            brillandoContra = false;
+            if (brilloHoja != null) brilloHoja.enabled = false;
+            PintarRGB(Color.white);
+        }
+    }
+
+    // La copia del sprite para el brillo de la hoja va un fotograma por detras si
+    // se copia en Update: el Animator cambia el sprite despues. Aqui ya esta puesto.
+    private void LateUpdate()
+    {
+        if (brilloHoja == null || !brilloHoja.enabled) return;
+        brilloHoja.sprite = m_spriteRenderer.sprite;
+        brilloHoja.flipX = m_spriteRenderer.flipX;
+        brilloHoja.sortingLayerID = m_spriteRenderer.sortingLayerID;
+        brilloHoja.sortingOrder = m_spriteRenderer.sortingOrder + 1;
+    }
+
+    // Crea la primera vez la copia del sprite que pinta solo la hoja. Es hija del
+    // player: se voltea y se mueve con el sin hacer nada.
+    private bool PrepararBrilloHoja()
+    {
+        if (brilloHoja != null) return true;
+
+        Shader shader = bladeGlowShader != null ? bladeGlowShader : Shader.Find("Sprites/BladeGlow");
+        if (shader == null) return false;
+
+        materialHoja = new Material(shader);
+        materialHoja.SetColor("_Key1", bladeColor1);
+        materialHoja.SetColor("_Key2", bladeColor2);
+        materialHoja.SetColor("_Key3", bladeColor3);
+        materialHoja.SetFloat("_Tolerance", bladeColorTolerance);
+
+        GameObject go = new GameObject("BrilloHoja");
+        go.transform.SetParent(m_transform, false);
+        brilloHoja = go.AddComponent<SpriteRenderer>();
+        brilloHoja.sharedMaterial = materialHoja;
+        brilloHoja.sprite = m_spriteRenderer.sprite;
+        brilloHoja.sortingLayerID = m_spriteRenderer.sortingLayerID;
+        brilloHoja.sortingOrder = m_spriteRenderer.sortingOrder + 1;
+        brilloHoja.enabled = false;
+        return true;
+    }
+
+    // Rafaga de chispas del parry. El Particle System se monta por codigo, como
+    // las del arco, asi no hace falta ningun prefab.
+    private void ChispasParry(Vector2 punto)
+    {
+        GameObject go = new GameObject("ChispasParry");
+        go.transform.position = punto;
+
+        ParticleSystem ps = go.AddComponent<ParticleSystem>();
+        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
+        ParticleSystem.MainModule main = ps.main;
+        main.duration = 0.1f;
+        main.loop = false;
+        main.playOnAwake = false;
+        main.startLifetime = new ParticleSystem.MinMaxCurve(0.15f, 0.35f);
+        main.startSpeed = new ParticleSystem.MinMaxCurve(3f, 8f);
+        main.startSize = new ParticleSystem.MinMaxCurve(0.07f, 0.11f);
+        main.startColor = new ParticleSystem.MinMaxGradient(parrySparkColorA, parrySparkColorB);
+        main.gravityModifier = 1.5f;
+        main.simulationSpace = ParticleSystemSimulationSpace.World;
+        // Tiempo real: salen durante el hit stop y se tienen que ver moverse.
+        main.useUnscaledTime = true;
+        main.stopAction = ParticleSystemStopAction.Destroy;
+
+        ParticleSystem.EmissionModule emision = ps.emission;
+        emision.rateOverTime = 0f;
+        emision.SetBursts(new[] { new ParticleSystem.Burst(0f, (short)parrySparkCount) });
+
+        // En todas direcciones, como el choque de dos hojas.
+        ParticleSystem.ShapeModule forma = ps.shape;
+        forma.shapeType = ParticleSystemShapeType.Circle;
+        forma.radius = 0.05f;
+
+        ParticleSystem.SizeOverLifetimeModule tamano = ps.sizeOverLifetime;
+        tamano.enabled = true;
+        tamano.size = new ParticleSystem.MinMaxCurve(1f, AnimationCurve.Linear(0f, 1f, 1f, 0f));
+
+        // Sin luces: en los niveles oscuros tienen que verse igual.
+        ParticleSystemRenderer pr = go.GetComponent<ParticleSystemRenderer>();
+        Shader sinLuz = Shader.Find("Universal Render Pipeline/2D/Sprite-Unlit-Default");
+        pr.sharedMaterial = sinLuz != null ? new Material(sinLuz) : m_spriteRenderer.sharedMaterial;
+        pr.sortingLayerName = "VFX";
+        pr.sortingOrder = 10;
+
+        ps.Play();
+    }
+
+    // Dano con el bonus del contraataque, si esta abierto.
+    private int DanoConContra(int dano)
+    {
+        return ventanaContra > 0f ? Mathf.RoundToInt(dano * counterDamageMultiplier) : dano;
+    }
+
+    // Tras conectar un golpe: si era el contraataque, cierra la ventana y lo hace
+    // sentir mas fuerte. Devuelve la congelacion a usar.
+    private float ImpactoConContra(float congelacion, ref float sacudida)
+    {
+        if (ventanaContra <= 0f) return congelacion;
+        ventanaContra = 0f;
+        sacudida = Mathf.Max(sacudida, counterShake);
+        return Mathf.Max(congelacion, counterHitStop);
+    }
+
+    #endregion
+
     #region Combate sin arma
 
     // Lee puño y patada, hace avanzar el golpe en curso y arranca el siguiente
@@ -2127,6 +2562,7 @@ public class PlayerControler : MonoBehaviour
         m_gatherInput.IsKicking = false;
 
         float dt = Time.fixedDeltaTime;
+
         if (bufferSinArma > 0f) bufferSinArma -= dt;
         if (!golpeSinArmaActivo && ventanaComboSinArma > 0f)
         {
@@ -2150,11 +2586,20 @@ public class PlayerControler : MonoBehaviour
 
         UnarmedMoveset.Golpe siguiente = null;
 
+        // Un golpe pedido con direccion (W + golpe, S + golpe en el aire) manda sobre
+        // la cadena: si no, clic, clic, W+clic daba el Puno 3 en vez del gancho,
+        // porque la cadena decia que tras el Puno 2 venia el 3.
+        UnarmedMoveset.Contexto contexto = ContextoSinArma();
+        UnarmedMoveset.Golpe conDireccion =
+            contexto == UnarmedMoveset.Contexto.SueloArriba || contexto == UnarmedMoveset.Contexto.AireAbajo
+                ? unarmedMoveset.InicioExacto(entradaGuardada, contexto)
+                : null;
+
         if (golpeSinArmaActivo)
         {
             // Aun no se puede encadenar: la pulsacion espera en el buffer.
             if (tGolpe < golpeActual.encadenarDesde) return;
-            siguiente = unarmedMoveset.Siguiente(golpeActual, entradaGuardada);
+            siguiente = conDireccion ?? unarmedMoveset.Siguiente(golpeActual, entradaGuardada);
             // Sin enlace para esta entrada, este golpe cierra la cadena: se ignora.
             if (siguiente == null) { bufferSinArma = 0f; return; }
         }
@@ -2163,9 +2608,16 @@ public class PlayerControler : MonoBehaviour
             if (!PuedeEmpezarGolpeSinArma()) return;
             // Dentro de la ventana del golpe anterior se sigue la cadena; si no, o si
             // no hay enlace, empieza una nueva segun la situacion.
-            if (golpeAnterior != null) siguiente = unarmedMoveset.Siguiente(golpeAnterior, entradaGuardada);
-            if (siguiente == null) siguiente = unarmedMoveset.Inicial(entradaGuardada, ContextoSinArma());
+            siguiente = conDireccion;
+            if (siguiente == null && golpeAnterior != null) siguiente = unarmedMoveset.Siguiente(golpeAnterior, entradaGuardada);
+            if (siguiente == null) siguiente = unarmedMoveset.Inicial(entradaGuardada, contexto);
         }
+
+        // Los golpes que flotan en el aire comparten contador con los aereos de la
+        // espada: se gastan en cada salto y se recargan al acertar o al aterrizar.
+        // Sin esto, flotando a base de clics se podria no caer nunca.
+        if (siguiente != null && !isGrounded && siguiente.flotar && airComboIndex >= airComboLength)
+            siguiente = null;
 
         bufferSinArma = 0f;
         if (siguiente == null) return;
@@ -2185,6 +2637,9 @@ public class PlayerControler : MonoBehaviour
     {
         if (!isGrounded)
             return m_gatherInput.Value.y < -0.5f ? UnarmedMoveset.Contexto.AireAbajo : UnarmedMoveset.Contexto.Aire;
+
+        // W + golpe: el lanzador.
+        if (m_gatherInput.Value.y > 0.5f) return UnarmedMoveset.Contexto.SueloArriba;
 
         bool corriendo = isSprinting && Mathf.Abs(m_rigitbody2D.linearVelocityX) > 0.5f;
         return corriendo ? UnarmedMoveset.Contexto.Corriendo : UnarmedMoveset.Contexto.Suelo;
@@ -2232,6 +2687,16 @@ public class PlayerControler : MonoBehaviour
                 break;
         }
 
+        // En el aire, los golpes que flotan dejan al personaje suspendido mientras
+        // duran: asi sigue a la altura de un enemigo lanzado.
+        if (g.flotar && !isGrounded && g.tipo != UnarmedMoveset.Tipo.Picado)
+        {
+            airComboIndex++;
+            if (gravedadAntesDelPicado < 0f) gravedadAntesDelPicado = m_rigitbody2D.gravityScale;
+            m_rigitbody2D.gravityScale = 0f;
+            m_rigitbody2D.linearVelocity = Vector2.zero;
+        }
+
         isSprinting = false;
     }
 
@@ -2270,8 +2735,10 @@ public class PlayerControler : MonoBehaviour
         }
         else
         {
-            // El empujon del golpe se frena solo.
-            if (isGrounded)
+            // El empujon del golpe se frena solo. Flotando, quieto en el aire.
+            if (gravedadAntesDelPicado >= 0f && !isGrounded)
+                m_rigitbody2D.linearVelocity = Vector2.zero;
+            else if (isGrounded)
             {
                 float vx = Mathf.MoveTowards(m_rigitbody2D.linearVelocityX, 0f, g.frenado * dt);
                 m_rigitbody2D.linearVelocity = new Vector2(vx, m_rigitbody2D.linearVelocityY);
@@ -2305,13 +2772,14 @@ public class PlayerControler : MonoBehaviour
             EnemyHealth enemigo = hit.GetComponentInParent<EnemyHealth>();
             if (enemigo == null || !tocadosSinArma.Add(enemigo)) continue;
 
-            enemigo.TakeDamage(g.dano, m_transform.position, g.retroceso);
+            enemigo.TakeHit(DanoConContra(g.dano), m_transform.position, g.knockback, g.lanza, g.elevacion);
             nuevo = true;
         }
 
         if (!nuevo) return false;
-        StartCoroutine(HitStop(g.congelacion));
-        Sacudir(g.sacudida);
+        float sacudida = g.sacudida;
+        StartCoroutine(HitStop(ImpactoConContra(g.congelacion, ref sacudida)));
+        Sacudir(sacudida);
         if (!isGrounded) RecuperarSaltoAereo();
         return true;
     }
@@ -2402,6 +2870,7 @@ public class PlayerControler : MonoBehaviour
         // muestra el arco tensado del todo.
         float puntoDeCarga = suelta - 0.05f;
 
+        SoltarSuspensionAerea();
         // En el aire se queda suspendido mientras dispara (y mientras carga).
         if (!enSuelo)
         {
@@ -2768,6 +3237,20 @@ public class PlayerControler : MonoBehaviour
 
     #region Vida y Daño
 
+    // Golpe de un enemigo, que se puede parar con la guardia. Las trampas llaman a
+    // TakeDamage(int) y no se bloquean.
+    public void TakeDamage(int damage, Component atacante)
+    {
+        if (atacante != null && isBlocking && !isInvincible && GolpeDeFrente(atacante.transform))
+        {
+            if (tBloqueo <= ventanaParryActual) { Parry(atacante); return; }
+            if (estamina.CanSpend()) { estamina.Spend(blockStaminaCost); GolpeBloqueado(); return; }
+            // Sin estamina la guardia se rompe: el golpe entra.
+        }
+
+        TakeDamage(damage);
+    }
+
     // Aplica daño al player, actualiza la barra de vida, dispara el knockback y controla la muerte.
     public void TakeDamage(int damage)
     {
@@ -2796,6 +3279,8 @@ public class PlayerControler : MonoBehaviour
         if (isShooting) TerminarDisparo();
         if (isTogglingWeapon) CancelarCambioArma(false);
         if (golpeSinArmaActivo) CortarGolpeSinArma();
+        if (isBlocking) TerminarBloqueo(false);
+        SoltarSuspensionAerea();
 
         Knockback();
 

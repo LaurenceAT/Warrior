@@ -260,7 +260,7 @@ MonoBehaviour:
   sprintAcceleration: 30
   keepSprintInAir: 1
   bowBeamPrefab: {fileID: 4172610507761915418, guid: 3b316857f51c31d4fae46c8b4d91916d, type: 3}
-  bowDamage: 1
+  bowDamage: 5
   bowTicks: 3
   bowTickInterval: 0.1
   bowFirstTickDelay: 0.08
@@ -297,7 +297,7 @@ MonoBehaviour:
   plungeHitSize: {x: 0.6, y: 0.4}
   plungeLandOffset: {x: 0, y: -0.45}
   plungeLandSize: {x: 2, y: 0.6}
-  plungeDamage: 2
+  plungeDamage: 20
   plungeKnockback: 2.5
   plungeHitStop: 0.08
   showPlungeGizmos: 1
@@ -425,6 +425,7 @@ MonoBehaviour:
   attackLayers:
     serializedVersion: 2
     m_Bits: 0
+  bladeGlowShader: {fileID: 4800000, guid: 5b7e2c9d1a4f4e8b9c3d6a1f2e7b8c90, type: 3}
   attackProfiles:
   - nombre: Ataque
     forma: 2
@@ -437,12 +438,14 @@ MonoBehaviour:
     anguloCentro: 4.69
     afiladoPuntas: 1
     puntaHacia: 1
-    dano: 1
+    dano: 15
+    knockback: {x: 2.5, y: 1.5}
+    lanza: 0
     costeEstamina: 12
     duracion: 0.4
     encadenarDesde: 0.28
     avance: 1.5
-    congelacion: 0.04
+    congelacion: 0.06
     sacudida: 0.1
     efectoGolpe: {fileID: 0}
   - nombre: Ataque 2
@@ -456,12 +459,14 @@ MonoBehaviour:
     anguloCentro: 4.69
     afiladoPuntas: 1
     puntaHacia: 1
-    dano: 1
+    dano: 15
+    knockback: {x: 2.5, y: 1.5}
+    lanza: 0
     costeEstamina: 14
     duracion: 0.4
     encadenarDesde: 0.28
     avance: 1.5
-    congelacion: 0.04
+    congelacion: 0.06
     sacudida: 0.1
     efectoGolpe: {fileID: 0}
   - nombre: Ataque 3
@@ -475,7 +480,9 @@ MonoBehaviour:
     anguloCentro: -4.49
     afiladoPuntas: 1
     puntaHacia: 1
-    dano: 1
+    dano: 22
+    knockback: {x: 3.5, y: 2}
+    lanza: 0
     costeEstamina: 20
     duracion: 0.4
     encadenarDesde: 0.32
@@ -494,31 +501,35 @@ MonoBehaviour:
     anguloCentro: -8.3
     afiladoPuntas: 1
     puntaHacia: 1
-    dano: 1
+    dano: 12
+    knockback: {x: 1.5, y: 2}
+    lanza: 0
     costeEstamina: 12
     duracion: 0.27
     encadenarDesde: 0.18
     avance: 3
-    congelacion: 0.1
+    congelacion: 0.06
     sacudida: 0.3
     efectoGolpe: {fileID: 0}
   - nombre: "A\xE9reo 2"
     forma: 2
-    offset: {x: -0.86, y: -0.54}
+    offset: {x: -1.1, y: -0.1}
     radio: -3.86
     tamano: {x: 0.45, y: 1.07}
-    radioInterior: 0.61
-    radioExterior: 1.32
-    angulo: 115
-    anguloCentro: 59.8
+    radioInterior: 0.3
+    radioExterior: 1.5
+    angulo: 130
+    anguloCentro: -20
     afiladoPuntas: 1
     puntaHacia: 1
-    dano: 1
+    dano: 14
+    knockback: {x: 2, y: 2}
+    lanza: 0
     costeEstamina: 14
     duracion: 0.2
     encadenarDesde: 0.14
     avance: 3
-    congelacion: 0.1
+    congelacion: 0.06
     sacudida: 0.3
     efectoGolpe: {fileID: 0}
   - nombre: "Estocada ca\xEDda"
@@ -532,7 +543,9 @@ MonoBehaviour:
     anguloCentro: 59.8
     afiladoPuntas: 1
     puntaHacia: 1
-    dano: 2
+    dano: 20
+    knockback: {x: 1, y: -8}
+    lanza: 0
     costeEstamina: 12
     duracion: 0.2
     encadenarDesde: 0.14
@@ -551,13 +564,44 @@ MonoBehaviour:
     anguloCentro: -72
     afiladoPuntas: 0.944
     puntaHacia: 1
-    dano: 2
+    dano: 20
+    knockback: {x: 3, y: 2}
+    lanza: 0
     costeEstamina: 12
     duracion: 0.2
     encadenarDesde: 0.14
     avance: 3
     congelacion: 0.1
     sacudida: 0.3
+    efectoGolpe: {fileID: 0}
+  - nombre: Lanzador
+    forma: 2
+    offset: {x: -0.84, y: 0.05}
+    radio: 0.5
+    tamano: {x: 0.45, y: 1.07}
+    radioInterior: 0.4
+    radioExterior: 0.98
+    angulo: 204
+    anguloCentro: 4.69
+    afiladoPuntas: 1
+    puntaHacia: 1
+    dano: 12
+    knockback: {x: 0, y: 2}
+    lanza: 1
+    elevacion:
+      altura: 1.5
+      desplazamientoX: 0
+      subida: 0.3
+      suspension: 0.6
+      bajada: 0.3
+      alturaPorGolpe: 0.1
+      subidaPorGolpe: 0.1
+    costeEstamina: 16
+    duracion: 0.4
+    encadenarDesde: 0.36
+    avance: 0
+    congelacion: 0.1
+    sacudida: 0.22
     efectoGolpe: {fileID: 0}
   gizmoProfileIndex: 6
   attackCooldown: 0.03

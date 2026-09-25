@@ -29,6 +29,10 @@ public class GatherInput : MonoBehaviour
     // PlayerControler, asi un toque breve no se pierde entre pasos de fisica.
     [SerializeField] private bool _isKicking;
     public bool IsKicking { get => _isKicking; set => _isKicking = value; }
+    // Si el clic derecho sigue pulsado. Con la espada fuera es el bloqueo, que dura
+    // mientras se mantenga.
+    [SerializeField] private bool _isKickHeld;
+    public bool IsKickHeld { get => _isKickHeld; }
 
     // Pulsacion de enfundar o desenfundar la espada (E). Como el ataque: se marca al pulsar y la consume
     // PlayerControler, asi un toque breve no se pierde entre pasos de fisica.
@@ -71,6 +75,7 @@ public class GatherInput : MonoBehaviour
         controls.Player.Sprint.performed += StartSprint;
         controls.Player.Sprint.canceled += StopSprint;
         controls.Player.Kick.performed += StartKick;
+        controls.Player.Kick.canceled += StopKick;
         controls.Player.ToggleWeapon.performed += StartToggleWeapon;
         controls.Player.Shoot.performed += StartShoot;
         controls.Player.Shoot.canceled += StopShoot;
@@ -89,6 +94,7 @@ public class GatherInput : MonoBehaviour
         controls.Player.Sprint.performed -= StartSprint;
         controls.Player.Sprint.canceled -= StopSprint;
         controls.Player.Kick.performed -= StartKick;
+        controls.Player.Kick.canceled -= StopKick;
         controls.Player.ToggleWeapon.performed -= StartToggleWeapon;
         controls.Player.Shoot.performed -= StartShoot;
         controls.Player.Shoot.canceled -= StopShoot;
@@ -146,6 +152,13 @@ public class GatherInput : MonoBehaviour
     private void StartKick(InputAction.CallbackContext context)
     {
         _isKicking = true;
+        _isKickHeld = true;
+    }
+
+    // Y deja de mantenerlo al soltar.
+    private void StopKick(InputAction.CallbackContext context)
+    {
+        _isKickHeld = false;
     }
 
     // Marca el cambio de arma al pulsar el boton.

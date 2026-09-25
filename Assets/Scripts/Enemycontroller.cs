@@ -207,7 +207,7 @@ public class EnemyController : MonoBehaviour
             PlayerControler player = hit.GetComponent<PlayerControler>();
             if (player != null)
             {
-                player.TakeDamage(attackDamage);
+                player.TakeDamage(attackDamage, this);
                 return;
             }
         }

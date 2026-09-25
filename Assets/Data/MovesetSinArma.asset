@@ -21,14 +21,16 @@ MonoBehaviour:
     activoHasta: 0.21
     encadenarDesde: 0.2
     ventanaCombo: 0.35
-    offset: {x: 0.45, y: 0.05}
-    tamano: {x: 0.5, y: 0.35}
-    dano: 1
-    retroceso: 1
+    offset: {x: 0.45, y: -0.1}
+    tamano: {x: 0.5, y: 0.5}
+    dano: 4
+    knockback: {x: 1.2, y: 0.8}
+    lanza: 0
+    flotar: 0
     costeEstamina: 8
     avance: 1.2
     frenado: 14
-    congelacion: 0.04
+    congelacion: 0.06
     sacudida: 0.1
     inicioPicado: 0.13
     velocidadPicado: {x: 6, y: 12}
@@ -45,14 +47,16 @@ MonoBehaviour:
     activoHasta: 0.21
     encadenarDesde: 0.2
     ventanaCombo: 0.35
-    offset: {x: 0.45, y: 0.05}
-    tamano: {x: 0.5, y: 0.35}
-    dano: 1
-    retroceso: 1
+    offset: {x: 0.45, y: -0.1}
+    tamano: {x: 0.5, y: 0.5}
+    dano: 4
+    knockback: {x: 1.2, y: 0.8}
+    lanza: 0
+    flotar: 0
     costeEstamina: 8
     avance: 1.2
     frenado: 14
-    congelacion: 0.04
+    congelacion: 0.06
     sacudida: 0.1
     inicioPicado: 0.13
     velocidadPicado: {x: 6, y: 12}
@@ -69,15 +73,49 @@ MonoBehaviour:
     activoHasta: 0.24
     encadenarDesde: 0.3
     ventanaCombo: 0.3
-    offset: {x: 0.4, y: 0.25}
-    tamano: {x: 0.55, y: 0.6}
-    dano: 2
-    retroceso: 1.5
+    offset: {x: 0.4, y: 0.05}
+    tamano: {x: 0.55, y: 0.8}
+    dano: 7
+    knockback: {x: 2, y: 1.2}
+    lanza: 0
+    flotar: 0
     costeEstamina: 12
     avance: 2
     frenado: 14
-    congelacion: 0.07
+    congelacion: 0.1
     sacudida: 0.2
+    inicioPicado: 0.13
+    velocidadPicado: {x: 6, y: 12}
+    rebote: 7
+    recuperacionAterrizaje: 0.15
+    siguientes: []
+  - nombre: Lanzador
+    estadoAnimator: Punch3
+    tipo: 0
+    duracion: 0.3333
+    activoDesde: 0.12
+    activoHasta: 0.24
+    encadenarDesde: 0.3
+    ventanaCombo: 0.4
+    offset: {x: 0.45, y: 0}
+    tamano: {x: 0.6, y: 0.9}
+    dano: 8
+    knockback: {x: 1.5, y: 7}
+    lanza: 1
+    elevacion:
+      altura: 1.5
+      desplazamientoX: 0.8
+      subida: 0.3
+      suspension: 0.6
+      bajada: 0.3
+      alturaPorGolpe: 0.1
+      subidaPorGolpe: 0.1
+    flotar: 0
+    costeEstamina: 16
+    avance: 0
+    frenado: 14
+    congelacion: 0.1
+    sacudida: 0.22
     inicioPicado: 0.13
     velocidadPicado: {x: 6, y: 12}
     rebote: 7
@@ -93,12 +131,14 @@ MonoBehaviour:
     ventanaCombo: 0.35
     offset: {x: 0.5, y: -0.15}
     tamano: {x: 0.6, y: 0.4}
-    dano: 1
-    retroceso: 1
+    dano: 5
+    knockback: {x: 2, y: 1}
+    lanza: 0
+    flotar: 0
     costeEstamina: 10
     avance: 1
     frenado: 14
-    congelacion: 0.04
+    congelacion: 0.06
     sacudida: 0.12
     inicioPicado: 0.13
     velocidadPicado: {x: 6, y: 12}
@@ -117,12 +157,14 @@ MonoBehaviour:
     ventanaCombo: 0.3
     offset: {x: 0.55, y: -0.05}
     tamano: {x: 0.7, y: 0.45}
-    dano: 2
-    retroceso: 1.6
+    dano: 8
+    knockback: {x: 3.5, y: 1.5}
+    lanza: 0
+    flotar: 0
     costeEstamina: 14
     avance: 1.5
     frenado: 14
-    congelacion: 0.07
+    congelacion: 0.1
     sacudida: 0.2
     inicioPicado: 0.13
     velocidadPicado: {x: 6, y: 12}
@@ -137,14 +179,16 @@ MonoBehaviour:
     activoHasta: 0.27
     encadenarDesde: 0.4
     ventanaCombo: 0.3
-    offset: {x: 0.55, y: 0.05}
+    offset: {x: 0.55, y: -0.1}
     tamano: {x: 0.75, y: 0.4}
-    dano: 2
-    retroceso: 1.5
+    dano: 8
+    knockback: {x: 3, y: 1.5}
+    lanza: 0
+    flotar: 0
     costeEstamina: 15
     avance: 7
     frenado: 12
-    congelacion: 0.06
+    congelacion: 0.08
     sacudida: 0.18
     inicioPicado: 0.13
     velocidadPicado: {x: 6, y: 12}
@@ -161,13 +205,15 @@ MonoBehaviour:
     ventanaCombo: 0.2
     offset: {x: 0.35, y: -0.45}
     tamano: {x: 0.55, y: 0.45}
-    dano: 2
-    retroceso: 1.5
+    dano: 14
+    knockback: {x: 1, y: -14}
+    lanza: 0
+    flotar: 0
     costeEstamina: 18
     avance: 0
     frenado: 0
-    congelacion: 0.06
-    sacudida: 0.25
+    congelacion: 0.1
+    sacudida: 0.3
     inicioPicado: 0.13
     velocidadPicado: {x: 6, y: 12}
     rebote: 7
@@ -186,3 +232,6 @@ MonoBehaviour:
   - entrada: 1
     contexto: 3
     golpe: PatadaPicado
+  - entrada: 0
+    contexto: 4
+    golpe: Lanzador
