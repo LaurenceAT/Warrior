@@ -220,6 +220,28 @@ public class PlayerControler : MonoBehaviour
     private bool isAgarrado;
     public bool Agarrado => isAgarrado;
 
+    // Agarre de cornisa (lo lleva AgarreCornisa): se engancha al borde y sube.
+    private AgarreCornisa agarreCornisa;
+    public int Direccion => direction;
+    public LayerMask CapaSuelo => groundLayer;
+    public void MirarHacia(int lado) => SetFacing(lado);
+
+    // Otro script lleva al player (el portal lo hace caminar hasta el centro):
+    // sin control ni dano mientras dura.
+    public void ControlExterno(bool activo)
+    {
+        canMove = !activo;
+        if (activo)
+        {
+            isInvincible = true;
+            LimpiarEntradas();
+        }
+    }
+    public Vector2 EntradaMovimiento => m_gatherInput != null ? m_gatherInput.Value : Vector2.zero;
+    public bool PuedeAgarrarCornisa => canMove && !isGrounded && !isKnocked && !isPlunging && !isAttacking && !isDodging
+                                       && !isImbuing && !isLaunched && !isBlocking && !isShooting && !isDrinking && currentHealth > 0;
+    public bool Interrumpido => isKnocked || isAgarrado || currentHealth <= 0;
+
     // Sonido de pasos.
     private float siguientePaso;
 
@@ -830,6 +852,14 @@ public class PlayerControler : MonoBehaviour
 
         if (!canMove) return;
         if (isKnocked) return;
+
+        // Colgado de una cornisa o subiendo: manda el agarre.
+        if (agarreCornisa == null) agarreCornisa = GetComponent<AgarreCornisa>();
+        if (agarreCornisa != null && (agarreCornisa.Activo || agarreCornisa.Intentar()))
+        {
+            LimpiarEntradas();
+            return;
+        }
 
         // La estocada lleva su propia velocidad de principio a fin.
         if (isPlunging) return;
@@ -2084,8 +2114,7 @@ public class PlayerControler : MonoBehaviour
         lFootRay = Physics2D.Raycast(lFoot.position, Vector2.down, rayLength, groundLayer);
         rFootRay = Physics2D.Raycast(rFoot.position, Vector2.down, rayLength, groundLayer);
         bool antes = isGrounded;
-        sobreHielo = (lFootRay && lFootRay.collider.GetComponent<SueloHielo>() != null)
-                     || (rFootRay && rFootRay.collider.GetComponent<SueloHielo>() != null);
+        sobreHielo = SueloHielo.EsResbaladizo(lFootRay) || SueloHielo.EsResbaladizo(rFootRay);
         if (lFootRay || rFootRay)
         {
             isGrounded = true;

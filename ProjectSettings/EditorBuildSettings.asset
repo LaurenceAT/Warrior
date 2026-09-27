@@ -5,30 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 0
-    path: Assets/Scenes/Level_Prototype.unity
-    guid: 9e75be476f374e547a59e92b290c4387
-  - enabled: 1
-    path: Assets/Scenes/Nivel 1.unity
-    guid: 44671456e6e2a414295d6a8ebd6a1ba9
-  - enabled: 1
-    path: Assets/Scenes/Nivel 2.unity
-    guid: 12b75c9100eb08246a658ab4d04628b4
-  - enabled: 1
-    path: Assets/Scenes/Nivel 3.unity
-    guid: b9209f0e18aaf8e4a8774ae900f9c81f
-  - enabled: 1
-    path: Assets/Scenes/Nivel 4.unity
-    guid: 84c8af0909b35074a84810645a340f1e
   - enabled: 1
     path: Assets/Scenes/Nivel Cueva.unity
-    guid: 19c71cba17191b04a811cea4dc65e9c8
+    guid: 5997edbd1b1fb9848a259a5530be8a53
   - enabled: 1
     path: Assets/Scenes/Nivel Nieve.unity
-    guid: 9ec587ba3a727444e8326d5efab0f368
+    guid: ec9a5dd3530b01640b2a5978ae25d7c7
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -27,6 +28,12 @@ public static class PruebaNieve
     public static void Enemigos() => Lanzar("enemigos", Escena);
     public static void Jefe() => Lanzar("jefe", Escena);
     public static void Cueva() => Lanzar("cueva", "Assets/Scenes/Nivel Cueva.unity");
+    // Fotos del nivel en los puntos de la variable de entorno VISTAS ("x,y;x,y").
+    public static void PintarCuevaPrueba() => Lanzar("pintarcueva", "Assets/Scenes/Nivel Cueva.unity");
+    public static void PintarPrueba() => Lanzar("pintar", Escena);
+    public static void CornisaPrueba() => Lanzar("cornisa", Escena);
+    public static void PortalPrueba() => Lanzar("portal", System.Environment.GetEnvironmentVariable("VISTAS_ESCENA") ?? Escena);
+    public static void Vistas() => Lanzar("vistas", System.Environment.GetEnvironmentVariable("VISTAS_ESCENA") ?? Escena);
 
     private static void Lanzar(string modo, string escena)
     {
@@ -63,11 +70,26 @@ public static class PruebaNieve
             Directory.CreateDirectory(carpeta);
             Progreso.Reiniciar();
             PlayerPrefs.DeleteKey("cofre_Nivel Nieve_cofre");
-            yield return new WaitForSeconds(2f);
+            for (int k = 0; k < 8; k++)
+            {
+                yield return new WaitForSeconds(0.25f);
+                PlayerControler pc = Object.FindFirstObjectByType<PlayerControler>();
+                if (pc != null) Debug.Log($"[Prueba] inicio t={k * 0.25f:0.00} player={pc.transform.position}");
+                else Debug.Log($"[Prueba] inicio t={k * 0.25f:0.00} sin player");
+            }
             p = Object.FindFirstObjectByType<PlayerControler>();
+            if (p == null || System.Environment.GetEnvironmentVariable("VISTAS_COLIS") == "1")
+                foreach (var tmc in Object.FindObjectsByType<UnityEngine.Tilemaps.TilemapCollider2D>(FindObjectsSortMode.None))
+                {
+                    var cc = tmc.GetComponent<CompositeCollider2D>();
+                    var tmap = tmc.GetComponent<UnityEngine.Tilemaps.Tilemap>();
+                    Debug.Log($"[Colis] {tmc.name} capa={tmc.gameObject.layer} activo={tmc.enabled} formas={tmc.shapeCount} bounds={tmc.bounds} op={tmc.compositeOperation} " +
+                              $"composite={(cc != null ? cc.pathCount + " caminos " + cc.bounds : "-")} tiles={tmap.GetUsedTilesCount()} tipo(2,-1)={tmap.GetColliderType(new Vector3Int(2, -1, 0))}");
+                }
+            if (p == null) { Debug.LogError("[Prueba] sin player"); EditorApplication.ExitPlaymode(); yield break; }
             Debug.Log($"[Prueba] modo={modo} player={(p != null)} vida={Vida()}/{p.VidaMaxima}");
             IEnumerator rutina = modo == "sistemas" ? Sistemas() : modo == "nivel" ? Nivel() : modo == "enemigos" ? Enemigos()
-                               : modo == "jefe" ? Jefe() : Cueva();
+                               : modo == "jefe" ? Jefe() : modo == "vistas" ? Vistas() : modo == "cornisa" ? Cornisa() : modo == "pintar" ? Pintar() : modo == "pintarcueva" ? PintarCueva() : modo == "portal" ? Portal() : Cueva();
             float limite = Time.realtimeSinceStartup + 240f;
             while (rutina.MoveNext())
             {
@@ -378,6 +400,167 @@ public static class PruebaNieve
             yield return Captura("j06_victoria", true);
             yield return new WaitForSeconds(4f);
             Debug.Log($"[Jefe] salida activa={(GameObject.Find("ExitDoor") != null)} almas={Progreso.Almas}");
+        }
+
+        // ------------------------------------------------------------------ Cornisa y portal
+
+        private IEnumerator Cornisa()
+        {
+            // Escalon de la meseta: x 291, arriba 5 (el suelo esta en 3).
+            Invulnerable();
+            Teletransportar(new Vector3(290.2f, 4.35f, 0f));
+            Mirar(1);
+            PonerEje(1f);
+            AgarreCornisa a = p.GetComponent<AgarreCornisa>();
+            Debug.Log($"[Cornisa] componente={(a != null)}");
+            for (int k = 0; k < 14; k++)
+            {
+                yield return new WaitForSeconds(0.05f);
+                Debug.Log($"[Cornisa] t={k * 0.05f:0.00} pos={p.transform.position} activo={(a != null && a.Activo)} sprite={p.GetComponent<SpriteRenderer>().sprite.name}");
+                if (k % 2 == 0) yield return Captura($"k_{k:00}", false);
+            }
+            PonerEje(0f);
+            yield return new WaitForSeconds(0.5f);
+            Debug.Log($"[Cornisa] final pos={p.transform.position}");
+
+            // Borde demasiado alto (pared de la bajada de 297 a 8 desde el suelo 3): no debe agarrarse.
+            Teletransportar(new Vector3(296.6f, 3.7f, 0f));
+            PonerEje(1f);
+            yield return new WaitForSeconds(0.6f);
+            Debug.Log($"[Cornisa] pared alta: pos={p.transform.position} activo={a.Activo}");
+            PonerEje(0f);
+        }
+
+        private IEnumerator Portal()
+        {
+            Object.DontDestroyOnLoad(gameObject);
+            PortalEntrada pe = Object.FindFirstObjectByType<PortalEntrada>();
+            Debug.Log($"[Portal] entrada={(pe != null)} en {pe?.transform.position}");
+            yield return Captura("p00_entrada", true);
+            PortalNivel pn = Object.FindFirstObjectByType<PortalNivel>(FindObjectsInactive.Include);
+            Debug.Log($"[Portal] salida={(pn != null)}");
+            if (pn == null) yield break;
+            pn.gameObject.SetActive(true);
+            Invulnerable();
+            Teletransportar(pn.transform.position + new Vector3(-1.4f, 0.7f, 0f));
+            yield return new WaitForSeconds(0.8f);
+            yield return Captura("p01_antes", true);
+            Teletransportar(pn.transform.position + new Vector3(-0.5f, 0.7f, 0f));
+            string escena = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            float t0 = Time.realtimeSinceStartup;
+            int n = 0;
+            while (Time.realtimeSinceStartup - t0 < 9f && UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == escena)
+            {
+                if (p != null) Debug.Log($"[Portal] t={Time.realtimeSinceStartup - t0:0.00} x={p.transform.position.x:0.00} vx={p.GetComponent<Rigidbody2D>().linearVelocityX:0.0} cargando={PantallaCarga.Cargando}");
+                if (n < 12) yield return Captura($"p02_{n++:00}", true);
+                yield return new WaitForSecondsRealtime(0.2f);
+            }
+            yield return new WaitForSecondsRealtime(1.5f);
+            Debug.Log($"[Portal] escena ahora={UnityEngine.SceneManagement.SceneManager.GetActiveScene().name} cargando={PantallaCarga.Cargando}");
+            yield return Captura("p03_llegada", true);
+        }
+
+        // ------------------------------------------------------------------ Pintar
+
+        private IEnumerator Pintar()
+        {
+            var tm = Object.FindObjectsByType<UnityEngine.Tilemaps.Tilemap>(FindObjectsSortMode.None).First(t => t.name == "Suelo");
+            var nieve = AssetDatabase.LoadAssetAtPath<TileTerreno>("Assets/Tiles/Nieve/Nieve (auto).asset");
+            // Bloque de 4x2 flotando sobre el campamento (x 20-23, y 3-4).
+            for (int x = 20; x < 24; x++) for (int y = 3; y < 5; y++) tm.SetTile(new Vector3Int(x, y, 0), nieve);
+            yield return new WaitForFixedUpdate();
+            for (int y = 4; y >= 3; y--)
+            {
+                string fila = "";
+                for (int x = 20; x < 24; x++) fila += tm.GetSprite(new Vector3Int(x, y, 0))?.name + " | ";
+                Debug.Log($"[Pintar] y={y}: {fila}");
+            }
+            Invulnerable();
+            Teletransportar(new Vector3(21.5f, 7f, 0f));
+            yield return new WaitForSeconds(1.2f);
+            Debug.Log($"[Pintar] player sobre el bloque pintado: y={p.transform.position.y:0.00} (arriba del bloque = 5, de pie = 5.63)");
+            yield return Captura("pintar", true);
+            // Borrar una casilla: deja de ser suelo.
+            for (int y = 3; y < 5; y++) { tm.SetTile(new Vector3Int(21, y, 0), null); tm.SetTile(new Vector3Int(22, y, 0), null); }
+            yield return new WaitForSeconds(1f);
+            Debug.Log($"[Pintar] tras borrar el centro: y={p.transform.position.y:0.00} (deberia caer al suelo 0 => 0.63)");
+        }
+
+        // ------------------------------------------------------------------ Cueva pintada
+
+        private IEnumerator PintarCueva()
+        {
+            var tms = Object.FindObjectsByType<UnityEngine.Tilemaps.Tilemap>(FindObjectsSortMode.None);
+            var falsas = tms.First(t => t.name == "ParedesFalsas");
+            var ocultas = tms.First(t => t.name == "ZonasOcultas");
+            var roca = AssetDatabase.LoadAssetAtPath<UnityEngine.Tilemaps.Tile>("Assets/Tiles/Cueva/Roca cueva.asset");
+            var sombra = AssetDatabase.LoadAssetAtPath<UnityEngine.Tilemaps.Tile>("Assets/Tiles/Comun/Sombra.asset");
+            // Pared falsa que cierra el pasillo de entrada (x 10, del suelo 0 al techo 7)
+            // y, detras, una zona oculta de x 11 a 15.
+            for (int y = 0; y < 7; y++) falsas.SetTile(new Vector3Int(10, y, 0), roca);
+            for (int x = 11; x < 16; x++) for (int y = 0; y < 7; y++) ocultas.SetTile(new Vector3Int(x, y, 0), sombra);
+            Invulnerable();
+            Teletransportar(new Vector3(7.5f, 0.7f, 0f));
+            yield return new WaitForSeconds(1f);
+            yield return Captura("pc0_fuera", true);
+            PonerEje(1f);
+            float t0 = Time.time;
+            while (p.transform.position.x < 10.5f && Time.time - t0 < 3f) yield return null;
+            yield return Captura("pc1_dentro_pared", true);
+            yield return new WaitForSeconds(0.5f);
+            PonerEje(0f);
+            yield return new WaitForSeconds(0.6f);
+            Debug.Log($"[PintarCueva] tras cruzar: x={p.transform.position.x:0.00} (la pared esta en 10-11)");
+            yield return Captura("pc2_detras", true);
+        }
+
+        // ------------------------------------------------------------------ Vistas
+
+        private IEnumerator Vistas()
+        {
+            string lista = System.Environment.GetEnvironmentVariable("VISTAS") ?? "";
+            var ci = System.Globalization.CultureInfo.InvariantCulture;
+            // Que se dibuja en un rectangulo ("x0,y0,x1,y1"), para localizar piezas sueltas.
+            string zona = System.Environment.GetEnvironmentVariable("VISTAS_ZONA");
+            if (!string.IsNullOrEmpty(zona))
+            {
+                float[] z = zona.Split(',').Select(v => float.Parse(v, ci)).ToArray();
+                Rect r = Rect.MinMaxRect(z[0], z[1], z[2], z[3]);
+                foreach (SpriteRenderer s in Object.FindObjectsByType<SpriteRenderer>(FindObjectsSortMode.None))
+                {
+                    Bounds b = s.bounds;
+                    if (!s.enabled || !r.Overlaps(Rect.MinMaxRect(b.min.x, b.min.y, b.max.x, b.max.y))) continue;
+                    string ruta = s.name;
+                    for (Transform t = s.transform.parent; t != null; t = t.parent) ruta = t.name + "/" + ruta;
+                    Debug.Log($"[Zona] {ruta} sprite={(s.sprite != null ? s.sprite.name : "-")} capa={s.sortingLayerName}:{s.sortingOrder} valor={SortingLayer.GetLayerValueFromID(s.sortingLayerID)} color={s.color} mat={s.sharedMaterial?.name} grupo={s.GetComponentInParent<UnityEngine.Rendering.SortingGroup>() != null} z={s.transform.position.z} min={b.min} max={b.max}");
+                }
+            }
+            if (System.Environment.GetEnvironmentVariable("VISTAS_ROJO") == "1")
+                foreach (ZonaOculta z in Object.FindObjectsByType<ZonaOculta>(FindObjectsSortMode.None)) z.enabled = false;
+            if (System.Environment.GetEnvironmentVariable("VISTAS_ROJO") == "1")
+                foreach (SpriteRenderer s in Object.FindObjectsByType<SpriteRenderer>(FindObjectsSortMode.None))
+                    if (s.name == "Sombra" && s.GetComponentInParent<ZonaOculta>(true) != null) s.color = new Color(1f, 0f, 0f, 0.7f);
+            int i = 0;
+            foreach (string par in lista.Split(';'))
+            {
+                string[] xy = par.Split(',');
+                if (xy.Length < 2) continue;
+                Vector3 pos = new Vector3(float.Parse(xy[0], ci), float.Parse(xy[1], ci), 0f);
+                Invulnerable();
+                Teletransportar(pos);
+                yield return new WaitForSeconds(1.2f);
+                Debug.Log($"[Vistas] {i} pedido={pos} real={p.transform.position}");
+                foreach (ZonaOculta z in Object.FindObjectsByType<ZonaOculta>(FindObjectsSortMode.None))
+                {
+                    var tmz = z.GetComponent<UnityEngine.Tilemaps.Tilemap>();
+                    var celda = tmz.WorldToCell(p.transform.position + Vector3.up * 0.1f);
+                    var zonas = (System.Collections.IList)GetCampo(z, "zonas");
+                    var alfas = (List<float>)GetCampo(z, "alfas");
+                    Debug.Log($"[Vistas] zona oculta: zonas={zonas?.Count} alfas={(alfas != null ? string.Join(",", alfas) : "-")} celda={celda} tile={tmz.HasTile(celda)} color={tmz.GetColor(celda)} tmcolor={tmz.color} flags={tmz.GetTileFlags(celda)}");
+                }
+                yield return Captura($"v{i:00}_{xy[0]}_{xy[1]}", true);
+                i++;
+            }
         }
 
         // ------------------------------------------------------------------ Cueva

@@ -51,6 +51,8 @@ public class ArenaJefe : MonoBehaviour
     [SerializeField] private GameObject salida;
 
     [Header("Musica: fase 1")]
+    [Tooltip("Archivo de configuracion del nivel: si tiene musica de jefe, se usa esa en vez de la de aqui abajo.")]
+    [SerializeField] private ConfigNivel config;
     [SerializeField] private AudioClip musica;
     [Range(0f, 1f)] [SerializeField] private float volumen = 0.6f;
     [SerializeField] private float inicioFase1;
@@ -92,6 +94,19 @@ public class ArenaJefe : MonoBehaviour
     private void Awake()
     {
         GetComponent<Collider2D>().isTrigger = true;
+        if (config != null)
+        {
+            if (config.jefeFase1.pista != null)
+            {
+                musica = config.jefeFase1.pista; volumen = config.jefeFase1.volumen;
+                inicioFase1 = config.jefeFase1.inicio; bucleFase1 = config.jefeFase1.bucle;
+            }
+            if (config.jefeFase2.pista != null)
+            {
+                musicaFase2 = config.jefeFase2.pista; volumenFase2 = config.jefeFase2.volumen;
+                inicioFase2 = config.jefeFase2.inicio; bucleFase2 = config.jefeFase2.bucle;
+            }
+        }
         audioSrc = NuevaFuente();
         audioFase2 = NuevaFuente();
 

@@ -78,7 +78,6 @@ public static class CrearNivelNieve
         new RectInt(297, 3, 3, 5),
         new RectInt(300, 6, 18, 4),       // meseta (arriba 10); debajo, el escondite
         new RectInt(326, 6, 4, 4),        // meseta, tras el tramo de hielo
-        new RectInt(329, 3, 1, 3),        // fondo del escondite (cerrado)
         new RectInt(330, -12, 32, 15),    // bajada y antesala
         // H  Arena
         new RectInt(362, -12, 36, 15),
@@ -94,6 +93,18 @@ public static class CrearNivelNieve
         new RectInt(75, -12, 13, 14),     // B: 75-88, arriba 2
         new RectInt(142, -12, 8, 15),     // C: 142-150, justo antes del pozo
         new RectInt(318, 6, 8, 4),        // F: parte de la meseta
+    };
+
+    // Paredes falsas: se ven como roca pero se atraviesan (sin colision). La del
+    // fondo del escondite da a la bajada de la antesala.
+    private static readonly RectInt[] Falsas =
+    {
+        new RectInt(329, 3, 1, 3),
+    };
+    // Interiores secretos: en sombra desde fuera, se ven al entrar.
+    private static readonly Rect[] Ocultos =
+    {
+        Rect.MinMaxRect(300.8f, 3f, 329f, 6f),    // el escondite bajo la meseta
     };
 
     private static readonly Vector2 Salida = new Vector2(2f, 0f);
@@ -117,7 +128,8 @@ public static class CrearNivelNieve
 
     // ------------------------------------------------------------------ Menu
 
-    [MenuItem("Warrior/Crear nivel Nieve")]
+    // Retirado del menu: las escenas ya se editan a mano (y se pintan con la Tile
+    // Palette). Regenerar el nivel borraria esos cambios. Se conserva el codigo.
     public static void Crear()
     {
         if (File.Exists(Destino) && !Application.isBatchMode &&
@@ -152,9 +164,13 @@ public static class CrearNivelNieve
         ColocarPlayerYCamara(escena);
         ConstruirArena(nivel, escena);
         Ambiente(nivel, escena);
+        ConfigurarPortales.Instalar(escena);
+        PaletaNieve.CrearPaleta();
 
         EditorSceneManager.MarkSceneDirty(escena);
         EditorSceneManager.SaveScene(escena);
+        // El archivo de configuracion del nivel: si ya existe, manda lo que diga el.
+        ConfigNivelEditor.Asegurar(Destino, ConfigNivelEditor.RutaNieve, ConfigNivel.TipoTerreno.Tiles);
         AnadirABuild();
         Debug.Log("[Nieve] Nivel generado en " + Destino);
     }
@@ -240,7 +256,16 @@ public static class CrearNivelNieve
         if (x < Mapa.xMin || x >= Mapa.xMax || y < Mapa.yMin) return true;
         if (y >= Mapa.yMax) return false;
         Vector2 p = new Vector2(x + 0.5f, y + 0.5f);
-        return Roca.Any(r => Contiene(r, p)) || Hielo.Any(r => Contiene(r, p));
+        return Roca.Any(r => Contiene(r, p)) || Hielo.Any(r => Contiene(r, p)) || Falsas.Any(r => Contiene(r, p));
+    }
+
+    private static string TipoCelda(int x, int y)
+    {
+        bool arriba = !EsRoca(x, y + 1), abajo = !EsRoca(x, y - 1);
+        bool izq = !EsRoca(x - 1, y), der = !EsRoca(x + 1, y);
+        return arriba ? (izq ? "esq_ai" : der ? "esq_ad" : "arriba")
+             : abajo ? (izq ? "esq_bi" : der ? "esq_bd" : "abajo")
+             : izq && der ? "der" : izq ? "izq" : der ? "der" : "centro";
     }
 
     private static bool EsHielo(int x, int y) => Hielo.Any(r => Contiene(r, new Vector2(x + 0.5f, y + 0.5f)));
@@ -289,6 +314,7 @@ public static class CrearNivelNieve
                      : izq ? "izq" : der ? "der" : "centro";
             tm.SetTile(new Vector3Int(x, y, 0), EsHielo(x, y) ? hielo[n] : nieve[n]);
         }
+
         // Relleno bajo lo pintado (por si se asoma la camara en los pozos).
         Sprite centro = S(1, 13);
         Transform relleno = Hijo(nivel, "RellenoProfundo");
@@ -299,24 +325,18 @@ public static class CrearNivelNieve
                 sr.color = new Color(0.12f, 0.1f, 0.09f);
             }
 
-        // Colisiones: una caja por rectangulo, en la capa Ground. El hielo, con SueloHielo.
+        // Colisiones: las pone el propio Tilemap (cada casilla pintada es suelo),
+        // asi lo que se pinte a mano con la Tile Palette ya se puede pisar. Las
+        // casillas se funden en una sola forma para que no haya tropiezos entre ellas.
         int capa = LayerMask.NameToLayer("Ground");
-        Transform colis = Hijo(nivel, "Colisiones");
-        foreach (RectInt r in Roca)
-        {
-            GameObject go = new GameObject("Roca");
-            go.layer = capa;
-            go.transform.SetParent(colis);
-            go.transform.position = r.center;
-            go.AddComponent<BoxCollider2D>().size = r.size;
-        }
+        PaletaNieve.PonerColisionTilemap(tm, capa);
+        // El hielo patina por su tile (SueloHielo.EsResbaladizo); aqui solo van sus brillos.
+        Transform colis = Hijo(nivel, "BrillosHielo");
         foreach (RectInt r in Hielo)
         {
             GameObject go = new GameObject("Hielo");
-            go.layer = capa;
             go.transform.SetParent(colis);
             go.transform.position = r.center;
-            go.AddComponent<BoxCollider2D>().size = r.size;
             SueloHielo sh = go.AddComponent<SueloHielo>();
             // Brillos que corren por la superficie del hielo.
             var brillos = new List<SpriteRenderer>();
@@ -334,6 +354,34 @@ public static class CrearNivelNieve
             }
             sh.PonerBrillos(brillos.ToArray());
         }
+    }
+
+    // Una imagen suelta como sprite unico, pixel art, con su pivote.
+    private static Sprite SpriteSuelto(string ruta, float ppu, Vector2 pivote)
+    {
+        AssetDatabase.ImportAsset(ruta);
+        TextureImporter ti = AssetImporter.GetAtPath(ruta) as TextureImporter;
+        if (ti == null) { Debug.LogWarning("[Nieve] No encuentro " + ruta); return null; }
+        TextureImporterSettings st = new TextureImporterSettings();
+        ti.ReadTextureSettings(st);
+        bool ok = ti.textureType == TextureImporterType.Sprite && ti.spriteImportMode == SpriteImportMode.Single
+                  && Mathf.Approximately(ti.spritePixelsPerUnit, ppu) && ti.filterMode == FilterMode.Point
+                  && st.spriteAlignment == (int)SpriteAlignment.Custom && Vector2.Distance(st.spritePivot, pivote) < 0.001f;
+        if (!ok)
+        {
+            ti.textureType = TextureImporterType.Sprite;
+            ti.spriteImportMode = SpriteImportMode.Single;
+            ti.ReadTextureSettings(st);
+            st.spriteAlignment = (int)SpriteAlignment.Custom;
+            st.spritePivot = pivote;
+            ti.SetTextureSettings(st);
+            ti.spritePixelsPerUnit = ppu;
+            ti.filterMode = FilterMode.Point;
+            ti.textureCompression = TextureImporterCompression.Uncompressed;
+            ti.mipmapEnabled = false;
+            ti.SaveAndReimport();
+        }
+        return AssetDatabase.LoadAssetAtPath<Sprite>(ruta);
     }
 
     private static Sprite blancoAsset;
@@ -376,7 +424,7 @@ public static class CrearNivelNieve
         }
         t.sprite = s;
         t.color = color;
-        t.colliderType = Tile.ColliderType.None;
+        t.colliderType = Tile.ColliderType.Grid;
         t.flags = TileFlags.LockColor;
         EditorUtility.SetDirty(t);
         return t;
@@ -429,7 +477,11 @@ public static class CrearNivelNieve
     private static void ConstruirDecoracion(Transform nivel, System.Random azar)
     {
         Transform padre = Hijo(nivel, "Decoracion");
-        Sprite[] pinos = Sprites(Gandalf + "Pine Trees.png").Where(s => s.rect.x > 440 && s.rect.height > 120).ToArray();
+        // El pino nevado del pack, sin el trozo de tronco vecino que se colaba en
+        // su recorte (se veia como un tronco flotando).
+        Sprite pinoLimpio = SpriteSuelto(CarpetaTiles + "/PinoNevado.png", 32f, new Vector2(0.5f, 0f));
+        Sprite[] pinos = pinoLimpio != null ? new[] { pinoLimpio }
+                       : Sprites(Gandalf + "Pine Trees.png").Where(s => s.rect.x > 440 && s.rect.height > 120).ToArray();
         Sprite[] decor = Sprites(Gandalf + "Decor.png");
         float Alto(Sprite s) => 544f - (s.rect.y + s.rect.height * 0.5f);
         Sprite[] rocasNieve = decor.Where(s => s.rect.center.x > 190 && s.rect.center.x < 300 && Alto(s) > 145 && Alto(s) < 260).ToArray();
@@ -447,6 +499,8 @@ public static class CrearNivelNieve
                 if (!EsRoca(Mathf.FloorToInt(x), Mathf.FloorToInt(y) - 1) || EsRoca(Mathf.FloorToInt(x), Mathf.FloorToInt(y))) continue;
                 if (Hogueras.Any(h => Mathf.Abs(h.x - x) < 2.5f)) continue;
                 double tirada = azar.NextDouble();
+                // Pinos no bajo techo (tuneles, el escondite): atravesarian la roca.
+                if (tirada < 0.22 && Enumerable.Range(1, 7).Any(k => EsRoca(Mathf.FloorToInt(x), Mathf.FloorToInt(y) + k))) continue;
                 if (tirada < 0.22 && pinos.Length > 0)
                     PiezaApoyada(padre, "Pino", pinos[azar.Next(pinos.Length)], x, y - 0.05f, 4.5f + (float)azar.NextDouble() * 2f, "Middleground", 0, new Color(0.85f, 0.9f, 1f));
                 else if (tirada < 0.4 && rocasNieve.Length > 0)
@@ -688,17 +742,20 @@ public static class CrearNivelNieve
         cofre.transform.position = new Vector3(326f, 3f, 0f);
         cofre.AddComponent<BoxCollider2D>().size = new Vector2(1.2f, 1.2f);
         cofre.GetComponent<BoxCollider2D>().offset = new Vector2(0f, 0.6f);
-        Sprite cerrado = PrimerSprite(Enemigos + "Enemigo_MonsterPack2/Mimic/Idle_closed.png");
+        // Las dos imagenes del cofre son un solo fotograma de 146x146 con el cofre
+        // en medio; el pivote va en la base del cofre (fila 82 desde arriba).
+        Sprite cerrado = SpriteSuelto(Enemigos + "Enemigo_MonsterPack2/Mimic/Idle_closed.png", 24f, new Vector2(0.503f, 63f / 146f));
+        Sprite abierto = SpriteSuelto(Enemigos + "Enemigo_MonsterPack2/Mimic/idle_open.png", 24f, new Vector2(0.503f, 63f / 146f));
         if (cerrado != null)
         {
             SpriteRenderer v = new GameObject("Visual").AddComponent<SpriteRenderer>();
             v.transform.SetParent(cofre.transform, false);
             v.sprite = cerrado;
-            v.transform.localScale = Vector3.one * 0.75f;
-            v.transform.localPosition = new Vector3(0f, -v.bounds.min.y + cofre.transform.position.y - 0.35f, 0f);
+            v.transform.localPosition = Vector3.zero;
             v.sortingLayerName = "Items";
             CofreAlmas ca = cofre.AddComponent<CofreAlmas>();
             Asignar(ca, "visual", v);
+            if (abierto != null) Asignar(ca, "abierto", abierto);
         }
         else cofre.AddComponent<CofreAlmas>();
     }
@@ -1275,7 +1332,6 @@ public static class CrearNivelNieve
     // Musica por fases en la arena del Espectro Carmesi, sin regenerar la cueva:
     // fase 1 la parte contenida de "The Final Revalation" (0-156 s) y fase 2 su
     // climax final (desde 328 s). Tambien la pista de su debilidad (ahora sagrada).
-    [MenuItem("Warrior/Actualizar jefe de la Cueva")]
     public static void ActualizarCueva()
     {
         const string cueva = "Assets/Scenes/Nivel Cueva.unity";
@@ -1361,9 +1417,11 @@ public static class CrearNivelNieve
 
     private static void AnadirABuild()
     {
+        // Al regenerar, la escena cambia de identificador: se rehace su entrada.
         List<EditorBuildSettingsScene> escenas = EditorBuildSettings.scenes.ToList();
-        if (escenas.Any(s => s.path == Destino)) return;
-        escenas.Add(new EditorBuildSettingsScene(Destino, true));
+        int i = escenas.FindIndex(s => s.path == Destino);
+        if (i >= 0) escenas[i] = new EditorBuildSettingsScene(Destino, true);
+        else escenas.Add(new EditorBuildSettingsScene(Destino, true));
         EditorBuildSettings.scenes = escenas.ToArray();
     }
 

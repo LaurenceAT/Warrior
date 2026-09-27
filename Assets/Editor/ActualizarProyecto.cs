@@ -1,0 +1,51 @@
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+
+// Para la linea de comandos: aplica los cambios de esta ronda sin regenerar la
+// cueva (sonidos nuevos, player, nivel nevado, portales y configuraciones).
+public static class ActualizarProyecto
+{
+    public static void Todo()
+    {
+        ConfigurarRecursosRPG.Configurar();
+        ConfigurarPlayer.Configurar();
+        CrearNivelNieve.Crear();
+        Portales();
+        Ajustes();
+    }
+
+    // Los numeros de la subida de nivel, en un archivo editable.
+    public static void Ajustes()
+    {
+        const string ruta = "Assets/Resources/AjustesProgreso.asset";
+        if (AssetDatabase.LoadAssetAtPath<AjustesProgreso>(ruta) != null) return;
+        AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<AjustesProgreso>(), ruta);
+        AssetDatabase.SaveAssets();
+    }
+
+    // Segunda ronda: nieve lista para pintar y borrado aprobado.
+    // Tercera ronda: tiles automaticos al dia y colisiones y bordes rehechos.
+    public static void Ronda3()
+    {
+        PaletaNieve.CrearPaleta();
+        NivelesPintables.ArreglarColisiones();
+    }
+
+    public static void Ronda2()
+    {
+        PaletaNieve.Preparar();
+        LimpiezaAprobada.Borrar();
+    }
+
+    public static void Portales()
+    {
+        var cueva = EditorSceneManager.OpenScene(ConfigNivelEditor.EscenaCueva);
+        ConfigurarPortales.Instalar(cueva);
+        EditorSceneManager.MarkSceneDirty(cueva);
+        EditorSceneManager.SaveScene(cueva);
+        ConfigNivelEditor.Asegurar(ConfigNivelEditor.EscenaCueva, ConfigNivelEditor.RutaCueva, ConfigNivel.TipoTerreno.Piezas);
+        AssetDatabase.SaveAssets();
+        Debug.Log("[Actualizar] Listo.");
+    }
+}

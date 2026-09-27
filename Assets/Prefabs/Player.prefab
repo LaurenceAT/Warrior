@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 6754855231493566586}
   - component: {fileID: 6245690450504146653}
   - component: {fileID: 8778370368055672439}
+  - component: {fileID: 4414078997526715646}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -273,6 +274,10 @@ MonoBehaviour:
   momentoCurar: 0.55
   frenoAlBeber: 0.35
   estadoBeber: UsarObjeto
+  estadoImbuir: UsarObjeto
+  drenajeOscuro: 0.2
+  aceleracionHielo: 10
+  frenadaHielo: 3.5
   swordLauncherProfile: 7
   swordLauncherState: SwordLauncher
   blockState: Block
@@ -840,6 +845,7 @@ MonoBehaviour:
     cantidad: 1
     fps: 10
     bucle: 1
+    alReves: 0
     pivote: {x: 0.5, y: 0.4}
     pixelesPorUnidad: 28
     fotogramas: []
@@ -859,6 +865,7 @@ MonoBehaviour:
     cantidad: 1
     fps: 10
     bucle: 1
+    alReves: 0
     pivote: {x: 0.5, y: 0.4}
     pixelesPorUnidad: 28
     fotogramas: []
@@ -878,6 +885,7 @@ MonoBehaviour:
     cantidad: 8
     fps: 18
     bucle: 0
+    alReves: 0
     pivote: {x: 0.5, y: 0.5}
     pixelesPorUnidad: 64
     fotogramas:
@@ -896,6 +904,43 @@ MonoBehaviour:
       height: 0
     pivotes: []
   colorImpacto: {r: 0.75, g: 0.92, b: 1, a: 1}
+--- !u!114 &4414078997526715646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 25321102597521225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be147965981dc39419ce83765c2885a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activado: 1
+  alcanceSobreCabeza: 0.8
+  margenBajo: 0.35
+  distanciaPared: 0.4
+  velocidadSubidaMaxima: 3
+  espera: 0.25
+  altoCabeza: 0.42
+  altoPies: 0.625
+  medioAncho: 0.24
+  colgadoBajoBorde: 0.6
+  duracionAgarre: 0.1
+  duracionSubida: 0.26
+  fotogramasAgarre:
+  - {fileID: 21300000, guid: 1988c5154f3e2ca48b0e1e0d638165e7, type: 3}
+  - {fileID: 21300000, guid: 025a2dc4a896f0d449d97e1638447884, type: 3}
+  - {fileID: 21300000, guid: 8a0e5d60badf0d64eaa5061a3acd9328, type: 3}
+  - {fileID: 21300000, guid: b02913aa1ab66314ab4ee90b4b4da163, type: 3}
+  fotogramasSubida:
+  - {fileID: 21300000, guid: 8c50eacbae8c6d444b7cbaf381ac0909, type: 3}
+  - {fileID: 21300000, guid: a7177eb9ce7e459499d33588430ef2cd, type: 3}
+  - {fileID: 21300000, guid: eff94cfcbd298e14bb9b13f865529d13, type: 3}
+  - {fileID: 21300000, guid: 3735cae1ea7095a4e81ff252e3ce715c, type: 3}
+  - {fileID: 21300000, guid: ef1fb18abfe96b942a7e05bffbc36c7f, type: 3}
+  sonidoAgarre: aterrizaje
+  sonidoSubida: esfuerzo
 --- !u!1 &306997544179117387
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,6 +15,9 @@ public class DatosNivel : MonoBehaviour
 {
     private enum Estado { Explorando, Combate, Jefe }
 
+    [Tooltip("Archivo de configuracion del nivel (Assets/Data/Niveles). Si esta puesto, su musica, " +
+             "ambiente, sonidos y frases sustituyen a los de aqui abajo.")]
+    [SerializeField] private ConfigNivel config;
     [SerializeField] private string[] frasesMuerte;
     // Musica de combate contra enemigos comunes.
     [SerializeField] private AudioClip musica;
@@ -39,6 +42,16 @@ public class DatosNivel : MonoBehaviour
 
     private void Awake()
     {
+        // Con archivo de configuracion, lo que diga el archivo manda.
+        if (config != null)
+        {
+            if (config.frasesMuerte != null && config.frasesMuerte.Length > 0) frasesMuerte = config.frasesMuerte;
+            musica = config.musicaCombate;
+            volumenMusica = config.volumenCombate;
+            ambiente = config.ambiente;
+            volumenAmbiente = config.volumenAmbiente;
+            RecursosRPG.SonidosNivel = config.sonidos;
+        }
         PantallaMuerte.FrasesNivel = frasesMuerte;
     }
 
@@ -62,6 +75,7 @@ public class DatosNivel : MonoBehaviour
     private void OnDisable()
     {
         if (PantallaMuerte.FrasesNivel == frasesMuerte) PantallaMuerte.FrasesNivel = null;
+        if (config != null && RecursosRPG.SonidosNivel == config.sonidos) RecursosRPG.SonidosNivel = null;
         FactorAmbiente = 1f;
     }
 

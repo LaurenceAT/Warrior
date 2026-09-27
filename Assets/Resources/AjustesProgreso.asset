@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87ab94db8d85a4f4bb1c9dac95ce5a42, type: 3}
+  m_Name: AjustesProgreso
+  m_EditorClassIdentifier: 
+  costeBase: 150
+  costePorNivel: 70
+  costeCurva: 14
+  nivelMaximo: 20
+  vidaBase: 100
+  vidaPorNivel: 10
+  estaminaBase: 100
+  estaminaPorNivel: 8
+  manaBase: 60
+  manaPorNivel: 10
+  resistenciaPorNivel: 0.03
+  resistenciaMaxima: 0.45

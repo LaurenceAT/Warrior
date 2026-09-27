@@ -1,0 +1,118 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a9dcba84fde274db80f321cf4b4b26, type: 3}
+  m_Name: Config Nivel Nieve
+  m_EditorClassIdentifier: 
+  tipoTerreno: 0
+  conjuntosTiles:
+  - nombre: Suelo nevado
+    color: {r: 1, g: 1, b: 1, a: 1}
+    tiles:
+    - {fileID: 11400000, guid: ecbbd215e0f458e4a8c3bb6805c306da, type: 2}
+    - {fileID: 11400000, guid: 5a9142d5611665842929dce329540211, type: 2}
+    - {fileID: 11400000, guid: 21165c66022148447ba0d39624665f57, type: 2}
+    - {fileID: 11400000, guid: 304f3f25d161b96458aaaa3acccf0351, type: 2}
+    - {fileID: 11400000, guid: 88c5cb913b6e6504abcc8427236fe1f5, type: 2}
+    - {fileID: 11400000, guid: 6a61e4099340d1548b6a733fef326e19, type: 2}
+    - {fileID: 11400000, guid: 3a3647934fd92854f86df72fcfa9bcd5, type: 2}
+    - {fileID: 11400000, guid: c2f1e460befc4744ab540e40f7af8d39, type: 2}
+    - {fileID: 11400000, guid: 468a13a62181eff4ea5eb79deef45c15, type: 2}
+    sprites:
+    - {fileID: 588779281632972243, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+    - {fileID: 1158586993178730860, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+    - {fileID: 6819705554842874996, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+    - {fileID: -8523408621843069300, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+    - {fileID: 71182217855533118, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+    - {fileID: -1679380998211241320, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+    - {fileID: 1227305744407349699, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+    - {fileID: 3463702519540379182, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+    - {fileID: 16328628837070797, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+  - nombre: Hielo resbaladizo
+    color: {r: 0.62, g: 0.86, b: 1, a: 1}
+    tiles:
+    - {fileID: 11400000, guid: a108a30cf33ddcb4a98f9256d94ea6e3, type: 2}
+    - {fileID: 11400000, guid: 36185c06b5231cc4b8b07f017d427ee1, type: 2}
+    - {fileID: 11400000, guid: 723d093f055069c40b34e29f427cc603, type: 2}
+    - {fileID: 11400000, guid: ca929c5f2bb580441836eda8cdd64fd5, type: 2}
+    - {fileID: 11400000, guid: f0454e9ce1bfab141a5ca5490074cfa7, type: 2}
+    - {fileID: 11400000, guid: 7eea2039ce525a44cb87b62c04002f46, type: 2}
+    - {fileID: 11400000, guid: 8b4611243eccdbb4595f581d462ea9ed, type: 2}
+    - {fileID: 11400000, guid: 15aab901c1b96484da67fbf6d7c278fd, type: 2}
+    - {fileID: 11400000, guid: 08d26124e55f96741955832e83755e26, type: 2}
+    sprites:
+    - {fileID: 588779281632972243, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+    - {fileID: 1158586993178730860, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+    - {fileID: 6819705554842874996, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+    - {fileID: -8523408621843069300, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+    - {fileID: 71182217855533118, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+    - {fileID: -1679380998211241320, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+    - {fileID: 1227305744407349699, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+    - {fileID: 3463702519540379182, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+    - {fileID: 16328628837070797, guid: 97faca9d848603f48a9bdafce2c89aa2, type: 3}
+  losas: []
+  pilares: []
+  relleno: {fileID: 0}
+  colorPiezas: {r: 1, g: 1, b: 1, a: 1}
+  altoFondo: 19
+  seguimientoVertical: 0.92
+  capasFondo:
+  - nombre: sky
+    imagen: {fileID: 3836954968553550457, guid: 60a4a0fb32d034a43b6700cc75fc0d6f, type: 3}
+    seguimiento: 0.99
+    color: {r: 1, g: 1, b: 1, a: 1}
+    desplazamientoY: 0
+  - nombre: 4_BG_mts
+    imagen: {fileID: -513187804234586371, guid: 6ff024129bfcb924ebb2315e22d20107, type: 3}
+    seguimiento: 0.93
+    color: {r: 0.9, g: 0.93, b: 1, a: 1}
+    desplazamientoY: 0
+  - nombre: 3_ice_castle
+    imagen: {fileID: 8001444471017366397, guid: baa967f4a8e2103469831179a8e3b8e1, type: 3}
+    seguimiento: 0.86
+    color: {r: 1, g: 1, b: 1, a: 1}
+    desplazamientoY: 0
+  - nombre: fog
+    imagen: {fileID: -1766006069671443837, guid: be6e5ff263d84cf4a923927a783a1363, type: 3}
+    seguimiento: 0.8
+    color: {r: 1, g: 1, b: 1, a: 0.6}
+    desplazamientoY: 0
+  - nombre: 2_foreground_mts
+    imagen: {fileID: -3885474361344544515, guid: f4e7ee6b40017a14498a2ddb4974c7cb, type: 3}
+    seguimiento: 0.72
+    color: {r: 0.85, g: 0.9, b: 1, a: 1}
+    desplazamientoY: 0
+  - nombre: 1_foreground_mts
+    imagen: {fileID: -4649898672351898750, guid: c48be256da3a7e44389d3d200b4c5663, type: 3}
+    seguimiento: 0.6
+    color: {r: 0.8, g: 0.86, b: 0.95, a: 1}
+    desplazamientoY: 0
+  musicaCombate: {fileID: 8300000, guid: de5b8e683ab69034ca2ecf2561df5f55, type: 3}
+  volumenCombate: 0.3
+  ambiente: {fileID: 8300000, guid: 068a269db825447448d9ea8a539974b8, type: 3}
+  volumenAmbiente: 0.35
+  jefeFase1:
+    pista: {fileID: 8300000, guid: 88b084e6468367d49b141f1874a01396, type: 3}
+    volumen: 0.6
+    inicio: 0
+    bucle: {x: 6, y: 102}
+  jefeFase2:
+    pista: {fileID: 8300000, guid: 261d1bdb53302314a9a67d0cdbfb8458, type: 3}
+    volumen: 0.62
+    inicio: 60
+    bucle: {x: 60, y: 290}
+  sonidos: []
+  frasesMuerte:
+  - "El fr\xEDo no perdona a los que dudan."
+  - "La nieve cubrir\xE1 tus huellas... y tu cuerpo."
+  - "Lev\xE1ntate. La ventisca a\xFAn no ha terminado contigo."
+  - "Algo en la bruma se r\xEDe de tu ca\xEDda."
+  - "Hasta el hielo m\xE1s firme se quiebra. T\xFA tambi\xE9n."

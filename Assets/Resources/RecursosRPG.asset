@@ -507,6 +507,26 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 31ba1609f944ceb42b5e9f08cca50aa9, type: 3}
     volumen: 0.8
     variacionTono: 0.06
+  - clave: secreto_descubierto
+    clips:
+    - {fileID: 8300000, guid: 25314be8c42244449a36750b943bff87, type: 3}
+    volumen: 0.6
+    variacionTono: 0.06
+  - clave: portal_entrar
+    clips:
+    - {fileID: 8300000, guid: 4fe73f76117837340a262046347c0ab6, type: 3}
+    volumen: 0.75
+    variacionTono: 0.06
+  - clave: portal_salir
+    clips:
+    - {fileID: 8300000, guid: 2aa40ce762458be4399deeb40fd60fd1, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: portal_zumbido
+    clips:
+    - {fileID: 8300000, guid: d857e16a98894a14494c9f6feda69d80, type: 3}
+    volumen: 0.35
+    variacionTono: 0.06
   iconos:
   - clave: elemento_0
     sprite: {fileID: 21300000, guid: 28a75b8a44d70764385db2d1e0838577, type: 3}

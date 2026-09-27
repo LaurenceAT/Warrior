@@ -124,7 +124,8 @@ public static class CrearNivelCueva
 
     // ------------------------------------------------------------------ Menu
 
-    [MenuItem("Warrior/Crear nivel Cueva")]
+    // Retirado del menu: las escenas ya se editan a mano (y se pintan con la Tile
+    // Palette). Regenerar el nivel borraria esos cambios. Se conserva el codigo.
     public static void Crear()
     {
         if (File.Exists(Destino) && !Application.isBatchMode &&
@@ -164,9 +165,11 @@ public static class CrearNivelCueva
         ColocarPlayerYCamara(escena);
         ConstruirArena(nivel, escena);
         IluminarTodasLasCapas(escena);
+        ConfigurarPortales.Instalar(escena);
 
         EditorSceneManager.MarkSceneDirty(escena);
         EditorSceneManager.SaveScene(escena);
+        ConfigNivelEditor.Asegurar(Destino, ConfigNivelEditor.RutaCueva, ConfigNivel.TipoTerreno.Piezas);
         AnadirABuild();
 
         Debug.Log("[Cueva] Nivel generado en " + Destino);
@@ -323,9 +326,11 @@ public static class CrearNivelCueva
 
     private static void AnadirABuild()
     {
+        // Al regenerar, la escena cambia de identificador: se rehace su entrada.
         List<EditorBuildSettingsScene> escenas = EditorBuildSettings.scenes.ToList();
-        if (escenas.Any(s => s.path == Destino)) return;
-        escenas.Add(new EditorBuildSettingsScene(Destino, true));
+        int i = escenas.FindIndex(s => s.path == Destino);
+        if (i >= 0) escenas[i] = new EditorBuildSettingsScene(Destino, true);
+        else escenas.Add(new EditorBuildSettingsScene(Destino, true));
         EditorBuildSettings.scenes = escenas.ToArray();
     }
 

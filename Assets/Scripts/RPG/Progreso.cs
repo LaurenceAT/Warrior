@@ -11,7 +11,10 @@ public static class Progreso
 {
     public enum Estadistica { Vida = 0, Estamina = 1, Mana = 2, ResHechizos = 3, ResGolpes = 4 }
     public const int NumEstadisticas = 5;
-    public const int NivelMaximo = 20;
+    // Los numeros (costes, lo que sube cada estadistica) estan en
+    // Resources/AjustesProgreso, editables en el Inspector.
+    public static int NivelMaximo => A.nivelMaximo;
+    private static AjustesProgreso A => AjustesProgreso.Get();
 
     public static event Action AlCambiarAlmas;
     public static event Action AlSubirNivel;
@@ -41,28 +44,29 @@ public static class Progreso
         get
         {
             int n = NivelTotal - 1;
-            return Mathf.RoundToInt(150f + 70f * n + 14f * n * n);
+            return Mathf.RoundToInt(A.costeBase + A.costePorNivel * n + A.costeCurva * n * n);
         }
     }
 
     // ------------------------------------------------------------------ Valores
 
-    public static int VidaMax => 100 + 10 * Nivel(Estadistica.Vida);
-    public static float EstaminaMax => 100f + 8f * Nivel(Estadistica.Estamina);
-    public static float ManaMax => 60f + 10f * Nivel(Estadistica.Mana);
-    // Fraccion del dano que se quita (0.03 por nivel, hasta 0.45).
-    public static float ResHechizos => Mathf.Min(0.45f, 0.03f * Nivel(Estadistica.ResHechizos));
-    public static float ResGolpes => Mathf.Min(0.45f, 0.03f * Nivel(Estadistica.ResGolpes));
+    public static int VidaMax => A.vidaBase + A.vidaPorNivel * Nivel(Estadistica.Vida);
+    public static float EstaminaMax => A.estaminaBase + A.estaminaPorNivel * Nivel(Estadistica.Estamina);
+    public static float ManaMax => A.manaBase + A.manaPorNivel * Nivel(Estadistica.Mana);
+    // Fraccion del dano que se quita (por defecto 0.03 por nivel, hasta 0.45).
+    public static float ResHechizos => Resistencia(Nivel(Estadistica.ResHechizos));
+    public static float ResGolpes => Resistencia(Nivel(Estadistica.ResGolpes));
+    private static float Resistencia(int nivel) => Mathf.Min(A.resistenciaMaxima, A.resistenciaPorNivel * nivel);
 
     // Valor de una estadistica a un nivel dado (para la vista previa del menu).
     public static string Describir(Estadistica e, int nivel)
     {
         switch (e)
         {
-            case Estadistica.Vida: return (100 + 10 * nivel).ToString();
-            case Estadistica.Estamina: return Mathf.RoundToInt(100f + 8f * nivel).ToString();
-            case Estadistica.Mana: return Mathf.RoundToInt(60f + 10f * nivel).ToString();
-            default: return Mathf.RoundToInt(Mathf.Min(0.45f, 0.03f * nivel) * 100f) + "%";
+            case Estadistica.Vida: return (A.vidaBase + A.vidaPorNivel * nivel).ToString();
+            case Estadistica.Estamina: return Mathf.RoundToInt(A.estaminaBase + A.estaminaPorNivel * nivel).ToString();
+            case Estadistica.Mana: return Mathf.RoundToInt(A.manaBase + A.manaPorNivel * nivel).ToString();
+            default: return Mathf.RoundToInt(Resistencia(nivel) * 100f) + "%";
         }
     }
 

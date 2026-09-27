@@ -42,11 +42,25 @@ public static class ConfigurarRecursosRPG
             AssetDatabase.CreateAsset(r, Ruta);
         }
 
-        r.sonidos = Sonidos();
-        r.iconos = IconosElegidos();
-        r.tajosElemento = TajosPorElemento();
-        r.impactoElemental = Clip("impacto_elemental", Pack + "EFECTOS DE ATAQUE DEL PLAYER/Efecto_Impactos/VFX1/B&W/Frames", 22f, false, 64f, new Vector2(0.5f, 0.5f));
-        r.fxCongelado = Clip("congelado", Pack + "EFECTOS DE ATAQUE DEL PLAYER/Efecto_CaballeroHielo/VFX3/Frames", 16f, false, 64f, new Vector2(0.5f, 0.12f));
+        // Lo que ya hay en el asset se respeta: si se cambio un sonido o un icono
+        // a mano en el Inspector, se queda. Solo se anaden las claves que falten.
+        foreach (RecursosRPG.GrupoSonido g in Sonidos())
+        {
+            RecursosRPG.GrupoSonido previo = r.sonidos.FirstOrDefault(s => s != null && s.clave == g.clave);
+            if (previo == null) r.sonidos.Add(g);
+            else if (previo.clips == null || previo.clips.Length == 0 || previo.clips.All(c => c == null)) previo.clips = g.clips;
+        }
+        foreach (RecursosRPG.EntradaIcono i in IconosElegidos())
+        {
+            RecursosRPG.EntradaIcono previo = r.iconos.FirstOrDefault(s => s != null && s.clave == i.clave);
+            if (previo == null) r.iconos.Add(i);
+            else if (previo.sprite == null) previo.sprite = i.sprite;
+        }
+        if (r.tajosElemento == null || r.tajosElemento.Length == 0) r.tajosElemento = TajosPorElemento();
+        if (r.impactoElemental == null || r.impactoElemental.cantidad == 0)
+            r.impactoElemental = Clip("impacto_elemental", Pack + "EFECTOS DE ATAQUE DEL PLAYER/Efecto_Impactos/VFX1/B&W/Frames", 22f, false, 64f, new Vector2(0.5f, 0.5f));
+        if (r.fxCongelado == null || r.fxCongelado.cantidad == 0)
+            r.fxCongelado = Clip("congelado", Pack + "EFECTOS DE ATAQUE DEL PLAYER/Efecto_CaballeroHielo/VFX3/Frames", 16f, false, 64f, new Vector2(0.5f, 0.12f));
         r.shaderAura = Shader.Find("Sprites/Aura");
         EditorUtility.SetDirty(r);
         AssetDatabase.SaveAssets();
@@ -78,6 +92,10 @@ public static class ConfigurarRecursosRPG
         G("esfuerzo", 0.45f, N(CE + "Voicelines/Action Grunts/", "VOXEfrt_ActionGrunt_HoveAud_SwordCombat_{0:00}.wav", 1, 7, 23, 29));
         G("muerte_player", 0.8f, Oscuro + "dark_spell_cast_curse_02.ogg");
         G("esquiva", 0.5f, N(Viento, "wind_spell_cast_air_short_whoosh_{0:00}.ogg", 1, 2, 3));
+        G("secreto_descubierto", 0.6f, Sagrado + "Holy_spell_heal_dust_cast_evolving_02.ogg");
+        G("portal_entrar", 0.75f, Oscuro + "dark_spell_cast_warp_0-001.ogg");
+        G("portal_salir", 0.7f, Oscuro + "dark_spell_cast_warp_0-003.ogg");
+        G("portal_zumbido", 0.35f, Viento + "wind_spell_cast_air_rise_cut_01.ogg");
         G("salto", 0.5f, FG + "SFX/Footsteps/Dirt/Dirt Jump.ogg");
         G("aterrizaje", 0.55f, FG + "SFX/Footsteps/Dirt/Dirt Land.ogg");
         G("pasos", 0.35f, N(FG + "SFX/Footsteps/Dirt/", "Dirt Walk {0}.ogg", 1, 2, 3, 4, 5));

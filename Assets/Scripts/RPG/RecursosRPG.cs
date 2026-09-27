@@ -51,8 +51,15 @@ public class RecursosRPG : ScriptableObject
         return instancia;
     }
 
+    // Sonidos propios del nivel cargado (ConfigNivel): mandan sobre los de aqui.
+    public static List<GrupoSonido> SonidosNivel;
+
     public GrupoSonido Sonido(string clave)
     {
+        if (SonidosNivel != null)
+            foreach (GrupoSonido n in SonidosNivel)
+                if (n != null && n.clave == clave && n.clips != null && n.clips.Length > 0) return n;
+
         if (porClave == null)
         {
             porClave = new Dictionary<string, GrupoSonido>();
