@@ -1,0 +1,1859 @@
+fileFormatVersion: 2
+guid: 94ca3632020a7b241a9ebbea13e612ec
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 988341884226146928
+    second: plants-crops_sheet_0
+  - first:
+      213: 3712361207992121410
+    second: plants-crops_sheet_1
+  - first:
+      213: 7422196403688323775
+    second: plants-crops_sheet_2
+  - first:
+      213: -42345415649625287
+    second: plants-crops_sheet_3
+  - first:
+      213: 3277210861988198477
+    second: plants-crops_sheet_4
+  - first:
+      213: 6032931953777001316
+    second: plants-crops_sheet_5
+  - first:
+      213: 3841882420599503611
+    second: plants-crops_sheet_6
+  - first:
+      213: 1878385313186355262
+    second: plants-crops_sheet_7
+  - first:
+      213: -2770021756586717209
+    second: plants-crops_sheet_8
+  - first:
+      213: -9211651105852281812
+    second: plants-crops_sheet_9
+  - first:
+      213: -1460406659677349785
+    second: plants-crops_sheet_10
+  - first:
+      213: 5904116789755940377
+    second: plants-crops_sheet_11
+  - first:
+      213: -7353700233125386487
+    second: plants-crops_sheet_12
+  - first:
+      213: 4480861305892705827
+    second: plants-crops_sheet_13
+  - first:
+      213: 1981515892233368967
+    second: plants-crops_sheet_14
+  - first:
+      213: 7068866009714169418
+    second: plants-crops_sheet_15
+  - first:
+      213: 8931024398996229252
+    second: plants-crops_sheet_16
+  - first:
+      213: 8116162454249473232
+    second: plants-crops_sheet_17
+  - first:
+      213: 569682857224821776
+    second: plants-crops_sheet_18
+  - first:
+      213: -1823396743201102262
+    second: plants-crops_sheet_19
+  - first:
+      213: 3246068914691944377
+    second: plants-crops_sheet_20
+  - first:
+      213: 1357002950931480826
+    second: plants-crops_sheet_21
+  - first:
+      213: 1980657923961415778
+    second: plants-crops_sheet_22
+  - first:
+      213: 4758915076929918783
+    second: plants-crops_sheet_23
+  - first:
+      213: -5577385080804679315
+    second: plants-crops_sheet_24
+  - first:
+      213: 5756877026464334318
+    second: plants-crops_sheet_25
+  - first:
+      213: 63007056005205324
+    second: plants-crops_sheet_26
+  - first:
+      213: 1296203855667321200
+    second: plants-crops_sheet_27
+  - first:
+      213: -6450821472203739071
+    second: plants-crops_sheet_28
+  - first:
+      213: -7890135520508126671
+    second: plants-crops_sheet_29
+  - first:
+      213: 4609310382285126631
+    second: plants-crops_sheet_30
+  - first:
+      213: 3652527852029401385
+    second: plants-crops_sheet_31
+  - first:
+      213: -4686604890092371022
+    second: plants-crops_sheet_32
+  - first:
+      213: -3724139901751286815
+    second: plants-crops_sheet_33
+  - first:
+      213: -891394063371576249
+    second: plants-crops_sheet_34
+  - first:
+      213: -1600514899077699193
+    second: plants-crops_sheet_35
+  - first:
+      213: -7925419096632196955
+    second: plants-crops_sheet_36
+  - first:
+      213: 9048279125038583138
+    second: plants-crops_sheet_37
+  - first:
+      213: -2375843979623694573
+    second: plants-crops_sheet_38
+  - first:
+      213: 6427125535438759831
+    second: plants-crops_sheet_39
+  - first:
+      213: -4245126063643579021
+    second: plants-crops_sheet_40
+  - first:
+      213: 8893854584069282047
+    second: plants-crops_sheet_41
+  - first:
+      213: -3959086844545201379
+    second: plants-crops_sheet_42
+  - first:
+      213: -477021055744372069
+    second: plants-crops_sheet_43
+  - first:
+      213: -8293107661187582849
+    second: plants-crops_sheet_44
+  - first:
+      213: 6757687832440127216
+    second: plants-crops_sheet_45
+  - first:
+      213: 923465003474600051
+    second: plants-crops_sheet_46
+  - first:
+      213: -3310455485394374896
+    second: plants-crops_sheet_47
+  - first:
+      213: 7308411305182146621
+    second: plants-crops_sheet_48
+  - first:
+      213: 2710553147003642725
+    second: plants-crops_sheet_49
+  - first:
+      213: 8387832004897420973
+    second: plants-crops_sheet_50
+  - first:
+      213: -722529972560842191
+    second: plants-crops_sheet_51
+  - first:
+      213: 3560361587939932499
+    second: plants-crops_sheet_52
+  - first:
+      213: -6728563250112701024
+    second: plants-crops_sheet_53
+  - first:
+      213: -2257121651233014177
+    second: plants-crops_sheet_54
+  - first:
+      213: -4705053922205300253
+    second: plants-crops_sheet_55
+  - first:
+      213: -4083995084347009505
+    second: plants-crops_sheet_56
+  - first:
+      213: -3386752122807948646
+    second: plants-crops_sheet_57
+  - first:
+      213: 7608146603853334152
+    second: plants-crops_sheet_58
+  - first:
+      213: 1349497065092496413
+    second: plants-crops_sheet_59
+  - first:
+      213: -8683341558964444524
+    second: plants-crops_sheet_60
+  - first:
+      213: -2413342820539958314
+    second: plants-crops_sheet_61
+  - first:
+      213: -1986261720291366176
+    second: plants-crops_sheet_62
+  - first:
+      213: -4540298619759519097
+    second: plants-crops_sheet_63
+  - first:
+      213: 2815806728545842693
+    second: plants-crops_sheet_64
+  - first:
+      213: 1495133682755243262
+    second: plants-crops_sheet_65
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: plants-crops_sheet_0
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 225
+        width: 23
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07290fd05bb47bd00800000000000000
+      internalID: 988341884226146928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_1
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 225
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2487f4889d4f48330800000000000000
+      internalID: 3712361207992121410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_2
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 225
+        width: 24
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fba360ffd40f00760800000000000000
+      internalID: 7422196403688323775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_3
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 225
+        width: 22
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93b765e911f896ff0800000000000000
+      internalID: -42345415649625287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_4
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 225
+        width: 18
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d48bbd26aedfa7d20800000000000000
+      internalID: 3277210861988198477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_5
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 226
+        width: 23
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4634bfae5a749b350800000000000000
+      internalID: 6032931953777001316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_6
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 226
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfab6a4d4bb115530800000000000000
+      internalID: 3841882420599503611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_7
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 227
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3898cf7d7d511a10800000000000000
+      internalID: 1878385313186355262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_8
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 193
+        width: 18
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ef8b8a73e7ee89d0800000000000000
+      internalID: -2770021756586717209
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_9
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 193
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2c27d8ef14a92080800000000000000
+      internalID: -9211651105852281812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_10
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 193
+        width: 18
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 768115e61e79bbbe0800000000000000
+      internalID: -1460406659677349785
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_11
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 193
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91e82dd50f2afe150800000000000000
+      internalID: 5904116789755940377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_12
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 195
+        width: 25
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 907aadb799862f990800000000000000
+      internalID: -7353700233125386487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_13
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 195
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3261789fd973f2e30800000000000000
+      internalID: 4480861305892705827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_14
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 196
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7857c599432cf7b10800000000000000
+      internalID: 1981515892233368967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_15
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 195
+        width: 19
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4698d1fe28a91260800000000000000
+      internalID: 7068866009714169418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_16
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 161
+        width: 16
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48c448e4f5f51fb70800000000000000
+      internalID: 8931024398996229252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_17
+      rect:
+        serializedVersion: 2
+        x: 40
+        y: 161
+        width: 16
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d407e830c662a070800000000000000
+      internalID: 8116162454249473232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_18
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 161
+        width: 16
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 01cd3835a8be7e700800000000000000
+      internalID: 569682857224821776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_19
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 161
+        width: 15
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a46e4e4a25ef1b6e0800000000000000
+      internalID: -1823396743201102262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_20
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 164
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9bfa6a0ca7a5c0d20800000000000000
+      internalID: 3246068914691944377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_21
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 165
+        width: 22
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af08d618efa05d210800000000000000
+      internalID: 1357002950931480826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_22
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 164
+        width: 18
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 268684b43e5bc7b10800000000000000
+      internalID: 1980657923961415778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_23
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 161
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3798a47c001b0240800000000000000
+      internalID: 4758915076929918783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_24
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 129
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d61e21bb1d52992b0800000000000000
+      internalID: -5577385080804679315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_25
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 131
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee18302872984ef40800000000000000
+      internalID: 5756877026464334318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_26
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 129
+        width: 17
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4d88876598dfd000800000000000000
+      internalID: 63007056005205324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_27
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 133
+        width: 22
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 079da850a8a0df110800000000000000
+      internalID: 1296203855667321200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_28
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 132
+        width: 19
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14075d78c041a76a0800000000000000
+      internalID: -6450821472203739071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_29
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 132
+        width: 18
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13adb6e3c8b908290800000000000000
+      internalID: -7890135520508126671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_30
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 131
+        width: 18
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ebff9b1f5f87ff30800000000000000
+      internalID: 4609310382285126631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_31
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 131
+        width: 21
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 929de60cab260b230800000000000000
+      internalID: 3652527852029401385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_32
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 97
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b38f63eea5d5feb0800000000000000
+      internalID: -4686604890092371022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_33
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 99
+        width: 26
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e3a14e9d72315cc0800000000000000
+      internalID: -3724139901751286815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_34
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 99
+        width: 26
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74c58d972d121a3f0800000000000000
+      internalID: -891394063371576249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_35
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 101
+        width: 22
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 789e0cedd24d9c9e0800000000000000
+      internalID: -1600514899077699193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_36
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 97
+        width: 18
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a004218251430290800000000000000
+      internalID: -7925419096632196955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_37
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 98
+        width: 21
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26dc184ace1f19d70800000000000000
+      internalID: 9048279125038583138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_38
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 97
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31f77c00d7e470fd0800000000000000
+      internalID: -2375843979623694573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_39
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 98
+        width: 24
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7976ba24f9cb13950800000000000000
+      internalID: 6427125535438759831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_40
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 65
+        width: 25
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37da5c536584615c0800000000000000
+      internalID: -4245126063643579021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_41
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 65
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff8dd6f5f915d6b70800000000000000
+      internalID: 8893854584069282047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_42
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 65
+        width: 18
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1b06f3bd7f7e09c0800000000000000
+      internalID: -3959086844545201379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_43
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 66
+        width: 22
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9299fd80e74169f0800000000000000
+      internalID: -477021055744372069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_44
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 65
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f74f7da5586f8ec80800000000000000
+      internalID: -8293107661187582849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_45
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 65
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0feb293a74128cd50800000000000000
+      internalID: 6757687832440127216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_46
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 65
+        width: 23
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 370cb96278ec0dc00800000000000000
+      internalID: 923465003474600051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_47
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 68
+        width: 23
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 01f235c8646ee02d0800000000000000
+      internalID: -3310455485394374896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_48
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 34
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d30b4d54c51bc6560800000000000000
+      internalID: 7308411305182146621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_49
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 33
+        width: 20
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56328ffd9b1dd9520800000000000000
+      internalID: 2710553147003642725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_50
+      rect:
+        serializedVersion: 2
+        x: 46
+        y: 56
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da6309f84c0976470800000000000000
+      internalID: 8387832004897420973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_51
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 52
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13230fd61de09f5f0800000000000000
+      internalID: -722529972560842191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_52
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 34
+        width: 24
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 359fa192002f86130800000000000000
+      internalID: 3560361587939932499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_53
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 33
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0add84c9f575f92a0800000000000000
+      internalID: -6728563250112701024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_54
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 33
+        width: 22
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5eb96321d71da0e0800000000000000
+      internalID: -2257121651233014177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_55
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 33
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e905edd26a44beb0800000000000000
+      internalID: -4705053922205300253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_56
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 33
+        width: 24
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f161e05db1cb257c0800000000000000
+      internalID: -4083995084347009505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_57
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 33
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9a6bb953e6dff0d0800000000000000
+      internalID: -3386752122807948646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_58
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 4
+        width: 20
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 886c5c9c601959960800000000000000
+      internalID: 7608146603853334152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_59
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 4
+        width: 20
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1c35464e606ab210800000000000000
+      internalID: 1349497065092496413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_60
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 4
+        width: 20
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 492a982cbd29e7780800000000000000
+      internalID: -8683341558964444524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_61
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 4
+        width: 20
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6dbf97cbd75128ed0800000000000000
+      internalID: -2413342820539958314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_62
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 4
+        width: 20
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0eaa3133d716f64e0800000000000000
+      internalID: -1986261720291366176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_63
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 4
+        width: 20
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78a990bf57e9df0c0800000000000000
+      internalID: -4540298619759519097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_64
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 4
+        width: 20
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50631230d41c31720800000000000000
+      internalID: 2815806728545842693
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: plants-crops_sheet_65
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 3
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efc0954b928cfb410800000000000000
+      internalID: 1495133682755243262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      plants-crops_sheet_0: 988341884226146928
+      plants-crops_sheet_1: 3712361207992121410
+      plants-crops_sheet_10: -1460406659677349785
+      plants-crops_sheet_11: 5904116789755940377
+      plants-crops_sheet_12: -7353700233125386487
+      plants-crops_sheet_13: 4480861305892705827
+      plants-crops_sheet_14: 1981515892233368967
+      plants-crops_sheet_15: 7068866009714169418
+      plants-crops_sheet_16: 8931024398996229252
+      plants-crops_sheet_17: 8116162454249473232
+      plants-crops_sheet_18: 569682857224821776
+      plants-crops_sheet_19: -1823396743201102262
+      plants-crops_sheet_2: 7422196403688323775
+      plants-crops_sheet_20: 3246068914691944377
+      plants-crops_sheet_21: 1357002950931480826
+      plants-crops_sheet_22: 1980657923961415778
+      plants-crops_sheet_23: 4758915076929918783
+      plants-crops_sheet_24: -5577385080804679315
+      plants-crops_sheet_25: 5756877026464334318
+      plants-crops_sheet_26: 63007056005205324
+      plants-crops_sheet_27: 1296203855667321200
+      plants-crops_sheet_28: -6450821472203739071
+      plants-crops_sheet_29: -7890135520508126671
+      plants-crops_sheet_3: -42345415649625287
+      plants-crops_sheet_30: 4609310382285126631
+      plants-crops_sheet_31: 3652527852029401385
+      plants-crops_sheet_32: -4686604890092371022
+      plants-crops_sheet_33: -3724139901751286815
+      plants-crops_sheet_34: -891394063371576249
+      plants-crops_sheet_35: -1600514899077699193
+      plants-crops_sheet_36: -7925419096632196955
+      plants-crops_sheet_37: 9048279125038583138
+      plants-crops_sheet_38: -2375843979623694573
+      plants-crops_sheet_39: 6427125535438759831
+      plants-crops_sheet_4: 3277210861988198477
+      plants-crops_sheet_40: -4245126063643579021
+      plants-crops_sheet_41: 8893854584069282047
+      plants-crops_sheet_42: -3959086844545201379
+      plants-crops_sheet_43: -477021055744372069
+      plants-crops_sheet_44: -8293107661187582849
+      plants-crops_sheet_45: 6757687832440127216
+      plants-crops_sheet_46: 923465003474600051
+      plants-crops_sheet_47: -3310455485394374896
+      plants-crops_sheet_48: 7308411305182146621
+      plants-crops_sheet_49: 2710553147003642725
+      plants-crops_sheet_5: 6032931953777001316
+      plants-crops_sheet_50: 8387832004897420973
+      plants-crops_sheet_51: -722529972560842191
+      plants-crops_sheet_52: 3560361587939932499
+      plants-crops_sheet_53: -6728563250112701024
+      plants-crops_sheet_54: -2257121651233014177
+      plants-crops_sheet_55: -4705053922205300253
+      plants-crops_sheet_56: -4083995084347009505
+      plants-crops_sheet_57: -3386752122807948646
+      plants-crops_sheet_58: 7608146603853334152
+      plants-crops_sheet_59: 1349497065092496413
+      plants-crops_sheet_6: 3841882420599503611
+      plants-crops_sheet_60: -8683341558964444524
+      plants-crops_sheet_61: -2413342820539958314
+      plants-crops_sheet_62: -1986261720291366176
+      plants-crops_sheet_63: -4540298619759519097
+      plants-crops_sheet_64: 2815806728545842693
+      plants-crops_sheet_65: 1495133682755243262
+      plants-crops_sheet_7: 1878385313186355262
+      plants-crops_sheet_8: -2770021756586717209
+      plants-crops_sheet_9: -9211651105852281812
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

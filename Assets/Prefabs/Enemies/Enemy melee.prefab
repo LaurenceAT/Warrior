@@ -160,7 +160,7 @@ MonoBehaviour:
   attackRange: 0.8
   attackCooldown: 1.3
   attackDuration: 0.55
-  attackDamage: 1
+  attackDamage: 20
   attackOffset: {x: 0.34, y: 0.06}
   attackRadius: 0.32
   isAttacking: 0

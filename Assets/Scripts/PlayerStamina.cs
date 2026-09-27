@@ -83,6 +83,12 @@ public class PlayerStamina : MonoBehaviour
         return true;
     }
 
+    // Devuelve estamina de golpe (el parry).
+    public void Recuperar(float cantidad)
+    {
+        currentStamina = Mathf.Min(maxStamina, currentStamina + Mathf.Max(0f, cantidad));
+    }
+
     private void Aplicar(float cantidad)
     {
         currentStamina = Mathf.Max(0f, currentStamina - Mathf.Max(0f, cantidad));

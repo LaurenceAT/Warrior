@@ -1,0 +1,2301 @@
+fileFormatVersion: 2
+guid: 5f7b20893bf9c074bb1ed78a98f8ffae
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4242176551786320426
+    second: magic-spells_sheet_0
+  - first:
+      213: 7879916907780534636
+    second: magic-spells_sheet_1
+  - first:
+      213: -2705394454550070808
+    second: magic-spells_sheet_2
+  - first:
+      213: 2748685711547194360
+    second: magic-spells_sheet_3
+  - first:
+      213: 2696400325730483847
+    second: magic-spells_sheet_4
+  - first:
+      213: 5977886739171005384
+    second: magic-spells_sheet_5
+  - first:
+      213: 4393086393190730956
+    second: magic-spells_sheet_6
+  - first:
+      213: 8362932632276293765
+    second: magic-spells_sheet_7
+  - first:
+      213: 2465878726273398899
+    second: magic-spells_sheet_8
+  - first:
+      213: 7484963451978066598
+    second: magic-spells_sheet_9
+  - first:
+      213: -5975028537191041265
+    second: magic-spells_sheet_10
+  - first:
+      213: -2403892730498993906
+    second: magic-spells_sheet_11
+  - first:
+      213: -8946657705287024875
+    second: magic-spells_sheet_12
+  - first:
+      213: -4546999469699501305
+    second: magic-spells_sheet_13
+  - first:
+      213: -3429531710985307874
+    second: magic-spells_sheet_14
+  - first:
+      213: -3936646823813415847
+    second: magic-spells_sheet_15
+  - first:
+      213: -5540578837072956123
+    second: magic-spells_sheet_16
+  - first:
+      213: -3525069678499014059
+    second: magic-spells_sheet_17
+  - first:
+      213: 7705815883103650222
+    second: magic-spells_sheet_18
+  - first:
+      213: -693959850297996345
+    second: magic-spells_sheet_19
+  - first:
+      213: -1507495412535223750
+    second: magic-spells_sheet_20
+  - first:
+      213: -8993204232150800596
+    second: magic-spells_sheet_21
+  - first:
+      213: 7874060296604891527
+    second: magic-spells_sheet_22
+  - first:
+      213: 7726662225325888377
+    second: magic-spells_sheet_23
+  - first:
+      213: -4455149137872027477
+    second: magic-spells_sheet_24
+  - first:
+      213: 633411053339581621
+    second: magic-spells_sheet_25
+  - first:
+      213: 1559989049079547562
+    second: magic-spells_sheet_26
+  - first:
+      213: 2541334745666240745
+    second: magic-spells_sheet_27
+  - first:
+      213: 7746337168976874878
+    second: magic-spells_sheet_28
+  - first:
+      213: 5393973255385031569
+    second: magic-spells_sheet_29
+  - first:
+      213: 5912140215503216320
+    second: magic-spells_sheet_30
+  - first:
+      213: 7387356473722924495
+    second: magic-spells_sheet_31
+  - first:
+      213: 5387864906513452011
+    second: magic-spells_sheet_32
+  - first:
+      213: -5974041538603527810
+    second: magic-spells_sheet_33
+  - first:
+      213: 4451184149214005092
+    second: magic-spells_sheet_34
+  - first:
+      213: 7485415906087065415
+    second: magic-spells_sheet_35
+  - first:
+      213: -7812741138020085438
+    second: magic-spells_sheet_36
+  - first:
+      213: -7152085840307329491
+    second: magic-spells_sheet_37
+  - first:
+      213: 2150322604050636345
+    second: magic-spells_sheet_38
+  - first:
+      213: -1622060751364146472
+    second: magic-spells_sheet_39
+  - first:
+      213: 6852035459182740259
+    second: magic-spells_sheet_40
+  - first:
+      213: -2530534067139335876
+    second: magic-spells_sheet_41
+  - first:
+      213: -822233189394679715
+    second: magic-spells_sheet_42
+  - first:
+      213: -5867940038554252369
+    second: magic-spells_sheet_43
+  - first:
+      213: -4780196780787558794
+    second: magic-spells_sheet_44
+  - first:
+      213: 7899384624184612799
+    second: magic-spells_sheet_45
+  - first:
+      213: -5136750207510376113
+    second: magic-spells_sheet_46
+  - first:
+      213: -6703657064088626461
+    second: magic-spells_sheet_47
+  - first:
+      213: -8141942868339935688
+    second: magic-spells_sheet_48
+  - first:
+      213: -1770390128553702592
+    second: magic-spells_sheet_49
+  - first:
+      213: -1350758664716739078
+    second: magic-spells_sheet_50
+  - first:
+      213: -2838510559178309715
+    second: magic-spells_sheet_51
+  - first:
+      213: -2287812314324956390
+    second: magic-spells_sheet_52
+  - first:
+      213: -6953312803364539836
+    second: magic-spells_sheet_53
+  - first:
+      213: -1337206186411016976
+    second: magic-spells_sheet_54
+  - first:
+      213: -206830896148478242
+    second: magic-spells_sheet_55
+  - first:
+      213: 7150413104164171843
+    second: magic-spells_sheet_56
+  - first:
+      213: 1744367231693721152
+    second: magic-spells_sheet_57
+  - first:
+      213: -788395365439916957
+    second: magic-spells_sheet_58
+  - first:
+      213: 3745402127535460218
+    second: magic-spells_sheet_59
+  - first:
+      213: 3237241503746908943
+    second: magic-spells_sheet_60
+  - first:
+      213: 7085256985847249182
+    second: magic-spells_sheet_61
+  - first:
+      213: -802400481649079395
+    second: magic-spells_sheet_62
+  - first:
+      213: 809542869134611385
+    second: magic-spells_sheet_63
+  - first:
+      213: 3528475084730803335
+    second: magic-spells_sheet_64
+  - first:
+      213: -5513986215785464961
+    second: magic-spells_sheet_65
+  - first:
+      213: 1596602663678983265
+    second: magic-spells_sheet_66
+  - first:
+      213: 3313216459501404990
+    second: magic-spells_sheet_67
+  - first:
+      213: -5214404293860328973
+    second: magic-spells_sheet_68
+  - first:
+      213: 6306015032336545975
+    second: magic-spells_sheet_69
+  - first:
+      213: -4480972575339613298
+    second: magic-spells_sheet_70
+  - first:
+      213: -821473560413435423
+    second: magic-spells_sheet_71
+  - first:
+      213: -1522154824651419197
+    second: magic-spells_sheet_72
+  - first:
+      213: 2354667123563932801
+    second: magic-spells_sheet_73
+  - first:
+      213: -1423701467634464054
+    second: magic-spells_sheet_74
+  - first:
+      213: -2743913713398010848
+    second: magic-spells_sheet_75
+  - first:
+      213: 1718062270135261189
+    second: magic-spells_sheet_76
+  - first:
+      213: -3337832403445401757
+    second: magic-spells_sheet_77
+  - first:
+      213: -525213222112992520
+    second: magic-spells_sheet_78
+  - first:
+      213: 8992355792510543704
+    second: magic-spells_sheet_79
+  - first:
+      213: -5290628381630071192
+    second: magic-spells_sheet_80
+  - first:
+      213: 4902063200746789291
+    second: magic-spells_sheet_81
+  - first:
+      213: 5502696187818570496
+    second: magic-spells_sheet_82
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: magic-spells_sheet_0
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 224
+        width: 22
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2217bb091d3fda30800000000000000
+      internalID: 4242176551786320426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_1
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 224
+        width: 28
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c617ad39da61b5d60800000000000000
+      internalID: 7879916907780534636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_2
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 224
+        width: 28
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e93b3fc312847ad0800000000000000
+      internalID: -2705394454550070808
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_3
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 225
+        width: 29
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fb56fb671b452620800000000000000
+      internalID: 2748685711547194360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_4
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 225
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78eb9636fc98b6520800000000000000
+      internalID: 2696400325730483847
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_5
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 224
+        width: 30
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c35ecb2158b5f250800000000000000
+      internalID: 5977886739171005384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_6
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 226
+        width: 26
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ccc4cbd8cc067fc30800000000000000
+      internalID: 4393086393190730956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_7
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 226
+        width: 28
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 588d95b9bea1f0470800000000000000
+      internalID: 8362932632276293765
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_8
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 195
+        width: 30
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 378f7b203af883220800000000000000
+      internalID: 2465878726273398899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_9
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 193
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6aa2fef3a9eefd760800000000000000
+      internalID: 7484963451978066598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_10
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 192
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f07f7e5d33f641da0800000000000000
+      internalID: -5975028537191041265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_11
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 193
+        width: 30
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e01b6784c48a3aed0800000000000000
+      internalID: -2403892730498993906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_12
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 193
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51ffa5de73617d380800000000000000
+      internalID: -8946657705287024875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_13
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 195
+        width: 9
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 703fba6c210d5e0c0800000000000000
+      internalID: -4546999469699501305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_14
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 211
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1978cc441bd760d0800000000000000
+      internalID: -3429531710985307874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_15
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 200
+        width: 10
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95c7e6c22983e59c0800000000000000
+      internalID: -3936646823813415847
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_16
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 206
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 525383627e8eb13b0800000000000000
+      internalID: -5540578837072956123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_17
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 193
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55ad094ddcf641fc0800000000000000
+      internalID: -3525069678499014059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_18
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 192
+        width: 28
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea1c4f0f7be80fa60800000000000000
+      internalID: 7705815883103650222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_19
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 193
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cbca92613f8e56f0800000000000000
+      internalID: -693959850297996345
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_20
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 161
+        width: 27
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3a9e4bc8ec441be0800000000000000
+      internalID: -1507495412535223750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_21
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 161
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c27ac1e1668b13380800000000000000
+      internalID: -8993204232150800596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_22
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 161
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78934270f18464d60800000000000000
+      internalID: 7874060296604891527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_23
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 161
+        width: 29
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9739af73b5e9a3b60800000000000000
+      internalID: 7726662225325888377
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_24
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 160
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba000c7a6712c22c0800000000000000
+      internalID: -4455149137872027477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_25
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 170
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5bc9c1f3ff35ac800800000000000000
+      internalID: 633411053339581621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_26
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 178
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa6c2e366c136a510800000000000000
+      internalID: 1559989049079547562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_27
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 171
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e04bc29c72a44320800000000000000
+      internalID: 2541334745666240745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_28
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 180
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7d85430d94808b60800000000000000
+      internalID: 7746337168976874878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_29
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 178
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 193ae27e81e3bda40800000000000000
+      internalID: 5393973255385031569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_30
+      rect:
+        serializedVersion: 2
+        x: 182
+        y: 170
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0cede5fb3342c0250800000000000000
+      internalID: 5912140215503216320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_31
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 161
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fcdef6da299258660800000000000000
+      internalID: 7387356473722924495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_32
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 161
+        width: 25
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: beb078a169a85ca40800000000000000
+      internalID: 5387864906513452011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_33
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 167
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e71db1a5fd0f71da0800000000000000
+      internalID: -5974041538603527810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_34
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 161
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 46700cb7668c5cd30800000000000000
+      internalID: 4451184149214005092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_35
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 167
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 747d06e6b1a81e760800000000000000
+      internalID: 7485415906087065415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_36
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 129
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2415b322451939390800000000000000
+      internalID: -7812741138020085438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_37
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 130
+        width: 24
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d26616552dfaebc90800000000000000
+      internalID: -7152085840307329491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_38
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 130
+        width: 28
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93e5ee6f30b77dd10800000000000000
+      internalID: 2150322604050636345
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_39
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 129
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8da36d637584d79e0800000000000000
+      internalID: -1622060751364146472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_40
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 128
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 323c7fc42f1571f50800000000000000
+      internalID: 6852035459182740259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_41
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 139
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c39a22c5cacb1ecd0800000000000000
+      internalID: -2530534067139335876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_42
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 147
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d58f7974547d694f0800000000000000
+      internalID: -822233189394679715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_43
+      rect:
+        serializedVersion: 2
+        x: 181
+        y: 138
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fab8ea6ef93e09ea0800000000000000
+      internalID: -5867940038554252369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_44
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 129
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67611bcba5459adb0800000000000000
+      internalID: -4780196780787558794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_45
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 129
+        width: 26
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb7d4b4867040ad60800000000000000
+      internalID: 7899384624184612799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_46
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 129
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f411e65e6e896b8b0800000000000000
+      internalID: -5136750207510376113
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_47
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 97
+        width: 26
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ea95feea63d7f2a0800000000000000
+      internalID: -6703657064088626461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_48
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 97
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 836b21f5912020f80800000000000000
+      internalID: -8141942868339935688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_49
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 97
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04bc2b9de8f4e67e0800000000000000
+      internalID: -1770390128553702592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_50
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 99
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afd174ca624214de0800000000000000
+      internalID: -1350758664716739078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_51
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 118
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: daf3bfc7fa59b98d0800000000000000
+      internalID: -2838510559178309715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_52
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 97
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1b85eb42de0040e0800000000000000
+      internalID: -2287812314324956390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_53
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 97
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 442f74778ded08f90800000000000000
+      internalID: -6953312803364539836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_54
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 97
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fc348bee0a417de0800000000000000
+      internalID: -1337206186411016976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_55
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 97
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed68e725560312df0800000000000000
+      internalID: -206830896148478242
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_56
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 107
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 340f00f65de5b3360800000000000000
+      internalID: 7150413104164171843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_57
+      rect:
+        serializedVersion: 2
+        x: 118
+        y: 107
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04e8fe251cc353810800000000000000
+      internalID: 1744367231693721152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_58
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 97
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 364b36c979e0f05f0800000000000000
+      internalID: -788395365439916957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_59
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 66
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7f4eb814675af330800000000000000
+      internalID: 3745402127535460218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_60
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 66
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f036cfafefdfcec20800000000000000
+      internalID: 3237241503746908943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_61
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 66
+        width: 22
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e19b7c770b3e35260800000000000000
+      internalID: 7085256985847249182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_62
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 66
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9b44b3630d4dd4f0800000000000000
+      internalID: -802400481649079395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_63
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 66
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b3183943f21c3b00800000000000000
+      internalID: 809542869134611385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_64
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 64
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78422381569a7f030800000000000000
+      internalID: 3528475084730803335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_65
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 64
+        width: 22
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7bf4b740c26a73b0800000000000000
+      internalID: -5513986215785464961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_66
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 64
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16c3708d9a5482610800000000000000
+      internalID: 1596602663678983265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_67
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 34
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e330f84d0d8eafd20800000000000000
+      internalID: 3313216459501404990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_68
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 32
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f9fe2dfbe6b2a7b0800000000000000
+      internalID: -5214404293860328973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_69
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 34
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b871bed247738750800000000000000
+      internalID: 6306015032336545975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_70
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 33
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e837d961f2360d1c0800000000000000
+      internalID: -4480972575339613298
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_71
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 34
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e98e2f262a8994f0800000000000000
+      internalID: -821473560413435423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_72
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 34
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c1518f604830eae0800000000000000
+      internalID: -1522154824651419197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_73
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 34
+        width: 29
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18ca158f5457da020800000000000000
+      internalID: 2354667123563932801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_74
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 34
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aca027bee0ffd3ce0800000000000000
+      internalID: -1423701467634464054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_75
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 2
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02ca69af309abe9d0800000000000000
+      internalID: -2743913713398010848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_76
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 2
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 508d9613888c7d710800000000000000
+      internalID: 1718062270135261189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_77
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 2
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36739d81d13ada1d0800000000000000
+      internalID: -3337832403445401757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_78
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 2
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f2ed907b5116b8f0800000000000000
+      internalID: -525213222112992520
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_79
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 2
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 857648223f34bcc70800000000000000
+      internalID: 8992355792510543704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_80
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 2
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86ef6529489e396b0800000000000000
+      internalID: -5290628381630071192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_81
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 2
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba9d6034280a70440800000000000000
+      internalID: 4902063200746789291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic-spells_sheet_82
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 2
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00372dd37018d5c40800000000000000
+      internalID: 5502696187818570496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      magic-spells_sheet_0: 4242176551786320426
+      magic-spells_sheet_1: 7879916907780534636
+      magic-spells_sheet_10: -5975028537191041265
+      magic-spells_sheet_11: -2403892730498993906
+      magic-spells_sheet_12: -8946657705287024875
+      magic-spells_sheet_13: -4546999469699501305
+      magic-spells_sheet_14: -3429531710985307874
+      magic-spells_sheet_15: -3936646823813415847
+      magic-spells_sheet_16: -5540578837072956123
+      magic-spells_sheet_17: -3525069678499014059
+      magic-spells_sheet_18: 7705815883103650222
+      magic-spells_sheet_19: -693959850297996345
+      magic-spells_sheet_2: -2705394454550070808
+      magic-spells_sheet_20: -1507495412535223750
+      magic-spells_sheet_21: -8993204232150800596
+      magic-spells_sheet_22: 7874060296604891527
+      magic-spells_sheet_23: 7726662225325888377
+      magic-spells_sheet_24: -4455149137872027477
+      magic-spells_sheet_25: 633411053339581621
+      magic-spells_sheet_26: 1559989049079547562
+      magic-spells_sheet_27: 2541334745666240745
+      magic-spells_sheet_28: 7746337168976874878
+      magic-spells_sheet_29: 5393973255385031569
+      magic-spells_sheet_3: 2748685711547194360
+      magic-spells_sheet_30: 5912140215503216320
+      magic-spells_sheet_31: 7387356473722924495
+      magic-spells_sheet_32: 5387864906513452011
+      magic-spells_sheet_33: -5974041538603527810
+      magic-spells_sheet_34: 4451184149214005092
+      magic-spells_sheet_35: 7485415906087065415
+      magic-spells_sheet_36: -7812741138020085438
+      magic-spells_sheet_37: -7152085840307329491
+      magic-spells_sheet_38: 2150322604050636345
+      magic-spells_sheet_39: -1622060751364146472
+      magic-spells_sheet_4: 2696400325730483847
+      magic-spells_sheet_40: 6852035459182740259
+      magic-spells_sheet_41: -2530534067139335876
+      magic-spells_sheet_42: -822233189394679715
+      magic-spells_sheet_43: -5867940038554252369
+      magic-spells_sheet_44: -4780196780787558794
+      magic-spells_sheet_45: 7899384624184612799
+      magic-spells_sheet_46: -5136750207510376113
+      magic-spells_sheet_47: -6703657064088626461
+      magic-spells_sheet_48: -8141942868339935688
+      magic-spells_sheet_49: -1770390128553702592
+      magic-spells_sheet_5: 5977886739171005384
+      magic-spells_sheet_50: -1350758664716739078
+      magic-spells_sheet_51: -2838510559178309715
+      magic-spells_sheet_52: -2287812314324956390
+      magic-spells_sheet_53: -6953312803364539836
+      magic-spells_sheet_54: -1337206186411016976
+      magic-spells_sheet_55: -206830896148478242
+      magic-spells_sheet_56: 7150413104164171843
+      magic-spells_sheet_57: 1744367231693721152
+      magic-spells_sheet_58: -788395365439916957
+      magic-spells_sheet_59: 3745402127535460218
+      magic-spells_sheet_6: 4393086393190730956
+      magic-spells_sheet_60: 3237241503746908943
+      magic-spells_sheet_61: 7085256985847249182
+      magic-spells_sheet_62: -802400481649079395
+      magic-spells_sheet_63: 809542869134611385
+      magic-spells_sheet_64: 3528475084730803335
+      magic-spells_sheet_65: -5513986215785464961
+      magic-spells_sheet_66: 1596602663678983265
+      magic-spells_sheet_67: 3313216459501404990
+      magic-spells_sheet_68: -5214404293860328973
+      magic-spells_sheet_69: 6306015032336545975
+      magic-spells_sheet_7: 8362932632276293765
+      magic-spells_sheet_70: -4480972575339613298
+      magic-spells_sheet_71: -821473560413435423
+      magic-spells_sheet_72: -1522154824651419197
+      magic-spells_sheet_73: 2354667123563932801
+      magic-spells_sheet_74: -1423701467634464054
+      magic-spells_sheet_75: -2743913713398010848
+      magic-spells_sheet_76: 1718062270135261189
+      magic-spells_sheet_77: -3337832403445401757
+      magic-spells_sheet_78: -525213222112992520
+      magic-spells_sheet_79: 8992355792510543704
+      magic-spells_sheet_8: 2465878726273398899
+      magic-spells_sheet_80: -5290628381630071192
+      magic-spells_sheet_81: 4902063200746789291
+      magic-spells_sheet_82: 5502696187818570496
+      magic-spells_sheet_9: 7484963451978066598
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

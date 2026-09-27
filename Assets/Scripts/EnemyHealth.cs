@@ -4,8 +4,21 @@ using UnityEngine;
 // Vida de un enemigo: recibe dano y retroceso, puede quedar en el aire para un combo
 // aereo, y muere al llegar a cero. Todo el dano pasa por aqui (espada, arco, punos,
 // trampas), asi que la barra de vida de encima solo tiene que escuchar a este script.
+// Con que arma se ha dado un golpe. La pone el player justo antes de pegar y la
+// gasta el primer golpe que entra (EnemyHealth.ArmaDelGolpe).
+public enum TipoArma { Ninguna, Espada, Punos, Arco }
+
+// Algo que cambia el dano recibido segun el arma (la debilidad del jefe).
+public interface IModificadorDano
+{
+    int Modificar(int dano, TipoArma arma);
+}
+
 public class EnemyHealth : MonoBehaviour
 {
+    // Arma del golpe que esta a punto de entrar. Ver TipoArma.
+    public static TipoArma ArmaDelGolpe = TipoArma.Ninguna;
+
     [Header("Vida")]
     [SerializeField] private int maxHealth = 50;
     [SerializeField] private int currentHealth;
@@ -80,6 +93,29 @@ public class EnemyHealth : MonoBehaviour
     public bool IsAirborne => isAirborne;
     public int CurrentHealth => currentHealth;
     public int MaxHealth => maxHealth;
+    // Esta en retroceso o aturdido (golpe, parry...). La IA de los enemigos nuevos
+    // espera a que se le pase antes de volver a actuar.
+    public bool Aturdido => rutinaAturdido != null;
+    private bool muerto;
+    public bool Muerto => muerto;
+
+    // Avisos para la IA de los enemigos que no usan Animator (los de la cueva).
+    public event System.Action AlRecibirGolpe;
+    public event System.Action AlMorir;
+    // Vida actual y maxima, cada vez que cambia (la barra grande del jefe).
+    public event System.Action<int, int> AlCambiarVida;
+    private IModificadorDano modificador;
+
+    [Header("Volador")]
+    // Los voladores no caen al suelo tras un golpe: el aturdimiento dura solo su
+    // tiempo, y los golpes que lanzan solo los empujan (no hay combo aereo).
+    [SerializeField] private bool volador;
+
+    [Header("Inamovible")]
+    // Los golpes no lo mueven ni lo lanzan (el jefe). Siguen quitando vida.
+    [SerializeField] private bool inamovible;
+    public bool Inamovible { get => inamovible; set => inamovible = value; }
+    public bool Volador { get => volador; set => volador = value; }
 
     private void Awake()
     {
@@ -98,6 +134,7 @@ public class EnemyHealth : MonoBehaviour
             foreach (AnimatorControllerParameter p in animator.parameters)
                 if (p.nameHash == IdIsHurt) { tieneIsHurt = true; break; }
         hitFlash = GetComponent<HitFlash>();
+        modificador = GetComponent<IModificadorDano>();
         currentHealth = maxHealth;
 
         if (showHealthBar)
@@ -113,6 +150,7 @@ public class EnemyHealth : MonoBehaviour
     public void TakeHit(int damage, Vector2 attackerPosition, Vector2 knockback, bool launches, Elevacion elevacion = null)
     {
         if (!RecibirDano(damage)) return;
+        if (inamovible) { Aturdir(knockbackDuration); return; }
 
         float lado = transform.position.x < attackerPosition.x ? -1f : 1f;
 
@@ -131,6 +169,7 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(int damage, Vector2 attackerPosition, Vector2 launchVelocity)
     {
         if (!RecibirDano(damage)) return;
+        if (inamovible) { Aturdir(knockbackDuration); return; }
 
         if (isAirborne) TerminarComboAereo();
         if (rb != null) rb.linearVelocity = launchVelocity;
@@ -142,6 +181,7 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(int damage, Vector2 attackerPosition, float knockbackMultiplier = 1f)
     {
         if (!RecibirDano(damage)) return;
+        if (inamovible) { Aturdir(knockbackDuration); return; }
 
         float lado = transform.position.x < attackerPosition.x ? -1f : 1f;
         float k = Mathf.Max(0f, knockbackMultiplier);
@@ -160,12 +200,18 @@ public class EnemyHealth : MonoBehaviour
     // false si muere.
     private bool RecibirDano(int damage)
     {
+        TipoArma arma = ArmaDelGolpe;
+        ArmaDelGolpe = TipoArma.Ninguna;
+        if (muerto) return false;
+        if (modificador != null) damage = modificador.Modificar(damage, arma);
         currentHealth = Mathf.Max(0, currentHealth - Mathf.Max(0, damage));
         if (barra != null) barra.Mostrar(currentHealth, maxHealth);
+        AlCambiarVida?.Invoke(currentHealth, maxHealth);
 
         // El destello sale siempre, tanto si sobrevive como si muere: es la
         // confirmacion de que el golpe ha entrado.
         if (hitFlash != null) hitFlash.Flash();
+        AlRecibirGolpe?.Invoke();
 
         if (currentHealth <= 0)
         {
@@ -186,6 +232,12 @@ public class EnemyHealth : MonoBehaviour
     private void Lanzar(float lado, Elevacion elevacion)
     {
         if (rb == null) return;
+        if (volador)
+        {
+            rb.linearVelocity = new Vector2(lado * 2f, 3f);
+            Aturdir(knockbackDuration);
+            return;
+        }
 
         curva = elevacion ?? defaultLaunch;
         isAirborne = true;
@@ -249,6 +301,7 @@ public class EnemyHealth : MonoBehaviour
         if (rb != null && !isAirborne) rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
         if (animator != null) animator.SetTrigger(IdHit);
         Aturdir(segundos);
+        AlRecibirGolpe?.Invoke();
     }
 
     // Fin del combo aereo: vuelve la gravedad normal y cae. La IA vuelve al aterrizar
@@ -332,7 +385,7 @@ public class EnemyHealth : MonoBehaviour
         yield return new WaitForSeconds(duracion);
 
         float enElAire = 0f;
-        while (isAirborne || (!EnElSuelo() && enElAire < maxAirStunTime))
+        while (!volador && (isAirborne || (!EnElSuelo() && enElAire < maxAirStunTime)))
         {
             yield return new WaitForFixedUpdate();
             // El tope solo cuenta al caer: durante el combo aereo no.
@@ -361,6 +414,9 @@ public class EnemyHealth : MonoBehaviour
     // Instancia el VFX de muerte, detiene al enemigo y lo destruye después de reproducir su animación de muerte.
     public void Die()
     {
+        if (muerto) return;
+        muerto = true;
+        AlMorir?.Invoke();
         TerminarComboAereo();
         if (rutinaAturdido != null) StopCoroutine(rutinaAturdido);
         if (tieneIsHurt && animator != null) animator.SetBool(IdIsHurt, false);

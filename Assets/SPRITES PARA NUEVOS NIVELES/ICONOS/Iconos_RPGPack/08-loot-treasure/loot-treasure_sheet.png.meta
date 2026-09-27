@@ -1,0 +1,2171 @@
+fileFormatVersion: 2
+guid: b0fed3f17fb18f54f80f5e3e0b05dfe8
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6246742777672548106
+    second: loot-treasure_sheet_0
+  - first:
+      213: 8496328116993203105
+    second: loot-treasure_sheet_1
+  - first:
+      213: -4312205889703190864
+    second: loot-treasure_sheet_2
+  - first:
+      213: 9155733723755655445
+    second: loot-treasure_sheet_3
+  - first:
+      213: -8898939121433858114
+    second: loot-treasure_sheet_4
+  - first:
+      213: -512972431277128522
+    second: loot-treasure_sheet_5
+  - first:
+      213: -1453598792216997481
+    second: loot-treasure_sheet_6
+  - first:
+      213: 5274731922790942965
+    second: loot-treasure_sheet_7
+  - first:
+      213: 1053560022883708822
+    second: loot-treasure_sheet_8
+  - first:
+      213: -2104505575368933713
+    second: loot-treasure_sheet_9
+  - first:
+      213: -6198377925219498365
+    second: loot-treasure_sheet_10
+  - first:
+      213: -79495634987839850
+    second: loot-treasure_sheet_11
+  - first:
+      213: 3003674659883670248
+    second: loot-treasure_sheet_12
+  - first:
+      213: 1419787089657499587
+    second: loot-treasure_sheet_13
+  - first:
+      213: -7652008414002939801
+    second: loot-treasure_sheet_14
+  - first:
+      213: 275790055278224226
+    second: loot-treasure_sheet_15
+  - first:
+      213: -8599260215061996512
+    second: loot-treasure_sheet_16
+  - first:
+      213: 6243369338545163107
+    second: loot-treasure_sheet_17
+  - first:
+      213: 6894056377826587304
+    second: loot-treasure_sheet_18
+  - first:
+      213: 1520027091648408879
+    second: loot-treasure_sheet_19
+  - first:
+      213: -124051534827249917
+    second: loot-treasure_sheet_20
+  - first:
+      213: -8814731740598600365
+    second: loot-treasure_sheet_21
+  - first:
+      213: -6025956320570091925
+    second: loot-treasure_sheet_22
+  - first:
+      213: 2828653185289392056
+    second: loot-treasure_sheet_23
+  - first:
+      213: -5322222610473680350
+    second: loot-treasure_sheet_24
+  - first:
+      213: 4658741955199249172
+    second: loot-treasure_sheet_25
+  - first:
+      213: 3411206948479605090
+    second: loot-treasure_sheet_26
+  - first:
+      213: -2666711583092065655
+    second: loot-treasure_sheet_27
+  - first:
+      213: 2937163892769776224
+    second: loot-treasure_sheet_28
+  - first:
+      213: -1556292667471541603
+    second: loot-treasure_sheet_29
+  - first:
+      213: 675746832587505092
+    second: loot-treasure_sheet_30
+  - first:
+      213: -7033564482578068126
+    second: loot-treasure_sheet_31
+  - first:
+      213: 6140499357698049502
+    second: loot-treasure_sheet_32
+  - first:
+      213: -7237226897541410842
+    second: loot-treasure_sheet_33
+  - first:
+      213: 1492939360389356338
+    second: loot-treasure_sheet_34
+  - first:
+      213: -7016250779922288615
+    second: loot-treasure_sheet_35
+  - first:
+      213: 9111939778519768022
+    second: loot-treasure_sheet_36
+  - first:
+      213: 516607438650874674
+    second: loot-treasure_sheet_37
+  - first:
+      213: -6187629259945703223
+    second: loot-treasure_sheet_38
+  - first:
+      213: -3171810600229399840
+    second: loot-treasure_sheet_39
+  - first:
+      213: 2641512919693152218
+    second: loot-treasure_sheet_40
+  - first:
+      213: -3403228618068532440
+    second: loot-treasure_sheet_41
+  - first:
+      213: 6975869945104528836
+    second: loot-treasure_sheet_42
+  - first:
+      213: 1358090019770534910
+    second: loot-treasure_sheet_43
+  - first:
+      213: -7391016548479190483
+    second: loot-treasure_sheet_44
+  - first:
+      213: -1581856137765497653
+    second: loot-treasure_sheet_45
+  - first:
+      213: -8114618352439997904
+    second: loot-treasure_sheet_46
+  - first:
+      213: -7545656608549566745
+    second: loot-treasure_sheet_47
+  - first:
+      213: -1811968700553251834
+    second: loot-treasure_sheet_48
+  - first:
+      213: -7203116401963714292
+    second: loot-treasure_sheet_49
+  - first:
+      213: 8843155141497627654
+    second: loot-treasure_sheet_50
+  - first:
+      213: -8053507908682260468
+    second: loot-treasure_sheet_51
+  - first:
+      213: 2051086804274870605
+    second: loot-treasure_sheet_52
+  - first:
+      213: -6671336090137988401
+    second: loot-treasure_sheet_53
+  - first:
+      213: -6931487531028700207
+    second: loot-treasure_sheet_54
+  - first:
+      213: 111428869630230755
+    second: loot-treasure_sheet_55
+  - first:
+      213: 7460463449826764738
+    second: loot-treasure_sheet_56
+  - first:
+      213: 1334301608191022585
+    second: loot-treasure_sheet_57
+  - first:
+      213: 2086391289083031231
+    second: loot-treasure_sheet_58
+  - first:
+      213: 4192798347603612517
+    second: loot-treasure_sheet_59
+  - first:
+      213: 4569861891770341856
+    second: loot-treasure_sheet_60
+  - first:
+      213: -98609572080643471
+    second: loot-treasure_sheet_61
+  - first:
+      213: -112016371134830813
+    second: loot-treasure_sheet_62
+  - first:
+      213: -4902927753808691085
+    second: loot-treasure_sheet_63
+  - first:
+      213: 3555591211186555256
+    second: loot-treasure_sheet_64
+  - first:
+      213: -2421885986732663127
+    second: loot-treasure_sheet_65
+  - first:
+      213: 2197564521146729614
+    second: loot-treasure_sheet_66
+  - first:
+      213: 5498446339071356452
+    second: loot-treasure_sheet_67
+  - first:
+      213: -3352396859766453139
+    second: loot-treasure_sheet_68
+  - first:
+      213: -5360384026940086783
+    second: loot-treasure_sheet_69
+  - first:
+      213: 4469784402015033259
+    second: loot-treasure_sheet_70
+  - first:
+      213: 220087422440988906
+    second: loot-treasure_sheet_71
+  - first:
+      213: -4465643269632866981
+    second: loot-treasure_sheet_72
+  - first:
+      213: 2660258824924761445
+    second: loot-treasure_sheet_73
+  - first:
+      213: 2547132570315075324
+    second: loot-treasure_sheet_74
+  - first:
+      213: 8906633848626864450
+    second: loot-treasure_sheet_75
+  - first:
+      213: -5403232627752129662
+    second: loot-treasure_sheet_76
+  - first:
+      213: 6886499547248217761
+    second: loot-treasure_sheet_77
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: loot-treasure_sheet_0
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 228
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f047955a8c1f49a0800000000000000
+      internalID: -6246742777672548106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_1
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 228
+        width: 26
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ab1b8c286509e570800000000000000
+      internalID: 8496328116993203105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_2
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 227
+        width: 30
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0bed4e12797f724c0800000000000000
+      internalID: -4312205889703190864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_3
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 238
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51135860053bf0f70800000000000000
+      internalID: 9155733723755655445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_4
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 243
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebfab15840e908480800000000000000
+      internalID: -8898939121433858114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_5
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 237
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b48826aa4e81e8f0800000000000000
+      internalID: -512972431277128522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_6
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 228
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79118f79997c3dbe0800000000000000
+      internalID: -1453598792216997481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_7
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 228
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f80e5facbc933940800000000000000
+      internalID: 5274731922790942965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_8
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 228
+        width: 25
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69f2981424ffe9e00800000000000000
+      internalID: 1053560022883708822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_9
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 228
+        width: 23
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fae3e40545b4bc2e0800000000000000
+      internalID: -2104505575368933713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_10
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 230
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3864baf0e10faf9a0800000000000000
+      internalID: -6198377925219498365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_11
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 233
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69e0b53242395eef0800000000000000
+      internalID: -79495634987839850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_12
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 227
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ea553360323fa920800000000000000
+      internalID: 3003674659883670248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_13
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 195
+        width: 22
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3cf88bfe5d814b310800000000000000
+      internalID: 1419787089657499587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_14
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 194
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 768fd09b3ea9ec590800000000000000
+      internalID: -7652008414002939801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_15
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 194
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 263a175189dc3d300800000000000000
+      internalID: 275790055278224226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_16
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 196
+        width: 28
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02c941e256a49a880800000000000000
+      internalID: -8599260215061996512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_17
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 195
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36bcc89a557e4a650800000000000000
+      internalID: 6243369338545163107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_18
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 193
+        width: 31
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a2bed5dfbb9caf50800000000000000
+      internalID: 6894056377826587304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_19
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 197
+        width: 16
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2d6cae1698381510800000000000000
+      internalID: 1520027091648408879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_20
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 195
+        width: 28
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30f97cc49c7474ef0800000000000000
+      internalID: -124051534827249917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_21
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 164
+        width: 24
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35d72433f28cba580800000000000000
+      internalID: -8814731740598600365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_22
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 164
+        width: 28
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b66566047a08f5ca0800000000000000
+      internalID: -6025956320570091925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_23
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 161
+        width: 29
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8bf83fdc515614720800000000000000
+      internalID: 2828653185289392056
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_24
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 162
+        width: 30
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2220a2febbaa326b0800000000000000
+      internalID: -5322222610473680350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_25
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 166
+        width: 20
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41b2cdb002d27a040800000000000000
+      internalID: 4658741955199249172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_26
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 163
+        width: 29
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 269987375aa075f20800000000000000
+      internalID: 3411206948479605090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_27
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 163
+        width: 28
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98ab06ba1ffedfad0800000000000000
+      internalID: -2666711583092065655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_28
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 163
+        width: 26
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06265abaff6e2c820800000000000000
+      internalID: 2937163892769776224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_29
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 130
+        width: 18
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9a40d48010f66ae0800000000000000
+      internalID: -1556292667471541603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_30
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 129
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4cd397af92cb06900800000000000000
+      internalID: 675746832587505092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_31
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 130
+        width: 25
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26d41275e52c36e90800000000000000
+      internalID: -7033564482578068126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_32
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 129
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed54b1fc1af673550800000000000000
+      internalID: 6140499357698049502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_33
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 128
+        width: 20
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ef442d2b74309b90800000000000000
+      internalID: -7237226897541410842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_34
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 131
+        width: 13
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23bd437307cf7b410800000000000000
+      internalID: 1492939360389356338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_35
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 131
+        width: 12
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 910bcafd61541ae90800000000000000
+      internalID: -7016250779922288615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_36
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 130
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6db1c6193fc147e70800000000000000
+      internalID: 9111939778519768022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_37
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 131
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23b1c157abb5b2700800000000000000
+      internalID: 516607438650874674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_38
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 96
+        width: 27
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c88f17b8ff112aa0800000000000000
+      internalID: -6187629259945703223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_39
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 96
+        width: 18
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e2128660177bf3d0800000000000000
+      internalID: -3171810600229399840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_40
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 98
+        width: 16
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: adf4aef410a88a420800000000000000
+      internalID: 2641512919693152218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_41
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 117
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 823e49a5a9d45c0d0800000000000000
+      internalID: -3403228618068532440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_42
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 98
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c5774d51c44fc060800000000000000
+      internalID: 6975869945104528836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_43
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 99
+        width: 30
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efb0d617da7e8d210800000000000000
+      internalID: 1358090019770534910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_44
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 100
+        width: 30
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2a3dd2cb95dd6990800000000000000
+      internalID: -7391016548479190483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_45
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 96
+        width: 24
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc457b6493e1c0ae0800000000000000
+      internalID: -1581856137765497653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_46
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 96
+        width: 24
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03ac2fef995136f80800000000000000
+      internalID: -8114618352439997904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_47
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 103
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e6035a0b41784790800000000000000
+      internalID: -7545656608549566745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_48
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 65
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 604b56b21189ad6e0800000000000000
+      internalID: -1811968700553251834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_49
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 65
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c09b921dbc3690c90800000000000000
+      internalID: -7203116401963714292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_50
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 69
+        width: 28
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 604a2a68fb239ba70800000000000000
+      internalID: 8843155141497627654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_51
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 68
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c00e133f9313c3090800000000000000
+      internalID: -8053507908682260468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_52
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 64
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d497b44d49ce67c10800000000000000
+      internalID: 2051086804274870605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_53
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 66
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc2f41a1c27aa63a0800000000000000
+      internalID: -6671336090137988401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_54
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 67
+        width: 28
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d32cfba0d86ecf90800000000000000
+      internalID: -6931487531028700207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_55
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 65
+        width: 24
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e0880077ffdb8100800000000000000
+      internalID: 111428869630230755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_56
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 33
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c7a5bafaf3e88760800000000000000
+      internalID: 7460463449826764738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_57
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 32
+        width: 24
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f555734e34648210800000000000000
+      internalID: 1334301608191022585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_58
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 37
+        width: 30
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbe6340c2d954fc10800000000000000
+      internalID: 2086391289083031231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_59
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 32
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56312cbf1efcf2a30800000000000000
+      internalID: 4192798347603612517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_60
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 47
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e9d09bad296b6f30800000000000000
+      internalID: 4569861891770341856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_61
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 52
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1721eacdd1ba1aef0800000000000000
+      internalID: -98609572080643471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_62
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 41
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 327ea7534b9027ef0800000000000000
+      internalID: -112016371134830813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_63
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 46
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37044da4f2d45fbb0800000000000000
+      internalID: -4902927753808691085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_64
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 32
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87986454e5ff75130800000000000000
+      internalID: 3555591211186555256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_65
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 31
+        width: 23
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ae9d4ad68bb36ed0800000000000000
+      internalID: -2421885986732663127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_66
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 32
+        width: 26
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e84c3fde9415f7e10800000000000000
+      internalID: 2197564521146729614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_67
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 36
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42e25e830d76e4c40800000000000000
+      internalID: 5498446339071356452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_68
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 33
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6c4c7b51d4e971d0800000000000000
+      internalID: -3352396859766453139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_69
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 36
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 106ee86c0271c95b0800000000000000
+      internalID: -5360384026940086783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_70
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 0
+        width: 28
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba710b05b3dd70e30800000000000000
+      internalID: 4469784402015033259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_71
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 1
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae0602a3858ed0300800000000000000
+      internalID: 220087422440988906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_72
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 3
+        width: 26
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b554be33b19d602c0800000000000000
+      internalID: -4465643269632866981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_73
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 1
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56d0d3e7e432be420800000000000000
+      internalID: 2660258824924761445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_74
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 2
+        width: 24
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cfe2571d39b395320800000000000000
+      internalID: 2547132570315075324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_75
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 1
+        width: 30
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 241efd3cb48ba9b70800000000000000
+      internalID: 8906633848626864450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_76
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 1
+        width: 30
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28ba8087d8cd305b0800000000000000
+      internalID: -5403232627752129662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loot-treasure_sheet_77
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 0
+        width: 28
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ae4e9b1ad2c19f50800000000000000
+      internalID: 6886499547248217761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      loot-treasure_sheet_0: -6246742777672548106
+      loot-treasure_sheet_1: 8496328116993203105
+      loot-treasure_sheet_10: -6198377925219498365
+      loot-treasure_sheet_11: -79495634987839850
+      loot-treasure_sheet_12: 3003674659883670248
+      loot-treasure_sheet_13: 1419787089657499587
+      loot-treasure_sheet_14: -7652008414002939801
+      loot-treasure_sheet_15: 275790055278224226
+      loot-treasure_sheet_16: -8599260215061996512
+      loot-treasure_sheet_17: 6243369338545163107
+      loot-treasure_sheet_18: 6894056377826587304
+      loot-treasure_sheet_19: 1520027091648408879
+      loot-treasure_sheet_2: -4312205889703190864
+      loot-treasure_sheet_20: -124051534827249917
+      loot-treasure_sheet_21: -8814731740598600365
+      loot-treasure_sheet_22: -6025956320570091925
+      loot-treasure_sheet_23: 2828653185289392056
+      loot-treasure_sheet_24: -5322222610473680350
+      loot-treasure_sheet_25: 4658741955199249172
+      loot-treasure_sheet_26: 3411206948479605090
+      loot-treasure_sheet_27: -2666711583092065655
+      loot-treasure_sheet_28: 2937163892769776224
+      loot-treasure_sheet_29: -1556292667471541603
+      loot-treasure_sheet_3: 9155733723755655445
+      loot-treasure_sheet_30: 675746832587505092
+      loot-treasure_sheet_31: -7033564482578068126
+      loot-treasure_sheet_32: 6140499357698049502
+      loot-treasure_sheet_33: -7237226897541410842
+      loot-treasure_sheet_34: 1492939360389356338
+      loot-treasure_sheet_35: -7016250779922288615
+      loot-treasure_sheet_36: 9111939778519768022
+      loot-treasure_sheet_37: 516607438650874674
+      loot-treasure_sheet_38: -6187629259945703223
+      loot-treasure_sheet_39: -3171810600229399840
+      loot-treasure_sheet_4: -8898939121433858114
+      loot-treasure_sheet_40: 2641512919693152218
+      loot-treasure_sheet_41: -3403228618068532440
+      loot-treasure_sheet_42: 6975869945104528836
+      loot-treasure_sheet_43: 1358090019770534910
+      loot-treasure_sheet_44: -7391016548479190483
+      loot-treasure_sheet_45: -1581856137765497653
+      loot-treasure_sheet_46: -8114618352439997904
+      loot-treasure_sheet_47: -7545656608549566745
+      loot-treasure_sheet_48: -1811968700553251834
+      loot-treasure_sheet_49: -7203116401963714292
+      loot-treasure_sheet_5: -512972431277128522
+      loot-treasure_sheet_50: 8843155141497627654
+      loot-treasure_sheet_51: -8053507908682260468
+      loot-treasure_sheet_52: 2051086804274870605
+      loot-treasure_sheet_53: -6671336090137988401
+      loot-treasure_sheet_54: -6931487531028700207
+      loot-treasure_sheet_55: 111428869630230755
+      loot-treasure_sheet_56: 7460463449826764738
+      loot-treasure_sheet_57: 1334301608191022585
+      loot-treasure_sheet_58: 2086391289083031231
+      loot-treasure_sheet_59: 4192798347603612517
+      loot-treasure_sheet_6: -1453598792216997481
+      loot-treasure_sheet_60: 4569861891770341856
+      loot-treasure_sheet_61: -98609572080643471
+      loot-treasure_sheet_62: -112016371134830813
+      loot-treasure_sheet_63: -4902927753808691085
+      loot-treasure_sheet_64: 3555591211186555256
+      loot-treasure_sheet_65: -2421885986732663127
+      loot-treasure_sheet_66: 2197564521146729614
+      loot-treasure_sheet_67: 5498446339071356452
+      loot-treasure_sheet_68: -3352396859766453139
+      loot-treasure_sheet_69: -5360384026940086783
+      loot-treasure_sheet_7: 5274731922790942965
+      loot-treasure_sheet_70: 4469784402015033259
+      loot-treasure_sheet_71: 220087422440988906
+      loot-treasure_sheet_72: -4465643269632866981
+      loot-treasure_sheet_73: 2660258824924761445
+      loot-treasure_sheet_74: 2547132570315075324
+      loot-treasure_sheet_75: 8906633848626864450
+      loot-treasure_sheet_76: -5403232627752129662
+      loot-treasure_sheet_77: 6886499547248217761
+      loot-treasure_sheet_8: 1053560022883708822
+      loot-treasure_sheet_9: -2104505575368933713
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

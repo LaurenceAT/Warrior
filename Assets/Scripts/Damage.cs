@@ -3,7 +3,7 @@ using UnityEngine;
 // Aplica daño a quien entre en este trigger, sea el player o un enemigo (picos, sierras, etc.).
 public class Damage : MonoBehaviour
 {
-    [SerializeField] private int damage = 1;
+    [SerializeField] private int damage = 20;
 
     // Detecta la colisión con el player o un enemigo y le aplica el daño configurado.
     private void OnTriggerEnter2D(Collider2D collision)

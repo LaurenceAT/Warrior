@@ -19,7 +19,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float attackCooldown = 1.5f;
     // Cuánto dura el bloqueo de movimiento/giro del golpe (debe parecerse al largo de la animación).
     [SerializeField] private float attackDuration = 0.5f;
-    [SerializeField] private int attackDamage = 1;
+    [SerializeField] private int attackDamage = 20;
     // Centro del área del golpe, relativo al enemigo (la X se invierte según hacia dónde mira).
     [SerializeField] private Vector2 attackOffset = new Vector2(0.5f, -0.15f);
     [SerializeField] private float attackRadius = 0.4f;

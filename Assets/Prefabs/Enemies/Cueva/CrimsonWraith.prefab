@@ -1,0 +1,1090 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &967357416833526698
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6105007850519390279}
+  - component: {fileID: 3556245282769916228}
+  - component: {fileID: 3696804084772505156}
+  - component: {fileID: 7402932051834679320}
+  - component: {fileID: 5988642240469722210}
+  - component: {fileID: 8311958760898627959}
+  - component: {fileID: 6911791240948304360}
+  - component: {fileID: 5587753220473897861}
+  m_Layer: 11
+  m_Name: CrimsonWraith
+  m_TagString: Enemy
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6105007850519390279
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967357416833526698}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1247002292212907069}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!50 &3556245282769916228
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967357416833526698}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 3
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4
+--- !u!114 &3696804084772505156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967357416833526698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc7a0991f13a91a4dbb00423cf5a85af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1600
+  currentHealth: 0
+  deathVFX: {fileID: 0}
+  deathAnimDuration: 3.2
+  bodyMass: 500
+  knockbackForce: {x: 4, y: 2}
+  knockbackDuration: 0.2
+  maxAirHits: 8
+  defaultLaunch:
+    altura: 1.5
+    desplazamientoX: 0
+    subida: 0.3
+    suspension: 0.6
+    bajada: 0.3
+    alturaPorGolpe: 0.1
+    subidaPorGolpe: 0.1
+  airKnockbackScale: 0.15
+  isAirborne: 0
+  showHealthBar: 0
+  healthBarOffset: {x: 0, y: 4.5}
+  healthBarWidth: 0.7
+  maxAirStunTime: 2.5
+  volador: 0
+  inamovible: 1
+--- !u!114 &7402932051834679320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967357416833526698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5af8ec0ab5ea4194fbd26763c8798782, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers: []
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.08
+  flashCount: 1
+  colorSinShader: {r: 1, g: 0.3, b: 0.3, a: 1}
+  scalePunch: 0.15
+  punchDuration: 0.12
+--- !u!61 &5988642240469722210
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967357416833526698}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 1.6}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 1.6, y: 3.2}
+  m_EdgeRadius: 0
+--- !u!114 &8311958760898627959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967357416833526698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 2
+    CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ImpulseDuration: 0.2
+    ImpulseType: 0
+    DissipationRate: 0.25
+    RawSignal: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AttackTime: 0
+      SustainTime: 0.2
+      DecayTime: 0.7
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!114 &6911791240948304360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967357416833526698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94aeffd8fb8a32c4eb1367f32e045a97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5587753220473897861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 967357416833526698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aebd954cb30a382489df81097c2ecdcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 6372027443541048}
+  visual: {fileID: 1247002292212907069}
+  radioDeteccion: 7
+  radioOlvido: 11
+  capaSuelo:
+    serializedVersion: 2
+    m_Bits: 0
+  spriteMiraDerecha: 1
+  colorAviso: {r: 1, g: 0.55, b: 0.15, a: 1}
+  danoNormal: 40
+  danoFuerte: 60
+  danoLeve: 20
+  sangradoPilar: 45
+  sangradoOrbe: 55
+  umbralFase2: 0.5
+  velocidadDeslizar: 2.6
+  multEspada: 0.6
+  multPunos: 1.8
+  multArco: 1
+  aturdidoEntrada: 2.6
+  aturdidoParry: 1.4
+  fxOnda:
+    nombre: onda
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 8
+    fps: 14
+    bucle: 1
+    pivote: {x: 0.5, y: 0.42}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 93114ef21be19254d88a304b80cc69f3, type: 3}
+    - {fileID: 2800000, guid: c121093365adf554f97d1d27b690451f, type: 3}
+    - {fileID: 2800000, guid: dca99c47938c53b4290211fdb2452497, type: 3}
+    - {fileID: 2800000, guid: 3d89adea7cd759845a2a2ac6bae0332e, type: 3}
+    - {fileID: 2800000, guid: e7ea65fbfccf7bb438395d22abd91721, type: 3}
+    - {fileID: 2800000, guid: 9bfc3b067712699428b45a8e838d48f5, type: 3}
+    - {fileID: 2800000, guid: cddfd64c489f53f4593c0a9b1125ed4e, type: 3}
+    - {fileID: 2800000, guid: a6f391f34b91e7e479c58265cfaa6133, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  fxPilar:
+    nombre: pilar
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 11
+    fps: 16
+    bucle: 0
+    pivote: {x: 0.5, y: 0.04}
+    pixelesPorUnidad: 35.5
+    fotogramas:
+    - {fileID: 2800000, guid: 4ef7feec2fcfaa14c859c20aa9cc6b0c, type: 3}
+    - {fileID: 2800000, guid: 6c7dcbdebf17d0149af8e81d78dabc09, type: 3}
+    - {fileID: 2800000, guid: 2ffa8d4f2ff63964cac3cd53039bf431, type: 3}
+    - {fileID: 2800000, guid: 01cb308082c2172468b69653654f1012, type: 3}
+    - {fileID: 2800000, guid: 946b52c29402e5144b388b4385f5a09d, type: 3}
+    - {fileID: 2800000, guid: dbc6971ec83230e4f9f7fb02c1ae8968, type: 3}
+    - {fileID: 2800000, guid: d03e09f4e48c1e241ab93d51643a5ee6, type: 3}
+    - {fileID: 2800000, guid: c32259a9c09b0db48904b50d001417e8, type: 3}
+    - {fileID: 2800000, guid: 66c87779fc41e6e4386440f9feec6d8b, type: 3}
+    - {fileID: 2800000, guid: 6428ca8aa1e3375469c425e23e4ca51b, type: 3}
+    - {fileID: 2800000, guid: 6b5647e388385ce4aa5700e23c7a20af, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  fxGlifo:
+    nombre: glifo
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 5
+    fps: 12
+    bucle: 1
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 29d701402b05ca04787aa8a1e547efd8, type: 3}
+    - {fileID: 2800000, guid: 753df9bdc51750747af8deb564100301, type: 3}
+    - {fileID: 2800000, guid: ca56a5b931b234943bf11e4f8d6d821b, type: 3}
+    - {fileID: 2800000, guid: 5fb272d45fdf12b439780f90eb10d9e7, type: 3}
+    - {fileID: 2800000, guid: a630109321be05344a987cea3056a8cf, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  fxOrbe:
+    nombre: orbe
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 4
+    fps: 12
+    bucle: 1
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: fe89f856a6c83224a8866f4f1da8adb3, type: 3}
+    - {fileID: 2800000, guid: f4896fb1cf088f440b1f3e492296ab3c, type: 3}
+    - {fileID: 2800000, guid: 4b9561417abeba7498a407f603d73b88, type: 3}
+    - {fileID: 2800000, guid: c42a2cbbdf9d6214ab01f86ba0a38f0e, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  fxSangre:
+    nombre: sangre
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 12
+    fps: 18
+    bucle: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: f2a13d4358ba02a4c889bb4ea4a97d14, type: 3}
+    - {fileID: 2800000, guid: bec4c64f44e9d7247b66847f3ce5dc84, type: 3}
+    - {fileID: 2800000, guid: 98ecc604df65e4145bbe0358b29b701e, type: 3}
+    - {fileID: 2800000, guid: 1df30fd601818864481a72601c921e7a, type: 3}
+    - {fileID: 2800000, guid: a16c4b6a8061f92489dcbb15595e85e1, type: 3}
+    - {fileID: 2800000, guid: bcc8f21c0d17a404eb5f5b44ee5739dc, type: 3}
+    - {fileID: 2800000, guid: f55c2bd64f7b57a4f87bd1aa3391a537, type: 3}
+    - {fileID: 2800000, guid: 6f9c2d9032d8da14eb503158bbc6082f, type: 3}
+    - {fileID: 2800000, guid: 43659fe2ed48a1242896eb398922b13c, type: 3}
+    - {fileID: 2800000, guid: 6aa68bc45ba30634ba8326e3c6368991, type: 3}
+    - {fileID: 2800000, guid: 50a1ba4f659193d4f8057cd80f771b3a, type: 3}
+    - {fileID: 2800000, guid: eea92b9f7299a5d4298b33817a7f9ead, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  fxMeteoro:
+    nombre: meteoro
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 12
+    fps: 14
+    bucle: 1
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 025d3fe96c189ae43a2c9a52b47d9c3a, type: 3}
+    - {fileID: 2800000, guid: 985da0e6892187646887f973a5f94470, type: 3}
+    - {fileID: 2800000, guid: 77c8c36bc90b6c144bfa5916f9dab62f, type: 3}
+    - {fileID: 2800000, guid: ce841518c528c5d4d94627555c8031cd, type: 3}
+    - {fileID: 2800000, guid: e073d66ae794127448945f17da18a1f0, type: 3}
+    - {fileID: 2800000, guid: 69005f88ea1559a4b807c80f27cccb97, type: 3}
+    - {fileID: 2800000, guid: fa8f71c07b944644983fc198b09f4fa5, type: 3}
+    - {fileID: 2800000, guid: bdac3a0c8de99dd46a765822236ef85f, type: 3}
+    - {fileID: 2800000, guid: 3cede6034e6fb1542a100a985d5fd17c, type: 3}
+    - {fileID: 2800000, guid: d8920473a5fee04449fd1cf39b0ea46f, type: 3}
+    - {fileID: 2800000, guid: b6fee4c9ea2b44748bb2f79122091940, type: 3}
+    - {fileID: 2800000, guid: f04cc07653f9e77409995d3e29eb1b72, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  fxExplosion:
+    nombre: explosion
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 8
+    fps: 16
+    bucle: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 9bf4bb09624d4b34697fadd2797461b6, type: 3}
+    - {fileID: 2800000, guid: b19b467c1229d1c4f93c6f4b77956c8c, type: 3}
+    - {fileID: 2800000, guid: e8114224ad2b72241975cbe11e435f5a, type: 3}
+    - {fileID: 2800000, guid: f78385e8748fad649be207022e8e579d, type: 3}
+    - {fileID: 2800000, guid: f99fa86654250534aabbdde7cfe38984, type: 3}
+    - {fileID: 2800000, guid: d6b6aa24c3a1ce442af2429412337e17, type: 3}
+    - {fileID: 2800000, guid: c18a7faadda9a2e4698cf4aebcc4e703, type: 3}
+    - {fileID: 2800000, guid: e265177be3d5b684e871a134f53560c0, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  fxAnillo:
+    nombre: anillo
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 12
+    fps: 14
+    bucle: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: a1096709919679e42ab637cbc34c19f9, type: 3}
+    - {fileID: 2800000, guid: 88cdb7a4fec28a84bbc0cbacf6e7040c, type: 3}
+    - {fileID: 2800000, guid: 0723d7917b924004fa027d98234b1ee7, type: 3}
+    - {fileID: 2800000, guid: 38508a6847e0a9645ad362fca4f2a493, type: 3}
+    - {fileID: 2800000, guid: 7b8f56fb8707b7541946baf7755788d0, type: 3}
+    - {fileID: 2800000, guid: f9c87955fe5e13644a23520357854168, type: 3}
+    - {fileID: 2800000, guid: 3da5b6780d4ef5740b9eea678699957d, type: 3}
+    - {fileID: 2800000, guid: 788a3bda28feb2f4c8fc9225a4761337, type: 3}
+    - {fileID: 2800000, guid: 69f83d14e04ddfa4aa93114797dd853e, type: 3}
+    - {fileID: 2800000, guid: b3c39f746963bd049823d8e40d823c22, type: 3}
+    - {fileID: 2800000, guid: 6ec4b8496faf15043b7a24f1fd133cd1, type: 3}
+    - {fileID: 2800000, guid: 95231b8df9fccbb499417d25813679ca, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  fxPortal:
+    nombre: portal
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 7
+    fps: 12
+    bucle: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 32
+    fotogramas:
+    - {fileID: 2800000, guid: eb66c6fd225bbd841a8095439d0fdf08, type: 3}
+    - {fileID: 2800000, guid: ef2ade298b541e14992f2153ef5cc9ca, type: 3}
+    - {fileID: 2800000, guid: cd2ceeac2795ab94293fca2fe8a46581, type: 3}
+    - {fileID: 2800000, guid: 3fa12eccec6333e4d9949f3b60b0512e, type: 3}
+    - {fileID: 2800000, guid: bec2338e77d8ae744b0cb63dc7023a15, type: 3}
+    - {fileID: 2800000, guid: 9af92d8056e39344f9c4448b79e4a331, type: 3}
+    - {fileID: 2800000, guid: 65182f763b1a8e441953363888577d3a, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  fxPolvo:
+    nombre: polvo
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 5
+    fps: 12
+    bucle: 0
+    pivote: {x: 0.5, y: 0.3}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 9c9fa19bdb50c3148a3d3e29d657b4c9, type: 3}
+    - {fileID: 2800000, guid: 6d53196d911c4464281ed4b825922c62, type: 3}
+    - {fileID: 2800000, guid: 0521432bc49fded49965c37cf0d6d2e3, type: 3}
+    - {fileID: 2800000, guid: 55844a80144444f4cb2fab1e7499a4c4, type: 3}
+    - {fileID: 2800000, guid: 3468813dd7df74943b93a8f81db1ec08, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  fxColumnaPolvo:
+    nombre: columna
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 9
+    fps: 14
+    bucle: 0
+    pivote: {x: 0.5, y: 0.1}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 9b8fb0bd67dfeb943aa666b618ca8d9c, type: 3}
+    - {fileID: 2800000, guid: eee457c3e6c8429419af6861562165dd, type: 3}
+    - {fileID: 2800000, guid: 2ef32da9b90582040822024182be51dd, type: 3}
+    - {fileID: 2800000, guid: 289c6f4c470543e479a2eaa96dd6d536, type: 3}
+    - {fileID: 2800000, guid: 6e9fedd2a219f1c44860a8f70f4acf4b, type: 3}
+    - {fileID: 2800000, guid: 8cc7ad06d3c7dea439918ccd1642420f, type: 3}
+    - {fileID: 2800000, guid: 22541361e02da7646934fe9104187a50, type: 3}
+    - {fileID: 2800000, guid: 3ea036962a63cba4a9cafe2eadb0cd09, type: 3}
+    - {fileID: 2800000, guid: 99317b5c60804a446ab2afb06ce55b9b, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  fxMedialuna:
+    nombre: medialuna
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 7
+    fps: 14
+    bucle: 1
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 45cb6f5b9ebf828408e3ae5a2a05e097, type: 3}
+    - {fileID: 2800000, guid: 49023483d0f28cb498bcc23a99f9add5, type: 3}
+    - {fileID: 2800000, guid: 76f972ef75498d84ca46b97f23fc17a7, type: 3}
+    - {fileID: 2800000, guid: c100098cef58ee947b356b6c62fc0ba4, type: 3}
+    - {fileID: 2800000, guid: ea57c305124e46948a1c0ec80d2d80e5, type: 3}
+    - {fileID: 2800000, guid: cfa3a907b274748408f7d1ddead1fed7, type: 3}
+    - {fileID: 2800000, guid: 227a98630c68f8d45adaa863a81fd4fa, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  fxVorticeInicio:
+    nombre: vortice_ini
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 8
+    fps: 12
+    bucle: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: d1cbfe9d11c89d844804ef6b3c23110d, type: 3}
+    - {fileID: 2800000, guid: ce622b6ee7be2994e98ce507da2db02a, type: 3}
+    - {fileID: 2800000, guid: 96618e9c8b969df4aabdf049c6f33b1b, type: 3}
+    - {fileID: 2800000, guid: 1666f70f2200dd1478af6f8890965924, type: 3}
+    - {fileID: 2800000, guid: 794526bf22aff974a8585e3188ca25e7, type: 3}
+    - {fileID: 2800000, guid: 6eaea7e285d60a745998fdc8d9808b40, type: 3}
+    - {fileID: 2800000, guid: 07daa5c2c5339de4ba8394794df20c0c, type: 3}
+    - {fileID: 2800000, guid: 68ae7ad17a961ef48b58639eee35d4c2, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  fxVorticeBucle:
+    nombre: vortice
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 5
+    fps: 12
+    bucle: 1
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 29d701402b05ca04787aa8a1e547efd8, type: 3}
+    - {fileID: 2800000, guid: 753df9bdc51750747af8deb564100301, type: 3}
+    - {fileID: 2800000, guid: ca56a5b931b234943bf11e4f8d6d821b, type: 3}
+    - {fileID: 2800000, guid: 5fb272d45fdf12b439780f90eb10d9e7, type: 3}
+    - {fileID: 2800000, guid: a630109321be05344a987cea3056a8cf, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  fxVorticeFin:
+    nombre: vortice_fin
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 6
+    fps: 12
+    bucle: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 237ecbde9d349fd46b374e871600d377, type: 3}
+    - {fileID: 2800000, guid: dcb5887b8433b1a4d93b60bb377d1467, type: 3}
+    - {fileID: 2800000, guid: 8445d19c873ad1649a74b546571ec3be, type: 3}
+    - {fileID: 2800000, guid: 15395b486d3ea9b43bbb8af6746237d0, type: 3}
+    - {fileID: 2800000, guid: 9962ed1f1646444459bc2d9b22cf0b41, type: 3}
+    - {fileID: 2800000, guid: 9e9e4f15b3aa8b3408a384e4ec279234, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  carmesi: {r: 1, g: 0.18, b: 0.22, a: 1}
+  colorOnda: {r: 1, g: 0.45, b: 0.55, a: 1}
+  cuerpoFase1: {x: 1.6, y: 3.2}
+  cuerpoFase2: {x: 2.8, y: 4.4}
+--- !u!1 &7305081995706168850
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1247002292212907069}
+  - component: {fileID: 3934767189572707150}
+  - component: {fileID: 6372027443541048}
+  m_Layer: 0
+  m_Name: Visual
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1247002292212907069
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7305081995706168850}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6105007850519390279}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &3934767189572707150
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7305081995706168850}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: e259e35f95170c14db9d0892a2d5fe1f, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: -2060847549
+  m_SortingLayer: 4
+  m_SortingOrder: -2
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!114 &6372027443541048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7305081995706168850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4120628558bc9e34eadd8dddbd387e20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destino: {fileID: 3934767189572707150}
+  clips:
+  - nombre: guardia
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 1
+    fps: 1
+    bucle: 1
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 110
+    fotogramas:
+    - {fileID: 2800000, guid: eb0ebc242a51170488ae20671bebee5c, type: 3}
+    recorte:
+      x: 480
+      y: 220
+      width: 1200
+      height: 860
+    pivotes:
+    - {x: 0.51666665, y: 0.1744186}
+  - nombre: aturdido
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 1
+    fps: 1
+    bucle: 1
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 110
+    fotogramas:
+    - {fileID: 2800000, guid: eb0ebc242a51170488ae20671bebee5c, type: 3}
+    recorte:
+      x: 480
+      y: 220
+      width: 1200
+      height: 860
+    pivotes:
+    - {x: 0.51666665, y: 0.1744186}
+  - nombre: preparar
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 1
+    fps: 1
+    bucle: 1
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 110
+    fotogramas:
+    - {fileID: 2800000, guid: 8eb95b89d69b9d940a1bd11c774d7c29, type: 3}
+    recorte:
+      x: 480
+      y: 220
+      width: 1200
+      height: 860
+    pivotes:
+    - {x: 0.51666665, y: 0.15581395}
+  - nombre: tajo
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 3
+    fps: 9
+    bucle: 0
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 110
+    fotogramas:
+    - {fileID: 2800000, guid: 4350bc82499ce3a41b6613a222688106, type: 3}
+    - {fileID: 2800000, guid: 892b79d8fbe421544b907ee175c48c49, type: 3}
+    - {fileID: 2800000, guid: 27c2e1ee2d17b694a806c1631d87e5c0, type: 3}
+    recorte:
+      x: 480
+      y: 220
+      width: 1200
+      height: 860
+    pivotes:
+    - {x: 0.51666665, y: 0.17325582}
+    - {x: 0.51666665, y: 0.19534884}
+    - {x: 0.51666665, y: 0.20930232}
+  - nombre: frenar
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 1
+    fps: 1
+    bucle: 1
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 110
+    fotogramas:
+    - {fileID: 2800000, guid: 27c2e1ee2d17b694a806c1631d87e5c0, type: 3}
+    recorte:
+      x: 480
+      y: 220
+      width: 1200
+      height: 860
+    pivotes:
+    - {x: 0.51666665, y: 0.20930232}
+  - nombre: embestida
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 2
+    fps: 14
+    bucle: 1
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 110
+    fotogramas:
+    - {fileID: 2800000, guid: fafe100fcecb4c9408ee8dab52a90d2c, type: 3}
+    - {fileID: 2800000, guid: b3bbb45ae25f770478b366b8cb470a61, type: 3}
+    recorte:
+      x: 480
+      y: 220
+      width: 1200
+      height: 860
+    pivotes:
+    - {x: 0.51666665, y: 0.19069767}
+    - {x: 0.51666665, y: 0.19069767}
+  - nombre: conjuro
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 2
+    fps: 5
+    bucle: 1
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 110
+    fotogramas:
+    - {fileID: 2800000, guid: 4b192c87e99fffb4c9a702f11787fd9e, type: 3}
+    - {fileID: 2800000, guid: a21fa16721505df4698dcf5fff11c8af, type: 3}
+    recorte:
+      x: 480
+      y: 220
+      width: 1200
+      height: 860
+    pivotes:
+    - {x: 0.51666665, y: 0.10813954}
+    - {x: 0.51666665, y: 0.10813954}
+  - nombre: zarpazo
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 2
+    fps: 6
+    bucle: 0
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 110
+    fotogramas:
+    - {fileID: 2800000, guid: 1305e5a901557ff43b25a130255bc939, type: 3}
+    - {fileID: 2800000, guid: bf500636505219842a73e9e11a7b6fb3, type: 3}
+    recorte:
+      x: 480
+      y: 220
+      width: 1200
+      height: 860
+    pivotes:
+    - {x: 0.51666665, y: 0.10930233}
+    - {x: 0.51666665, y: 0.10930233}
+  - nombre: flotar
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 2
+    fps: 3
+    bucle: 1
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 110
+    fotogramas:
+    - {fileID: 2800000, guid: b991d5f25700b8f44904594607b28158, type: 3}
+    - {fileID: 2800000, guid: 6f6b4a831f502ae4ebb4085e5441f1c5, type: 3}
+    recorte:
+      x: 480
+      y: 220
+      width: 1200
+      height: 860
+    pivotes:
+    - {x: 0.51666665, y: 0.10581395}
+    - {x: 0.51666665, y: 0.1627907}
+  - nombre: caida
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 1
+    fps: 1
+    bucle: 1
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 110
+    fotogramas:
+    - {fileID: 2800000, guid: 8eb95b89d69b9d940a1bd11c774d7c29, type: 3}
+    recorte:
+      x: 480
+      y: 220
+      width: 1200
+      height: 860
+    pivotes:
+    - {x: 0.51666665, y: 0.15581395}
+  - nombre: impacto
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 1
+    fps: 1
+    bucle: 1
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 110
+    fotogramas:
+    - {fileID: 2800000, guid: 27c2e1ee2d17b694a806c1631d87e5c0, type: 3}
+    recorte:
+      x: 480
+      y: 220
+      width: 1200
+      height: 860
+    pivotes:
+    - {x: 0.51666665, y: 0.20930232}
+  - nombre: grande_guardia
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 1
+    fps: 1
+    bucle: 1
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 110
+    fotogramas:
+    - {fileID: 2800000, guid: 9306f95727ba6a34aa6bbd687110c8b1, type: 3}
+    recorte:
+      x: 480
+      y: 220
+      width: 1200
+      height: 860
+    pivotes:
+    - {x: 0.51666665, y: 0.17906977}
+  - nombre: grande_zarpazo
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 1
+    fps: 1
+    bucle: 1
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 110
+    fotogramas:
+    - {fileID: 2800000, guid: 5b9e363621cebad48ab9ae0c9c5c9cbe, type: 3}
+    recorte:
+      x: 480
+      y: 220
+      width: 1200
+      height: 860
+    pivotes:
+    - {x: 0.51666665, y: 0.11046512}
+  - nombre: grande_rugido
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 1
+    fps: 1
+    bucle: 1
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 110
+    fotogramas:
+    - {fileID: 2800000, guid: 17a02bae908644846bfd2ccfce2f0522, type: 3}
+    recorte:
+      x: 480
+      y: 220
+      width: 1200
+      height: 860
+    pivotes:
+    - {x: 0.51666665, y: 0.09883721}
+  - nombre: muerte
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 1
+    fps: 1
+    bucle: 1
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 110
+    fotogramas:
+    - {fileID: 2800000, guid: 6f6b4a831f502ae4ebb4085e5441f1c5, type: 3}
+    recorte:
+      x: 480
+      y: 220
+      width: 1200
+      height: 860
+    pivotes:
+    - {x: 0.51666665, y: 0.1627907}
+  clipInicial: 

@@ -53,7 +53,20 @@ public class GatherInput : MonoBehaviour
     [SerializeField] private bool _isDodging;
     public bool IsDodging { get => _isDodging; set => _isDodging = value; }
 
+    // Pulsacion de beber pocion (Q, o el boton norte del mando). Como el ataque: se
+    // marca al pulsar y la consume PlayerControler.
+    [SerializeField] private bool _isHealing;
+    public bool IsHealing { get => _isHealing; set => _isHealing = value; }
+
     #region Unity Lifecycle
+
+    // La Q se lee directamente del teclado (no esta en el mapa de acciones).
+    private void Update()
+    {
+        if (Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame) _isHealing = true;
+        if (Gamepad.current != null && Gamepad.current.buttonNorth.wasPressedThisFrame) _isHealing = true;
+    }
+
 
     // Crea la instancia del sistema de controles generado por el Input System.
     private void Awake()

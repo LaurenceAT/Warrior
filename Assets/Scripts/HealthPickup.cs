@@ -9,7 +9,7 @@ using UnityEngine;
 public class HealthPickup : MonoBehaviour
 {
     [Header("Curacion")]
-    [SerializeField] private int healAmount = 1;
+    [SerializeField] private int healAmount = 25;
     // Con la vida llena, el corazon se queda donde esta en vez de gastarse para
     // nada. Si lo marcas, se recoge igual aunque no cure.
     [SerializeField] private bool consumeWhenFull;

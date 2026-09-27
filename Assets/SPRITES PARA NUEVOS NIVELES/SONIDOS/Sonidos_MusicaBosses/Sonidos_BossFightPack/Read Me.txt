@@ -1,0 +1,22 @@
+10 original tracks for boss encounters, combat sequences, and the moments that need to feel earned and dangerous.
+
+Not generic battle music — this pack has conviction. Heavy orchestral arrangements, dissonant synth layers, and rhythms built for the moment a player realizes they're outmatched. Each track has a distinct identity so your final boss sounds different from your mid-game encounter.
+
+All tracks are provided as .ogg files — the recommended format for music in Godot for optimal streaming performance and file size.
+
+TRACKS INCLUDED
+1. The Final Revelation — massive dissonant boss energy, Dm, 100 BPM
+2. The Hooded March — dark and purposeful, Cm
+3. Opus — pure chaos and power, Cm
+4. Feast of the Red Lynx — ferocious and relentless, Fm
+5. One Misstep — tense and punishing, Fm
+6. Obey the Master — commanding dark authority, Fm
+7. Skeletron X — mechanical boss intensity, Dm
+8. Fierce to the Last — defiant final stand energy, Gm
+9. Waking Burden — heavy and inevitable, Am
+10. First Iteration — cold opening aggression, F#m
+
+LICENSE
+Free to use in any Godot project with attribution. Credit "Music: Talon Trueblood" in your game credits or itch.io page. Commercial use permitted with credit.
+
+Part of the Talon catalog — 203 original tracks across themed packs, all free with attribution.

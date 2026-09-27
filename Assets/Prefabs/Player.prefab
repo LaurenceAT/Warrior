@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 8415853499437379215}
   - component: {fileID: 6754855231493566586}
   - component: {fileID: 6245690450504146653}
+  - component: {fileID: 8778370368055672439}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -234,9 +235,13 @@ MonoBehaviour:
   _isJumping: 0
   _isAttacking: 0
   _isSprinting: 0
+  _isKicking: 0
+  _isKickHeld: 0
+  _isTogglingWeapon: 0
   _isShooting: 0
   _isShootHeld: 0
   _isDodging: 0
+  _isHealing: 0
 --- !u!114 &2360815886447925532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,14 +256,56 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_transform: {fileID: 8745591629479740634}
   speed: 5
-  unarmedMoveset: {fileID: 11400000, guid: a17b40de40de4d883f5f48f426f6919c, type: 2}
-  swordIcon: {fileID: 21300000, guid: 11b00f0ff19b78f4c8b99cc9cd4dca7e, type: 3}
-  glovesIcon: {fileID: 21300000, guid: ad0e9b2c1fcd57546890854cf36f483e, type: 3}
   canMove: 0
   moveDelay: 0.8
   sprintSpeed: 8.5
   sprintAcceleration: 30
   keepSprintInAir: 1
+  estadoArma: 0
+  swordIcon: {fileID: 21300000, guid: 11b00f0ff19b78f4c8b99cc9cd4dca7e, type: 3}
+  glovesIcon: {fileID: 21300000, guid: ad0e9b2c1fcd57546890854cf36f483e, type: 3}
+  weaponToggleTimeout: 0.6
+  isTogglingWeapon: 0
+  unarmedMoveset: {fileID: 11400000, guid: a17b40de40de4d883f5f48f426f6919c, type: 2}
+  unarmedBufferTime: 0.2
+  unarmedGizmoMove: -1
+  tiempoBeber: 1
+  momentoCurar: 0.55
+  frenoAlBeber: 0.35
+  estadoBeber: UsarObjeto
+  swordLauncherProfile: 7
+  swordLauncherState: SwordLauncher
+  blockState: Block
+  parryWindow: 0.2
+  parrySpamTime: 0.5
+  parrySpamFactor: 0.35
+  blockStaminaCost: 10
+  blockDamageFactor: 0.25
+  parryStaminaGain: 12
+  blockPushback: 2
+  blockHitStop: 0.05
+  blockShake: 0.08
+  parryStagger: 1
+  parryHitStop: 0.12
+  parryShake: 0.25
+  parryFlashColor: {r: 1, g: 1, b: 1, a: 0.3}
+  parryFlashTime: 0.12
+  counterWindow: 1.2
+  counterDamageMultiplier: 2
+  counterHitStop: 0.12
+  counterShake: 0.3
+  counterGlowColor: {r: 1, g: 0.25, b: 0.25, a: 1}
+  counterPulseSpeed: 18
+  parrySparkCount: 16
+  parrySparkColorA: {r: 1, g: 0.95, b: 0.6, a: 1}
+  parrySparkColorB: {r: 1, g: 0.35, b: 0.2, a: 1}
+  counterGlowBladeOnly: 1
+  bladeGlowShader: {fileID: 4800000, guid: 5b7e2c9d1a4f4e8b9c3d6a1f2e7b8c90, type: 3}
+  bladeColor1: {r: 0.761, g: 0.784, b: 0.941, a: 1}
+  bladeColor2: {r: 0.647, g: 0.682, b: 0.918, a: 1}
+  bladeColor3: {r: 0.522, g: 0.565, b: 0.624, a: 1}
+  bladeColorTolerance: 0.04
+  isBlocking: 0
   bowBeamPrefab: {fileID: 4172610507761915418, guid: 3b316857f51c31d4fae46c8b4d91916d, type: 3}
   bowDamage: 5
   bowTicks: 3
@@ -293,6 +340,8 @@ MonoBehaviour:
   airComboLength: 2
   airAttackHang: 0.3
   airHitRestoresJump: 1
+  airHitHover: 1
+  airHitHoverGrace: 0.12
   plungeHitOffset: {x: 0, y: -0.7}
   plungeHitSize: {x: 0.6, y: 0.4}
   plungeLandOffset: {x: 0, y: -0.45}
@@ -302,8 +351,12 @@ MonoBehaviour:
   plungeHitStop: 0.08
   showPlungeGizmos: 1
   plungeWindup: 0.1
+  plungeStartOffset: {x: 0.55, y: -0.25}
+  plungeStartSize: {x: 1.1, y: 1.2}
+  plungeStartKnockback: {x: 2, y: 1}
   plungeSpeed: 18
   plungeLaunch: {x: 3.5, y: 7}
+  plungeAirSpike: {x: 1, y: -14}
   plungeLandTime: 0.25
   plungeLandShake: 0.35
   plungeMaxTime: 1.5
@@ -321,7 +374,7 @@ MonoBehaviour:
   hasIFrames: 0
   slideColliderHeight: 0.55
   slideMaxExtraUnderCeiling: 0.6
-  maxHealth: 5
+  maxHealth: 100
   currentHealth: 0
   invincibleTime: 1
   blinkInterval: 0.1
@@ -359,6 +412,7 @@ MonoBehaviour:
   wallRunCooldown: 0
   wallRunFromGroundSprint: 1
   wallRunStick: 0.2
+  wallRunSnapSpeed: 4
   wallRunGraceTime: 0.12
   wallRunProbeExtra: 0.15
   wallRunLedgePush: 2.5
@@ -425,7 +479,6 @@ MonoBehaviour:
   attackLayers:
     serializedVersion: 2
     m_Bits: 0
-  bladeGlowShader: {fileID: 4800000, guid: 5b7e2c9d1a4f4e8b9c3d6a1f2e7b8c90, type: 3}
   attackProfiles:
   - nombre: Ataque
     forma: 2
@@ -441,6 +494,14 @@ MonoBehaviour:
     dano: 15
     knockback: {x: 2.5, y: 1.5}
     lanza: 0
+    elevacion:
+      altura: 1.5
+      desplazamientoX: 0
+      subida: 0.3
+      suspension: 0.6
+      bajada: 0.3
+      alturaPorGolpe: 0.1
+      subidaPorGolpe: 0.1
     costeEstamina: 12
     duracion: 0.4
     encadenarDesde: 0.28
@@ -462,6 +523,14 @@ MonoBehaviour:
     dano: 15
     knockback: {x: 2.5, y: 1.5}
     lanza: 0
+    elevacion:
+      altura: 1.5
+      desplazamientoX: 0
+      subida: 0.3
+      suspension: 0.6
+      bajada: 0.3
+      alturaPorGolpe: 0.1
+      subidaPorGolpe: 0.1
     costeEstamina: 14
     duracion: 0.4
     encadenarDesde: 0.28
@@ -483,6 +552,14 @@ MonoBehaviour:
     dano: 22
     knockback: {x: 3.5, y: 2}
     lanza: 0
+    elevacion:
+      altura: 1.5
+      desplazamientoX: 0
+      subida: 0.3
+      suspension: 0.6
+      bajada: 0.3
+      alturaPorGolpe: 0.1
+      subidaPorGolpe: 0.1
     costeEstamina: 20
     duracion: 0.4
     encadenarDesde: 0.32
@@ -504,6 +581,14 @@ MonoBehaviour:
     dano: 12
     knockback: {x: 1.5, y: 2}
     lanza: 0
+    elevacion:
+      altura: 1.5
+      desplazamientoX: 0
+      subida: 0.3
+      suspension: 0.6
+      bajada: 0.3
+      alturaPorGolpe: 0.1
+      subidaPorGolpe: 0.1
     costeEstamina: 12
     duracion: 0.27
     encadenarDesde: 0.18
@@ -525,6 +610,14 @@ MonoBehaviour:
     dano: 14
     knockback: {x: 2, y: 2}
     lanza: 0
+    elevacion:
+      altura: 1.5
+      desplazamientoX: 0
+      subida: 0.3
+      suspension: 0.6
+      bajada: 0.3
+      alturaPorGolpe: 0.1
+      subidaPorGolpe: 0.1
     costeEstamina: 14
     duracion: 0.2
     encadenarDesde: 0.14
@@ -546,6 +639,14 @@ MonoBehaviour:
     dano: 20
     knockback: {x: 1, y: -8}
     lanza: 0
+    elevacion:
+      altura: 1.5
+      desplazamientoX: 0
+      subida: 0.3
+      suspension: 0.6
+      bajada: 0.3
+      alturaPorGolpe: 0.1
+      subidaPorGolpe: 0.1
     costeEstamina: 12
     duracion: 0.2
     encadenarDesde: 0.14
@@ -567,6 +668,14 @@ MonoBehaviour:
     dano: 20
     knockback: {x: 3, y: 2}
     lanza: 0
+    elevacion:
+      altura: 1.5
+      desplazamientoX: 0
+      subida: 0.3
+      suspension: 0.6
+      bajada: 0.3
+      alturaPorGolpe: 0.1
+      subidaPorGolpe: 0.1
     costeEstamina: 12
     duracion: 0.2
     encadenarDesde: 0.14
@@ -706,6 +815,87 @@ MonoBehaviour:
   plungeCost: 25
   dodgeCost: 15
   exhausted: 0
+--- !u!114 &8778370368055672439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 25321102597521225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3629e275d129ab043aed5dfc3a547af7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tajos: []
+  escalaTajo: []
+  desvioTajo: {x: 0.85, y: 0.05}
+  impactoEspada:
+    nombre: 
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 1
+    fps: 10
+    bucle: 1
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 28
+    fotogramas: []
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  impactoPunos:
+    nombre: 
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 1
+    fps: 10
+    bucle: 1
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 28
+    fotogramas: []
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  impactoContra:
+    nombre: impacto_contra
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 8
+    fps: 18
+    bucle: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 23ef9a42f0dd0a64cbfdacd444fdb214, type: 3}
+    - {fileID: 2800000, guid: 5e4a64492c31c434c85aaac3ce00ae12, type: 3}
+    - {fileID: 2800000, guid: 5c554fe28c51131499d30564e5964288, type: 3}
+    - {fileID: 2800000, guid: cb018f96a5ea86d4ebfaddd0f813f3a1, type: 3}
+    - {fileID: 2800000, guid: 8ea0caac1eebba841967a7c19379bc22, type: 3}
+    - {fileID: 2800000, guid: 5049aeb3722a5cc42806241bf4bbd361, type: 3}
+    - {fileID: 2800000, guid: 8f7edc00685c4d84baf9d6f15f2ba867, type: 3}
+    - {fileID: 2800000, guid: 5dd1f114547b4bf48a94768c7382b906, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  colorImpacto: {r: 0.75, g: 0.92, b: 1, a: 1}
 --- !u!1 &306997544179117387
 GameObject:
   m_ObjectHideFlags: 0

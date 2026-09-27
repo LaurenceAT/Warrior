@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
     // INSTANCIA GLOBAL DEL GAME MANAGER (PATRÓN SINGLETON)
     public static GameManager Instance;
 
+    // Se lanza cada vez que el player reaparece tras morir (reinicio de enemigos...).
+    public static event System.Action AlReaparecerPlayer;
+
     [Header("Player Settings")]
     // REFERENCIAS Y CONFIGURACIÓN DEL RESPAWN DEL JUGADOR
     [SerializeField] private GameObject playerPrefab;
@@ -72,7 +75,8 @@ public class GameManager : MonoBehaviour
     // Escucha la tecla Escape para pausar/reanudar el juego.
     private void Update()
     {
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        // Con la pantalla de muerte, Escape es "cualquier boton" para continuar.
+        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame && !PantallaMuerte.Activa)
         {
             if (isPaused)
                 ResumeGame();
@@ -99,6 +103,8 @@ public class GameManager : MonoBehaviour
     IEnumerator RespawnPlayerCoroutine()
     {
         yield return new WaitForSeconds(respawnPlayerDelay);
+        // Tras morir, la pantalla de muerte espera a que el jugador pulse un boton.
+        if (PantallaMuerte.Activa) yield return PantallaMuerte.EsperarContinuar();
 
         GameObject newPlayer = Instantiate(playerPrefab, playerRespawnPoint.position, Quaternion.identity);
         newPlayer.name = "Player";
@@ -110,6 +116,18 @@ public class GameManager : MonoBehaviour
 
         // ACTUALIZA EL OBJETIVO DE LA CÁMARA AL NUEVO PLAYER
         cinemachineCamera.Follow = newPlayer.transform;
+
+        AlReaparecerPlayer?.Invoke();
+        PantallaMuerte.Ocultar();
+    }
+
+    // Reinicia desde el ultimo punto de control sin morir (menu de pausa): el
+    // player desaparece y reaparece donde toque, como tras una muerte.
+    public void ReiniciarDesdeCheckpoint()
+    {
+        if (playerControler == null) playerControler = FindFirstObjectByType<PlayerControler>();
+        if (playerControler != null) Destroy(playerControler.gameObject);
+        RespawnPlayer();
     }
 
     #endregion
@@ -139,7 +157,9 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
         isPaused = true;
 
-        pausePanel.SetActive(true);
+        // El menu nuevo sustituye al panel antiguo.
+        if (pausePanel != null) pausePanel.SetActive(false);
+        MenuPausa.Get().Mostrar(true);
     }
 
     // Reanuda el tiempo del juego y oculta el panel de pausa.
@@ -148,7 +168,8 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         isPaused = false;
 
-        pausePanel.SetActive(false);
+        if (pausePanel != null) pausePanel.SetActive(false);
+        MenuPausa.Get().Mostrar(false);
     }
 
     #endregion

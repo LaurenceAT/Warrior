@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d891e334f77e81946a8bca2539fd014d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healAmount: 1
+  healAmount: 25
   consumeWhenFull: 0
   idleFrames:
   - {fileID: 7524770952856964032, guid: 592a5f9ffffe4b84ba7e481f8533b77d, type: 3}

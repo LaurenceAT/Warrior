@@ -1,0 +1,1963 @@
+fileFormatVersion: 2
+guid: 7f284822d2c1d8a4d915f992b4e584a7
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7658057852191608598
+    second: jewelry-accessories_sheet_0
+  - first:
+      213: 1494562405469158233
+    second: jewelry-accessories_sheet_1
+  - first:
+      213: -192970092404461880
+    second: jewelry-accessories_sheet_2
+  - first:
+      213: -4947779926502281499
+    second: jewelry-accessories_sheet_3
+  - first:
+      213: 2050910345575497080
+    second: jewelry-accessories_sheet_4
+  - first:
+      213: 3245745178760455465
+    second: jewelry-accessories_sheet_5
+  - first:
+      213: -8418954216076420535
+    second: jewelry-accessories_sheet_6
+  - first:
+      213: 729592231598735270
+    second: jewelry-accessories_sheet_7
+  - first:
+      213: -2454424345963952557
+    second: jewelry-accessories_sheet_8
+  - first:
+      213: 1815932228195597457
+    second: jewelry-accessories_sheet_9
+  - first:
+      213: 2254899794766981908
+    second: jewelry-accessories_sheet_10
+  - first:
+      213: -4215977614695233196
+    second: jewelry-accessories_sheet_11
+  - first:
+      213: 4225335799715549145
+    second: jewelry-accessories_sheet_12
+  - first:
+      213: -5161737421723487609
+    second: jewelry-accessories_sheet_13
+  - first:
+      213: 4595334329056491814
+    second: jewelry-accessories_sheet_14
+  - first:
+      213: -7647805964787808271
+    second: jewelry-accessories_sheet_15
+  - first:
+      213: 4249495097500187305
+    second: jewelry-accessories_sheet_16
+  - first:
+      213: 2742789041076118795
+    second: jewelry-accessories_sheet_17
+  - first:
+      213: -7857608952752621628
+    second: jewelry-accessories_sheet_18
+  - first:
+      213: 1085728046317637983
+    second: jewelry-accessories_sheet_19
+  - first:
+      213: 3257350786963764473
+    second: jewelry-accessories_sheet_20
+  - first:
+      213: -420414569282660084
+    second: jewelry-accessories_sheet_21
+  - first:
+      213: 8959852550975000957
+    second: jewelry-accessories_sheet_22
+  - first:
+      213: -4590637155379194473
+    second: jewelry-accessories_sheet_23
+  - first:
+      213: 8559864033811602162
+    second: jewelry-accessories_sheet_24
+  - first:
+      213: 3128767871722689707
+    second: jewelry-accessories_sheet_25
+  - first:
+      213: 1693654725741285060
+    second: jewelry-accessories_sheet_26
+  - first:
+      213: 1021423181691954319
+    second: jewelry-accessories_sheet_27
+  - first:
+      213: -4741999958253571208
+    second: jewelry-accessories_sheet_28
+  - first:
+      213: -9032491152597738489
+    second: jewelry-accessories_sheet_29
+  - first:
+      213: 1100034228530178326
+    second: jewelry-accessories_sheet_30
+  - first:
+      213: 7630994196664343042
+    second: jewelry-accessories_sheet_31
+  - first:
+      213: 3171088508497770161
+    second: jewelry-accessories_sheet_32
+  - first:
+      213: -3418638670061574703
+    second: jewelry-accessories_sheet_33
+  - first:
+      213: 7957565726883411511
+    second: jewelry-accessories_sheet_34
+  - first:
+      213: 5590250525662996938
+    second: jewelry-accessories_sheet_35
+  - first:
+      213: 3651905216794599202
+    second: jewelry-accessories_sheet_36
+  - first:
+      213: -1551227177792204278
+    second: jewelry-accessories_sheet_37
+  - first:
+      213: -3622152806323256974
+    second: jewelry-accessories_sheet_38
+  - first:
+      213: 7290142329700912268
+    second: jewelry-accessories_sheet_39
+  - first:
+      213: 2019722744286419915
+    second: jewelry-accessories_sheet_40
+  - first:
+      213: 9157401999510965174
+    second: jewelry-accessories_sheet_41
+  - first:
+      213: 1211046214156587297
+    second: jewelry-accessories_sheet_42
+  - first:
+      213: -6938381506665334643
+    second: jewelry-accessories_sheet_43
+  - first:
+      213: -7365106334286544821
+    second: jewelry-accessories_sheet_44
+  - first:
+      213: -5953211116532722836
+    second: jewelry-accessories_sheet_45
+  - first:
+      213: -6655301223112543110
+    second: jewelry-accessories_sheet_46
+  - first:
+      213: 3727352130912584838
+    second: jewelry-accessories_sheet_47
+  - first:
+      213: 7625216256380350753
+    second: jewelry-accessories_sheet_48
+  - first:
+      213: 4824499238647478499
+    second: jewelry-accessories_sheet_49
+  - first:
+      213: 753953626205105760
+    second: jewelry-accessories_sheet_50
+  - first:
+      213: 2696607946440405401
+    second: jewelry-accessories_sheet_51
+  - first:
+      213: 2939102510392100107
+    second: jewelry-accessories_sheet_52
+  - first:
+      213: -2497258023912302987
+    second: jewelry-accessories_sheet_53
+  - first:
+      213: -5397058822300351945
+    second: jewelry-accessories_sheet_54
+  - first:
+      213: 5847828248996078878
+    second: jewelry-accessories_sheet_55
+  - first:
+      213: -8527986095284663617
+    second: jewelry-accessories_sheet_56
+  - first:
+      213: 4773001801083881534
+    second: jewelry-accessories_sheet_57
+  - first:
+      213: 8893758640721539128
+    second: jewelry-accessories_sheet_58
+  - first:
+      213: -5472072853672074634
+    second: jewelry-accessories_sheet_59
+  - first:
+      213: 6867487281790077177
+    second: jewelry-accessories_sheet_60
+  - first:
+      213: -5192776163899956545
+    second: jewelry-accessories_sheet_61
+  - first:
+      213: 359834083554718337
+    second: jewelry-accessories_sheet_62
+  - first:
+      213: -7173224576267326608
+    second: jewelry-accessories_sheet_63
+  - first:
+      213: -7042017802366396030
+    second: jewelry-accessories_sheet_64
+  - first:
+      213: 2416312663516950756
+    second: jewelry-accessories_sheet_65
+  - first:
+      213: 8918299608625728217
+    second: jewelry-accessories_sheet_66
+  - first:
+      213: -4737861452683767619
+    second: jewelry-accessories_sheet_67
+  - first:
+      213: 8609050938607698075
+    second: jewelry-accessories_sheet_68
+  - first:
+      213: -2356331835899416105
+    second: jewelry-accessories_sheet_69
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_0
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 227
+        width: 22
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61f854dda03e64a60800000000000000
+      internalID: 7658057852191608598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_1
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 227
+        width: 22
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95b74a8d690cdb410800000000000000
+      internalID: 1494562405469158233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_2
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 227
+        width: 22
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ce25fd29be625df0800000000000000
+      internalID: -192970092404461880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_3
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 227
+        width: 22
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5eee50e0f54f55bb0800000000000000
+      internalID: -4947779926502281499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_4
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 227
+        width: 22
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87d7336d71c467c10800000000000000
+      internalID: 2050910345575497080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_5
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 227
+        width: 22
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 925247b1b043b0d20800000000000000
+      internalID: 3245745178760455465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_6
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 227
+        width: 22
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94adc7afebdd92b80800000000000000
+      internalID: -8418954216076420535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_7
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 227
+        width: 22
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6afb353e448002a00800000000000000
+      internalID: 729592231598735270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_8
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 195
+        width: 22
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3568fbabf0220fdd0800000000000000
+      internalID: -2454424345963952557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_9
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 192
+        width: 24
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19c38c58dbc733910800000000000000
+      internalID: 1815932228195597457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_10
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 195
+        width: 22
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41bef279a630b4f10800000000000000
+      internalID: 2254899794766981908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_11
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 192
+        width: 26
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 459871752b6dd75c0800000000000000
+      internalID: -4215977614695233196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_12
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 193
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9df49c6e58863aa30800000000000000
+      internalID: 4225335799715549145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_13
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 196
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 782b45ab923dd58b0800000000000000
+      internalID: -5161737421723487609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_14
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 197
+        width: 13
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 629f193a938e5cf30800000000000000
+      internalID: 4595334329056491814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_15
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 197
+        width: 12
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f785bdaef88dd590800000000000000
+      internalID: -7647805964787808271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_16
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 192
+        width: 28
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9aa3341c64d39fa30800000000000000
+      internalID: 4249495097500187305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_17
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 163
+        width: 23
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b052d27d918501620800000000000000
+      internalID: 2742789041076118795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_18
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 161
+        width: 28
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c73043f94a24f290800000000000000
+      internalID: -7857608952752621628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_19
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 161
+        width: 28
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f51117bd7e7411f00800000000000000
+      internalID: 1085728046317637983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_20
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 161
+        width: 28
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f470d5584f643d20800000000000000
+      internalID: 3257350786963764473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_21
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 163
+        width: 23
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c09128b3d236a2af0800000000000000
+      internalID: -420414569282660084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_22
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 166
+        width: 26
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d711ebc7c6ac75c70800000000000000
+      internalID: 8959852550975000957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_23
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 165
+        width: 14
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 795d9e454d7ca40c0800000000000000
+      internalID: -4590637155379194473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_24
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 165
+        width: 12
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2fa9bf49cfebac670800000000000000
+      internalID: 8559864033811602162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_25
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 164
+        width: 12
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba49faa6dcd9b6b20800000000000000
+      internalID: 3128767871722689707
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_26
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 164
+        width: 12
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ce88fbeff1118710800000000000000
+      internalID: 1693654725741285060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_27
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 131
+        width: 23
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f842916d8f2dc2e00800000000000000
+      internalID: 1021423181691954319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_28
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 131
+        width: 23
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 873f0638928013eb0800000000000000
+      internalID: -4741999958253571208
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_29
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 131
+        width: 23
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70c9d84272526a280800000000000000
+      internalID: -9032491152597738489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_30
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 131
+        width: 23
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 619ef487d4b144f00800000000000000
+      internalID: 1100034228530178326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_31
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 131
+        width: 23
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20ade378accb6e960800000000000000
+      internalID: 7630994196664343042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_32
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 134
+        width: 12
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b635548238f10c20800000000000000
+      internalID: 3171088508497770161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_33
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 134
+        width: 12
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d5e0970e3e8e80d0800000000000000
+      internalID: -3418638670061574703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_34
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 133
+        width: 9
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73675bb1ed3fe6e60800000000000000
+      internalID: 7957565726883411511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_35
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 133
+        width: 11
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac965931c3f849d40800000000000000
+      internalID: 5590250525662996938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_36
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 132
+        width: 12
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22f1070327c2ea230800000000000000
+      internalID: 3651905216794599202
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_37
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 132
+        width: 12
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0293cdb91fe87ae0800000000000000
+      internalID: -1551227177792204278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_38
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 98
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2710be0b6378bbdc0800000000000000
+      internalID: -3622152806323256974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_39
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 97
+        width: 28
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8c8cd3f2d9cb2560800000000000000
+      internalID: 7290142329700912268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_40
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 97
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcb18fd822f770c10800000000000000
+      internalID: 2019722744286419915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_41
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 102
+        width: 28
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6bb8d4eb990a51f70800000000000000
+      internalID: 9157401999510965174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_42
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 100
+        width: 28
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12192698d108ec010800000000000000
+      internalID: 1211046214156587297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_43
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 100
+        width: 28
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d88b213e7cae5bf90800000000000000
+      internalID: -6938381506665334643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_44
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 100
+        width: 26
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b400fdb9fc2e9c990800000000000000
+      internalID: -7365106334286544821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_45
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 101
+        width: 28
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c63192ee702f16da0800000000000000
+      internalID: -5953211116532722836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_46
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 68
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7477238cce93a3a0800000000000000
+      internalID: -6655301223112543110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_47
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 69
+        width: 29
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68407d3c3073ab330800000000000000
+      internalID: 3727352130912584838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_48
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 65
+        width: 26
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 121b519f8c532d960800000000000000
+      internalID: 7625216256380350753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_49
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 65
+        width: 30
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e8b9ba0f7014f240800000000000000
+      internalID: 4824499238647478499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_50
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 65
+        width: 30
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06ea21314d4967a00800000000000000
+      internalID: 753953626205105760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_51
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 71
+        width: 28
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 991731ad3a64c6520800000000000000
+      internalID: 2696607946440405401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_52
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 71
+        width: 28
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b054162492ac9c820800000000000000
+      internalID: 2939102510392100107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_53
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 69
+        width: 28
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 576963cee05f75dd0800000000000000
+      internalID: -2497258023912302987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_54
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 37
+        width: 26
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73246e0989bc915b0800000000000000
+      internalID: -5397058822300351945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_55
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 37
+        width: 26
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e15e7e03fc8a72150800000000000000
+      internalID: 5847828248996078878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_56
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 36
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fba461d54d186a980800000000000000
+      internalID: -8527986095284663617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_57
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 33
+        width: 28
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3887e189db1d3240800000000000000
+      internalID: 4773001801083881534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_58
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 36
+        width: 30
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 830b442dc5afc6b70800000000000000
+      internalID: 8893758640721539128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_59
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 40
+        width: 28
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67261db5bba4f04b0800000000000000
+      internalID: -5472072853672074634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_60
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 38
+        width: 28
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f84c9a1c473e4f50800000000000000
+      internalID: 6867487281790077177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_61
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 38
+        width: 28
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb2a0a8679d8fe7b0800000000000000
+      internalID: -5192776163899956545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_62
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 2
+        width: 18
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1827b5841336ef400800000000000000
+      internalID: 359834083554718337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_63
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 2
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07beb75d046937c90800000000000000
+      internalID: -7173224576267326608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_64
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 2
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28959f37e1ab54e90800000000000000
+      internalID: -7042017802366396030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_65
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 2
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e0b437b097788120800000000000000
+      internalID: 2416312663516950756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_66
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 2
+        width: 14
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9da44ac2e3a24cb70800000000000000
+      internalID: 8918299608625728217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_67
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 2
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db094cd6c1cbf3eb0800000000000000
+      internalID: -4737861452683767619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_68
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 2
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9084f8473e797770800000000000000
+      internalID: 8609050938607698075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jewelry-accessories_sheet_69
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 2
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d1754cfda0ac4fd0800000000000000
+      internalID: -2356331835899416105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      jewelry-accessories_sheet_0: 7658057852191608598
+      jewelry-accessories_sheet_1: 1494562405469158233
+      jewelry-accessories_sheet_10: 2254899794766981908
+      jewelry-accessories_sheet_11: -4215977614695233196
+      jewelry-accessories_sheet_12: 4225335799715549145
+      jewelry-accessories_sheet_13: -5161737421723487609
+      jewelry-accessories_sheet_14: 4595334329056491814
+      jewelry-accessories_sheet_15: -7647805964787808271
+      jewelry-accessories_sheet_16: 4249495097500187305
+      jewelry-accessories_sheet_17: 2742789041076118795
+      jewelry-accessories_sheet_18: -7857608952752621628
+      jewelry-accessories_sheet_19: 1085728046317637983
+      jewelry-accessories_sheet_2: -192970092404461880
+      jewelry-accessories_sheet_20: 3257350786963764473
+      jewelry-accessories_sheet_21: -420414569282660084
+      jewelry-accessories_sheet_22: 8959852550975000957
+      jewelry-accessories_sheet_23: -4590637155379194473
+      jewelry-accessories_sheet_24: 8559864033811602162
+      jewelry-accessories_sheet_25: 3128767871722689707
+      jewelry-accessories_sheet_26: 1693654725741285060
+      jewelry-accessories_sheet_27: 1021423181691954319
+      jewelry-accessories_sheet_28: -4741999958253571208
+      jewelry-accessories_sheet_29: -9032491152597738489
+      jewelry-accessories_sheet_3: -4947779926502281499
+      jewelry-accessories_sheet_30: 1100034228530178326
+      jewelry-accessories_sheet_31: 7630994196664343042
+      jewelry-accessories_sheet_32: 3171088508497770161
+      jewelry-accessories_sheet_33: -3418638670061574703
+      jewelry-accessories_sheet_34: 7957565726883411511
+      jewelry-accessories_sheet_35: 5590250525662996938
+      jewelry-accessories_sheet_36: 3651905216794599202
+      jewelry-accessories_sheet_37: -1551227177792204278
+      jewelry-accessories_sheet_38: -3622152806323256974
+      jewelry-accessories_sheet_39: 7290142329700912268
+      jewelry-accessories_sheet_4: 2050910345575497080
+      jewelry-accessories_sheet_40: 2019722744286419915
+      jewelry-accessories_sheet_41: 9157401999510965174
+      jewelry-accessories_sheet_42: 1211046214156587297
+      jewelry-accessories_sheet_43: -6938381506665334643
+      jewelry-accessories_sheet_44: -7365106334286544821
+      jewelry-accessories_sheet_45: -5953211116532722836
+      jewelry-accessories_sheet_46: -6655301223112543110
+      jewelry-accessories_sheet_47: 3727352130912584838
+      jewelry-accessories_sheet_48: 7625216256380350753
+      jewelry-accessories_sheet_49: 4824499238647478499
+      jewelry-accessories_sheet_5: 3245745178760455465
+      jewelry-accessories_sheet_50: 753953626205105760
+      jewelry-accessories_sheet_51: 2696607946440405401
+      jewelry-accessories_sheet_52: 2939102510392100107
+      jewelry-accessories_sheet_53: -2497258023912302987
+      jewelry-accessories_sheet_54: -5397058822300351945
+      jewelry-accessories_sheet_55: 5847828248996078878
+      jewelry-accessories_sheet_56: -8527986095284663617
+      jewelry-accessories_sheet_57: 4773001801083881534
+      jewelry-accessories_sheet_58: 8893758640721539128
+      jewelry-accessories_sheet_59: -5472072853672074634
+      jewelry-accessories_sheet_6: -8418954216076420535
+      jewelry-accessories_sheet_60: 6867487281790077177
+      jewelry-accessories_sheet_61: -5192776163899956545
+      jewelry-accessories_sheet_62: 359834083554718337
+      jewelry-accessories_sheet_63: -7173224576267326608
+      jewelry-accessories_sheet_64: -7042017802366396030
+      jewelry-accessories_sheet_65: 2416312663516950756
+      jewelry-accessories_sheet_66: 8918299608625728217
+      jewelry-accessories_sheet_67: -4737861452683767619
+      jewelry-accessories_sheet_68: 8609050938607698075
+      jewelry-accessories_sheet_69: -2356331835899416105
+      jewelry-accessories_sheet_7: 729592231598735270
+      jewelry-accessories_sheet_8: -2454424345963952557
+      jewelry-accessories_sheet_9: 1815932228195597457
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

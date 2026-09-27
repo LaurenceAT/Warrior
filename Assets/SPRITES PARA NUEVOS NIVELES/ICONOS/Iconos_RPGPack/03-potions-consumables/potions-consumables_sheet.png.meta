@@ -1,0 +1,1807 @@
+fileFormatVersion: 2
+guid: d9c2688313ba75a48887e2dbd278b7ae
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7097500838345211154
+    second: potions-consumables_sheet_0
+  - first:
+      213: 8881618899419283995
+    second: potions-consumables_sheet_1
+  - first:
+      213: 2470383170969711770
+    second: potions-consumables_sheet_2
+  - first:
+      213: 5680869810751944756
+    second: potions-consumables_sheet_3
+  - first:
+      213: 8013687050147660748
+    second: potions-consumables_sheet_4
+  - first:
+      213: -7074990301936953187
+    second: potions-consumables_sheet_5
+  - first:
+      213: 3199792073425761220
+    second: potions-consumables_sheet_6
+  - first:
+      213: -1248201803168079821
+    second: potions-consumables_sheet_7
+  - first:
+      213: -1771336798785524531
+    second: potions-consumables_sheet_8
+  - first:
+      213: -1286103327190700852
+    second: potions-consumables_sheet_9
+  - first:
+      213: -5572291344713221342
+    second: potions-consumables_sheet_10
+  - first:
+      213: -5181503514819581605
+    second: potions-consumables_sheet_11
+  - first:
+      213: 8443178478952016184
+    second: potions-consumables_sheet_12
+  - first:
+      213: -3443371288578089572
+    second: potions-consumables_sheet_13
+  - first:
+      213: -4750425902396560789
+    second: potions-consumables_sheet_14
+  - first:
+      213: 2546910117268818171
+    second: potions-consumables_sheet_15
+  - first:
+      213: 5572212621209761897
+    second: potions-consumables_sheet_16
+  - first:
+      213: 8294346508459354260
+    second: potions-consumables_sheet_17
+  - first:
+      213: 1405995313367215973
+    second: potions-consumables_sheet_18
+  - first:
+      213: -3674716146854512314
+    second: potions-consumables_sheet_19
+  - first:
+      213: -2390464764750832870
+    second: potions-consumables_sheet_20
+  - first:
+      213: 7030710622833246644
+    second: potions-consumables_sheet_21
+  - first:
+      213: -2414888320953055479
+    second: potions-consumables_sheet_22
+  - first:
+      213: -736021469127087603
+    second: potions-consumables_sheet_23
+  - first:
+      213: -1574601362107685172
+    second: potions-consumables_sheet_24
+  - first:
+      213: -6711487353552375366
+    second: potions-consumables_sheet_25
+  - first:
+      213: 1452975333384314476
+    second: potions-consumables_sheet_26
+  - first:
+      213: 5951625717170994739
+    second: potions-consumables_sheet_27
+  - first:
+      213: -7147646668811514871
+    second: potions-consumables_sheet_28
+  - first:
+      213: 5436884848307224285
+    second: potions-consumables_sheet_29
+  - first:
+      213: -8140929232826289002
+    second: potions-consumables_sheet_30
+  - first:
+      213: -5966644301862837616
+    second: potions-consumables_sheet_31
+  - first:
+      213: 5824883996748240876
+    second: potions-consumables_sheet_32
+  - first:
+      213: -5702181514534071396
+    second: potions-consumables_sheet_33
+  - first:
+      213: 3158129184276942582
+    second: potions-consumables_sheet_34
+  - first:
+      213: 7492576012620357276
+    second: potions-consumables_sheet_35
+  - first:
+      213: 8350426056935587491
+    second: potions-consumables_sheet_36
+  - first:
+      213: 8721741386402858144
+    second: potions-consumables_sheet_37
+  - first:
+      213: 7294048968751945622
+    second: potions-consumables_sheet_38
+  - first:
+      213: -7168657730107850863
+    second: potions-consumables_sheet_39
+  - first:
+      213: 8953811745801484304
+    second: potions-consumables_sheet_40
+  - first:
+      213: -4381354039439693505
+    second: potions-consumables_sheet_41
+  - first:
+      213: 7497818400561477573
+    second: potions-consumables_sheet_42
+  - first:
+      213: -1313106805284247605
+    second: potions-consumables_sheet_43
+  - first:
+      213: 99632478700960906
+    second: potions-consumables_sheet_44
+  - first:
+      213: 6665369239748575386
+    second: potions-consumables_sheet_45
+  - first:
+      213: 5034310882915253382
+    second: potions-consumables_sheet_46
+  - first:
+      213: 8344328525748249106
+    second: potions-consumables_sheet_47
+  - first:
+      213: 912537216692016291
+    second: potions-consumables_sheet_48
+  - first:
+      213: 1721270131018716394
+    second: potions-consumables_sheet_49
+  - first:
+      213: 7086115267262510578
+    second: potions-consumables_sheet_50
+  - first:
+      213: 2459719424775891535
+    second: potions-consumables_sheet_51
+  - first:
+      213: 3952947133965166423
+    second: potions-consumables_sheet_52
+  - first:
+      213: -8861703252726086187
+    second: potions-consumables_sheet_53
+  - first:
+      213: 1491646550827441786
+    second: potions-consumables_sheet_54
+  - first:
+      213: -2930961851323470097
+    second: potions-consumables_sheet_55
+  - first:
+      213: -703104862953629269
+    second: potions-consumables_sheet_56
+  - first:
+      213: -4479258637948460735
+    second: potions-consumables_sheet_57
+  - first:
+      213: 8671988726842984771
+    second: potions-consumables_sheet_58
+  - first:
+      213: -703298754183457166
+    second: potions-consumables_sheet_59
+  - first:
+      213: -1198310150085929282
+    second: potions-consumables_sheet_60
+  - first:
+      213: -4798720585373563465
+    second: potions-consumables_sheet_61
+  - first:
+      213: -7839226989586675066
+    second: potions-consumables_sheet_62
+  - first:
+      213: 7888143617890552995
+    second: potions-consumables_sheet_63
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: potions-consumables_sheet_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 224
+        width: 16
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21d7a9688636f7260800000000000000
+      internalID: 7097500838345211154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_1
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 224
+        width: 26
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b12484a0559d14b70800000000000000
+      internalID: 8881618899419283995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_2
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 224
+        width: 26
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a94b0c4c760984220800000000000000
+      internalID: 2470383170969711770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_3
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 224
+        width: 24
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4383c1d8ef086de40800000000000000
+      internalID: 5680869810751944756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_4
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 224
+        width: 22
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc3033de9e5563f60800000000000000
+      internalID: 8013687050147660748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_5
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 224
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d98d6b72ec590dd90800000000000000
+      internalID: -7074990301936953187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_6
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 224
+        width: 20
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c337a300f1f76c20800000000000000
+      internalID: 3199792073425761220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_7
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 224
+        width: 20
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3302a22c21f7daee0800000000000000
+      internalID: -1248201803168079821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_8
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 192
+        width: 22
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dccafc20192fa67e0800000000000000
+      internalID: -1771336798785524531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_9
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 192
+        width: 26
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ccca95686d7d62ee0800000000000000
+      internalID: -1286103327190700852
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_10
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 192
+        width: 26
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22b72659b8e3ba2b0800000000000000
+      internalID: -5572291344713221342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_11
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 192
+        width: 26
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b59adbc810a9718b0800000000000000
+      internalID: -5181503514819581605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_12
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 192
+        width: 22
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 839682db7123c2570800000000000000
+      internalID: 8443178478952016184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_13
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 192
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9d168a8e00b630d0800000000000000
+      internalID: -3443371288578089572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_14
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 192
+        width: 24
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6aa6d38fc8131eb0800000000000000
+      internalID: -4750425902396560789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_15
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 195
+        width: 26
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf808aee141785320800000000000000
+      internalID: 2546910117268818171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_16
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 161
+        width: 18
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 968f72c2bd9745d40800000000000000
+      internalID: 5572212621209761897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_17
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 161
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 498a8b044307b1370800000000000000
+      internalID: 8294346508459354260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_18
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 161
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56fed19c949138310800000000000000
+      internalID: 1405995313367215973
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_19
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 161
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64938584229c00dc0800000000000000
+      internalID: -3674716146854512314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_20
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 161
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1b50f036fc53ded0800000000000000
+      internalID: -2390464764750832870
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_21
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 161
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b18a88af0a129160800000000000000
+      internalID: 7030710622833246644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_22
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 161
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9078a51edd79c7ed0800000000000000
+      internalID: -2414888320953055479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_23
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 161
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0a6e999f5029c5f0800000000000000
+      internalID: -736021469127087603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_24
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 129
+        width: 18
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc6a9bc5764e52ae0800000000000000
+      internalID: -1574601362107685172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_25
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 129
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab1fbf89fc10cd2a0800000000000000
+      internalID: -6711487353552375366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_26
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 129
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6ed6c51e510a2410800000000000000
+      internalID: 1452975333384314476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_27
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 129
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33e7e048e0c689250800000000000000
+      internalID: 5951625717170994739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_28
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 129
+        width: 18
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90c4c7d79357ecc90800000000000000
+      internalID: -7147646668811514871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_29
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 129
+        width: 18
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dde3e04b6f1b37b40800000000000000
+      internalID: 5436884848307224285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_30
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 129
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 694bbc7cefb950f80800000000000000
+      internalID: -8140929232826289002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_31
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 129
+        width: 29
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0926b5ebe98323da0800000000000000
+      internalID: -5966644301862837616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_32
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 101
+        width: 26
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce7590c222526d050800000000000000
+      internalID: 5824883996748240876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_33
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 98
+        width: 30
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c93d56dbf18cdd0b0800000000000000
+      internalID: -5702181514534071396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_34
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 99
+        width: 30
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6fe0f97b2cde3db20800000000000000
+      internalID: 3158129184276942582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_35
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 98
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9e59d4af2afaf760800000000000000
+      internalID: 7492576012620357276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_36
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 99
+        width: 30
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3aebfce914ca2e370800000000000000
+      internalID: 8350426056935587491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_37
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 99
+        width: 28
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a48d57c499d90970800000000000000
+      internalID: 8721741386402858144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_38
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 97
+        width: 26
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69793cc34eaa93560800000000000000
+      internalID: 7294048968751945622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_39
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 97
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19f309096cfc38c90800000000000000
+      internalID: -7168657730107850863
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_40
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 67
+        width: 28
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 018b73ee754524c70800000000000000
+      internalID: 8953811745801484304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_41
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 66
+        width: 31
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3969fbe6bd4233c0800000000000000
+      internalID: -4381354039439693505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_42
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 67
+        width: 30
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c7bad33c1a9d0860800000000000000
+      internalID: 7497818400561477573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_43
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 67
+        width: 30
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc762e65158e6cde0800000000000000
+      internalID: -1313106805284247605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_44
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 67
+        width: 28
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8cff052637f16100800000000000000
+      internalID: 99632478700960906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_45
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 65
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9087084206208c50800000000000000
+      internalID: 6665369239748575386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_46
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 68
+        width: 30
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68cfb0933177dd540800000000000000
+      internalID: 5034310882915253382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_47
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 65
+        width: 26
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 212226285920dc370800000000000000
+      internalID: 8344328525748249106
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_48
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 34
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a4504583cbf9ac00800000000000000
+      internalID: 912537216692016291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_49
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 34
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae45cd1801e23e710800000000000000
+      internalID: 1721270131018716394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_50
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 33
+        width: 30
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f577aeaa40f65260800000000000000
+      internalID: 7086115267262510578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_51
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 33
+        width: 26
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4a25e0e8cda22220800000000000000
+      internalID: 2459719424775891535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_52
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 33
+        width: 22
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75764e78970bbd630800000000000000
+      internalID: 3952947133965166423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_53
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 34
+        width: 22
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d5865cc7d7e40580800000000000000
+      internalID: -8861703252726086187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_54
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 34
+        width: 22
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7e918882a463b410800000000000000
+      internalID: 1491646550827441786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_55
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 34
+        width: 22
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: feea4a1a9b12357d0800000000000000
+      internalID: -2930961851323470097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_56
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 2
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba99cc33ad11e36f0800000000000000
+      internalID: -703104862953629269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_57
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 3
+        width: 23
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1416bfb300a76d1c0800000000000000
+      internalID: -4479258637948460735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_58
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 1
+        width: 30
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3490ba70dc7195870800000000000000
+      internalID: 8671988726842984771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_59
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 2
+        width: 27
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2769be162816d36f0800000000000000
+      internalID: -703298754183457166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_60
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 1
+        width: 20
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb61265744fbe5fe0800000000000000
+      internalID: -1198310150085929282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_61
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 2
+        width: 22
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b544746d05876db0800000000000000
+      internalID: -4798720585373563465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_62
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 2
+        width: 22
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68a08044698753390800000000000000
+      internalID: -7839226989586675066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: potions-consumables_sheet_63
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 2
+        width: 22
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ac81a9c3d0587d60800000000000000
+      internalID: 7888143617890552995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      potions-consumables_sheet_0: 7097500838345211154
+      potions-consumables_sheet_1: 8881618899419283995
+      potions-consumables_sheet_10: -5572291344713221342
+      potions-consumables_sheet_11: -5181503514819581605
+      potions-consumables_sheet_12: 8443178478952016184
+      potions-consumables_sheet_13: -3443371288578089572
+      potions-consumables_sheet_14: -4750425902396560789
+      potions-consumables_sheet_15: 2546910117268818171
+      potions-consumables_sheet_16: 5572212621209761897
+      potions-consumables_sheet_17: 8294346508459354260
+      potions-consumables_sheet_18: 1405995313367215973
+      potions-consumables_sheet_19: -3674716146854512314
+      potions-consumables_sheet_2: 2470383170969711770
+      potions-consumables_sheet_20: -2390464764750832870
+      potions-consumables_sheet_21: 7030710622833246644
+      potions-consumables_sheet_22: -2414888320953055479
+      potions-consumables_sheet_23: -736021469127087603
+      potions-consumables_sheet_24: -1574601362107685172
+      potions-consumables_sheet_25: -6711487353552375366
+      potions-consumables_sheet_26: 1452975333384314476
+      potions-consumables_sheet_27: 5951625717170994739
+      potions-consumables_sheet_28: -7147646668811514871
+      potions-consumables_sheet_29: 5436884848307224285
+      potions-consumables_sheet_3: 5680869810751944756
+      potions-consumables_sheet_30: -8140929232826289002
+      potions-consumables_sheet_31: -5966644301862837616
+      potions-consumables_sheet_32: 5824883996748240876
+      potions-consumables_sheet_33: -5702181514534071396
+      potions-consumables_sheet_34: 3158129184276942582
+      potions-consumables_sheet_35: 7492576012620357276
+      potions-consumables_sheet_36: 8350426056935587491
+      potions-consumables_sheet_37: 8721741386402858144
+      potions-consumables_sheet_38: 7294048968751945622
+      potions-consumables_sheet_39: -7168657730107850863
+      potions-consumables_sheet_4: 8013687050147660748
+      potions-consumables_sheet_40: 8953811745801484304
+      potions-consumables_sheet_41: -4381354039439693505
+      potions-consumables_sheet_42: 7497818400561477573
+      potions-consumables_sheet_43: -1313106805284247605
+      potions-consumables_sheet_44: 99632478700960906
+      potions-consumables_sheet_45: 6665369239748575386
+      potions-consumables_sheet_46: 5034310882915253382
+      potions-consumables_sheet_47: 8344328525748249106
+      potions-consumables_sheet_48: 912537216692016291
+      potions-consumables_sheet_49: 1721270131018716394
+      potions-consumables_sheet_5: -7074990301936953187
+      potions-consumables_sheet_50: 7086115267262510578
+      potions-consumables_sheet_51: 2459719424775891535
+      potions-consumables_sheet_52: 3952947133965166423
+      potions-consumables_sheet_53: -8861703252726086187
+      potions-consumables_sheet_54: 1491646550827441786
+      potions-consumables_sheet_55: -2930961851323470097
+      potions-consumables_sheet_56: -703104862953629269
+      potions-consumables_sheet_57: -4479258637948460735
+      potions-consumables_sheet_58: 8671988726842984771
+      potions-consumables_sheet_59: -703298754183457166
+      potions-consumables_sheet_6: 3199792073425761220
+      potions-consumables_sheet_60: -1198310150085929282
+      potions-consumables_sheet_61: -4798720585373563465
+      potions-consumables_sheet_62: -7839226989586675066
+      potions-consumables_sheet_63: 7888143617890552995
+      potions-consumables_sheet_7: -1248201803168079821
+      potions-consumables_sheet_8: -1771336798785524531
+      potions-consumables_sheet_9: -1286103327190700852
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

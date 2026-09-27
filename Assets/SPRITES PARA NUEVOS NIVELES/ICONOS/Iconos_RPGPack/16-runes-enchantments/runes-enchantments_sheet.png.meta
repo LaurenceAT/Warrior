@@ -1,0 +1,2431 @@
+fileFormatVersion: 2
+guid: 5fcf10375083f2647a22c11a11eb4e7e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8486119658142779254
+    second: runes-enchantments_sheet_0
+  - first:
+      213: -885633811387403116
+    second: runes-enchantments_sheet_1
+  - first:
+      213: -7003823081717617851
+    second: runes-enchantments_sheet_2
+  - first:
+      213: 8031846923593116023
+    second: runes-enchantments_sheet_3
+  - first:
+      213: -3813121971618543085
+    second: runes-enchantments_sheet_4
+  - first:
+      213: 6478117782808771568
+    second: runes-enchantments_sheet_5
+  - first:
+      213: 5716938787912670877
+    second: runes-enchantments_sheet_6
+  - first:
+      213: 9120418288883591260
+    second: runes-enchantments_sheet_7
+  - first:
+      213: -8984804878087311161
+    second: runes-enchantments_sheet_8
+  - first:
+      213: -1783703451061096085
+    second: runes-enchantments_sheet_9
+  - first:
+      213: -4043910949630443281
+    second: runes-enchantments_sheet_10
+  - first:
+      213: 4452452768923487551
+    second: runes-enchantments_sheet_11
+  - first:
+      213: 1140539838625297994
+    second: runes-enchantments_sheet_12
+  - first:
+      213: -687271307493177879
+    second: runes-enchantments_sheet_13
+  - first:
+      213: -6060016477425671428
+    second: runes-enchantments_sheet_14
+  - first:
+      213: 5989875882451443261
+    second: runes-enchantments_sheet_15
+  - first:
+      213: -7872426992746845232
+    second: runes-enchantments_sheet_16
+  - first:
+      213: -6174893038890121512
+    second: runes-enchantments_sheet_17
+  - first:
+      213: -7617693689455393179
+    second: runes-enchantments_sheet_18
+  - first:
+      213: -8009472507279717885
+    second: runes-enchantments_sheet_19
+  - first:
+      213: 6999081104089205987
+    second: runes-enchantments_sheet_20
+  - first:
+      213: -5430490473457483505
+    second: runes-enchantments_sheet_21
+  - first:
+      213: 3674313551810480315
+    second: runes-enchantments_sheet_22
+  - first:
+      213: 8428317009163269008
+    second: runes-enchantments_sheet_23
+  - first:
+      213: -9140415723377048993
+    second: runes-enchantments_sheet_24
+  - first:
+      213: 4458632075982385686
+    second: runes-enchantments_sheet_25
+  - first:
+      213: 7474504664624778305
+    second: runes-enchantments_sheet_26
+  - first:
+      213: -7406152551082398974
+    second: runes-enchantments_sheet_27
+  - first:
+      213: -8548736504240396298
+    second: runes-enchantments_sheet_28
+  - first:
+      213: 408962715279016668
+    second: runes-enchantments_sheet_29
+  - first:
+      213: -1149983821983676393
+    second: runes-enchantments_sheet_30
+  - first:
+      213: 1988161692137946562
+    second: runes-enchantments_sheet_31
+  - first:
+      213: -8495710392362061755
+    second: runes-enchantments_sheet_32
+  - first:
+      213: -7946049625457597553
+    second: runes-enchantments_sheet_33
+  - first:
+      213: -2721861742718529538
+    second: runes-enchantments_sheet_34
+  - first:
+      213: -5571144068411424424
+    second: runes-enchantments_sheet_35
+  - first:
+      213: -2851277010692743931
+    second: runes-enchantments_sheet_36
+  - first:
+      213: -8583945592064803481
+    second: runes-enchantments_sheet_37
+  - first:
+      213: 7482871976039616287
+    second: runes-enchantments_sheet_38
+  - first:
+      213: -2144286533941055273
+    second: runes-enchantments_sheet_39
+  - first:
+      213: -4188746518272741731
+    second: runes-enchantments_sheet_40
+  - first:
+      213: -769943155675110186
+    second: runes-enchantments_sheet_41
+  - first:
+      213: -1238392760390996949
+    second: runes-enchantments_sheet_42
+  - first:
+      213: -5636499953049988803
+    second: runes-enchantments_sheet_43
+  - first:
+      213: -7767016404066897288
+    second: runes-enchantments_sheet_44
+  - first:
+      213: 6402242503968246076
+    second: runes-enchantments_sheet_45
+  - first:
+      213: 626243148736272024
+    second: runes-enchantments_sheet_46
+  - first:
+      213: -6400179053819365426
+    second: runes-enchantments_sheet_47
+  - first:
+      213: 553079518685202568
+    second: runes-enchantments_sheet_48
+  - first:
+      213: -7577943456386529386
+    second: runes-enchantments_sheet_49
+  - first:
+      213: -3353743605409346691
+    second: runes-enchantments_sheet_50
+  - first:
+      213: -1817939972723994136
+    second: runes-enchantments_sheet_51
+  - first:
+      213: -7235912175112653914
+    second: runes-enchantments_sheet_52
+  - first:
+      213: -8515125176243550169
+    second: runes-enchantments_sheet_53
+  - first:
+      213: -582425181409801415
+    second: runes-enchantments_sheet_54
+  - first:
+      213: 6388005815355920153
+    second: runes-enchantments_sheet_55
+  - first:
+      213: -746590303446908857
+    second: runes-enchantments_sheet_56
+  - first:
+      213: 6437842954156524612
+    second: runes-enchantments_sheet_57
+  - first:
+      213: 2680006690202033474
+    second: runes-enchantments_sheet_58
+  - first:
+      213: 4399608640916816453
+    second: runes-enchantments_sheet_59
+  - first:
+      213: 4140800045901507742
+    second: runes-enchantments_sheet_60
+  - first:
+      213: 48970451699706355
+    second: runes-enchantments_sheet_61
+  - first:
+      213: 7589573391192518872
+    second: runes-enchantments_sheet_62
+  - first:
+      213: -2952078719987626943
+    second: runes-enchantments_sheet_63
+  - first:
+      213: -428203482500561132
+    second: runes-enchantments_sheet_64
+  - first:
+      213: -179757689409921753
+    second: runes-enchantments_sheet_65
+  - first:
+      213: 3102533575605793441
+    second: runes-enchantments_sheet_66
+  - first:
+      213: -1515433316490732539
+    second: runes-enchantments_sheet_67
+  - first:
+      213: -3036567118117882128
+    second: runes-enchantments_sheet_68
+  - first:
+      213: 101283647848548445
+    second: runes-enchantments_sheet_69
+  - first:
+      213: 2917304037324496410
+    second: runes-enchantments_sheet_70
+  - first:
+      213: -4387596934749443993
+    second: runes-enchantments_sheet_71
+  - first:
+      213: 6669173856376750764
+    second: runes-enchantments_sheet_72
+  - first:
+      213: -8149482688253500836
+    second: runes-enchantments_sheet_73
+  - first:
+      213: 5457572379294015874
+    second: runes-enchantments_sheet_74
+  - first:
+      213: 1601696760320146223
+    second: runes-enchantments_sheet_75
+  - first:
+      213: -2166326765200251292
+    second: runes-enchantments_sheet_76
+  - first:
+      213: 6847383272950719657
+    second: runes-enchantments_sheet_77
+  - first:
+      213: -441511984295037601
+    second: runes-enchantments_sheet_78
+  - first:
+      213: -4934525199416405901
+    second: runes-enchantments_sheet_79
+  - first:
+      213: -8564013082565872132
+    second: runes-enchantments_sheet_80
+  - first:
+      213: -7134648415611838879
+    second: runes-enchantments_sheet_81
+  - first:
+      213: -6921628132836937257
+    second: runes-enchantments_sheet_82
+  - first:
+      213: -6190405301195135779
+    second: runes-enchantments_sheet_83
+  - first:
+      213: -8515489677864208861
+    second: runes-enchantments_sheet_84
+  - first:
+      213: -7470183609551411887
+    second: runes-enchantments_sheet_85
+  - first:
+      213: 5619397826338802189
+    second: runes-enchantments_sheet_86
+  - first:
+      213: -2605957612884408132
+    second: runes-enchantments_sheet_87
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_0
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 226
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6774f012ed0c4c570800000000000000
+      internalID: 8486119658142779254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_1
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 226
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 494bd27adb895b3f0800000000000000
+      internalID: -885633811387403116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_2
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 226
+        width: 20
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54b2a88d30c6dce90800000000000000
+      internalID: -7003823081717617851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_3
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 225
+        width: 25
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 779e413f83ad67f60800000000000000
+      internalID: 8031846923593116023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_4
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 226
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31a807405c1151bc0800000000000000
+      internalID: -3813121971618543085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_5
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 227
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fb35790dc5e6e950800000000000000
+      internalID: 6478117782808771568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_6
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 226
+        width: 22
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9edf28b985a65f40800000000000000
+      internalID: 5716938787912670877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_7
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 226
+        width: 23
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c58e1e79c1c329e70800000000000000
+      internalID: 9120418288883591260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_8
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 195
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c0b861219f8f4380800000000000000
+      internalID: -8984804878087311161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_9
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 194
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b617dd669230f37e0800000000000000
+      internalID: -1783703451061096085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_10
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 194
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe007f7ba6421e7c0800000000000000
+      internalID: -4043910949630443281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_11
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 194
+        width: 25
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3d83e6043a4acd30800000000000000
+      internalID: 4452452768923487551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_12
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 194
+        width: 26
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a46317db0f204df00800000000000000
+      internalID: 1140539838625297994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_13
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 195
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e50d8c13625676f0800000000000000
+      internalID: -687271307493177879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_14
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 194
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf267020f1f76eba0800000000000000
+      internalID: -6060016477425671428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_15
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 195
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3e923e1160502350800000000000000
+      internalID: 5989875882451443261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_16
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 178
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0dba0292c558fb290800000000000000
+      internalID: -7872426992746845232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_17
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 182
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d60ce24f7f5e4aa0800000000000000
+      internalID: -6174893038890121512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_18
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 168
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 566c64023f3884690800000000000000
+      internalID: -7617693689455393179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_19
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 183
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30ac55dc033a8d090800000000000000
+      internalID: -8009472507279717885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_20
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 178
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ecc2637e2bb12160800000000000000
+      internalID: 6999081104089205987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_21
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 163
+        width: 28
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f018c65bfa503a4b0800000000000000
+      internalID: -5430490473457483505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_22
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 163
+        width: 28
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb8411145b8cdf230800000000000000
+      internalID: 3674313551810480315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_23
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 163
+        width: 28
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0933f892aa567f470800000000000000
+      internalID: 8428317009163269008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_24
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 161
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5247bcd358b62180800000000000000
+      internalID: -9140415723377048993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_25
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 178
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 612b711104e30ed30800000000000000
+      internalID: 4458632075982385686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_26
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 171
+        width: 20
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14cc5fe0466cab760800000000000000
+      internalID: 7474504664624778305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_27
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 178
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20b61688e7f083990800000000000000
+      internalID: -7406152551082398974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_28
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 163
+        width: 20
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f7265a4179cc5980800000000000000
+      internalID: -8548736504240396298
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_29
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 162
+        width: 20
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd2c59a3c6deca500800000000000000
+      internalID: 408962715279016668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_30
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 174
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71887398ecf6a00f0800000000000000
+      internalID: -1149983821983676393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_31
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 168
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2cdfbe7768e579b10800000000000000
+      internalID: 1988161692137946562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_32
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 168
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5403aac096c291a80800000000000000
+      internalID: -8495710392362061755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_33
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 162
+        width: 14
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8369f237f5f9b190800000000000000
+      internalID: -7946049625457597553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_34
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 163
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eff49818a210a3ad0800000000000000
+      internalID: -2721861742718529538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_35
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 162
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85100d9acf15fa2b0800000000000000
+      internalID: -5571144068411424424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_36
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 130
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50ddb6d5aaa3e68d0800000000000000
+      internalID: -2851277010692743931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_37
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 130
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76d72b5b6f2bfd880800000000000000
+      internalID: -8583945592064803481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_38
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 130
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1f019f8a6088d760800000000000000
+      internalID: 7482871976039616287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_39
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 130
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d03acf12c6fd32e0800000000000000
+      internalID: -2144286533941055273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_40
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 130
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9ee23c0c359ed5c0800000000000000
+      internalID: -4188746518272741731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_41
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 130
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d4edbc77cc9055f0800000000000000
+      internalID: -769943155675110186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_42
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 130
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2caa70885850dee0800000000000000
+      internalID: -1238392760390996949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_43
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 130
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3113f9f72127c1b0800000000000000
+      internalID: -5636499953049988803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_44
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 98
+        width: 20
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 872f5fe5bb3063490800000000000000
+      internalID: -7767016404066897288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_45
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 98
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c394fe603a559d850800000000000000
+      internalID: 6402242503968246076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_46
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 98
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 896927763dcd0b800800000000000000
+      internalID: 626243148736272024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_47
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 99
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec773366f0ffd27a0800000000000000
+      internalID: -6400179053819365426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_48
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 98
+        width: 22
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88886c354eeeca700800000000000000
+      internalID: 553079518685202568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_49
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 97
+        width: 26
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 697c51a739cb5d690800000000000000
+      internalID: -7577943456386529386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_50
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 97
+        width: 26
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7b86d3b5fb1571d0800000000000000
+      internalID: -3353743605409346691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_51
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 98
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e19dc60a3165c6e0800000000000000
+      internalID: -1817939972723994136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_52
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 66
+        width: 20
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a37c78d630e49b90800000000000000
+      internalID: -7235912175112653914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_53
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 65
+        width: 22
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 728840c64c234d980800000000000000
+      internalID: -8515125176243550169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_54
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 81
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93b83d1226fcae7f0800000000000000
+      internalID: -582425181409801415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_55
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 66
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91f4b67a171c6a850800000000000000
+      internalID: 6388005815355920153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_56
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 82
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 740cb4a131493a5f0800000000000000
+      internalID: -746590303446908857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_57
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 66
+        width: 16
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4444042ce00d75950800000000000000
+      internalID: 6437842954156524612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_58
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 80
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24d992da2eb413520800000000000000
+      internalID: 2680006690202033474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_59
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 80
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5420690bfbc8e0d30800000000000000
+      internalID: 4399608640916816453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_60
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 70
+        width: 14
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9c61ede3b3177930800000000000000
+      internalID: 4140800045901507742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_61
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 84
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f92d0acd5afda000800000000000000
+      internalID: 48970451699706355
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_62
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 66
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d079cab9c4935960800000000000000
+      internalID: 7589573391192518872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_63
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 66
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14cc5228b0c1807d0800000000000000
+      internalID: -2952078719987626943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_64
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 66
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41708fd8337be0af0800000000000000
+      internalID: -428203482500561132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_65
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 67
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72d9319755f518df0800000000000000
+      internalID: -179757689409921753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_66
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 67
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a2b4bd59d96e0b20800000000000000
+      internalID: 3102533575605793441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_67
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 67
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50c17c18d6918fae0800000000000000
+      internalID: -1515433316490732539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_68
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 33
+        width: 27
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f6b3f36b42fbd5d0800000000000000
+      internalID: -3036567118117882128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_69
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 34
+        width: 20
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d58819be0f4d76100800000000000000
+      internalID: 101283647848548445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_70
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 34
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1e1a8eb0985c7820800000000000000
+      internalID: 2917304037324496410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_71
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 37
+        width: 26
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 768aaa695df1c13c0800000000000000
+      internalID: -4387596934749443993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_72
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 55
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca288ae994aad8c50800000000000000
+      internalID: 6669173856376750764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_73
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 33
+        width: 28
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c52647f3ca837ee80800000000000000
+      internalID: -8149482688253500836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_74
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 34
+        width: 22
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 281adcbd9213dbb40800000000000000
+      internalID: 5457572379294015874
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_75
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 33
+        width: 32
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2bb6c4a7be5a3610800000000000000
+      internalID: 1601696760320146223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_76
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 34
+        width: 22
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 46661d4e849afe1e0800000000000000
+      internalID: -2166326765200251292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_77
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 34
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a4ed29cecac60f50800000000000000
+      internalID: 6847383272950719657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_78
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 1
+        width: 23
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f553404803f6fd9f0800000000000000
+      internalID: -441511984295037601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_79
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 23
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3705291b97b058bb0800000000000000
+      internalID: -4934525199416405901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_80
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 1
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf5fcd9b973862980800000000000000
+      internalID: -8564013082565872132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_81
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 21
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16e17262113acfc90800000000000000
+      internalID: -7134648415611838879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_82
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 1
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d177e2b2ef61ff90800000000000000
+      internalID: -6921628132836937257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_83
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 1
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd4a19e3d23471aa0800000000000000
+      internalID: -6190405301195135779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_84
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 1
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 326f5664147e2d980800000000000000
+      internalID: -8515489677864208861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_85
+      rect:
+        serializedVersion: 2
+        x: 164
+        y: 1
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1552eb9f593945890800000000000000
+      internalID: -7470183609551411887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_86
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 1
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0ac68adc8c1cfd40800000000000000
+      internalID: 5619397826338802189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: runes-enchantments_sheet_87
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 1
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb8cc48ab57c5dbd0800000000000000
+      internalID: -2605957612884408132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      runes-enchantments_sheet_0: 8486119658142779254
+      runes-enchantments_sheet_1: -885633811387403116
+      runes-enchantments_sheet_10: -4043910949630443281
+      runes-enchantments_sheet_11: 4452452768923487551
+      runes-enchantments_sheet_12: 1140539838625297994
+      runes-enchantments_sheet_13: -687271307493177879
+      runes-enchantments_sheet_14: -6060016477425671428
+      runes-enchantments_sheet_15: 5989875882451443261
+      runes-enchantments_sheet_16: -7872426992746845232
+      runes-enchantments_sheet_17: -6174893038890121512
+      runes-enchantments_sheet_18: -7617693689455393179
+      runes-enchantments_sheet_19: -8009472507279717885
+      runes-enchantments_sheet_2: -7003823081717617851
+      runes-enchantments_sheet_20: 6999081104089205987
+      runes-enchantments_sheet_21: -5430490473457483505
+      runes-enchantments_sheet_22: 3674313551810480315
+      runes-enchantments_sheet_23: 8428317009163269008
+      runes-enchantments_sheet_24: -9140415723377048993
+      runes-enchantments_sheet_25: 4458632075982385686
+      runes-enchantments_sheet_26: 7474504664624778305
+      runes-enchantments_sheet_27: -7406152551082398974
+      runes-enchantments_sheet_28: -8548736504240396298
+      runes-enchantments_sheet_29: 408962715279016668
+      runes-enchantments_sheet_3: 8031846923593116023
+      runes-enchantments_sheet_30: -1149983821983676393
+      runes-enchantments_sheet_31: 1988161692137946562
+      runes-enchantments_sheet_32: -8495710392362061755
+      runes-enchantments_sheet_33: -7946049625457597553
+      runes-enchantments_sheet_34: -2721861742718529538
+      runes-enchantments_sheet_35: -5571144068411424424
+      runes-enchantments_sheet_36: -2851277010692743931
+      runes-enchantments_sheet_37: -8583945592064803481
+      runes-enchantments_sheet_38: 7482871976039616287
+      runes-enchantments_sheet_39: -2144286533941055273
+      runes-enchantments_sheet_4: -3813121971618543085
+      runes-enchantments_sheet_40: -4188746518272741731
+      runes-enchantments_sheet_41: -769943155675110186
+      runes-enchantments_sheet_42: -1238392760390996949
+      runes-enchantments_sheet_43: -5636499953049988803
+      runes-enchantments_sheet_44: -7767016404066897288
+      runes-enchantments_sheet_45: 6402242503968246076
+      runes-enchantments_sheet_46: 626243148736272024
+      runes-enchantments_sheet_47: -6400179053819365426
+      runes-enchantments_sheet_48: 553079518685202568
+      runes-enchantments_sheet_49: -7577943456386529386
+      runes-enchantments_sheet_5: 6478117782808771568
+      runes-enchantments_sheet_50: -3353743605409346691
+      runes-enchantments_sheet_51: -1817939972723994136
+      runes-enchantments_sheet_52: -7235912175112653914
+      runes-enchantments_sheet_53: -8515125176243550169
+      runes-enchantments_sheet_54: -582425181409801415
+      runes-enchantments_sheet_55: 6388005815355920153
+      runes-enchantments_sheet_56: -746590303446908857
+      runes-enchantments_sheet_57: 6437842954156524612
+      runes-enchantments_sheet_58: 2680006690202033474
+      runes-enchantments_sheet_59: 4399608640916816453
+      runes-enchantments_sheet_6: 5716938787912670877
+      runes-enchantments_sheet_60: 4140800045901507742
+      runes-enchantments_sheet_61: 48970451699706355
+      runes-enchantments_sheet_62: 7589573391192518872
+      runes-enchantments_sheet_63: -2952078719987626943
+      runes-enchantments_sheet_64: -428203482500561132
+      runes-enchantments_sheet_65: -179757689409921753
+      runes-enchantments_sheet_66: 3102533575605793441
+      runes-enchantments_sheet_67: -1515433316490732539
+      runes-enchantments_sheet_68: -3036567118117882128
+      runes-enchantments_sheet_69: 101283647848548445
+      runes-enchantments_sheet_7: 9120418288883591260
+      runes-enchantments_sheet_70: 2917304037324496410
+      runes-enchantments_sheet_71: -4387596934749443993
+      runes-enchantments_sheet_72: 6669173856376750764
+      runes-enchantments_sheet_73: -8149482688253500836
+      runes-enchantments_sheet_74: 5457572379294015874
+      runes-enchantments_sheet_75: 1601696760320146223
+      runes-enchantments_sheet_76: -2166326765200251292
+      runes-enchantments_sheet_77: 6847383272950719657
+      runes-enchantments_sheet_78: -441511984295037601
+      runes-enchantments_sheet_79: -4934525199416405901
+      runes-enchantments_sheet_8: -8984804878087311161
+      runes-enchantments_sheet_80: -8564013082565872132
+      runes-enchantments_sheet_81: -7134648415611838879
+      runes-enchantments_sheet_82: -6921628132836937257
+      runes-enchantments_sheet_83: -6190405301195135779
+      runes-enchantments_sheet_84: -8515489677864208861
+      runes-enchantments_sheet_85: -7470183609551411887
+      runes-enchantments_sheet_86: 5619397826338802189
+      runes-enchantments_sheet_87: -2605957612884408132
+      runes-enchantments_sheet_9: -1783703451061096085
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

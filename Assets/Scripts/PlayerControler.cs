@@ -176,6 +176,21 @@ public class PlayerControler : MonoBehaviour
     // Indice del golpe cuya caja se dibuja en la escena (-1 = ninguno).
     [SerializeField] private int unarmedGizmoMove = -1;
 
+    [Header("Pociones (Q)")]
+    // Beber tarda "tiempoBeber"; la vida sube a mitad (momentoCurar). Mientras se bebe
+    // se anda despacio y no se puede atacar ni saltar. Un golpe lo corta y la
+    // pocion se pierde, como en los Souls.
+    [SerializeField] private float tiempoBeber = 1f;
+    [SerializeField] private float momentoCurar = 0.55f;
+    [Range(0f, 1f)] [SerializeField] private float frenoAlBeber = 0.35f;
+    [SerializeField] private string estadoBeber = "UsarObjeto";
+    private bool isDrinking;
+    private Coroutine rutinaBeber;
+    private EfectosGolpePlayer efectosGolpe;
+    // Ultimo sitio con suelo firme y sin trampas: a donde lleva "Destrabar".
+    private Vector2 ultimoSueloSeguro;
+    private float siguienteSueloSeguro;
+
     [Header("Lanzador de espada (W + clic)")]
     // Perfil de la lista de ataques que usa y su estado del Animator. Lanza al
     // enemigo recto hacia arriba (su Elevacion va sin desplazamiento).
@@ -193,7 +208,11 @@ public class PlayerControler : MonoBehaviour
     [Range(0f, 1f)] [SerializeField] private float parrySpamFactor = 0.35f;
     // Bloqueo normal (fuera de la ventana): anula el dano a cambio de estamina.
     // Sin estamina la guardia se rompe y el golpe entra.
-    [SerializeField] private float blockStaminaCost = 15f;
+    [SerializeField] private float blockStaminaCost = 10f;
+    // Fraccion del dano que entra aun bloqueando (0.25 = un cuarto).
+    [Range(0f, 1f)] [SerializeField] private float blockDamageFactor = 0.25f;
+    // Estamina que devuelve un parry.
+    [SerializeField] private float parryStaminaGain = 12f;
     [SerializeField] private float blockPushback = 2f;
     [SerializeField] private float blockHitStop = 0.05f;
     [SerializeField] private float blockShake = 0.08f;
@@ -427,7 +446,7 @@ public class PlayerControler : MonoBehaviour
 
     //VIDA
     [Header("Health")]
-    [SerializeField] private int maxHealth = 5;
+    [SerializeField] private int maxHealth = 100;
     [SerializeField] private int currentHealth;
     [SerializeField] private float invincibleTime = 1f;
     // Cada cuánto parpadea el sprite mientras el player es invulnerable.
@@ -733,6 +752,9 @@ public class PlayerControler : MonoBehaviour
         currentHealth = maxHealth;
 
         PlayerHud.Get().SetHealth(currentHealth, maxHealth);
+        ReservaPociones.Get();
+        ultimoSueloSeguro = m_transform.position;
+        efectosGolpe = GetComponent<EfectosGolpePlayer>();
         ActualizarIconoArma();
     }
 
@@ -751,6 +773,7 @@ public class PlayerControler : MonoBehaviour
         // falso y mete un fotograma de caida que no corresponde.
         CheckCollision();
 
+        GuardarSueloSeguro();
         MantenerSuspensionAerea();
 
         if (!canMove) return;
@@ -795,6 +818,15 @@ public class PlayerControler : MonoBehaviour
         // tanto queda guardado y sale al terminar.
         Dodge();
         if (isDodging) return;
+
+        Beber();
+        if (isDrinking)
+        {
+            // Bebiendo: se anda despacio, sin saltar ni atacar.
+            Move();
+            m_rigitbody2D.linearVelocity = new Vector2(m_rigitbody2D.linearVelocityX * frenoAlBeber, m_rigitbody2D.linearVelocityY);
+            return;
+        }
 
         Move();
         Jump();
@@ -1336,7 +1368,10 @@ public class PlayerControler : MonoBehaviour
             EnemyHealth enemigo = hit.GetComponent<EnemyHealth>();
             if (enemigo == null || (excluir != null && excluir.Contains(enemigo))) continue;
             if (tocados.Add(enemigo))
+            {
+                EnemyHealth.ArmaDelGolpe = TipoArma.Espada;
                 enemigo.TakeDamage(dano, m_transform.position, retroceso);
+            }
         }
 
         if (tocados.Count > 0) StartCoroutine(HitStop(plungeHitStop));
@@ -1362,6 +1397,7 @@ public class PlayerControler : MonoBehaviour
             // donde mira el player.
             float dx = enemigo.transform.position.x - m_transform.position.x;
             float lado = Mathf.Abs(dx) > 0.05f ? Mathf.Sign(dx) : direction;
+            EnemyHealth.ArmaDelGolpe = TipoArma.Espada;
             if (enemigo.IsAirborne)
                 enemigo.TakeHit(plungeDamage, m_transform.position, plungeAirSpike, false);
             else
@@ -1510,6 +1546,7 @@ public class PlayerControler : MonoBehaviour
             if (enemigo == null || !tocados.Add(enemigo)) continue;
 
             int dano = DanoConContra(plungeDamage);
+            EnemyHealth.ArmaDelGolpe = TipoArma.Espada;
             if (enemigo.IsAirborne) enemigo.TakeHit(dano, m_transform.position, plungeAirSpike, false);
             else enemigo.TakeHit(dano, m_transform.position, plungeStartKnockback, false);
             alguno = true;
@@ -1599,6 +1636,9 @@ public class PlayerControler : MonoBehaviour
 
         Collider2D[] hits = BuscarObjetivos(perfil);
         Vector2 centro = CentroDelGolpe(perfil);
+        // El tajo se ve en el instante del golpe, acierte o no.
+        if (efectosGolpe != null) efectosGolpe.Tajo(index, direction);
+        bool contraEspada = ventanaContra > 0f;
         HashSet<EnemyHealth> alreadyHit = new HashSet<EnemyHealth>();
 
         foreach (Collider2D hit in hits)
@@ -1610,7 +1650,11 @@ public class PlayerControler : MonoBehaviour
             // Un mismo enemigo puede tener varios colliders (trigger de daño + sólido de suelo);
             // alreadyHit.Add evita contarlo dos veces en el mismo golpe.
             if (enemyHealth != null && alreadyHit.Add(enemyHealth))
+            {
+                EnemyHealth.ArmaDelGolpe = TipoArma.Espada;
                 enemyHealth.TakeHit(DanoConContra(perfil.dano), m_transform.position, perfil.knockback, perfil.lanza, perfil.elevacion);
+                if (efectosGolpe != null) efectosGolpe.Impacto(hit.ClosestPoint(centro), TipoArma.Espada, contraEspada);
+            }
         }
 
         // Todo lo de abajo solo si el golpe ha conectado: al aire no aporta nada
@@ -1673,7 +1717,7 @@ public class PlayerControler : MonoBehaviour
         // lo que no es.
         yield return new WaitForSecondsRealtime(duracion);
 
-        Time.timeScale = escalaPrevia;
+        if (GameManager.Instance == null || !GameManager.Instance.IsPaused) Time.timeScale = escalaPrevia;
         enHitStop = false;
     }
 
@@ -1712,13 +1756,42 @@ public class PlayerControler : MonoBehaviour
 
     // Recorta el circulo hasta dejar la media luna. Con las otras formas no hace nada,
     // porque OverlapBox y OverlapCircle ya son exactos.
+    //
+    // Se prueban varios puntos del cuerpo del enemigo (el mas cercano al centro del
+    // tajo, su centro, las esquinas y los bordes): con solo el mas cercano, un
+    // enemigo pegado al player caia en el hueco de la media luna y el tajo le
+    // atravesaba sin tocarlo.
     private bool EstaDentroDelArco(AttackProfile perfil, Vector2 centro, Collider2D objetivo)
     {
         if (perfil.forma != AttackShape.Arco) return true;
 
-        // Medimos al punto del collider mas cercano, no a su transform: asi un enemigo
-        // grande se detecta por su cuerpo y no por donde tenga el origen.
-        Vector2 haciaObjetivo = objetivo.ClosestPoint(centro) - centro;
+        Vector2 cercano = objetivo.ClosestPoint(centro);
+        if (PuntoEnArco(perfil, centro, cercano)) return true;
+
+        Bounds b = objetivo.bounds;
+        Vector2 c = b.center, mn = b.min, mx = b.max;
+        Vector2[] muestras =
+        {
+            c, new Vector2(mn.x, mn.y), new Vector2(mx.x, mn.y), new Vector2(mn.x, mx.y), new Vector2(mx.x, mx.y),
+            new Vector2(c.x, mn.y), new Vector2(c.x, mx.y), new Vector2(mn.x, c.y), new Vector2(mx.x, c.y),
+        };
+        foreach (Vector2 m in muestras)
+            if (objetivo.OverlapPoint(m) && PuntoEnArco(perfil, centro, m)) return true;
+
+        // A quemarropa: el enemigo esta dentro del hueco (o solapado con el player,
+        // que ahora se atraviesan). Si esta delante, el tajo le da.
+        if (Vector2.Distance(cercano, centro) <= perfil.radioInterior + 0.05f)
+        {
+            float dx = c.x - m_transform.position.x;
+            return dx * direction > -b.extents.x * 0.5f;
+        }
+        return false;
+    }
+
+    // Si un punto cae dentro de la media luna del perfil.
+    private bool PuntoEnArco(AttackProfile perfil, Vector2 centro, Vector2 punto)
+    {
+        Vector2 haciaObjetivo = punto - centro;
         float distancia = haciaObjetivo.magnitude;
 
         if (distancia > perfil.radioExterior) return false;
@@ -2237,6 +2310,16 @@ public class PlayerControler : MonoBehaviour
     // Lee la E y arranca el cambio cuando se pueda.
     private void CambioDeArma()
     {
+        // Con una hoguera a tiro, la E es para descansar y no cambia de arma.
+        if (m_gatherInput.IsTogglingWeapon && Hoguera.Cercana != null && isGrounded && !isTogglingWeapon
+            && !isAttacking && !isDodging && !isShooting)
+        {
+            m_gatherInput.IsTogglingWeapon = false;
+            cambioArmaPendiente = false;
+            Hoguera.Cercana.Usar(this);
+            return;
+        }
+
         if (m_gatherInput.IsTogglingWeapon)
         {
             m_gatherInput.IsTogglingWeapon = false;
@@ -2323,6 +2406,79 @@ public class PlayerControler : MonoBehaviour
 
     #endregion
 
+    #region Destrabar
+
+    // Cada poco, si esta de pie en suelo firme y sin trampas alrededor, apunta la
+    // posicion. Es el sitio al que vuelve con "Destrabar" (menu de pausa).
+    private void GuardarSueloSeguro()
+    {
+        if (!isGrounded || isKnocked || Time.time < siguienteSueloSeguro) return;
+        siguienteSueloSeguro = Time.time + 0.4f;
+        int trampas = LayerMask.GetMask("Traps");
+        if (Physics2D.OverlapCircle(m_transform.position, 1.2f, trampas)) return;
+        ultimoSueloSeguro = m_transform.position;
+    }
+
+    public void Destrabar()
+    {
+        CortarBebida();
+        if (isBlocking) TerminarBloqueo();
+        SoltarSuspensionAerea();
+        m_rigitbody2D.linearVelocity = Vector2.zero;
+        m_rigitbody2D.position = ultimoSueloSeguro;
+        m_transform.position = ultimoSueloSeguro;
+        ReproducirEstado("PlayerIdle");
+    }
+
+    #endregion
+
+    #region Pociones
+
+    // Q: bebe una pocion si hay cargas y el player esta libre (en el suelo, sin
+    // atacar, ni esquivar, ni bloquear).
+    private void Beber()
+    {
+        if (!m_gatherInput.IsHealing) return;
+        m_gatherInput.IsHealing = false;
+        if (isDrinking || !isGrounded || isAttacking || isShooting || isDodging || isBlocking || isTogglingWeapon || isKnocked) return;
+
+        ReservaPociones reserva = ReservaPociones.Get();
+        if (!reserva.Gastar())
+        {
+            TextoFlotante.Mostrar("Sin pociones", (Vector2)m_transform.position + Vector2.up * 1.3f, new Color(0.7f, 0.7f, 0.7f), 0.8f);
+            return;
+        }
+        rutinaBeber = StartCoroutine(BeberRoutine(reserva.Curacion));
+    }
+
+    private IEnumerator BeberRoutine(int curacion)
+    {
+        isDrinking = true;
+        isSprinting = false;
+        ReproducirEstado(estadoBeber);
+        yield return new WaitForSeconds(momentoCurar);
+
+        Heal(curacion);
+        ParticulasFx.Rafaga((Vector2)m_transform.position, 18, new Color(0.4f, 1f, 0.5f), new Color(0.9f, 1f, 0.7f),
+                            new Vector2(0.8f, 2.5f), -0.4f, new Vector2(0.05f, 0.1f), new Vector2(0.5f, 1f), 90f, 90f);
+        yield return new WaitForSeconds(Mathf.Max(0f, tiempoBeber - momentoCurar));
+
+        isDrinking = false;
+        rutinaBeber = null;
+        ReproducirEstado(isGrounded ? "PlayerIdle" : "Fall");
+    }
+
+    // Un golpe recibido corta el trago (la carga ya se ha gastado).
+    private void CortarBebida()
+    {
+        if (!isDrinking) return;
+        if (rutinaBeber != null) StopCoroutine(rutinaBeber);
+        rutinaBeber = null;
+        isDrinking = false;
+    }
+
+    #endregion
+
     #region Bloqueo y parry
 
     // Clic derecho con la espada fuera. Al pulsar, la guardia sale al instante,
@@ -2398,6 +2554,7 @@ public class PlayerControler : MonoBehaviour
         if (enemigo != null) enemigo.Stagger(parryStagger);
 
         ventanaContra = counterWindow;
+        estamina.Recuperar(parryStaminaGain);
         StartCoroutine(HitStop(parryHitStop));
         Sacudir(parryShake);
         ScreenFlash.Destello(parryFlashColor, parryFlashTime);
@@ -2772,7 +2929,10 @@ public class PlayerControler : MonoBehaviour
             EnemyHealth enemigo = hit.GetComponentInParent<EnemyHealth>();
             if (enemigo == null || !tocadosSinArma.Add(enemigo)) continue;
 
+            bool contraPuno = ventanaContra > 0f;
+            EnemyHealth.ArmaDelGolpe = TipoArma.Punos;
             enemigo.TakeHit(DanoConContra(g.dano), m_transform.position, g.knockback, g.lanza, g.elevacion);
+            if (efectosGolpe != null) efectosGolpe.Impacto(hit.ClosestPoint(centro), TipoArma.Punos, contraPuno);
             nuevo = true;
         }
 
@@ -3009,6 +3169,7 @@ public class PlayerControler : MonoBehaviour
             EnemyHealth enemigo = hit.GetComponentInParent<EnemyHealth>();
             if (enemigo == null || !tocados.Add(enemigo)) continue;
 
+            EnemyHealth.ArmaDelGolpe = TipoArma.Arco;
             enemigo.TakeDamage(bowDamage, m_transform.position, ultimo ? 1f : bowTickKnockback);
             if (haz != null) haz.Impacto(hit.bounds.center);
         }
@@ -3239,32 +3400,57 @@ public class PlayerControler : MonoBehaviour
 
     // Golpe de un enemigo, que se puede parar con la guardia. Las trampas llaman a
     // TakeDamage(int) y no se bloquean.
-    public void TakeDamage(int damage, Component atacante)
+    // Que ha pasado con un golpe: lo usan los proyectiles para saber si explotar,
+    // rebotar (parry) o seguir de largo (barrido con invulnerabilidad).
+    public enum ResultadoDano { Recibido, Bloqueado, Parry, Ignorado }
+
+    public ResultadoDano TakeDamage(int damage, Component atacante)
     {
         if (atacante != null && isBlocking && !isInvincible && GolpeDeFrente(atacante.transform))
         {
-            if (tBloqueo <= ventanaParryActual) { Parry(atacante); return; }
-            if (estamina.CanSpend()) { estamina.Spend(blockStaminaCost); GolpeBloqueado(); return; }
+            if (tBloqueo <= ventanaParryActual) { Parry(atacante); return ResultadoDano.Parry; }
+            if (estamina.CanSpend())
+            {
+                // Bloqueo normal: gasta estamina y entra una parte del dano.
+                estamina.Spend(blockStaminaCost);
+                GolpeBloqueado();
+                DanoReducido(Mathf.Max(1, Mathf.RoundToInt(damage * blockDamageFactor)));
+                return ResultadoDano.Bloqueado;
+            }
             // Sin estamina la guardia se rompe: el golpe entra.
         }
 
-        TakeDamage(damage);
+        return TakeDamage(damage) ? ResultadoDano.Recibido : ResultadoDano.Ignorado;
+    }
+
+    // Dano que entra a traves de la guardia: sin retroceso ni parpadeo, para que
+    // se pueda seguir bloqueando. Si mata, mata.
+    private void DanoReducido(int dano)
+    {
+        if (isInvincible || hasIFrames || isPlunging || dano <= 0) return;
+        currentHealth -= dano;
+        PlayerHud.Get().Damage(currentHealth, maxHealth);
+        if (currentHealth > 0) return;
+        if (isBlocking) TerminarBloqueo(false);
+        Die();
+        GameManager.Instance.RespawnPlayer();
     }
 
     // Aplica daño al player, actualiza la barra de vida, dispara el knockback y controla la muerte.
-    public void TakeDamage(int damage)
+    // Devuelve false si el golpe no ha entrado (invulnerable, barrido, estocada).
+    public bool TakeDamage(int damage)
     {
         // Ignora el daño durante la invulnerabilidad. Esto evita recibir dos golpes a la vez
         // (el contacto del cuerpo del enemigo y el espadazo de su animación).
-        if (isInvincible) return;
+        if (isInvincible) return false;
         // Ventana de invulnerabilidad del barrido. Esquiva golpes de enemigo
         // y trampas por igual; las zonas de muerte no pasan por aqui y siguen
         // matando.
-        if (hasIFrames) return;
+        if (hasIFrames) return false;
         // La estocada es invulnerable de principio a fin. Al caer encima de un
         // enemigo, este atacaba en el mismo instante y el golpe del jugador
         // perdia; ademas el rebote tiene que salir limpio.
-        if (isPlunging) return;
+        if (isPlunging) return false;
 
         currentHealth -= damage;
 
@@ -3281,6 +3467,7 @@ public class PlayerControler : MonoBehaviour
         if (golpeSinArmaActivo) CortarGolpeSinArma();
         if (isBlocking) TerminarBloqueo(false);
         SoltarSuspensionAerea();
+        CortarBebida();
 
         Knockback();
 
@@ -3288,10 +3475,11 @@ public class PlayerControler : MonoBehaviour
         {
             Die();
             GameManager.Instance.RespawnPlayer();
-            return;
+            return true;
         }
 
         StartCoroutine(InvincibleRoutine());
+        return true;
     }
 
     // Aplica el impulso de retroceso al recibir un golpe.
@@ -3371,6 +3559,13 @@ public class PlayerControler : MonoBehaviour
         m_animator.SetBool("isKnockback", isKnocked);
     }
 
+    // Vida al maximo (la hoguera). Sin destello verde si ya estaba lleno.
+    public void CurarCompleto()
+    {
+        if (currentHealth <= 0) return;
+        if (currentHealth < maxHealth) Heal(maxHealth - currentHealth);
+    }
+
     // Devuelve vida al player. Devuelve false si ya estaba lleno, para que quien
     // cura (un corazon, por ejemplo) sepa que no ha hecho nada y no se gaste.
     public bool Heal(int amount)
@@ -3440,6 +3635,7 @@ public class PlayerControler : MonoBehaviour
     // Actualiza la barra de vida a cero, instancia el VFX de muerte y destruye al player.
     public void Die()
     {
+        PantallaMuerte.Mostrar(ArenaJefe.EnCombate);
         PlayerHud.Get().Damage(0, maxHealth);
         GameObject deathVFXPrefab = Instantiate(deathVFX, m_transform.position, Quaternion.identity);
         Destroy(gameObject);

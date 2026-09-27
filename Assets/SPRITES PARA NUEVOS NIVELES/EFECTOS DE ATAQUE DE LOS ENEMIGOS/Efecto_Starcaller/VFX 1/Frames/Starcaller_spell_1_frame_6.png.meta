@@ -1,0 +1,455 @@
+fileFormatVersion: 2
+guid: 5e33416f2b341f44fbaeac90141a30c0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5331731907135039362
+    second: Starcaller_spell_1_frame_6_0
+  - first:
+      213: 5856737629405918505
+    second: Starcaller_spell_1_frame_6_1
+  - first:
+      213: -7875020600741515668
+    second: Starcaller_spell_1_frame_6_2
+  - first:
+      213: 3708274056233939642
+    second: Starcaller_spell_1_frame_6_3
+  - first:
+      213: 7514396271298577065
+    second: Starcaller_spell_1_frame_6_4
+  - first:
+      213: -8241129352919730514
+    second: Starcaller_spell_1_frame_6_5
+  - first:
+      213: 9125097510784087117
+    second: Starcaller_spell_1_frame_6_6
+  - first:
+      213: 7969738722488801854
+    second: Starcaller_spell_1_frame_6_7
+  - first:
+      213: -7048517953241727871
+    second: Starcaller_spell_1_frame_6_8
+  - first:
+      213: -7003993675326000173
+    second: Starcaller_spell_1_frame_6_9
+  - first:
+      213: 7005007874447886976
+    second: Starcaller_spell_1_frame_6_10
+  - first:
+      213: -8187538843349216540
+    second: Starcaller_spell_1_frame_6_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Starcaller_spell_1_frame_6_0
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 113
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7899954412e106b0800000000000000
+      internalID: -5331731907135039362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Starcaller_spell_1_frame_6_1
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 84
+        width: 47
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9253767f7df474150800000000000000
+      internalID: 5856737629405918505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Starcaller_spell_1_frame_6_2
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 26
+        width: 41
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c6e2bedbc7e46b290800000000000000
+      internalID: -7875020600741515668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Starcaller_spell_1_frame_6_3
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 104
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab2fe9b5b9f667330800000000000000
+      internalID: 3708274056233939642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Starcaller_spell_1_frame_6_4
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 39
+        width: 40
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a28544889f784860800000000000000
+      internalID: 7514396271298577065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Starcaller_spell_1_frame_6_5
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 68
+        width: 6
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea6bc235480a1ad80800000000000000
+      internalID: -8241129352919730514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Starcaller_spell_1_frame_6_6
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 71
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d443617d6dbd2ae70800000000000000
+      internalID: 9125097510784087117
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Starcaller_spell_1_frame_6_7
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 61
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3ade9284233a9e60800000000000000
+      internalID: 7969738722488801854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Starcaller_spell_1_frame_6_8
+      rect:
+        serializedVersion: 2
+        x: 76
+        y: 60
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18c30142442ae2e90800000000000000
+      internalID: -7048517953241727871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Starcaller_spell_1_frame_6_9
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 54
+        width: 11
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d37c1d6cd0dcce90800000000000000
+      internalID: -7003993675326000173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Starcaller_spell_1_frame_6_10
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 53
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 08ac7453c89c63160800000000000000
+      internalID: 7005007874447886976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Starcaller_spell_1_frame_6_11
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 38
+        width: 21
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e215792dc4006e80800000000000000
+      internalID: -8187538843349216540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Starcaller_spell_1_frame_6_0: -5331731907135039362
+      Starcaller_spell_1_frame_6_1: 5856737629405918505
+      Starcaller_spell_1_frame_6_10: 7005007874447886976
+      Starcaller_spell_1_frame_6_11: -8187538843349216540
+      Starcaller_spell_1_frame_6_2: -7875020600741515668
+      Starcaller_spell_1_frame_6_3: 3708274056233939642
+      Starcaller_spell_1_frame_6_4: 7514396271298577065
+      Starcaller_spell_1_frame_6_5: -8241129352919730514
+      Starcaller_spell_1_frame_6_6: 9125097510784087117
+      Starcaller_spell_1_frame_6_7: 7969738722488801854
+      Starcaller_spell_1_frame_6_8: -7048517953241727871
+      Starcaller_spell_1_frame_6_9: -7003993675326000173
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

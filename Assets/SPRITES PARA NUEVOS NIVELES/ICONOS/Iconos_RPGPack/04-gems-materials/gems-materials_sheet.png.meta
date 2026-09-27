@@ -1,0 +1,1989 @@
+fileFormatVersion: 2
+guid: b5f550c06c07ea446a34df377482f87f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7900602126075133950
+    second: gems-materials_sheet_0
+  - first:
+      213: 867410843637075147
+    second: gems-materials_sheet_1
+  - first:
+      213: -2917064224340589453
+    second: gems-materials_sheet_2
+  - first:
+      213: -3752704204151116162
+    second: gems-materials_sheet_3
+  - first:
+      213: -6186336280650112928
+    second: gems-materials_sheet_4
+  - first:
+      213: 6088243284984599758
+    second: gems-materials_sheet_5
+  - first:
+      213: 1061129558114807673
+    second: gems-materials_sheet_6
+  - first:
+      213: 3403496281227258010
+    second: gems-materials_sheet_7
+  - first:
+      213: -5844587796660221006
+    second: gems-materials_sheet_8
+  - first:
+      213: -3932558411486681107
+    second: gems-materials_sheet_9
+  - first:
+      213: -8119975818644620323
+    second: gems-materials_sheet_10
+  - first:
+      213: 781642550018003419
+    second: gems-materials_sheet_11
+  - first:
+      213: -8027622718656882372
+    second: gems-materials_sheet_12
+  - first:
+      213: -8988360999918218095
+    second: gems-materials_sheet_13
+  - first:
+      213: 8684800615198193606
+    second: gems-materials_sheet_14
+  - first:
+      213: -6314322582545673490
+    second: gems-materials_sheet_15
+  - first:
+      213: -2314343372776026732
+    second: gems-materials_sheet_16
+  - first:
+      213: -1878426126025519873
+    second: gems-materials_sheet_17
+  - first:
+      213: -5571651378025873959
+    second: gems-materials_sheet_18
+  - first:
+      213: -4870852147618662560
+    second: gems-materials_sheet_19
+  - first:
+      213: -4476407458087795269
+    second: gems-materials_sheet_20
+  - first:
+      213: 5354470074614357145
+    second: gems-materials_sheet_21
+  - first:
+      213: -5755406371289833825
+    second: gems-materials_sheet_22
+  - first:
+      213: 3500668997041146204
+    second: gems-materials_sheet_23
+  - first:
+      213: -4318740521240629762
+    second: gems-materials_sheet_24
+  - first:
+      213: 8757626662084340376
+    second: gems-materials_sheet_25
+  - first:
+      213: -3301564132897838959
+    second: gems-materials_sheet_26
+  - first:
+      213: 4813511177187002589
+    second: gems-materials_sheet_27
+  - first:
+      213: -124586509592605775
+    second: gems-materials_sheet_28
+  - first:
+      213: -6618289743791468073
+    second: gems-materials_sheet_29
+  - first:
+      213: 1926179500981381772
+    second: gems-materials_sheet_30
+  - first:
+      213: -6643783753214102886
+    second: gems-materials_sheet_31
+  - first:
+      213: 3724081938232643162
+    second: gems-materials_sheet_32
+  - first:
+      213: -8884278542319635806
+    second: gems-materials_sheet_33
+  - first:
+      213: -6249108987450371750
+    second: gems-materials_sheet_34
+  - first:
+      213: -3393529135030154519
+    second: gems-materials_sheet_35
+  - first:
+      213: -48189247882887494
+    second: gems-materials_sheet_36
+  - first:
+      213: 6471696234273280139
+    second: gems-materials_sheet_37
+  - first:
+      213: 2388906653455236890
+    second: gems-materials_sheet_38
+  - first:
+      213: 6345212848440666395
+    second: gems-materials_sheet_39
+  - first:
+      213: 2764012263894155970
+    second: gems-materials_sheet_40
+  - first:
+      213: 1552829337207547767
+    second: gems-materials_sheet_41
+  - first:
+      213: -5874703912153499491
+    second: gems-materials_sheet_42
+  - first:
+      213: -8635109832695361325
+    second: gems-materials_sheet_43
+  - first:
+      213: -8470893681442845214
+    second: gems-materials_sheet_44
+  - first:
+      213: 6013765076933098181
+    second: gems-materials_sheet_45
+  - first:
+      213: 2918199089035438316
+    second: gems-materials_sheet_46
+  - first:
+      213: 5212808082017394867
+    second: gems-materials_sheet_47
+  - first:
+      213: -4343896131552957064
+    second: gems-materials_sheet_48
+  - first:
+      213: 3859998614980155143
+    second: gems-materials_sheet_49
+  - first:
+      213: -6756229363691281476
+    second: gems-materials_sheet_50
+  - first:
+      213: 7473738408642156488
+    second: gems-materials_sheet_51
+  - first:
+      213: 6610973551007051878
+    second: gems-materials_sheet_52
+  - first:
+      213: -8944408903873930431
+    second: gems-materials_sheet_53
+  - first:
+      213: 3502713462386912725
+    second: gems-materials_sheet_54
+  - first:
+      213: -4281113181712947450
+    second: gems-materials_sheet_55
+  - first:
+      213: 4292738362068899882
+    second: gems-materials_sheet_56
+  - first:
+      213: 4406755837959203877
+    second: gems-materials_sheet_57
+  - first:
+      213: -3442723679443282630
+    second: gems-materials_sheet_58
+  - first:
+      213: 2002368735957737530
+    second: gems-materials_sheet_59
+  - first:
+      213: -3147718863635299884
+    second: gems-materials_sheet_60
+  - first:
+      213: -2987811633886900569
+    second: gems-materials_sheet_61
+  - first:
+      213: -7735473105638803239
+    second: gems-materials_sheet_62
+  - first:
+      213: -8234222073072111716
+    second: gems-materials_sheet_63
+  - first:
+      213: 8644004019033797886
+    second: gems-materials_sheet_64
+  - first:
+      213: -1993275557832457485
+    second: gems-materials_sheet_65
+  - first:
+      213: -7215478138568004421
+    second: gems-materials_sheet_66
+  - first:
+      213: 2830513688758438943
+    second: gems-materials_sheet_67
+  - first:
+      213: 6449087043893651207
+    second: gems-materials_sheet_68
+  - first:
+      213: -5564890094825060749
+    second: gems-materials_sheet_69
+  - first:
+      213: -1367637457412084374
+    second: gems-materials_sheet_70
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: gems-materials_sheet_0
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 226
+        width: 20
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 200889bb93c6b5290800000000000000
+      internalID: -7900602126075133950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_1
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 227
+        width: 26
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcc4f490199a90c00800000000000000
+      internalID: 867410843637075147
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_2
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 226
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 374cd211b818487d0800000000000000
+      internalID: -2917064224340589453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_3
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 227
+        width: 22
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7e2574b867bbebc0800000000000000
+      internalID: -3752704204151116162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_4
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 227
+        width: 28
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0602dbaede7b52aa0800000000000000
+      internalID: -6186336280650112928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_5
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 227
+        width: 22
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec41aa3c209cd7450800000000000000
+      internalID: 6088243284984599758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_6
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 225
+        width: 26
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 97fa91406b3e9be00800000000000000
+      internalID: 1061129558114807673
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_7
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 227
+        width: 22
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a98e9e4d5d5ab3f20800000000000000
+      internalID: 3403496281227258010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_8
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 195
+        width: 26
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bb0c796d5ad3eea0800000000000000
+      internalID: -5844587796660221006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_9
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 196
+        width: 26
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de7acd8d5febc69c0800000000000000
+      internalID: -3932558411486681107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_10
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 195
+        width: 26
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddbfce0b30d005f80800000000000000
+      internalID: -8119975818644620323
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_11
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 195
+        width: 26
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd1572702c3f8da00800000000000000
+      internalID: 781642550018003419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_12
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 195
+        width: 26
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c39d9976ba7289090800000000000000
+      internalID: -8027622718656882372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_13
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 195
+        width: 26
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19456eefa4de24380800000000000000
+      internalID: -8988360999918218095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_14
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 196
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c77bfd352c968870800000000000000
+      internalID: 8684800615198193606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_15
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 196
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee2532ed0150f58a0800000000000000
+      internalID: -6314322582545673490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_16
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 162
+        width: 29
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49dc761e6fcc1efd0800000000000000
+      internalID: -2314343372776026732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_17
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 162
+        width: 30
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ffc8f65046d7ee5e0800000000000000
+      internalID: -1878426126025519873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_18
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 161
+        width: 28
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ddb37077948da2b0800000000000000
+      internalID: -5571651378025873959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_19
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 163
+        width: 28
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 067bdb357c1476cb0800000000000000
+      internalID: -4870852147618662560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_20
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 161
+        width: 28
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb584c6422b90e1c0800000000000000
+      internalID: -4476407458087795269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_21
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 161
+        width: 23
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99c19d5e926ee4a40800000000000000
+      internalID: 5354470074614357145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_22
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 162
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9edf351660b020b0800000000000000
+      internalID: -5755406371289833825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_23
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 161
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c594cdcc7efd49030800000000000000
+      internalID: 3500668997041146204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_24
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 129
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efded5aa060c014c0800000000000000
+      internalID: -4318740521240629762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_25
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 131
+        width: 28
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89ae60d9c07598970800000000000000
+      internalID: 8757626662084340376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_26
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 129
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 198247fd9ec7e22d0800000000000000
+      internalID: -3301564132897838959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_27
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 130
+        width: 28
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd88a9e99e60dc240800000000000000
+      internalID: 4813511177187002589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_28
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 130
+        width: 30
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bb4de7ca31654ef0800000000000000
+      internalID: -124586509592605775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_29
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 130
+        width: 29
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d1d2b01b8c1724a0800000000000000
+      internalID: -6618289743791468073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_30
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 130
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8a62a10d0a2bba10800000000000000
+      internalID: 1926179500981381772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_31
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 131
+        width: 26
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a92792170e98cc3a0800000000000000
+      internalID: -6643783753214102886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_32
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 97
+        width: 29
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5e0ec2bac89ea330800000000000000
+      internalID: 3724081938232643162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_33
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 97
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a2b9679cb3b4b480800000000000000
+      internalID: -8884278542319635806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_34
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 97
+        width: 27
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a51d1503c74b649a0800000000000000
+      internalID: -6249108987450371750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_35
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 97
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9eac69b3b33c7e0d0800000000000000
+      internalID: -3393529135030154519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_36
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 97
+        width: 26
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: abe72f5622cc45ff0800000000000000
+      internalID: -48189247882887494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_37
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 97
+        width: 27
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b809712cf6510d950800000000000000
+      internalID: 6471696234273280139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_38
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 100
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1f34c0c1f9172120800000000000000
+      internalID: 2388906653455236890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_39
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 99
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b19ec8f9779be0850800000000000000
+      internalID: 6345212848440666395
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_40
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 97
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c20c38728ebb5620800000000000000
+      internalID: 2764012263894155970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_41
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 65
+        width: 25
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 777af011e02cc8510800000000000000
+      internalID: 1552829337207547767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_42
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 65
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d983e7bdaebd87ea0800000000000000
+      internalID: -5874703912153499491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_43
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 65
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d0d5b1ab5de92880800000000000000
+      internalID: -8635109832695361325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_44
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 65
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ed8f73d317517a80800000000000000
+      internalID: -8470893681442845214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_45
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 66
+        width: 18
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ca3f35a97f257350800000000000000
+      internalID: 6013765076933098181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_46
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 65
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce863d53c968f7820800000000000000
+      internalID: 2918199089035438316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_47
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 65
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b0aeeaf45d975840800000000000000
+      internalID: 5212808082017394867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_48
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 65
+        width: 24
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87da799bb7167b3c0800000000000000
+      internalID: -4343896131552957064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_49
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 36
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70754670a48719530800000000000000
+      internalID: 3859998614980155143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_50
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 36
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb32e14903d0d32a0800000000000000
+      internalID: -6756229363691281476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_51
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 36
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c71f4f2c7d08b760800000000000000
+      internalID: 7473738408642156488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_52
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 36
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 660374f0b65eebb50800000000000000
+      internalID: 6610973551007051878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_53
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 36
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14bd0cecd731fd380800000000000000
+      internalID: -8944408903873930431
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_54
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 36
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ddec8bf5532c9030800000000000000
+      internalID: 3502713462386912725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_55
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 36
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 607e1c85e3e6694c0800000000000000
+      internalID: -4281113181712947450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_56
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 36
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a281fc0ebced29b30800000000000000
+      internalID: 4292738362068899882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_57
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 1
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 52cef6d2611f72d30800000000000000
+      internalID: 4406755837959203877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_58
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 1
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3515facd0df830d0800000000000000
+      internalID: -3442723679443282630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_59
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 1
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a30eb10a1c7d9cb10800000000000000
+      internalID: 2002368735957737530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_60
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 1
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d1c830fe5e0154d0800000000000000
+      internalID: -3147718863635299884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_61
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 16
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ae446a26292986d0800000000000000
+      internalID: -2987811633886900569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_62
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 1
+        width: 16
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d8bfc8d13416a490800000000000000
+      internalID: -7735473105638803239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_63
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 18
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9f2bdcb6aa2abd80800000000000000
+      internalID: -8234222073072111716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_64
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 1
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef4fe8f7bdba5f770800000000000000
+      internalID: 8644004019033797886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_65
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 20
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f28de3e0767654e0800000000000000
+      internalID: -1993275557832457485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_66
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 1
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bbcae0abcd87ddb90800000000000000
+      internalID: -7215478138568004421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_67
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 2
+        width: 26
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1cc3560431084720800000000000000
+      internalID: 2830513688758438943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_68
+      rect:
+        serializedVersion: 2
+        x: 132
+        y: 4
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 707ead86f72cf7950800000000000000
+      internalID: 6449087043893651207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_69
+      rect:
+        serializedVersion: 2
+        x: 148
+        y: 4
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 376ccdb51f985c2b0800000000000000
+      internalID: -5564890094825060749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gems-materials_sheet_70
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 4
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6d2f618afc250de0800000000000000
+      internalID: -1367637457412084374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      gems-materials_sheet_0: -7900602126075133950
+      gems-materials_sheet_1: 867410843637075147
+      gems-materials_sheet_10: -8119975818644620323
+      gems-materials_sheet_11: 781642550018003419
+      gems-materials_sheet_12: -8027622718656882372
+      gems-materials_sheet_13: -8988360999918218095
+      gems-materials_sheet_14: 8684800615198193606
+      gems-materials_sheet_15: -6314322582545673490
+      gems-materials_sheet_16: -2314343372776026732
+      gems-materials_sheet_17: -1878426126025519873
+      gems-materials_sheet_18: -5571651378025873959
+      gems-materials_sheet_19: -4870852147618662560
+      gems-materials_sheet_2: -2917064224340589453
+      gems-materials_sheet_20: -4476407458087795269
+      gems-materials_sheet_21: 5354470074614357145
+      gems-materials_sheet_22: -5755406371289833825
+      gems-materials_sheet_23: 3500668997041146204
+      gems-materials_sheet_24: -4318740521240629762
+      gems-materials_sheet_25: 8757626662084340376
+      gems-materials_sheet_26: -3301564132897838959
+      gems-materials_sheet_27: 4813511177187002589
+      gems-materials_sheet_28: -124586509592605775
+      gems-materials_sheet_29: -6618289743791468073
+      gems-materials_sheet_3: -3752704204151116162
+      gems-materials_sheet_30: 1926179500981381772
+      gems-materials_sheet_31: -6643783753214102886
+      gems-materials_sheet_32: 3724081938232643162
+      gems-materials_sheet_33: -8884278542319635806
+      gems-materials_sheet_34: -6249108987450371750
+      gems-materials_sheet_35: -3393529135030154519
+      gems-materials_sheet_36: -48189247882887494
+      gems-materials_sheet_37: 6471696234273280139
+      gems-materials_sheet_38: 2388906653455236890
+      gems-materials_sheet_39: 6345212848440666395
+      gems-materials_sheet_4: -6186336280650112928
+      gems-materials_sheet_40: 2764012263894155970
+      gems-materials_sheet_41: 1552829337207547767
+      gems-materials_sheet_42: -5874703912153499491
+      gems-materials_sheet_43: -8635109832695361325
+      gems-materials_sheet_44: -8470893681442845214
+      gems-materials_sheet_45: 6013765076933098181
+      gems-materials_sheet_46: 2918199089035438316
+      gems-materials_sheet_47: 5212808082017394867
+      gems-materials_sheet_48: -4343896131552957064
+      gems-materials_sheet_49: 3859998614980155143
+      gems-materials_sheet_5: 6088243284984599758
+      gems-materials_sheet_50: -6756229363691281476
+      gems-materials_sheet_51: 7473738408642156488
+      gems-materials_sheet_52: 6610973551007051878
+      gems-materials_sheet_53: -8944408903873930431
+      gems-materials_sheet_54: 3502713462386912725
+      gems-materials_sheet_55: -4281113181712947450
+      gems-materials_sheet_56: 4292738362068899882
+      gems-materials_sheet_57: 4406755837959203877
+      gems-materials_sheet_58: -3442723679443282630
+      gems-materials_sheet_59: 2002368735957737530
+      gems-materials_sheet_6: 1061129558114807673
+      gems-materials_sheet_60: -3147718863635299884
+      gems-materials_sheet_61: -2987811633886900569
+      gems-materials_sheet_62: -7735473105638803239
+      gems-materials_sheet_63: -8234222073072111716
+      gems-materials_sheet_64: 8644004019033797886
+      gems-materials_sheet_65: -1993275557832457485
+      gems-materials_sheet_66: -7215478138568004421
+      gems-materials_sheet_67: 2830513688758438943
+      gems-materials_sheet_68: 6449087043893651207
+      gems-materials_sheet_69: -5564890094825060749
+      gems-materials_sheet_7: 3403496281227258010
+      gems-materials_sheet_70: -1367637457412084374
+      gems-materials_sheet_8: -5844587796660221006
+      gems-materials_sheet_9: -3932558411486681107
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

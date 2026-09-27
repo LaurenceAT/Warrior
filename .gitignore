@@ -98,3 +98,20 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+# Capturas de las pruebas automaticas del nivel Cueva
+/PruebaCueva/
+/NivelCueva_*.png
+
+# Packs de assets: audio sin comprimir y archivos fuente/vista previa. Se quedan
+# en local (pesan casi 2 GB y el juego no los usa). Los sonidos que se usen se
+# convierten a .ogg, que si se sube.
+/Assets/SPRITES PARA NUEVOS NIVELES/**/*.wav
+/Assets/SPRITES PARA NUEVOS NIVELES/**/*.wav.meta
+/Assets/SPRITES PARA NUEVOS NIVELES/**/*.psd
+/Assets/SPRITES PARA NUEVOS NIVELES/**/*.psd.meta
+/Assets/SPRITES PARA NUEVOS NIVELES/**/*.gif
+/Assets/SPRITES PARA NUEVOS NIVELES/**/*.gif.meta
+/Assets/SPRITES PARA NUEVOS NIVELES/**/*.zip
+/Assets/SPRITES PARA NUEVOS NIVELES/**/*.zip.meta
+/Assets/SPRITES PARA NUEVOS NIVELES/**/*.pdf
+/Assets/SPRITES PARA NUEVOS NIVELES/**/*.pdf.meta

@@ -1,0 +1,1911 @@
+fileFormatVersion: 2
+guid: aa3d4bc5cc5d35148a3c9af5d748b72f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5350936144652311016
+    second: fish-loot_sheet_0
+  - first:
+      213: 5401103515888280108
+    second: fish-loot_sheet_1
+  - first:
+      213: -7280304049738662375
+    second: fish-loot_sheet_2
+  - first:
+      213: -7416673160790826832
+    second: fish-loot_sheet_3
+  - first:
+      213: 4268534381583955804
+    second: fish-loot_sheet_4
+  - first:
+      213: -4830129105739968912
+    second: fish-loot_sheet_5
+  - first:
+      213: -766468536609919787
+    second: fish-loot_sheet_6
+  - first:
+      213: 4863038774233010424
+    second: fish-loot_sheet_7
+  - first:
+      213: -3427949738065245654
+    second: fish-loot_sheet_8
+  - first:
+      213: 5241661780646339712
+    second: fish-loot_sheet_9
+  - first:
+      213: -4386592780569456615
+    second: fish-loot_sheet_10
+  - first:
+      213: -6507235615489315592
+    second: fish-loot_sheet_11
+  - first:
+      213: -387700206451345164
+    second: fish-loot_sheet_12
+  - first:
+      213: 6346681894554155247
+    second: fish-loot_sheet_13
+  - first:
+      213: -8973914360874422823
+    second: fish-loot_sheet_14
+  - first:
+      213: 6286116248655746894
+    second: fish-loot_sheet_15
+  - first:
+      213: 8925422250732655417
+    second: fish-loot_sheet_16
+  - first:
+      213: 7711628877607547923
+    second: fish-loot_sheet_17
+  - first:
+      213: 7826839534356237468
+    second: fish-loot_sheet_18
+  - first:
+      213: 4126420140667363176
+    second: fish-loot_sheet_19
+  - first:
+      213: -4251830614730593932
+    second: fish-loot_sheet_20
+  - first:
+      213: -3074694825753345320
+    second: fish-loot_sheet_21
+  - first:
+      213: -6790021059262981590
+    second: fish-loot_sheet_22
+  - first:
+      213: 3555343432256449111
+    second: fish-loot_sheet_23
+  - first:
+      213: -1213328272669915990
+    second: fish-loot_sheet_24
+  - first:
+      213: -1089835318446171156
+    second: fish-loot_sheet_25
+  - first:
+      213: -9019395318706190122
+    second: fish-loot_sheet_26
+  - first:
+      213: -67950277571043365
+    second: fish-loot_sheet_27
+  - first:
+      213: -1365080512543702722
+    second: fish-loot_sheet_28
+  - first:
+      213: -8459243268479623406
+    second: fish-loot_sheet_29
+  - first:
+      213: -5056448169992035490
+    second: fish-loot_sheet_30
+  - first:
+      213: -3078362609984994443
+    second: fish-loot_sheet_31
+  - first:
+      213: -2538764144520728181
+    second: fish-loot_sheet_32
+  - first:
+      213: -3272559395272677080
+    second: fish-loot_sheet_33
+  - first:
+      213: 857660919929537221
+    second: fish-loot_sheet_34
+  - first:
+      213: -7149284450763092492
+    second: fish-loot_sheet_35
+  - first:
+      213: -2341648638201537352
+    second: fish-loot_sheet_36
+  - first:
+      213: -5238881106871928245
+    second: fish-loot_sheet_37
+  - first:
+      213: 7523555489529276328
+    second: fish-loot_sheet_38
+  - first:
+      213: -7803433899531926894
+    second: fish-loot_sheet_39
+  - first:
+      213: -8676516232578107836
+    second: fish-loot_sheet_40
+  - first:
+      213: 5786444821644026347
+    second: fish-loot_sheet_41
+  - first:
+      213: -4032234232588695751
+    second: fish-loot_sheet_42
+  - first:
+      213: 4634461259170637045
+    second: fish-loot_sheet_43
+  - first:
+      213: -1144395095298745645
+    second: fish-loot_sheet_44
+  - first:
+      213: 2743011991271337478
+    second: fish-loot_sheet_45
+  - first:
+      213: 8528821719567409736
+    second: fish-loot_sheet_46
+  - first:
+      213: -5813576467894444533
+    second: fish-loot_sheet_47
+  - first:
+      213: 7353831538690903795
+    second: fish-loot_sheet_48
+  - first:
+      213: 4085869936526726978
+    second: fish-loot_sheet_49
+  - first:
+      213: 1822022244990778373
+    second: fish-loot_sheet_50
+  - first:
+      213: -2026966469477901782
+    second: fish-loot_sheet_51
+  - first:
+      213: 1101755335481070232
+    second: fish-loot_sheet_52
+  - first:
+      213: -3523936233658623068
+    second: fish-loot_sheet_53
+  - first:
+      213: 2095807962705324530
+    second: fish-loot_sheet_54
+  - first:
+      213: -2075882524980866483
+    second: fish-loot_sheet_55
+  - first:
+      213: -7360301463387458599
+    second: fish-loot_sheet_56
+  - first:
+      213: 2877653773802120620
+    second: fish-loot_sheet_57
+  - first:
+      213: 2106933449225186978
+    second: fish-loot_sheet_58
+  - first:
+      213: -406754046162656357
+    second: fish-loot_sheet_59
+  - first:
+      213: 457288849284366156
+    second: fish-loot_sheet_60
+  - first:
+      213: -3890850098798783024
+    second: fish-loot_sheet_61
+  - first:
+      213: -3610017452212220354
+    second: fish-loot_sheet_62
+  - first:
+      213: -1914331911028607235
+    second: fish-loot_sheet_63
+  - first:
+      213: -6958713479249965257
+    second: fish-loot_sheet_64
+  - first:
+      213: 1484445886630909316
+    second: fish-loot_sheet_65
+  - first:
+      213: -6686781617688915282
+    second: fish-loot_sheet_66
+  - first:
+      213: 2198450529427647169
+    second: fish-loot_sheet_67
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: fish-loot_sheet_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 232
+        width: 30
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 816633a4de7adb5b0800000000000000
+      internalID: -5350936144652311016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_1
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 231
+        width: 30
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2262ab080394fa40800000000000000
+      internalID: 5401103515888280108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 232
+        width: 31
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91e3d7a1a0a27fa90800000000000000
+      internalID: -7280304049738662375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_3
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 224
+        width: 31
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b0a3e33e0fa21990800000000000000
+      internalID: -7416673160790826832
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_4
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 231
+        width: 23
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c577ad58761ec3b30800000000000000
+      internalID: 4268534381583955804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_5
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 235
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07e08116b2fe7fcb0800000000000000
+      internalID: -4830129105739968912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_6
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 229
+        width: 30
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5dc2ad74de4fc55f0800000000000000
+      internalID: -766468536609919787
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_7
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 229
+        width: 28
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f01c1beffbfc7340800000000000000
+      internalID: 4863038774233010424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_8
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 227
+        width: 29
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2a4ab210e97d60d0800000000000000
+      internalID: -3427949738065245654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_9
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 201
+        width: 31
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 084aa243e9f1eb840800000000000000
+      internalID: 5241661780646339712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_10
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 200
+        width: 30
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9105dd37b11bf13c0800000000000000
+      internalID: -4386592780569456615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_11
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 199
+        width: 30
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fc2dfc3fa7a1b5a0800000000000000
+      internalID: -6507235615489315592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_12
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 197
+        width: 30
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f83f1367bc9e9af0800000000000000
+      internalID: -387700206451345164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_13
+      rect:
+        serializedVersion: 2
+        x: 136
+        y: 195
+        width: 16
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe8bd439e81f31850800000000000000
+      internalID: 6346681894554155247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_14
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 195
+        width: 29
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ddad434f60467380800000000000000
+      internalID: -8973914360874422823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_15
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 199
+        width: 30
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e47dfe14c65cc3750800000000000000
+      internalID: 6286116248655746894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_16
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 197
+        width: 29
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93399458f387ddb70800000000000000
+      internalID: 8925422250732655417
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_17
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 165
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31431713b95350b60800000000000000
+      internalID: 7711628877607547923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_18
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 166
+        width: 30
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9c894f86158e9c60800000000000000
+      internalID: 7826839534356237468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_19
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 164
+        width: 30
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86fde76514df34930800000000000000
+      internalID: 4126420140667363176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_20
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 167
+        width: 28
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4792ad345967ef4c0800000000000000
+      internalID: -4251830614730593932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_21
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 167
+        width: 30
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d28d3ea85d7455d0800000000000000
+      internalID: -3074694825753345320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_22
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 165
+        width: 30
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2a553952dff4c1a0800000000000000
+      internalID: -6790021059262981590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_23
+      rect:
+        serializedVersion: 2
+        x: 196
+        y: 166
+        width: 25
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75ae92eb30e175130800000000000000
+      internalID: 3555343432256449111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_24
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 163
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa4429f4d54692fe0800000000000000
+      internalID: -1213328272669915990
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_25
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 135
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ceb57545d8020e0f0800000000000000
+      internalID: -1089835318446171156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_26
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 133
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d842b39ebba4d280800000000000000
+      internalID: -9019395318706190122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_27
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 134
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdf1df225979e0ff0800000000000000
+      internalID: -67950277571043365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_28
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 134
+        width: 26
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e314600a1824e0de0800000000000000
+      internalID: -1365080512543702722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_29
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 134
+        width: 28
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21f58a9f01bba9a80800000000000000
+      internalID: -8459243268479623406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_30
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 133
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e53637afd23e3d9b0800000000000000
+      internalID: -5056448169992035490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_31
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 133
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 573000e14857745d0800000000000000
+      internalID: -3078362609984994443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_32
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 133
+        width: 24
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b81f755267f74ccd0800000000000000
+      internalID: -2538764144520728181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_33
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 102
+        width: 26
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 829a76a91988592d0800000000000000
+      internalID: -3272559395272677080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_34
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 102
+        width: 20
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c28226001607eb00800000000000000
+      internalID: 857660919929537221
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_35
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 103
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fdca0aaba3a8cc90800000000000000
+      internalID: -7149284450763092492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_36
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 102
+        width: 26
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8bc583b58fac08fd0800000000000000
+      internalID: -2341648638201537352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_37
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 103
+        width: 28
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4ab46cd361cb47b0800000000000000
+      internalID: -5238881106871928245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_38
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 104
+        width: 30
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a725513bd9096860800000000000000
+      internalID: 7523555489529276328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_39
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 102
+        width: 26
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29288267632a4b390800000000000000
+      internalID: -7803433899531926894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_40
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 103
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4467545e472d69780800000000000000
+      internalID: -8676516232578107836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_41
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 72
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be1ad7a48e49d4050800000000000000
+      internalID: 5786444821644026347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_42
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 72
+        width: 30
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93781634450aa08c0800000000000000
+      internalID: -4032234232588695751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_43
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 71
+        width: 28
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f4ec26f5f9e05040800000000000000
+      internalID: 4634461259170637045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_44
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 71
+        width: 29
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3dad40e59ba4e10f0800000000000000
+      internalID: -1144395095298745645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_45
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 72
+        width: 30
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60e6d5a7fd2211620800000000000000
+      internalID: 2743011991271337478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_46
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 73
+        width: 30
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 842a3739a267c5670800000000000000
+      internalID: 8528821719567409736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_47
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 71
+        width: 22
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0ed49c0107025fa0800000000000000
+      internalID: -5813576467894444533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_48
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 71
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3fe4cb972de0e0660800000000000000
+      internalID: 7353831538690903795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_49
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 38
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2479f153f0de3b830800000000000000
+      internalID: 4085869936526726978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_50
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 42
+        width: 30
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50cf88d049f194910800000000000000
+      internalID: 1822022244990778373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_51
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 43
+        width: 30
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2a542f3cb4ced3e0800000000000000
+      internalID: -2026966469477901782
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_52
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 38
+        width: 28
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8929db8e3a83a4f00800000000000000
+      internalID: 1101755335481070232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_53
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 40
+        width: 30
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ab56a58aa6781fc0800000000000000
+      internalID: -3523936233658623068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_54
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 40
+        width: 30
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f96c7eec3ec51d10800000000000000
+      internalID: 2095807962705324530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_55
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 40
+        width: 30
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d42131f87dbf033e0800000000000000
+      internalID: -2075882524980866483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_56
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 39
+        width: 22
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d3b00bc0d4fad990800000000000000
+      internalID: -7360301463387458599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_57
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 7
+        width: 22
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca5a90e5cda7fe720800000000000000
+      internalID: 2877653773802120620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_58
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 7
+        width: 30
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2aea47e1fc45d3d10800000000000000
+      internalID: 2106933449225186978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_59
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 13
+        width: 30
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b93a58f995bea5af0800000000000000
+      internalID: -406754046162656357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_60
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 14
+        width: 30
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4f775d19cd985600800000000000000
+      internalID: 457288849284366156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_61
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 11
+        width: 30
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d51ec2237ce00ac0800000000000000
+      internalID: -3890850098798783024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_62
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 10
+        width: 30
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3e0eeff044a6edc0800000000000000
+      internalID: -3610017452212220354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_63
+      rect:
+        serializedVersion: 2
+        x: 193
+        y: 22
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df6f1fcf44dee65e0800000000000000
+      internalID: -1914331911028607235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_64
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 27
+        width: 15
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73f459f95fead6f90800000000000000
+      internalID: -6958713479249965257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_65
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 22
+        width: 15
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 485dce04bafc99410800000000000000
+      internalID: 1484445886630909316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_66
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 8
+        width: 28
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea25a0bfb87c333a0800000000000000
+      internalID: -6686781617688915282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fish-loot_sheet_67
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 10
+        width: 15
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1caedcecb17728e10800000000000000
+      internalID: 2198450529427647169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      fish-loot_sheet_0: -5350936144652311016
+      fish-loot_sheet_1: 5401103515888280108
+      fish-loot_sheet_10: -4386592780569456615
+      fish-loot_sheet_11: -6507235615489315592
+      fish-loot_sheet_12: -387700206451345164
+      fish-loot_sheet_13: 6346681894554155247
+      fish-loot_sheet_14: -8973914360874422823
+      fish-loot_sheet_15: 6286116248655746894
+      fish-loot_sheet_16: 8925422250732655417
+      fish-loot_sheet_17: 7711628877607547923
+      fish-loot_sheet_18: 7826839534356237468
+      fish-loot_sheet_19: 4126420140667363176
+      fish-loot_sheet_2: -7280304049738662375
+      fish-loot_sheet_20: -4251830614730593932
+      fish-loot_sheet_21: -3074694825753345320
+      fish-loot_sheet_22: -6790021059262981590
+      fish-loot_sheet_23: 3555343432256449111
+      fish-loot_sheet_24: -1213328272669915990
+      fish-loot_sheet_25: -1089835318446171156
+      fish-loot_sheet_26: -9019395318706190122
+      fish-loot_sheet_27: -67950277571043365
+      fish-loot_sheet_28: -1365080512543702722
+      fish-loot_sheet_29: -8459243268479623406
+      fish-loot_sheet_3: -7416673160790826832
+      fish-loot_sheet_30: -5056448169992035490
+      fish-loot_sheet_31: -3078362609984994443
+      fish-loot_sheet_32: -2538764144520728181
+      fish-loot_sheet_33: -3272559395272677080
+      fish-loot_sheet_34: 857660919929537221
+      fish-loot_sheet_35: -7149284450763092492
+      fish-loot_sheet_36: -2341648638201537352
+      fish-loot_sheet_37: -5238881106871928245
+      fish-loot_sheet_38: 7523555489529276328
+      fish-loot_sheet_39: -7803433899531926894
+      fish-loot_sheet_4: 4268534381583955804
+      fish-loot_sheet_40: -8676516232578107836
+      fish-loot_sheet_41: 5786444821644026347
+      fish-loot_sheet_42: -4032234232588695751
+      fish-loot_sheet_43: 4634461259170637045
+      fish-loot_sheet_44: -1144395095298745645
+      fish-loot_sheet_45: 2743011991271337478
+      fish-loot_sheet_46: 8528821719567409736
+      fish-loot_sheet_47: -5813576467894444533
+      fish-loot_sheet_48: 7353831538690903795
+      fish-loot_sheet_49: 4085869936526726978
+      fish-loot_sheet_5: -4830129105739968912
+      fish-loot_sheet_50: 1822022244990778373
+      fish-loot_sheet_51: -2026966469477901782
+      fish-loot_sheet_52: 1101755335481070232
+      fish-loot_sheet_53: -3523936233658623068
+      fish-loot_sheet_54: 2095807962705324530
+      fish-loot_sheet_55: -2075882524980866483
+      fish-loot_sheet_56: -7360301463387458599
+      fish-loot_sheet_57: 2877653773802120620
+      fish-loot_sheet_58: 2106933449225186978
+      fish-loot_sheet_59: -406754046162656357
+      fish-loot_sheet_6: -766468536609919787
+      fish-loot_sheet_60: 457288849284366156
+      fish-loot_sheet_61: -3890850098798783024
+      fish-loot_sheet_62: -3610017452212220354
+      fish-loot_sheet_63: -1914331911028607235
+      fish-loot_sheet_64: -6958713479249965257
+      fish-loot_sheet_65: 1484445886630909316
+      fish-loot_sheet_66: -6686781617688915282
+      fish-loot_sheet_67: 2198450529427647169
+      fish-loot_sheet_7: 4863038774233010424
+      fish-loot_sheet_8: -3427949738065245654
+      fish-loot_sheet_9: 5241661780646339712
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

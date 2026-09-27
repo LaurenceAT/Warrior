@@ -1,0 +1,611 @@
+fileFormatVersion: 2
+guid: eea92b9f7299a5d4298b33817a7f9ead
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3394335981441181768
+    second: BloodMage_skill2_frame12_0
+  - first:
+      213: -1452061040067153454
+    second: BloodMage_skill2_frame12_1
+  - first:
+      213: -2676967026465298956
+    second: BloodMage_skill2_frame12_2
+  - first:
+      213: 4153366350111142389
+    second: BloodMage_skill2_frame12_3
+  - first:
+      213: 8369566402963915241
+    second: BloodMage_skill2_frame12_4
+  - first:
+      213: 4118928118868311215
+    second: BloodMage_skill2_frame12_5
+  - first:
+      213: -3565667508845859994
+    second: BloodMage_skill2_frame12_6
+  - first:
+      213: 7135739010488006587
+    second: BloodMage_skill2_frame12_7
+  - first:
+      213: 3656042988632484672
+    second: BloodMage_skill2_frame12_8
+  - first:
+      213: -5492967613513302041
+    second: BloodMage_skill2_frame12_9
+  - first:
+      213: 96541592445319351
+    second: BloodMage_skill2_frame12_10
+  - first:
+      213: 7294866607208381057
+    second: BloodMage_skill2_frame12_11
+  - first:
+      213: 4740855819080809197
+    second: BloodMage_skill2_frame12_12
+  - first:
+      213: 6177997897634212280
+    second: BloodMage_skill2_frame12_13
+  - first:
+      213: 2648472805234947946
+    second: BloodMage_skill2_frame12_14
+  - first:
+      213: 1660640655544152632
+    second: BloodMage_skill2_frame12_15
+  - first:
+      213: 6914814928652804850
+    second: BloodMage_skill2_frame12_16
+  - first:
+      213: 6296216204051984635
+    second: BloodMage_skill2_frame12_17
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_0
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 73
+        width: 24
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b71fd9a865e4e0d0800000000000000
+      internalID: -3394335981441181768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_1
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 94
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d1fc9a6d2e39dbe0800000000000000
+      internalID: -1452061040067153454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_2
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 92
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f52a103ca089dad0800000000000000
+      internalID: -2676967026465298956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_3
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 84
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f17f60a0b8b3a930800000000000000
+      internalID: 4153366350111142389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_4
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 77
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e145b4bc4ca62470800000000000000
+      internalID: 8369566402963915241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_5
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 64
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fac73841d4f592930800000000000000
+      internalID: 4118928118868311215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_6
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 54
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66b271cda44348ec0800000000000000
+      internalID: -3565667508845859994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_7
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 53
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb7f802c2dc370360800000000000000
+      internalID: 7135739010488006587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_8
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 60
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04b2ff44abfdcb230800000000000000
+      internalID: 3656042988632484672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_9
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 63
+        width: 14
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ef70d9fe0f05c3b0800000000000000
+      internalID: -5492967613513302041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_10
+      rect:
+        serializedVersion: 2
+        x: 29
+        y: 47
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b8f0cb111cf65100800000000000000
+      internalID: 96541592445319351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_11
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 35
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18ab38687829c3560800000000000000
+      internalID: 7294866607208381057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_12
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 48
+        width: 10
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: deab7a3df37eac140800000000000000
+      internalID: 4740855819080809197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_13
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 38
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b9e89ffa58acb550800000000000000
+      internalID: 6177997897634212280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_14
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 25
+        width: 15
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a67bf41fbf341c420800000000000000
+      internalID: 2648472805234947946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_15
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 29
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 832f745b0e7cb0710800000000000000
+      internalID: 1660640655544152632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_16
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 25
+        width: 15
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f22be59a8b56ff50800000000000000
+      internalID: 6914814928652804850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BloodMage_skill2_frame12_17
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 25
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf0b39f5747a06750800000000000000
+      internalID: 6296216204051984635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BloodMage_skill2_frame12_0: -3394335981441181768
+      BloodMage_skill2_frame12_1: -1452061040067153454
+      BloodMage_skill2_frame12_10: 96541592445319351
+      BloodMage_skill2_frame12_11: 7294866607208381057
+      BloodMage_skill2_frame12_12: 4740855819080809197
+      BloodMage_skill2_frame12_13: 6177997897634212280
+      BloodMage_skill2_frame12_14: 2648472805234947946
+      BloodMage_skill2_frame12_15: 1660640655544152632
+      BloodMage_skill2_frame12_16: 6914814928652804850
+      BloodMage_skill2_frame12_17: 6296216204051984635
+      BloodMage_skill2_frame12_2: -2676967026465298956
+      BloodMage_skill2_frame12_3: 4153366350111142389
+      BloodMage_skill2_frame12_4: 8369566402963915241
+      BloodMage_skill2_frame12_5: 4118928118868311215
+      BloodMage_skill2_frame12_6: -3565667508845859994
+      BloodMage_skill2_frame12_7: 7135739010488006587
+      BloodMage_skill2_frame12_8: 3656042988632484672
+      BloodMage_skill2_frame12_9: -5492967613513302041
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

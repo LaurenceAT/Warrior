@@ -1,0 +1,871 @@
+fileFormatVersion: 2
+guid: 2c534eb9e06ea054d9c3418a3a19d556
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2696011923633262407
+    second: atk25_0
+  - first:
+      213: 8654082628535446652
+    second: atk25_1
+  - first:
+      213: 6580967396227567948
+    second: atk25_2
+  - first:
+      213: 5138240583282380569
+    second: atk25_3
+  - first:
+      213: 5837321573818395478
+    second: atk25_4
+  - first:
+      213: -4704893010791778747
+    second: atk25_5
+  - first:
+      213: -6069037645615462457
+    second: atk25_6
+  - first:
+      213: 4039945326174275566
+    second: atk25_7
+  - first:
+      213: -6840620381095141690
+    second: atk25_8
+  - first:
+      213: 2599724976544973383
+    second: atk25_9
+  - first:
+      213: 2304287266973054486
+    second: atk25_10
+  - first:
+      213: -8936992743288008704
+    second: atk25_11
+  - first:
+      213: -4014217787527149238
+    second: atk25_12
+  - first:
+      213: -1024525278187413403
+    second: atk25_13
+  - first:
+      213: -6773917692661837845
+    second: atk25_14
+  - first:
+      213: -7397459116442182828
+    second: atk25_15
+  - first:
+      213: 5728608027244267507
+    second: atk25_16
+  - first:
+      213: -3337914241649976331
+    second: atk25_17
+  - first:
+      213: 107925669656718189
+    second: atk25_18
+  - first:
+      213: 851561296604919083
+    second: atk25_19
+  - first:
+      213: 5760760464493418471
+    second: atk25_20
+  - first:
+      213: 6254175697656415534
+    second: atk25_21
+  - first:
+      213: 5521798263157551219
+    second: atk25_22
+  - first:
+      213: 3646837524183007824
+    second: atk25_23
+  - first:
+      213: 7565690853855459121
+    second: atk25_24
+  - first:
+      213: -5377824840506704618
+    second: atk25_25
+  - first:
+      213: -1113947606725304317
+    second: atk25_26
+  - first:
+      213: -8810753193644971691
+    second: atk25_27
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: atk25_0
+      rect:
+        serializedVersion: 2
+        x: 1399
+        y: 129
+        width: 1502
+        height: 2482
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74fc06a7f882a6520800000000000000
+      internalID: 2696011923633262407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_1
+      rect:
+        serializedVersion: 2
+        x: 2969
+        y: 1719
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7cebb2ac4a791870800000000000000
+      internalID: 8654082628535446652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_2
+      rect:
+        serializedVersion: 2
+        x: 2989
+        y: 129
+        width: 1282
+        height: 2082
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c41529abafa445b50800000000000000
+      internalID: 6580967396227567948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_3
+      rect:
+        serializedVersion: 2
+        x: 2969
+        y: 1549
+        width: 12
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91fca014692be4740800000000000000
+      internalID: 5138240583282380569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_4
+      rect:
+        serializedVersion: 2
+        x: 1329
+        y: 759
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65b6b2f3b05520150800000000000000
+      internalID: 5837321573818395478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_5
+      rect:
+        serializedVersion: 2
+        x: 1289
+        y: 739
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 546b989fbbcd4beb0800000000000000
+      internalID: -4704893010791778747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_6
+      rect:
+        serializedVersion: 2
+        x: 1319
+        y: 739
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c70e9c9a6276cba0800000000000000
+      internalID: -6069037645615462457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_7
+      rect:
+        serializedVersion: 2
+        x: 1279
+        y: 719
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee70e9e9ed4c01830800000000000000
+      internalID: 4039945326174275566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_8
+      rect:
+        serializedVersion: 2
+        x: 1309
+        y: 719
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ced68da10c3111a0800000000000000
+      internalID: -6840620381095141690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_9
+      rect:
+        serializedVersion: 2
+        x: 4549
+        y: 669
+        width: 32
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7428cac9714141420800000000000000
+      internalID: 2599724976544973383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_10
+      rect:
+        serializedVersion: 2
+        x: 1269
+        y: 699
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61672688f097aff10800000000000000
+      internalID: 2304287266973054486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_11
+      rect:
+        serializedVersion: 2
+        x: 1299
+        y: 689
+        width: 12
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0001310437c69f380800000000000000
+      internalID: -8936992743288008704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_12
+      rect:
+        serializedVersion: 2
+        x: 1289
+        y: 659
+        width: 12
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a49c363c032aa48c0800000000000000
+      internalID: -4014217787527149238
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_13
+      rect:
+        serializedVersion: 2
+        x: 1379
+        y: 629
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5602b3a00b728c1f0800000000000000
+      internalID: -1024525278187413403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_14
+      rect:
+        serializedVersion: 2
+        x: 1309
+        y: 549
+        width: 62
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bef482f8fb53ef1a0800000000000000
+      internalID: -6773917692661837845
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_15
+      rect:
+        serializedVersion: 2
+        x: 1379
+        y: 569
+        width: 22
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45b1df38022f65990800000000000000
+      internalID: -7397459116442182828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_16
+      rect:
+        serializedVersion: 2
+        x: 4569
+        y: 549
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f7885936aa108f40800000000000000
+      internalID: 5728608027244267507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_17
+      rect:
+        serializedVersion: 2
+        x: 1369
+        y: 549
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5fb5cb7aea85da1d0800000000000000
+      internalID: -3337914241649976331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_18
+      rect:
+        serializedVersion: 2
+        x: 1359
+        y: 529
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6be80223dd6f7100800000000000000
+      internalID: 107925669656718189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_19
+      rect:
+        serializedVersion: 2
+        x: 1349
+        y: 509
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b257b9ccc7a51db00800000000000000
+      internalID: 851561296604919083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_20
+      rect:
+        serializedVersion: 2
+        x: 809
+        y: 469
+        width: 32
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e79e32ee1552ff40800000000000000
+      internalID: 5760760464493418471
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_21
+      rect:
+        serializedVersion: 2
+        x: 1349
+        y: 389
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2501b539ab4bc650800000000000000
+      internalID: 6254175697656415534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_22
+      rect:
+        serializedVersion: 2
+        x: 1369
+        y: 399
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 370ffdcb34e51ac40800000000000000
+      internalID: 5521798263157551219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_23
+      rect:
+        serializedVersion: 2
+        x: 909
+        y: 309
+        width: 52
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0524e7e086b2c9230800000000000000
+      internalID: 3646837524183007824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_24
+      rect:
+        serializedVersion: 2
+        x: 1339
+        y: 359
+        width: 22
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 137f9703fbbbef860800000000000000
+      internalID: 7565690853855459121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_25
+      rect:
+        serializedVersion: 2
+        x: 1379
+        y: 359
+        width: 22
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61d735decc02e55b0800000000000000
+      internalID: -5377824840506704618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_26
+      rect:
+        serializedVersion: 2
+        x: 1019
+        y: 319
+        width: 42
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 300edbabd867a80f0800000000000000
+      internalID: -1113947606725304317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atk25_27
+      rect:
+        serializedVersion: 2
+        x: 1269
+        y: 239
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5592729d6aae9b580800000000000000
+      internalID: -8810753193644971691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      atk25_0: 2696011923633262407
+      atk25_1: 8654082628535446652
+      atk25_10: 2304287266973054486
+      atk25_11: -8936992743288008704
+      atk25_12: -4014217787527149238
+      atk25_13: -1024525278187413403
+      atk25_14: -6773917692661837845
+      atk25_15: -7397459116442182828
+      atk25_16: 5728608027244267507
+      atk25_17: -3337914241649976331
+      atk25_18: 107925669656718189
+      atk25_19: 851561296604919083
+      atk25_2: 6580967396227567948
+      atk25_20: 5760760464493418471
+      atk25_21: 6254175697656415534
+      atk25_22: 5521798263157551219
+      atk25_23: 3646837524183007824
+      atk25_24: 7565690853855459121
+      atk25_25: -5377824840506704618
+      atk25_26: -1113947606725304317
+      atk25_27: -8810753193644971691
+      atk25_3: 5138240583282380569
+      atk25_4: 5837321573818395478
+      atk25_5: -4704893010791778747
+      atk25_6: -6069037645615462457
+      atk25_7: 4039945326174275566
+      atk25_8: -6840620381095141690
+      atk25_9: 2599724976544973383
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
