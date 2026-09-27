@@ -23,6 +23,8 @@ public class Hoguera : MonoBehaviour
     [SerializeField] private Vector2 puntoReaparicion = new Vector2(1.2f, 0.6f);
     [SerializeField] private string textoAviso = "Presiona E para descansar";
     [SerializeField] private string textoDescanso = "Has descansado";
+    // Al descansar se abre el menu de la hoguera (subir de nivel).
+    [SerializeField] private bool abrirMenu = true;
 
     [Header("Efecto (no hay sonido: todo es visual)")]
     [SerializeField] private SpriteRenderer torre;
@@ -87,8 +89,11 @@ public class Hoguera : MonoBehaviour
         GameManager.Instance.hasCheckPointActive = true;
         GameManager.Instance.checkpointRespawnPosition = transform.position + (Vector3)puntoReaparicion;
 
+        bool primeraVez = !encendida;
         encendida = true;
         AlDescansar?.Invoke();
+        Sonido.Reproducir(primeraVez ? "hoguera_encender" : "hoguera_descansar");
+        if (abrirMenu) MenuHoguera.Abrir();
 
         if (efecto != null) StopCoroutine(efecto);
         efecto = StartCoroutine(Efecto());

@@ -10856,6 +10856,7 @@ MonoBehaviour:
     cantidad: 7
     fps: 8
     bucle: 1
+    alReves: 0
     pivote: {x: 0.5, y: 0.5}
     pixelesPorUnidad: 64
     fotogramas:
@@ -18006,6 +18007,7 @@ MonoBehaviour:
     cantidad: 7
     fps: 8
     bucle: 1
+    alReves: 0
     pivote: {x: 0.5, y: 0.5}
     pixelesPorUnidad: 64
     fotogramas:
@@ -24364,8 +24366,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   texto: "Ara\xF1azos profundos cubren la roca. Alguien escribi\xF3 con sangre: \xABSu
-    piel carmes\xED se r\xEDe del acero... solo el pu\xF1o desnudo quiebra su verdadera
-    forma\xBB."
+    piel carmes\xED se r\xEDe del acero desnudo... solo la luz sagrada quiebra su
+    verdadera forma\xBB."
   duracion: 7
 --- !u!61 &1099059693
 BoxCollider2D:
@@ -25616,6 +25618,7 @@ MonoBehaviour:
     cantidad: 7
     fps: 8
     bucle: 1
+    alReves: 0
     pivote: {x: 0.5, y: 0.5}
     pixelesPorUnidad: 64
     fotogramas:
@@ -29414,6 +29417,7 @@ MonoBehaviour:
   puntoReaparicion: {x: 1.2, y: 0.6}
   textoAviso: Presiona E para descansar
   textoDescanso: Has descansado
+  abrirMenu: 1
   torre: {fileID: 1289345387}
   colorDestello: {r: 1, g: 0.2, b: 0.15, a: 0.35}
   tiempoDestello: 0.35
@@ -31616,6 +31620,7 @@ MonoBehaviour:
   _diamondCollected: 0
   totalDiamonds: 0
   diamondsText: {fileID: 449286474}
+  almasPorDiamante: 40
 --- !u!1 &1372275566
 GameObject:
   m_ObjectHideFlags: 0
@@ -32102,6 +32107,7 @@ MonoBehaviour:
   puntoReaparicion: {x: 1.2, y: 0.6}
   textoAviso: Presiona E para descansar
   textoDescanso: Has descansado
+  abrirMenu: 1
   torre: {fileID: 1645191522}
   colorDestello: {r: 1, g: 0.2, b: 0.15, a: 0.35}
   tiempoDestello: 0.35
@@ -36817,6 +36823,11 @@ MonoBehaviour:
     width: 35.5
     height: 18
   suelo: 4
+  burlas: []
+  marcaFase: 0.5
+  barraPorFase: 0
+  colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+  nombreFase2: 
   muroNiebla: {fileID: 1669088722}
   visualNiebla:
   - {fileID: 1619945685}
@@ -36827,9 +36838,20 @@ MonoBehaviour:
   nieblaAbierta: {r: 0.8, g: 0.15, b: 0.2, a: 0.25}
   nieblaCerrada: {r: 0.9, g: 0.1, b: 0.15, a: 0.75}
   salida: {fileID: 654260164}
-  musica: {fileID: 8300000, guid: 822c628a5788087458c8bf8980440beb, type: 3}
+  musica: {fileID: 8300000, guid: 30d52bd5df01da54b8aa072e4cef7312, type: 3}
   volumen: 0.6
+  inicioFase1: 0
+  bucleFase1: {x: 8, y: 156}
+  musicaFase2: {fileID: 8300000, guid: 30d52bd5df01da54b8aa072e4cef7312, type: 3}
+  volumenFase2: 0.7
+  inicioFase2: 328
+  bucleFase2: {x: 336, y: 410}
   luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+  textoFase2: "El Espectro Carmes\xED revela su verdadera forma..."
+  particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+  particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+  particulasCaen: 0
+  bannerVictoria: "ENEMIGO CA\xCDDO"
 --- !u!61 &1588356058
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -37510,6 +37532,7 @@ MonoBehaviour:
     cantidad: 7
     fps: 8
     bucle: 1
+    alReves: 0
     pivote: {x: 0.5, y: 0.5}
     pixelesPorUnidad: 64
     fotogramas:
@@ -48008,6 +48031,7 @@ MonoBehaviour:
     cantidad: 7
     fps: 8
     bucle: 1
+    alReves: 0
     pivote: {x: 0.5, y: 0.5}
     pixelesPorUnidad: 64
     fotogramas:

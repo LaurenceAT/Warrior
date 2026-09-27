@@ -51,6 +51,14 @@ public class CamaraDinamica : MonoBehaviour
 
     private readonly List<ZonaCamara> zonas = new List<ZonaCamara>();
     private readonly List<(float tamano, float hasta)> pulsos = new List<(float, float)>();
+    // Acercamientos: mandan sobre todo lo demas mientras duren (el mas reciente).
+    private readonly List<(float tamano, float hasta, float desde)> acercamientos = new List<(float, float, float)>();
+    private float ultimoAlejamiento = -99f;
+    // Encuadre especial: la camara mira hacia un punto (el jefe) un rato.
+    private Vector2 puntoEncuadre;
+    private float pesoEncuadre;
+    private float encuadreHasta = -1f;
+    private CinemachineImpulseSource sacudidor;
 
     private void Awake()
     {
@@ -82,6 +90,8 @@ public class CamaraDinamica : MonoBehaviour
     {
         zonas.Clear();
         pulsos.Clear();
+        acercamientos.Clear();
+        encuadreHasta = -1f;
     }
 
     private void OnDestroy()
@@ -94,6 +104,53 @@ public class CamaraDinamica : MonoBehaviour
     {
         if (instancia == null) return;
         instancia.pulsos.Add((tamano, Time.time + segundos));
+        instancia.ultimoAlejamiento = Time.time;
+    }
+
+    // Cierra el plano hasta "tamano" durante "segundos" (golpes fuertes, agarres):
+    // como en los Souls, un acercamiento breve hace que el golpe pese mas.
+    public static void Acercar(float tamano, float segundos)
+    {
+        if (instancia == null) return;
+        instancia.acercamientos.Add((tamano, Time.time + segundos, Time.time));
+    }
+
+    // Durante "segundos" la camara se desplaza hacia "punto" (peso 0 = nada, 1 =
+    // centrado en el). Para mostrar al jefe en un momento importante.
+    public static void Encuadrar(Vector2 punto, float peso, float segundos)
+    {
+        if (instancia == null) return;
+        instancia.puntoEncuadre = punto;
+        instancia.pesoEncuadre = Mathf.Clamp01(peso);
+        instancia.encuadreHasta = Time.time + segundos;
+    }
+
+    // Camara lenta un momento (tiempo real). No toca nada si el juego esta en pausa.
+    public static void CamaraLenta(float escala, float segundos)
+    {
+        if (instancia == null || Time.timeScale < 0.05f) return;
+        instancia.StartCoroutine(instancia.Lenta(escala, segundos));
+    }
+
+    private System.Collections.IEnumerator Lenta(float escala, float segundos)
+    {
+        Time.timeScale = escala;
+        yield return new WaitForSecondsRealtime(segundos);
+        bool pausado = GameManager.Instance != null && GameManager.Instance.IsPaused;
+        if (!pausado && !MenuHoguera.Abierto && !RuedaImbuir.Abierta) Time.timeScale = 1f;
+    }
+
+    // Sacudida de camara desde cualquier sitio (golpes contra el suelo, muros...).
+    public static void Sacudir(float fuerza)
+    {
+        if (instancia == null || fuerza <= 0f) return;
+        if (instancia.sacudidor == null)
+        {
+            instancia.sacudidor = instancia.gameObject.AddComponent<CinemachineImpulseSource>();
+            instancia.sacudidor.ImpulseDefinition.ImpulseShape = CinemachineImpulseDefinition.ImpulseShapes.Bump;
+            instancia.sacudidor.ImpulseDefinition.ImpulseDuration = 0.25f;
+        }
+        instancia.sacudidor.GenerateImpulseWithVelocity(new Vector3(Random.Range(-0.4f, 0.4f), -1f, 0f) * fuerza);
     }
 
     public static void EntrarZona(ZonaCamara z)
@@ -121,6 +178,14 @@ public class CamaraDinamica : MonoBehaviour
 
         pulsos.RemoveAll(p => Time.time >= p.hasta);
         foreach (var p in pulsos) objetivo = Mathf.Max(objetivo, p.tamano);
+
+        // Un acercamiento pedido despues del ultimo alejamiento manda.
+        acercamientos.RemoveAll(a => Time.time >= a.hasta);
+        if (acercamientos.Count > 0)
+        {
+            var a = acercamientos[acercamientos.Count - 1];
+            if (a.desde >= ultimoAlejamiento || pulsos.Count == 0) objetivo = a.tamano;
+        }
 
         bool zoom = Mathf.Abs(objetivo - tamanoBase) > 0.01f || Mathf.Abs(tamanoActual - tamanoBase) > 0.01f;
         if (pixelPerfectCine != null) pixelPerfectCine.enabled = !zoom;
@@ -152,6 +217,14 @@ public class CamaraDinamica : MonoBehaviour
         float x = mirada * adelanto * (moviendose ? 1f : adelantoQuieto);
         float extra = zonas.Count > 0 ? zonas[zonas.Count - 1].DesplazamientoY : 0f;
         float y = vel.y < -velocidadCaidaMinima ? -mirarAbajo : alturaMirada + extra;
+
+        // Encuadre especial: la camara se va hacia el punto pedido.
+        if (Time.time < encuadreHasta)
+        {
+            Vector2 hacia = (puntoEncuadre - (Vector2)objetivo.position) * pesoEncuadre;
+            x = Mathf.Clamp(hacia.x, -6f, 6f);
+            y = Mathf.Clamp(hacia.y + alturaMirada * (1f - pesoEncuadre), -3f, 4f);
+        }
 
         offsetActual.x = Mathf.Lerp(offsetActual.x, x, 1f - Mathf.Exp(-rapidezAdelanto * dt));
         offsetActual.y = Mathf.Lerp(offsetActual.y, y, 1f - Mathf.Exp(-rapidezVertical * dt));

@@ -70,13 +70,16 @@ public class GameManager : MonoBehaviour
         totalDiamonds = diamonds.Length;
 
         UpdateDiamondUI();
+        ContadorAlmas.Asegurar();
+        ManchaAlmas.Colocar();
     }
 
     // Escucha la tecla Escape para pausar/reanudar el juego.
     private void Update()
     {
         // Con la pantalla de muerte, Escape es "cualquier boton" para continuar.
-        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame && !PantallaMuerte.Activa)
+        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame && !PantallaMuerte.Activa
+            && !RuedaImbuir.Abierta && !MenuHoguera.Abierto)
         {
             if (isPaused)
                 ResumeGame();
@@ -119,6 +122,7 @@ public class GameManager : MonoBehaviour
 
         AlReaparecerPlayer?.Invoke();
         PantallaMuerte.Ocultar();
+        ManchaAlmas.Colocar();
     }
 
     // Reinicia desde el ultimo punto de control sin morir (menu de pausa): el
@@ -134,17 +138,27 @@ public class GameManager : MonoBehaviour
 
     #region Diamantes
 
-    // Aumenta la cantidad de diamantes recolectados y refresca la UI.
+    // Los diamantes ahora son cristales de alma: cada uno da almas (la moneda para
+    // subir de nivel en la hoguera). Se sigue contando cuantos se han cogido.
+    [SerializeField] private int almasPorDiamante = 40;
+
     public void AddDiamond()
     {
         _diamondCollected++;
+        Progreso.SumarAlmas(almasPorDiamante);
+        Sonido.Reproducir("alma_recoger", 0.8f);
         UpdateDiamondUI();
     }
 
     // Actualiza el texto de la UI con el progreso de diamantes recolectados.
+    // El contador viejo de diamantes se esconde: las almas tienen el suyo
+    // (ContadorAlmas, abajo a la derecha).
     private void UpdateDiamondUI()
     {
-        diamondsText.text = $"{_diamondCollected} / {totalDiamonds}";
+        if (diamondsText == null) return;
+        Transform caja = diamondsText.transform.parent != null && diamondsText.transform.parent.GetComponent<Canvas>() == null
+            ? diamondsText.transform.parent : diamondsText.transform;
+        caja.gameObject.SetActive(false);
     }
 
     #endregion

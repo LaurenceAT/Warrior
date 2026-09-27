@@ -1,0 +1,1015 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5799999b75f5714f81a5cab46f45749, type: 3}
+  m_Name: RecursosRPG
+  m_EditorClassIdentifier: 
+  sonidos:
+  - clave: espada_tajo
+    clips:
+    - {fileID: 8300000, guid: 5e0a91ba18f917c419cca09a1198885e, type: 3}
+    - {fileID: 8300000, guid: 39031ad5889579f4ab1e45c8c394bd8b, type: 3}
+    volumen: 0.55
+    variacionTono: 0.06
+  - clave: espada_impacto
+    clips:
+    - {fileID: 8300000, guid: 258d2209f4dc7b14e88240701240adf2, type: 3}
+    - {fileID: 8300000, guid: 1e71ecff1f1f06c4ba6b39273d0b9654, type: 3}
+    - {fileID: 8300000, guid: 5f7ebac2f1679d7458222f6312714a9a, type: 3}
+    volumen: 0.65
+    variacionTono: 0.06
+  - clave: bloqueo
+    clips:
+    - {fileID: 8300000, guid: e30bdad31da6792498552337d136c477, type: 3}
+    - {fileID: 8300000, guid: 2b5564dd64b22b64bbdc4e2517e9190f, type: 3}
+    - {fileID: 8300000, guid: cd6727e5da5ac6f43a04e335466e5fa9, type: 3}
+    volumen: 0.75
+    variacionTono: 0.06
+  - clave: parry
+    clips:
+    - {fileID: 8300000, guid: b74c8b16aa1236540b8e7a10191edd57, type: 3}
+    - {fileID: 8300000, guid: 8cad1e8bb651b2c40954610691e1b9e6, type: 3}
+    volumen: 1
+    variacionTono: 0.06
+  - clave: parry_brillo
+    clips:
+    - {fileID: 8300000, guid: 76f932805282a174aa056fb55400ed24, type: 3}
+    - {fileID: 8300000, guid: 5359708ce6830e54bbcff9e329209b8d, type: 3}
+    - {fileID: 8300000, guid: ca23e636692074d45b4bdd0cb3bf4d99, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: dano_player
+    clips:
+    - {fileID: 8300000, guid: efbcb17b3aa1be94e9deb394ceff6f03, type: 3}
+    - {fileID: 8300000, guid: 794877ad592d15c44a09b832a7f65581, type: 3}
+    - {fileID: 8300000, guid: 22fae5550770e8740ba5e31037d18737, type: 3}
+    - {fileID: 8300000, guid: 4241b3ea74384b84e8f6597ef03b0d65, type: 3}
+    volumen: 0.65
+    variacionTono: 0.06
+  - clave: esfuerzo
+    clips:
+    - {fileID: 8300000, guid: e06cf52357e3d3e4284c9a20b9b0efad, type: 3}
+    - {fileID: 8300000, guid: d287db167574cf74b98ecf8397629c14, type: 3}
+    - {fileID: 8300000, guid: 4ab41c8f1a964ef478b89e052b02cfa9, type: 3}
+    - {fileID: 8300000, guid: bf076d37e40786e4599d35e25781d399, type: 3}
+    volumen: 0.45
+    variacionTono: 0.06
+  - clave: muerte_player
+    clips:
+    - {fileID: 8300000, guid: fff91c7870f5c8c44b92cff683c64733, type: 3}
+    volumen: 0.8
+    variacionTono: 0.06
+  - clave: esquiva
+    clips:
+    - {fileID: 8300000, guid: 6a768a2875db2cc45b5f57038c31a3b1, type: 3}
+    - {fileID: 8300000, guid: 366b65e1e04107047a8e2874f953928e, type: 3}
+    - {fileID: 8300000, guid: d824487ba42c23941ab4c852546795ee, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: salto
+    clips:
+    - {fileID: 8300000, guid: 6a15a4be53254e44a8d6925747b5cce0, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: aterrizaje
+    clips:
+    - {fileID: 8300000, guid: 2d9ace98d7a2d224184e37e85a693b0a, type: 3}
+    volumen: 0.55
+    variacionTono: 0.06
+  - clave: pasos
+    clips:
+    - {fileID: 8300000, guid: 4ecfd3c45e57c8d44afe57045598618d, type: 3}
+    - {fileID: 8300000, guid: 8e86a151d567d1d499ede496196f26e6, type: 3}
+    - {fileID: 8300000, guid: 6a346ca8091881d479913bc3d45b210a, type: 3}
+    - {fileID: 8300000, guid: 6bbbc76306522e24ba6a62399a5a51b6, type: 3}
+    - {fileID: 8300000, guid: 9d82ba344a4db4a49a940ee1e259993b, type: 3}
+    volumen: 0.35
+    variacionTono: 0.06
+  - clave: pasos_hielo
+    clips:
+    - {fileID: 8300000, guid: 6469e245822a7804a8cdc8d1ff2c7aa3, type: 3}
+    - {fileID: 8300000, guid: 1692fb1a3b849cd4e8f93ce60336da22, type: 3}
+    - {fileID: 8300000, guid: ab96e26050829ea49a8440d9239be3c1, type: 3}
+    - {fileID: 8300000, guid: 0c923c1727699a947add324fa7b89cbe, type: 3}
+    - {fileID: 8300000, guid: c52c66b747a552b499da7583f5b5f8ce, type: 3}
+    volumen: 0.35
+    variacionTono: 0.06
+  - clave: beber
+    clips:
+    - {fileID: 8300000, guid: 3329602dee2fb3f4eb06c7ad11e3d2e4, type: 3}
+    - {fileID: 8300000, guid: 61b0a3d2227e4b34e85145e6cd7c09b2, type: 3}
+    - {fileID: 8300000, guid: d1ff77bdc3a19aa40ba6df23cb40762c, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: imbuir_0
+    clips:
+    - {fileID: 8300000, guid: 225d26d294a284743b801e42aa600da6, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: imbuir_1
+    clips:
+    - {fileID: 8300000, guid: 296e1d117a286d440a6d213e21508dd2, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: imbuir_2
+    clips:
+    - {fileID: 8300000, guid: 6e692211f11739945870b20ea0c8d669, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: imbuir_3
+    clips:
+    - {fileID: 8300000, guid: 73531fdf37d264c47a7963b0a0dfe7db, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: imbuir_4
+    clips:
+    - {fileID: 8300000, guid: 7e8d2794dad0af2479bfea1988da5b61, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: golpe_0
+    clips:
+    - {fileID: 8300000, guid: b584033b000798d4fb5c9ef09664a8e7, type: 3}
+    - {fileID: 8300000, guid: 499fa9680682a174e8665ec915ede798, type: 3}
+    - {fileID: 8300000, guid: b0d16c4ec9933a94383f8a2908d7390d, type: 3}
+    - {fileID: 8300000, guid: e412ebfe0ce3de349b8fc9c9947e1b73, type: 3}
+    - {fileID: 8300000, guid: e2003b006d2917f4aa21df2d633b177a, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: golpe_1
+    clips:
+    - {fileID: 8300000, guid: 03a5d306d09fa244d8b694af33d798f3, type: 3}
+    - {fileID: 8300000, guid: 0720067b90c18a04c89b7e1a697e317c, type: 3}
+    - {fileID: 8300000, guid: dcc05b74074123c418b19dc7fcca2a3c, type: 3}
+    - {fileID: 8300000, guid: 6d4d2928ab3714642927f32ec8d38d95, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: golpe_2
+    clips:
+    - {fileID: 8300000, guid: 41df6acd221132f4699b5e07a10e4d35, type: 3}
+    - {fileID: 8300000, guid: 3c1c24ed60f5b2845a75ee5ce34f7783, type: 3}
+    - {fileID: 8300000, guid: 2f9e82b8bbd10b843a6be661dae889c7, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: golpe_3
+    clips:
+    - {fileID: 8300000, guid: e025f01dbbd7a2b47845c9a05d144362, type: 3}
+    - {fileID: 8300000, guid: 68a83b969f7189c4a993e095980b1889, type: 3}
+    - {fileID: 8300000, guid: bf1eeb2d907af6c438e5fabb8d92ff99, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: golpe_4
+    clips:
+    - {fileID: 8300000, guid: d5e9830c202fd7e42932e2a10c2e823b, type: 3}
+    - {fileID: 8300000, guid: ba9ebc9188db69e42a82088c4dcc7ded, type: 3}
+    - {fileID: 8300000, guid: aff5fe0407a18ae4892ecacd6f724a60, type: 3}
+    - {fileID: 8300000, guid: 4c9accfa44fe32d498d9e976ed392a4b, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: tajo_0
+    clips:
+    - {fileID: 8300000, guid: 250dc8e696b29354cbb17d13879cd89d, type: 3}
+    - {fileID: 8300000, guid: 7ce158499a294154e8173e4b909fd3b6, type: 3}
+    - {fileID: 8300000, guid: 20e9ace42aa791140a14ecfcca990577, type: 3}
+    volumen: 0.4
+    variacionTono: 0.06
+  - clave: tajo_1
+    clips:
+    - {fileID: 8300000, guid: cb2a394ad8e8486408a250930c248bdc, type: 3}
+    - {fileID: 8300000, guid: ce7f24d1af8cc274d9ac7215d7594968, type: 3}
+    - {fileID: 8300000, guid: d4af0059bad290a4eb2a3342d142f18d, type: 3}
+    - {fileID: 8300000, guid: 720fcdb00961e204db0e93bcd8979ed0, type: 3}
+    volumen: 0.4
+    variacionTono: 0.06
+  - clave: tajo_2
+    clips:
+    - {fileID: 8300000, guid: 25f183731f96ac844a4dbd808c3788a8, type: 3}
+    - {fileID: 8300000, guid: d62b6b1ca1059d247bd610c553b24d5e, type: 3}
+    - {fileID: 8300000, guid: 50119274dea4b9a41966cd9bdea9b46b, type: 3}
+    volumen: 0.4
+    variacionTono: 0.06
+  - clave: tajo_3
+    clips:
+    - {fileID: 8300000, guid: ac2e7461d64137a449f0d0c65436d0a8, type: 3}
+    - {fileID: 8300000, guid: 782ce72224b545f44b93111570064609, type: 3}
+    - {fileID: 8300000, guid: 90fc24bd2700099449054a1ec646d684, type: 3}
+    volumen: 0.4
+    variacionTono: 0.06
+  - clave: tajo_4
+    clips:
+    - {fileID: 8300000, guid: ecc1f38722590f2468218d8f06a8bff8, type: 3}
+    - {fileID: 8300000, guid: 7ac164ab2c0b4514fa6f212d97c0c0c9, type: 3}
+    - {fileID: 8300000, guid: d258b734927c4d441a9053f3985b3392, type: 3}
+    volumen: 0.4
+    variacionTono: 0.06
+  - clave: hielo_congelar
+    clips:
+    - {fileID: 8300000, guid: 726efa179da723647bc5dedaa729bdbf, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: hielo_congelar_lago
+    clips:
+    - {fileID: 8300000, guid: b8aecd7eb1cbfe048b84aeda12b93ae2, type: 3}
+    volumen: 0.85
+    variacionTono: 0.06
+  - clave: hielo_rebote
+    clips:
+    - {fileID: 8300000, guid: b74c8b16aa1236540b8e7a10191edd57, type: 3}
+    - {fileID: 8300000, guid: 8cad1e8bb651b2c40954610691e1b9e6, type: 3}
+    volumen: 0.6
+    variacionTono: 0.06
+  - clave: hielo_derretir
+    clips:
+    - {fileID: 8300000, guid: cbc65b8891921f849abd80dd804358ad, type: 3}
+    - {fileID: 8300000, guid: 82957483708ef5944ba5fd292a4400b0, type: 3}
+    - {fileID: 8300000, guid: d5532ac31eb04814582ad7df411a9cc0, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: hielo_romper
+    clips:
+    - {fileID: 8300000, guid: 1cb27e30b1c768e44ad6aab0f6133986, type: 3}
+    volumen: 0.9
+    variacionTono: 0.06
+  - clave: hielo_estaca
+    clips:
+    - {fileID: 8300000, guid: 48201c3d783a25d4a9b2b4f9cf38f85c, type: 3}
+    - {fileID: 8300000, guid: 795c3efe86820f8489efe75c0b80e79f, type: 3}
+    - {fileID: 8300000, guid: 137d95dfdc3742f4483ee8ec95c408cf, type: 3}
+    - {fileID: 8300000, guid: e7fb63a799a06f44d8e50a11a3909af6, type: 3}
+    volumen: 0.55
+    variacionTono: 0.06
+  - clave: hielo_impacto
+    clips:
+    - {fileID: 8300000, guid: 290d07aa66440c544a0645115484a107, type: 3}
+    - {fileID: 8300000, guid: 6ab7ac6227ae0c9428af71ff639ca205, type: 3}
+    - {fileID: 8300000, guid: 6a7f2548c75269e4da6d719b517b05a8, type: 3}
+    - {fileID: 8300000, guid: c10b3911e2c24b645b5c9bbe891b52ee, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: hielo_conjuro
+    clips:
+    - {fileID: 8300000, guid: b09a8285721454249b087cc66d8261d6, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: agua_chapoteo
+    clips:
+    - {fileID: 8300000, guid: 66720ff105fe12446a306b084a99d200, type: 3}
+    - {fileID: 8300000, guid: ab1bbbc8095a7c443a4b483cff83ee19, type: 3}
+    - {fileID: 8300000, guid: c816b0d03a6cafd47b7fd47125defece, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: sombra_rebote
+    clips:
+    - {fileID: 8300000, guid: 7a483429abff2a9458f3567fc157de10, type: 3}
+    volumen: 0.6
+    variacionTono: 0.06
+  - clave: sello_roto
+    clips:
+    - {fileID: 8300000, guid: 77f8f5d181e4bb244a4de37daba0bd68, type: 3}
+    volumen: 0.8
+    variacionTono: 0.06
+  - clave: ventisca
+    clips:
+    - {fileID: 8300000, guid: 068a269db825447448d9ea8a539974b8, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: ventisca_rafaga
+    clips:
+    - {fileID: 8300000, guid: ad57b03bad4b6d74c82c6b2c1f057596, type: 3}
+    - {fileID: 8300000, guid: e128bad542f129d4588bf74cd2cde4e4, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: ambiente_nieve
+    clips:
+    - {fileID: 8300000, guid: 068a269db825447448d9ea8a539974b8, type: 3}
+    volumen: 0.4
+    variacionTono: 0.06
+  - clave: menu_abrir
+    clips:
+    - {fileID: 8300000, guid: 843d321638df48146b2ec90b49d6605a, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: menu_mover
+    clips:
+    - {fileID: 8300000, guid: fc990cf1ee1ff5e47a6bec93fd8cee2d, type: 3}
+    - {fileID: 8300000, guid: 7e5f9cfa92e01f347bc0c8c60d56a321, type: 3}
+    - {fileID: 8300000, guid: 57382655a4bb27641a178f0271010dae, type: 3}
+    volumen: 0.3
+    variacionTono: 0.06
+  - clave: menu_cancelar
+    clips:
+    - {fileID: 8300000, guid: 78db3ea07e4291941bd60591bb87f416, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: menu_error
+    clips:
+    - {fileID: 8300000, guid: 2f8cbad46c8a21440b5c97f659f789dc, type: 3}
+    volumen: 0.6
+    variacionTono: 0.06
+  - clave: subir_nivel
+    clips:
+    - {fileID: 8300000, guid: 20350001ac6eb6943b9c0b8aa3fccf74, type: 3}
+    volumen: 0.8
+    variacionTono: 0.06
+  - clave: hoguera_encender
+    clips:
+    - {fileID: 8300000, guid: 8dcdf9ba1d8d7d0459285f177dcd72f4, type: 3}
+    volumen: 0.8
+    variacionTono: 0.06
+  - clave: hoguera_descansar
+    clips:
+    - {fileID: 8300000, guid: 750eefccaee400c4d8ac23e580c1c564, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: alma_recoger
+    clips:
+    - {fileID: 8300000, guid: 3d4316c6c2ba4714a904483a3a37a97c, type: 3}
+    - {fileID: 8300000, guid: 25314be8c42244449a36750b943bff87, type: 3}
+    volumen: 0.25
+    variacionTono: 0.06
+  - clave: alma_mancha
+    clips:
+    - {fileID: 8300000, guid: ff78724c5e2d6664984c7cfe37a60326, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: rata_mordisco
+    clips:
+    - {fileID: 8300000, guid: cc0caab8469aaa649a02a4370f69cc06, type: 3}
+    volumen: 0.6
+    variacionTono: 0.06
+  - clave: rata_chillido
+    clips:
+    - {fileID: 8300000, guid: 9f82b724611464742b5c9b32ca82cdea, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: murcielago_chillido
+    clips:
+    - {fileID: 8300000, guid: 5affb436d451ff643afb87e55334f20f, type: 3}
+    - {fileID: 8300000, guid: 1920c7b94cd5ede40b32ef7185320e86, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: murcielago_onda
+    clips:
+    - {fileID: 8300000, guid: 61babcdec3dfd8140b7c3a25a0ef3276, type: 3}
+    volumen: 0.6
+    variacionTono: 0.06
+  - clave: ojo_escupir
+    clips:
+    - {fileID: 8300000, guid: fc0049790f359cd4591423d911930b5a, type: 3}
+    - {fileID: 8300000, guid: 4119b649dd2ff054ebd7fe97fe1038eb, type: 3}
+    volumen: 0.6
+    variacionTono: 0.06
+  - clave: ojo_impacto
+    clips:
+    - {fileID: 8300000, guid: 7ac164ab2c0b4514fa6f212d97c0c0c9, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: arco_tensar
+    clips:
+    - {fileID: 8300000, guid: c69f33d93ac528d4682e8c33bbe8ea62, type: 3}
+    volumen: 0.6
+    variacionTono: 0.06
+  - clave: arco_disparo
+    clips:
+    - {fileID: 8300000, guid: 9f036e34e4370ae40ad4de3f086ca67d, type: 3}
+    - {fileID: 8300000, guid: b767f05ce1ec33e439fe5da7afc49e75, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: flecha_impacto
+    clips:
+    - {fileID: 8300000, guid: 2e3976dcf339f774aa3dee68e4f875f8, type: 3}
+    - {fileID: 8300000, guid: c51d4e91165f7be4083797fd34d480d4, type: 3}
+    - {fileID: 8300000, guid: 3e20d66b7a446f04d8a5ee31dc03710b, type: 3}
+    volumen: 0.6
+    variacionTono: 0.06
+  - clave: sombra_carga
+    clips:
+    - {fileID: 8300000, guid: f79db7cf1c1367c429742327f59db119, type: 3}
+    volumen: 0.6
+    variacionTono: 0.06
+  - clave: sombra_golpe
+    clips:
+    - {fileID: 8300000, guid: 40006911adfdf974ba39552d65bfb186, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: teletransporte
+    clips:
+    - {fileID: 8300000, guid: 4fe73f76117837340a262046347c0ab6, type: 3}
+    - {fileID: 8300000, guid: 34b7af9b00f009a46bdb905065a84c99, type: 3}
+    - {fileID: 8300000, guid: 2aa40ce762458be4399deeb40fd60fd1, type: 3}
+    volumen: 0.6
+    variacionTono: 0.06
+  - clave: jefe_tajo
+    clips:
+    - {fileID: 8300000, guid: 5e0a91ba18f917c419cca09a1198885e, type: 3}
+    - {fileID: 8300000, guid: afec11814a41adb41a312123be1074fc, type: 3}
+    - {fileID: 8300000, guid: f61f96241e484724a8e775e85fbab1ba, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: jefe_tajo_fuerte
+    clips:
+    - {fileID: 8300000, guid: 8bfc23add605752429751db44667ab1b, type: 3}
+    - {fileID: 8300000, guid: d326594a5ae97934fab5580879b574a2, type: 3}
+    volumen: 0.85
+    variacionTono: 0.06
+  - clave: jefe_carga_tajo
+    clips:
+    - {fileID: 8300000, guid: d857e16a98894a14494c9f6feda69d80, type: 3}
+    - {fileID: 8300000, guid: cc149deaa569bda428869b988fb86ee6, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - clave: jefe_golpe_fuerte
+    clips:
+    - {fileID: 8300000, guid: f908e7fd5fc01c147ad030622a167b91, type: 3}
+    volumen: 0.85
+    variacionTono: 0.06
+  - clave: jefe_impacto_suelo
+    clips:
+    - {fileID: 8300000, guid: 08838acf190993e4d93330f5941d091d, type: 3}
+    - {fileID: 8300000, guid: 129ef85b50797f14681fd7764b7936c2, type: 3}
+    volumen: 0.85
+    variacionTono: 0.06
+  - clave: jefe_transformacion
+    clips:
+    - {fileID: 8300000, guid: de77542fe3090a84aba4f6e96d95951e, type: 3}
+    volumen: 0.9
+    variacionTono: 0.06
+  - clave: jefe_nova
+    clips:
+    - {fileID: 8300000, guid: f84a7f00d553a064ab294396a2b4b79c, type: 3}
+    volumen: 0.85
+    variacionTono: 0.06
+  - clave: jefe_aparicion
+    clips:
+    - {fileID: 8300000, guid: 2aa40ce762458be4399deeb40fd60fd1, type: 3}
+    volumen: 0.8
+    variacionTono: 0.06
+  - clave: jefe_parry
+    clips:
+    - {fileID: 8300000, guid: db203c02013fcd24a939a2336fe14d23, type: 3}
+    volumen: 0.8
+    variacionTono: 0.06
+  - clave: jefe_medialuna
+    clips:
+    - {fileID: 8300000, guid: 20b1eb2aa5a96f044994e90ad6940e02, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - clave: jefe_agarre_carga
+    clips:
+    - {fileID: 8300000, guid: a1ebe5b7a15337a4b8b43438aacb5d03, type: 3}
+    volumen: 0.9
+    variacionTono: 0.06
+  - clave: jefe_agarre
+    clips:
+    - {fileID: 8300000, guid: 4f365f862fc74794183c349747541d22, type: 3}
+    volumen: 0.9
+    variacionTono: 0.06
+  - clave: jefe_corte_agarre
+    clips:
+    - {fileID: 8300000, guid: 8dadf1b1bad27664594412f3ea1544e0, type: 3}
+    - {fileID: 8300000, guid: d326594a5ae97934fab5580879b574a2, type: 3}
+    volumen: 0.8
+    variacionTono: 0.06
+  - clave: jefe_caida
+    clips:
+    - {fileID: 8300000, guid: 22e60036a75bb2349a3f85c2195a7ecc, type: 3}
+    volumen: 0.8
+    variacionTono: 0.06
+  - clave: jefe_revivir_carga
+    clips:
+    - {fileID: 8300000, guid: 5fadf63a54b6e9b4f93c12e67859f761, type: 3}
+    volumen: 0.8
+    variacionTono: 0.06
+  - clave: jefe_revivir
+    clips:
+    - {fileID: 8300000, guid: 58a96792a0730c749b868265176d7a4b, type: 3}
+    volumen: 1
+    variacionTono: 0.06
+  - clave: jefe_postura
+    clips:
+    - {fileID: 8300000, guid: 746ac9c784b2f7f48b6a02be7e4820ba, type: 3}
+    volumen: 0.9
+    variacionTono: 0.06
+  - clave: jefe_muerte
+    clips:
+    - {fileID: 8300000, guid: ff8205f37b5f32c4c8bb4a6e95d051a8, type: 3}
+    volumen: 0.9
+    variacionTono: 0.06
+  - clave: victoria
+    clips:
+    - {fileID: 8300000, guid: 31ba1609f944ceb42b5e9f08cca50aa9, type: 3}
+    volumen: 0.8
+    variacionTono: 0.06
+  iconos:
+  - clave: elemento_0
+    sprite: {fileID: 21300000, guid: 28a75b8a44d70764385db2d1e0838577, type: 3}
+  - clave: elemento_1
+    sprite: {fileID: 21300000, guid: 7e16e892bc2b300498466171ec3a80fa, type: 3}
+  - clave: elemento_2
+    sprite: {fileID: 21300000, guid: e4800fb6f7049334aac28a64a3d0266c, type: 3}
+  - clave: elemento_3
+    sprite: {fileID: 21300000, guid: 40100e93754465d49ba2799e46101f29, type: 3}
+  - clave: elemento_4
+    sprite: {fileID: 21300000, guid: 968fb0828306b454c959a851e9035383, type: 3}
+  - clave: estado_quemado
+    sprite: {fileID: 21300000, guid: f222915a8e86f2945843a7dd2453810a, type: 3}
+  - clave: estado_lento
+    sprite: {fileID: 21300000, guid: 965f9119d42d2f548a10c58feff1f763, type: 3}
+  - clave: estado_congelado
+    sprite: {fileID: 21300000, guid: 4192a43ba3eb6bc4da7dfc6331da4a4d, type: 3}
+  - clave: estado_aturdido
+    sprite: {fileID: 21300000, guid: 6bd1ca7161b4de747a0568bda9fcddb4, type: 3}
+  - clave: estado_corroido
+    sprite: {fileID: 21300000, guid: 652f4dbc97e5be64ba94464536fe872f, type: 3}
+  - clave: estado_drenado
+    sprite: {fileID: 21300000, guid: 51d1c94baf3d4a449aa36fe23dffffc5, type: 3}
+  - clave: stat_vida
+    sprite: {fileID: 21300000, guid: 0861a60dea788904bb0c637658f6088d, type: 3}
+  - clave: stat_estamina
+    sprite: {fileID: 21300000, guid: f024420a0a8ab8041a5c7158194ced9c, type: 3}
+  - clave: stat_mana
+    sprite: {fileID: 21300000, guid: 8d5c228eebb0b3642947a30c20fb7258, type: 3}
+  - clave: stat_reshechizos
+    sprite: {fileID: 21300000, guid: 394d293cfa1e17246b9b983b25df39ff, type: 3}
+  - clave: stat_resgolpes
+    sprite: {fileID: 21300000, guid: 04831990176411b4083122535e570f18, type: 3}
+  - clave: pocion
+    sprite: {fileID: 21300000, guid: 5ea972842403c8f46b62c0f89e181c5b, type: 3}
+  - clave: almas
+    sprite: {fileID: 21300000, guid: 50dbb3b8974268c44b3d29c86f1d05e9, type: 3}
+  - clave: peligro
+    sprite: {fileID: 21300000, guid: 41a4d878a0c59ca47848542c51dc6400, type: 3}
+  tajosElemento:
+  - nombre: tajo_h_Fuego
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 9
+    fps: 24
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 69d4904e8cc1f5d4c9d8b0354a0ead8f, type: 3}
+    - {fileID: 2800000, guid: 12520962e6902844b9b9a9c690235504, type: 3}
+    - {fileID: 2800000, guid: a3dd8d397a42f3144ad3ca7516e15786, type: 3}
+    - {fileID: 2800000, guid: 24e49b26e5866c24aae42d05eb45a923, type: 3}
+    - {fileID: 2800000, guid: 37a20c5f4a976b9479984c31d1499cab, type: 3}
+    - {fileID: 2800000, guid: 360864c72c0960e4e95a2008388ce857, type: 3}
+    - {fileID: 2800000, guid: f2d08db27da4dad4c977dece5d27d3b9, type: 3}
+    - {fileID: 2800000, guid: f8a1adaee1473434988b50b4053c26b0, type: 3}
+    - {fileID: 2800000, guid: f5e0a6ac0d841b14b92d29736988c6a9, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: tajo_c_Fuego
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 9
+    fps: 24
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: bd40f8b9b134289478074ce92ba8a013, type: 3}
+    - {fileID: 2800000, guid: 7e303246daece22429748bf88a11ea99, type: 3}
+    - {fileID: 2800000, guid: ddabd3955582e074f8bcf662dfdce730, type: 3}
+    - {fileID: 2800000, guid: 0436abd0eeb28084f9366d6ca82bb6bf, type: 3}
+    - {fileID: 2800000, guid: 8494e71c0c4ade94494808c57c7fa49b, type: 3}
+    - {fileID: 2800000, guid: 70ffc8a0624d0de49a5b82549a383db6, type: 3}
+    - {fileID: 2800000, guid: 8858005857d41af49bc98a1b1fdd69dd, type: 3}
+    - {fileID: 2800000, guid: f47a58a4a8073984388bf7feb9fe6fba, type: 3}
+    - {fileID: 2800000, guid: 5de626c822e8089479bf0efe468ed805, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: tajo_a_Fuego
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 7
+    fps: 22
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 9a92c1918939cd84cbbeb21106155e0c, type: 3}
+    - {fileID: 2800000, guid: aa7f3dbf6d0674245800508bcc8b75ca, type: 3}
+    - {fileID: 2800000, guid: 1b8b05c2604781a4a988fc127ae0a856, type: 3}
+    - {fileID: 2800000, guid: b5deba3d038c4b048adec69654205686, type: 3}
+    - {fileID: 2800000, guid: ef5f031b6bb3e6b4a9998841a329d070, type: 3}
+    - {fileID: 2800000, guid: d221815b54f005443964db0a7715643f, type: 3}
+    - {fileID: 2800000, guid: ed573021112de824c9dd13e828f64d0f, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: tajo_h_Hielo
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 9
+    fps: 24
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 4b18f5fee21e8784899b9611752863d7, type: 3}
+    - {fileID: 2800000, guid: 73c21f27cf755774ea3706298fa9d452, type: 3}
+    - {fileID: 2800000, guid: b1bfd00f713f57946aba2d06125212a7, type: 3}
+    - {fileID: 2800000, guid: f37dd21157f86004a8852b0712bafd7d, type: 3}
+    - {fileID: 2800000, guid: 356823f5a512b264ba022741d1359ced, type: 3}
+    - {fileID: 2800000, guid: 7d2de3ed2f3bba84eaae3066633e605a, type: 3}
+    - {fileID: 2800000, guid: 862c6669d80930b43ae62e4baab40f68, type: 3}
+    - {fileID: 2800000, guid: 56f15e8ec7df97240bdb837dda36ddb0, type: 3}
+    - {fileID: 2800000, guid: 69d6c026c92d86845a795a41692cfb74, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: tajo_c_Hielo
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 9
+    fps: 24
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: f697b457e8c24df499e799764b6ccb5f, type: 3}
+    - {fileID: 2800000, guid: 03e014db0cfa6d045aa3d267ced7d97f, type: 3}
+    - {fileID: 2800000, guid: b3677459153be9a4bb80ee05ca898cc1, type: 3}
+    - {fileID: 2800000, guid: fe4b4a8cf2837b9489fce869ecf8f5fc, type: 3}
+    - {fileID: 2800000, guid: 4ebff4733f1b5254da3ecd4a244e524f, type: 3}
+    - {fileID: 2800000, guid: b358f8b83d076034a96a563f096a2129, type: 3}
+    - {fileID: 2800000, guid: 996ef5ff2729a0a4d9623e06e03d3121, type: 3}
+    - {fileID: 2800000, guid: 5e6ffafb5d0431c42aebd212ffe3226b, type: 3}
+    - {fileID: 2800000, guid: fc7d04c2cb8a1ec40bf44a601c7f628d, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: tajo_a_Hielo
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 7
+    fps: 22
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 10d6af941632db24fb526addeb535296, type: 3}
+    - {fileID: 2800000, guid: 8dfeb2cda2577234c8b30ac713b74f70, type: 3}
+    - {fileID: 2800000, guid: 2d355d94c7e293943a0f0ece1f5a3ed3, type: 3}
+    - {fileID: 2800000, guid: e9c2ca2ac2cd2a6408ff64ddb15363b0, type: 3}
+    - {fileID: 2800000, guid: 1a87a3af00bcc534bb3a636bc1c413a5, type: 3}
+    - {fileID: 2800000, guid: 205e3391924812e4e807d1aad8f8fb1d, type: 3}
+    - {fileID: 2800000, guid: 1f7ccfb69ac39494992726c9d39d358b, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: tajo_h_Oscuro
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 9
+    fps: 24
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 0e97dc6f064e8d840b08d0c54c8ae90b, type: 3}
+    - {fileID: 2800000, guid: 053acbac49a8dcc44bd7025c19d8176e, type: 3}
+    - {fileID: 2800000, guid: 17fbfc14918421f499dc646171c4dbc4, type: 3}
+    - {fileID: 2800000, guid: d0e04f423cd32784b9cd67d70f3eae85, type: 3}
+    - {fileID: 2800000, guid: 59295aee8919af04ba035e9b5d5cf525, type: 3}
+    - {fileID: 2800000, guid: 81bf9cf7908d5f24fa6a2c29e1114b5d, type: 3}
+    - {fileID: 2800000, guid: 3757c50f9ff409140835e7d03be074db, type: 3}
+    - {fileID: 2800000, guid: cf5773693decbf24ab7d53fb2a700eb0, type: 3}
+    - {fileID: 2800000, guid: 09e727ceeaeaea24e81da38b1c4235bc, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: tajo_c_Oscuro
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 9
+    fps: 24
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 5e9d695c8600a9a45bf8672a69ba4cfd, type: 3}
+    - {fileID: 2800000, guid: 2affa159e68f6bb488190cbf46196ff2, type: 3}
+    - {fileID: 2800000, guid: c82ed0cd9d459c143906842e70157b89, type: 3}
+    - {fileID: 2800000, guid: e55a6994a152f62468227b0025a59680, type: 3}
+    - {fileID: 2800000, guid: 8b291ad0c5429ff47bb9f29756a639a5, type: 3}
+    - {fileID: 2800000, guid: 066616deb17568f4bbecf77552901b2f, type: 3}
+    - {fileID: 2800000, guid: fe1a86fbafd596c4f9396278fdb10bc1, type: 3}
+    - {fileID: 2800000, guid: 801d0cfb689c55d429b1c66948ca1f01, type: 3}
+    - {fileID: 2800000, guid: 9d645258290a88547ab44e733d2a1865, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: tajo_a_Oscuro
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 7
+    fps: 22
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: fa8040fbfb79e5f4fb03df69d2ba10ef, type: 3}
+    - {fileID: 2800000, guid: a93b964276fefc1498cd72c147409156, type: 3}
+    - {fileID: 2800000, guid: b5a92bd8c8b43164f8a1dafbb8b0ddcd, type: 3}
+    - {fileID: 2800000, guid: cbacd6dbb17d4154c9e4875b3fcdcb10, type: 3}
+    - {fileID: 2800000, guid: 7c212a222a5621d4fb1fc5b96cb40911, type: 3}
+    - {fileID: 2800000, guid: 5deea2764b7bf0f47bb6d5568e6e0733, type: 3}
+    - {fileID: 2800000, guid: 8e078e3c2d5191948ab611c7f65d86fa, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: tajo_h_Sagrado
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 9
+    fps: 24
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 346f97064d857ca4581e4a70c7319e18, type: 3}
+    - {fileID: 2800000, guid: 6d64bc11a3106f84183036eb95bc7072, type: 3}
+    - {fileID: 2800000, guid: 2bab6e8fdb5715b4d8bb1272737e3a7b, type: 3}
+    - {fileID: 2800000, guid: 8af7088bdafcd674090706fdee006743, type: 3}
+    - {fileID: 2800000, guid: 52b6b05b25abb7d45b15443351296f59, type: 3}
+    - {fileID: 2800000, guid: 8d345670de6f84343a1fd5527f5268ab, type: 3}
+    - {fileID: 2800000, guid: fc48d260865e20441ba5247d913406cc, type: 3}
+    - {fileID: 2800000, guid: 0ed111820f66b3d45bb37172648bbec2, type: 3}
+    - {fileID: 2800000, guid: eee93be1c4c2f7145adf3908591f303c, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: tajo_c_Sagrado
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 9
+    fps: 24
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 595e9587b39f22c4ba15643f9d48029c, type: 3}
+    - {fileID: 2800000, guid: 10751f96cc3c5eb4db724e67911aa701, type: 3}
+    - {fileID: 2800000, guid: b1c1ca9ca84b2304baa9efa0e8915074, type: 3}
+    - {fileID: 2800000, guid: b8d3836e4931cda45b60da4a3221acb6, type: 3}
+    - {fileID: 2800000, guid: b2a1c0c9e89d7864b9ac7e6e4e2a6914, type: 3}
+    - {fileID: 2800000, guid: 4d878e920df1b754fbadccacf8911566, type: 3}
+    - {fileID: 2800000, guid: 8fb0fe79b4a5d2949bf00472c10def2a, type: 3}
+    - {fileID: 2800000, guid: 1e608461cf40268489641eb561ef64aa, type: 3}
+    - {fileID: 2800000, guid: ff661a17c766bc04f88116685bb6a3b0, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: tajo_a_Sagrado
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 7
+    fps: 22
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: f80537a41c3967c4a898f8882caeed63, type: 3}
+    - {fileID: 2800000, guid: 561f7e10bfb36704b9e704f71c11374f, type: 3}
+    - {fileID: 2800000, guid: b859c33800fd34d4f8ea47374beefa83, type: 3}
+    - {fileID: 2800000, guid: 67082e438488d2c41a9f10b8cc472e34, type: 3}
+    - {fileID: 2800000, guid: ebd70a74653c9c840834c9020cb25665, type: 3}
+    - {fileID: 2800000, guid: 5ea93110211a7f945afe84699a97523b, type: 3}
+    - {fileID: 2800000, guid: 49215d1167afe47428ed689b0b0c71f8, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: tajo_h_Acido
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 9
+    fps: 24
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 8da89d0fd0ef0fd40adbccbd76a2b59f, type: 3}
+    - {fileID: 2800000, guid: e2ace6c9eae637f49a5b2da842eadda5, type: 3}
+    - {fileID: 2800000, guid: dc05f8434706a3d449d8b52c15b31c98, type: 3}
+    - {fileID: 2800000, guid: aba6ddfef1dd2a249980061671512d98, type: 3}
+    - {fileID: 2800000, guid: 94e779d8f61431e418729172694b9f13, type: 3}
+    - {fileID: 2800000, guid: a2bdf1bff1ae7714793ff5f2cb07d95e, type: 3}
+    - {fileID: 2800000, guid: 1b2d067539dacc041ace6ec2106f3871, type: 3}
+    - {fileID: 2800000, guid: d0cf12a1e75ebf342b53d2e03f6b0fff, type: 3}
+    - {fileID: 2800000, guid: 2b4d17f6e92fbd04a82a0bf3f96c25ee, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: tajo_c_Acido
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 9
+    fps: 24
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 7e6eb474e5220214fb2fc7b1895d990b, type: 3}
+    - {fileID: 2800000, guid: 5ef8faa5e650095468eece2df2307106, type: 3}
+    - {fileID: 2800000, guid: 9a806c36e9906354ebb7cc9aac0dfcc5, type: 3}
+    - {fileID: 2800000, guid: 9791b208fbdea8046a780c1d9f9ca08a, type: 3}
+    - {fileID: 2800000, guid: c22a0bdb44ef51341a719090a6f1a7e8, type: 3}
+    - {fileID: 2800000, guid: aad9777c0d20e874ba7afec87b6b6659, type: 3}
+    - {fileID: 2800000, guid: bc4742472e7562f49800bcfd077966a4, type: 3}
+    - {fileID: 2800000, guid: df915f070adabb44f9b93882d940b061, type: 3}
+    - {fileID: 2800000, guid: bc22856a323317740afd9936d516bc46, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: tajo_a_Acido
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 7
+    fps: 22
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: ddbe653d5be56ef4d9b54705170d7b9d, type: 3}
+    - {fileID: 2800000, guid: 577ac55c59e72cb4db2e3a8a38719b2d, type: 3}
+    - {fileID: 2800000, guid: 6751938ee0edfe844b3b83a17f064b8b, type: 3}
+    - {fileID: 2800000, guid: 06955cef4b3163140b9491fc63b5b48a, type: 3}
+    - {fileID: 2800000, guid: f67e25d588a74a64dae31fd3b727ff61, type: 3}
+    - {fileID: 2800000, guid: 7fad4fab8e59d294ca2a3fd9415b724b, type: 3}
+    - {fileID: 2800000, guid: c9aa8c494adc27c498b647b26b1e08f7, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  impactoElemental:
+    nombre: impacto_elemental
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 4
+    fps: 22
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: c44c48458ddd67b4d855f2b0563869a8, type: 3}
+    - {fileID: 2800000, guid: fa630a31096494644a45baf709722a5a, type: 3}
+    - {fileID: 2800000, guid: 8bc3bd84e4cd68243ab857fd50e43816, type: 3}
+    - {fileID: 2800000, guid: 0c590e1ae143db44b80a0e6b32b35128, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  fxCongelado:
+    nombre: congelado
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 11
+    fps: 16
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.12}
+    pixelesPorUnidad: 64
+    fotogramas:
+    - {fileID: 2800000, guid: 2a649c538f157f84ead495ff10d7be9b, type: 3}
+    - {fileID: 2800000, guid: 468aef942ffdbfd41869b8265991e4e9, type: 3}
+    - {fileID: 2800000, guid: 004d321688052094fb30a97984be30e5, type: 3}
+    - {fileID: 2800000, guid: fb6e0ce63fe777b4aa34ff0e7ea9318b, type: 3}
+    - {fileID: 2800000, guid: 8cd974f83350e52429cbdc55b67e54f3, type: 3}
+    - {fileID: 2800000, guid: 8bfb83326ec6a5e49b3e04ee625127c5, type: 3}
+    - {fileID: 2800000, guid: 22d81a97d2b45234fa303ed041d4608a, type: 3}
+    - {fileID: 2800000, guid: bb6c6a366a18a3b42a66c9f404109c46, type: 3}
+    - {fileID: 2800000, guid: f98365d512d3f10429e9d10c6ee9114f, type: 3}
+    - {fileID: 2800000, guid: b4d086ca0a9238a4fb7316e618b53dd9, type: 3}
+    - {fileID: 2800000, guid: b92eb5d640e8eb0438dae887472d355b, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  shaderAura: {fileID: 4800000, guid: 9534b0ad4b84de04091cafda74fe73c2, type: 3}

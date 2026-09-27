@@ -191,6 +191,38 @@ public class PlayerControler : MonoBehaviour
     private Vector2 ultimoSueloSeguro;
     private float siguienteSueloSeguro;
 
+    [Header("Imbuir arma (E)")]
+    // La E abre la rueda de elementos (RuedaImbuir). El gesto de imbuir usa el
+    // mismo estado que beber: quieto un momento, sin atacar.
+    [SerializeField] private string estadoImbuir = "UsarObjeto";
+    private bool isImbuing;
+    private Coroutine rutinaImbuir;
+    private ArmaImbuida armaImbuida;
+    private PlayerMana mana;
+    // Fraccion del dano que devuelve como vida el elemento oscuro.
+    [SerializeField] private float drenajeOscuro = 0.2f;
+
+    [Header("Hielo, viento y escarcha")]
+    // Suelo de hielo (SueloHielo): la velocidad no cambia de golpe, se va
+    // acercando a la pedida con esta aceleracion. Sin pulsar nada, desliza.
+    [SerializeField] private float aceleracionHielo = 10f;
+    [SerializeField] private float frenadaHielo = 3.5f;
+    private bool sobreHielo;
+    // Empuje de la ventisca (ZonaVentisca lo pone cada paso de fisica).
+    private Vector2 viento;
+    private float vientoHasta;
+    // Escarcha del jefe: camina mas lento un rato.
+    private float factorLento = 1f;
+    private float lentoHasta;
+    private float siguienteEscarchaFx;
+
+    // Agarre del jefe: sin control, lo mueve quien lo agarra.
+    private bool isAgarrado;
+    public bool Agarrado => isAgarrado;
+
+    // Sonido de pasos.
+    private float siguientePaso;
+
     [Header("Lanzador de espada (W + clic)")]
     // Perfil de la lista de ataques que usa y su estado del Animator. Lanza al
     // enemigo recto hacia arriba (su Elevacion va sin desplazamiento).
@@ -710,6 +742,13 @@ public class PlayerControler : MonoBehaviour
         m_spriteRenderer = GetComponent<SpriteRenderer>();
         estamina = GetComponent<PlayerStamina>();
         if (estamina == null) estamina = gameObject.AddComponent<PlayerStamina>();
+        mana = GetComponent<PlayerMana>();
+        if (mana == null) mana = gameObject.AddComponent<PlayerMana>();
+        armaImbuida = GetComponent<ArmaImbuida>();
+        if (armaImbuida == null) armaImbuida = gameObject.AddComponent<ArmaImbuida>();
+        // La espada es ahora el unico moveset: siempre desenvainada. El combate
+        // sin arma sigue en el codigo, pero ya no se puede elegir.
+        estadoArma = EstadoArma.Desenfundada;
         m_collider = GetComponent<Collider2D>();
         capsula = GetComponent<CapsuleCollider2D>();
         if (capsula != null)
@@ -748,11 +787,13 @@ public class PlayerControler : MonoBehaviour
         DustFx.Configurar(wallRunDust, wallRunDustPreset, "VFX", 1);
         // CONFIGURA EL ESTADO DEL PLAYER AL REAPARECER
         counterExtraJumps = extraJumps;
-        //vida
+        //vida: el maximo sale del nivel del personaje (hoguera)
+        AplicarProgreso(false);
         currentHealth = maxHealth;
 
         PlayerHud.Get().SetHealth(currentHealth, maxHealth);
         ReservaPociones.Get();
+        ContadorAlmas.Asegurar();
         ultimoSueloSeguro = m_transform.position;
         efectosGolpe = GetComponent<EfectosGolpePlayer>();
         ActualizarIconoArma();
@@ -776,11 +817,31 @@ public class PlayerControler : MonoBehaviour
         GuardarSueloSeguro();
         MantenerSuspensionAerea();
 
+        ActualizarEfectosExternos();
+
+        // Con la rueda de imbuir o el menu de la hoguera abiertos, el player no
+        // hace nada (y lo que se pulse ahi no cuenta como ataque o salto).
+        if (RuedaImbuir.Abierta || MenuHoguera.Abierto || isAgarrado)
+        {
+            LimpiarEntradas();
+            if (!isAgarrado && isGrounded) m_rigitbody2D.linearVelocity = new Vector2(0f, m_rigitbody2D.linearVelocityY);
+            return;
+        }
+
         if (!canMove) return;
         if (isKnocked) return;
 
         // La estocada lleva su propia velocidad de principio a fin.
         if (isPlunging) return;
+
+        // Imbuyendo el arma: quieto, sin atacar ni saltar.
+        if (isImbuing)
+        {
+            LimpiarEntradas();
+            float vxi = Mathf.MoveTowards(m_rigitbody2D.linearVelocityX, 0f, attackDrag * Time.fixedDeltaTime);
+            m_rigitbody2D.linearVelocity = new Vector2(vxi, m_rigitbody2D.linearVelocityY);
+            return;
+        }
 
         // Enfundar o desenfundar: quieto y sin atacar, disparar ni barrer hasta
         // que termine, para que no se corte a medias. Saltar si se puede, y lo cancela.
@@ -1016,19 +1077,89 @@ public class PlayerControler : MonoBehaviour
             isSprinting = false;
             currentSpeed = speed;
 
-            // El empujon del golpe se frena solo, para que no derrape.
+            // El empujon del golpe se frena solo, para que no derrape. En el
+            // hielo frena mucho menos: el golpe te hace resbalar.
             if (isAttacking && isGrounded)
             {
-                float vx = Mathf.MoveTowards(m_rigitbody2D.linearVelocityX, 0f, attackDrag * Time.fixedDeltaTime);
+                float frena = attackDrag * (sobreHielo ? 0.2f : 1f);
+                float vx = Mathf.MoveTowards(m_rigitbody2D.linearVelocityX, 0f, frena * Time.fixedDeltaTime);
                 m_rigitbody2D.linearVelocity = new Vector2(vx, m_rigitbody2D.linearVelocityY);
             }
+            vxPropia = m_rigitbody2D.linearVelocityX - VientoX;
             return;
         }
 
         ActualizarCarrera();
 
         Flip();
-        m_rigitbody2D.linearVelocity = new Vector2(currentSpeed * m_gatherInput.Value.x, m_rigitbody2D.linearVelocityY);
+        float objetivo = currentSpeed * factorLento * m_gatherInput.Value.x;
+        if (sobreHielo && isGrounded)
+        {
+            // En el hielo no hay traccion: se acelera y se frena despacio.
+            float acel = Mathf.Abs(objetivo) > 0.1f && Mathf.Sign(objetivo) == Mathf.Sign(vxPropia) || Mathf.Abs(vxPropia) < 0.05f
+                ? aceleracionHielo : frenadaHielo * (Mathf.Abs(objetivo) > 0.1f ? 1.6f : 1f);
+            vxPropia = Mathf.MoveTowards(vxPropia, objetivo, acel * Time.fixedDeltaTime);
+        }
+        else vxPropia = objetivo;
+        m_rigitbody2D.linearVelocity = new Vector2(vxPropia + VientoX, m_rigitbody2D.linearVelocityY);
+    }
+
+    // Velocidad horizontal que pone el propio player, sin el viento.
+    private float vxPropia;
+    private float VientoX => Time.time < vientoHasta ? viento.x : 0f;
+
+    // ------------------------------------------------------------------ Efectos del nivel
+
+    // La ventisca empuja mientras dure (se renueva cada paso de fisica).
+    public void AplicarViento(Vector2 fuerza)
+    {
+        viento = fuerza;
+        vientoHasta = Time.time + 0.1f;
+    }
+
+    // Escarcha del jefe: anda mas lento durante un rato.
+    public void Ralentizar(float factor, float segundos)
+    {
+        if (Time.time >= lentoHasta)
+            TextoFlotante.Mostrar("Ralentizado", (Vector2)m_transform.position + Vector2.up * 1.1f, new Color(0.6f, 0.9f, 1f), 0.7f);
+        factorLento = Mathf.Min(Time.time < lentoHasta ? factorLento : 1f, factor);
+        lentoHasta = Mathf.Max(lentoHasta, Time.time + segundos);
+    }
+
+    private void ActualizarEfectosExternos()
+    {
+        if (Time.time >= lentoHasta) factorLento = 1f;
+        else if (Time.time >= siguienteEscarchaFx)
+        {
+            siguienteEscarchaFx = Time.time + 0.15f;
+            ParticulasFx.Rafaga((Vector2)m_transform.position + new Vector2(UnityEngine.Random.Range(-0.25f, 0.25f), -0.5f), 2,
+                                new Color(0.8f, 0.95f, 1f), new Color(0.4f, 0.8f, 1f), new Vector2(0.3f, 0.8f), -0.2f,
+                                new Vector2(0.04f, 0.08f), new Vector2(0.3f, 0.6f), 60f, 90f);
+        }
+        SonidoPasos();
+    }
+
+    private void SonidoPasos()
+    {
+        bool andando = isGrounded && Mathf.Abs(m_rigitbody2D.linearVelocityX) > 1f && !isDodging && !isAttacking && canMove && !isKnocked;
+        if (!andando || Time.time < siguientePaso) return;
+        siguientePaso = Time.time + (isSprinting ? 0.24f : 0.33f);
+        Sonido.Reproducir(sobreHielo ? "pasos_hielo" : "pasos", isSprinting ? 0.55f : 0.4f);
+    }
+
+    // Borra lo que se haya pulsado (menus abiertos, gesto de imbuir...).
+    private void LimpiarEntradas()
+    {
+        m_gatherInput.IsAttacking = false;
+        m_gatherInput.IsJumping = false;
+        m_gatherInput.IsKicking = false;
+        m_gatherInput.IsDodging = false;
+        m_gatherInput.IsShooting = false;
+        m_gatherInput.IsHealing = false;
+        m_gatherInput.IsTogglingWeapon = false;
+        attackBuffer = 0f;
+        dodgeBuffer = 0f;
+        bufferBloqueo = 0f;
     }
 
     // Decide si el personaje esta corriendo y lleva la velocidad hasta la que toca.
@@ -1104,8 +1235,12 @@ public class PlayerControler : MonoBehaviour
         {
             if (isGrounded)
             {
-                m_rigitbody2D.linearVelocity = new Vector2(speed * m_gatherInput.Value.x, jumpForce);
+                // En el hielo se salta con la inercia que se lleve.
+                float vxSalto = sobreHielo ? vxPropia : speed * factorLento * m_gatherInput.Value.x;
+                m_rigitbody2D.linearVelocity = new Vector2(vxSalto + VientoX, jumpForce);
+                vxPropia = vxSalto;
                 canDoubleJump = true;
+                Sonido.Reproducir("salto", 0.5f);
             }
             else if (isWallDetected || wallCoyoteTimer > 0f)
             {
@@ -1144,7 +1279,8 @@ public class PlayerControler : MonoBehaviour
     // Ejecuta un salto extra en el aire y descuenta un uso del contador de saltos extra.
     private void DoubleJump()
     {
-        m_rigitbody2D.linearVelocity = new Vector2(speed * m_gatherInput.Value.x, jumpForce);
+        m_rigitbody2D.linearVelocity = new Vector2(speed * factorLento * m_gatherInput.Value.x + VientoX, jumpForce);
+        Sonido.Reproducir("salto", 0.45f, 1.15f);
         counterExtraJumps -= 1;
 
         // El segundo salto usa su propia animacion (la voltereta) en lugar de repetir
@@ -1369,8 +1505,9 @@ public class PlayerControler : MonoBehaviour
             if (enemigo == null || (excluir != null && excluir.Contains(enemigo))) continue;
             if (tocados.Add(enemigo))
             {
-                EnemyHealth.ArmaDelGolpe = TipoArma.Espada;
+                PrepararGolpe();
                 enemigo.TakeDamage(dano, m_transform.position, retroceso);
+                TrasGolpe(enemigo, hit.ClosestPoint(centro));
             }
         }
 
@@ -1397,11 +1534,12 @@ public class PlayerControler : MonoBehaviour
             // donde mira el player.
             float dx = enemigo.transform.position.x - m_transform.position.x;
             float lado = Mathf.Abs(dx) > 0.05f ? Mathf.Sign(dx) : direction;
-            EnemyHealth.ArmaDelGolpe = TipoArma.Espada;
+            PrepararGolpe();
             if (enemigo.IsAirborne)
                 enemigo.TakeHit(plungeDamage, m_transform.position, plungeAirSpike, false);
             else
                 enemigo.TakeDamage(plungeDamage, m_transform.position, new Vector2(plungeLaunch.x * lado, plungeLaunch.y));
+            TrasGolpe(enemigo, hit.ClosestPoint(centro));
             alguno = true;
         }
 
@@ -1546,9 +1684,10 @@ public class PlayerControler : MonoBehaviour
             if (enemigo == null || !tocados.Add(enemigo)) continue;
 
             int dano = DanoConContra(plungeDamage);
-            EnemyHealth.ArmaDelGolpe = TipoArma.Espada;
+            PrepararGolpe();
             if (enemigo.IsAirborne) enemigo.TakeHit(dano, m_transform.position, plungeAirSpike, false);
             else enemigo.TakeHit(dano, m_transform.position, plungeStartKnockback, false);
+            TrasGolpe(enemigo, hit.ClosestPoint(centro));
             alguno = true;
         }
 
@@ -1636,8 +1775,10 @@ public class PlayerControler : MonoBehaviour
 
         Collider2D[] hits = BuscarObjetivos(perfil);
         Vector2 centro = CentroDelGolpe(perfil);
-        // El tajo se ve en el instante del golpe, acierte o no.
-        if (efectosGolpe != null) efectosGolpe.Tajo(index, direction);
+        // El tajo se ve en el instante del golpe, acierte o no, ajustado al area
+        // que dana de verdad (un poco mas grande).
+        if (efectosGolpe != null) efectosGolpe.Tajo(index, direction, ElementoActivo, CentroVisual(perfil, centro), TamanoGolpe(perfil), perfil.anguloCentro * direction);
+        GolpearObjetos(hits, centro);
         bool contraEspada = ventanaContra > 0f;
         HashSet<EnemyHealth> alreadyHit = new HashSet<EnemyHealth>();
 
@@ -1651,11 +1792,16 @@ public class PlayerControler : MonoBehaviour
             // alreadyHit.Add evita contarlo dos veces en el mismo golpe.
             if (enemyHealth != null && alreadyHit.Add(enemyHealth))
             {
-                EnemyHealth.ArmaDelGolpe = TipoArma.Espada;
+                PrepararGolpe();
                 enemyHealth.TakeHit(DanoConContra(perfil.dano), m_transform.position, perfil.knockback, perfil.lanza, perfil.elevacion);
+                TrasGolpe(enemyHealth, hit.ClosestPoint(centro));
                 if (efectosGolpe != null) efectosGolpe.Impacto(hit.ClosestPoint(centro), TipoArma.Espada, contraEspada);
             }
         }
+
+        // Un solo sonido por espadazo: el del impacto si ha dado (lo pone TrasGolpe)
+        // o el silbido de la hoja si ha fallado. Asi se oye exactamente cuando conecta.
+        if (alreadyHit.Count == 0) Sonido.ReproducirCanal("espada", "espada_tajo", 0.75f);
 
         // Todo lo de abajo solo si el golpe ha conectado: al aire no aporta nada
         // y sacudir la camara por fallar marea.
@@ -1673,6 +1819,77 @@ public class PlayerControler : MonoBehaviour
         Sacudir(sacudida);
         MostrarEfecto(perfil, centro);
         return alreadyHit.Count;
+    }
+
+    // Antes de cada golpe de espada: con que arma y con que elemento entra.
+    private void PrepararGolpe()
+    {
+        EnemyHealth.ArmaDelGolpe = TipoArma.Espada;
+        EnemyHealth.ElementoDelGolpe = ElementoActivo;
+    }
+
+    // Centro del area que dana de verdad. En los arcos, el centro del anillo queda
+    // detras de la hoja: el corte esta a media distancia entre sus dos radios.
+    private Vector2 CentroVisual(AttackProfile perfil, Vector2 centro)
+    {
+        if (perfil.forma != AttackShape.Arco) return centro;
+        return centro + FrenteDelArco(perfil) * ((perfil.radioInterior + perfil.radioExterior) * 0.5f);
+    }
+
+    // Diametro aproximado del area de dano de un perfil (para el tajo visual).
+    private static float TamanoGolpe(AttackProfile perfil)
+    {
+        switch (perfil.forma)
+        {
+            case AttackShape.Arco: return perfil.radioExterior * (perfil.angulo > 150f ? 1.8f : 1.3f);
+            case AttackShape.Caja: return Mathf.Max(perfil.tamano.x, perfil.tamano.y);
+            default: return perfil.radio * 2f;
+        }
+    }
+
+    // Despues de un golpe de espada que ha tocado a un enemigo: sonido, mana,
+    // y lo que haga el elemento (estado, drenaje, chispa de color).
+    private void TrasGolpe(EnemyHealth enemigo, Vector2 punto)
+    {
+        // Si el golpe no llego a entrar (enemigo ya muerto), que no se quede puesto.
+        EnemyHealth.ElementoDelGolpe = Elemento.Ninguno;
+        Sonido.ReproducirCanal("espada", "espada_impacto", 0.8f);
+        if (mana != null) mana.Recuperar(mana.PorGolpe);
+
+        Elemento e = ElementoActivo;
+        if (e == Elemento.Ninguno || enemigo == null) return;
+        int dano = enemigo.UltimoDano;
+        if (!enemigo.Muerto) EstadosEnemigo.Aplicar(enemigo, e, dano);
+        if (e == Elemento.Oscuro && dano > 0) CurarDrenaje(Mathf.Max(1, Mathf.RoundToInt(dano * drenajeOscuro)));
+
+        Color c = Elementos.Color(e);
+        RecursosRPG r = RecursosRPG.Get();
+        if (r.impactoElemental != null)
+            EfectoVisual.Crear(r.impactoElemental, punto, 0.8f, c, UnityEngine.Random.value < 0.5f, -1f, "VFX", 23,
+                               UnityEngine.Random.Range(-30f, 30f));
+        ParticulasFx.Rafaga(punto, 8, c, Color.Lerp(c, Color.white, 0.5f), new Vector2(1.5f, 3.5f),
+                            e == Elemento.Fuego ? -0.4f : 0.6f, new Vector2(0.04f, 0.09f), new Vector2(0.2f, 0.45f));
+    }
+
+    // Vida del drenaje oscuro: sin el destello verde de las curas normales.
+    private void CurarDrenaje(int cantidad)
+    {
+        if (currentHealth <= 0 || currentHealth >= maxHealth) return;
+        currentHealth = Mathf.Min(maxHealth, currentHealth + cantidad);
+        PlayerHud.Get().Heal(currentHealth, maxHealth);
+        ParticulasFx.Rafaga((Vector2)m_transform.position + Vector2.up * 0.2f, 4, Elementos.Color(Elemento.Oscuro),
+                            new Color(1f, 0.4f, 0.5f), new Vector2(0.4f, 1f), -0.4f, new Vector2(0.04f, 0.08f), new Vector2(0.3f, 0.6f));
+    }
+
+    // Cosas del escenario que reaccionan a la espada (muro de hielo, agua que se
+    // congela...). No son enemigos: no tienen vida ni reciben retroceso.
+    private void GolpearObjetos(Collider2D[] hits, Vector2 centro)
+    {
+        foreach (Collider2D hit in hits)
+        {
+            IGolpeable g = hit.GetComponent<IGolpeable>();
+            if (g != null) g.Golpear(ElementoActivo, hit.ClosestPoint(centro));
+        }
     }
 
     // Sacude la camara a traves de Cinemachine. La direccion sale del propio
@@ -1866,9 +2083,14 @@ public class PlayerControler : MonoBehaviour
     {
         lFootRay = Physics2D.Raycast(lFoot.position, Vector2.down, rayLength, groundLayer);
         rFootRay = Physics2D.Raycast(rFoot.position, Vector2.down, rayLength, groundLayer);
+        bool antes = isGrounded;
+        sobreHielo = (lFootRay && lFootRay.collider.GetComponent<SueloHielo>() != null)
+                     || (rFootRay && rFootRay.collider.GetComponent<SueloHielo>() != null);
         if (lFootRay || rFootRay)
         {
             isGrounded = true;
+            if (!antes && m_rigitbody2D.linearVelocityY < -4f) Sonido.Reproducir("aterrizaje", 0.5f);
+            if (!antes && !sobreHielo) vxPropia = m_rigitbody2D.linearVelocityX - VientoX;
             counterExtraJumps = extraJumps;
             canDoubleJump = false;
             airComboIndex = 0;
@@ -2307,8 +2529,87 @@ public class PlayerControler : MonoBehaviour
 
     #region Espada
 
-    // Lee la E y arranca el cambio cuando se pueda.
+    // La E: descansar en la hoguera si hay una a tiro; si no, la rueda de imbuir.
+    // Ya no cambia entre espada y punos: la espada es el unico moveset.
     private void CambioDeArma()
+    {
+        if (!m_gatherInput.IsTogglingWeapon) return;
+        m_gatherInput.IsTogglingWeapon = false;
+        cambioArmaPendiente = false;
+
+        // La E que cierra un menu no debe volver a abrir nada.
+        float desdeCierre = Time.unscaledTime - Mathf.Max(MenuHoguera.UltimoCierre, RuedaImbuir.UltimoCierre);
+        if (desdeCierre < 0.3f) return;
+        if (isAttacking || isDodging || isShooting || isDrinking || isImbuing || isBlocking) return;
+
+        if (Hoguera.Cercana != null && isGrounded)
+        {
+            Hoguera.Cercana.Usar(this);
+            return;
+        }
+
+        RuedaImbuir.Abrir(armaImbuida.Activo, () => armaImbuida.Impedimento(mana), EmpezarImbuir);
+    }
+
+    private void EmpezarImbuir(Elemento e)
+    {
+        if (isImbuing || !canMove || isKnocked) return;
+        if (!mana.Gastar(armaImbuida.CosteMana)) return;
+        rutinaImbuir = StartCoroutine(ImbuirRoutine(e));
+    }
+
+    // El gesto: quieto, la hoja se va encendiendo del color del elemento y, al
+    // final, el arma queda imbuida. Un golpe lo corta y el mana se pierde.
+    private IEnumerator ImbuirRoutine(Elemento e)
+    {
+        isImbuing = true;
+        isSprinting = false;
+        ReproducirEstado(estadoImbuir);
+        Sonido.Reproducir("imbuir_" + (int)e);
+        Color c = Elementos.Color(e);
+        float dur = armaImbuida.TiempoGesto;
+        float t = 0f;
+        while (t < dur)
+        {
+            t += Time.deltaTime;
+            if (PrepararBrilloHoja())
+            {
+                brilloHoja.enabled = m_spriteRenderer.enabled;
+                materialHoja.SetColor("_GlowColor", c);
+                materialHoja.SetFloat("_Amount", Mathf.Clamp01(t / dur));
+            }
+            if (UnityEngine.Random.value < 0.5f)
+                ParticulasFx.Rafaga((Vector2)m_transform.position + UnityEngine.Random.insideUnitCircle * 0.6f, 1, c, Color.white,
+                                    new Vector2(0.2f, 0.6f), -0.3f, new Vector2(0.04f, 0.08f), new Vector2(0.3f, 0.5f));
+            yield return null;
+        }
+
+        armaImbuida.Activar(e);
+        ScreenFlash.Destello(new Color(c.r, c.g, c.b, 0.18f), 0.2f);
+        ParticulasFx.Rafaga(m_transform.position, 26, c, Color.Lerp(c, Color.white, 0.6f), new Vector2(1.5f, 4f), -0.2f,
+                            new Vector2(0.05f, 0.11f), new Vector2(0.4f, 0.8f));
+        TextoFlotante.Mostrar(Elementos.Nombre(e), (Vector2)m_transform.position + Vector2.up * 1.2f, c, 0.9f);
+        Sonido.Reproducir("golpe_" + (int)e, 0.8f);
+        yield return new WaitForSeconds(0.15f);
+
+        isImbuing = false;
+        rutinaImbuir = null;
+        ReproducirEstado(isGrounded ? "PlayerIdle" : "Fall");
+    }
+
+    private void CortarImbuir()
+    {
+        if (!isImbuing) return;
+        if (rutinaImbuir != null) StopCoroutine(rutinaImbuir);
+        rutinaImbuir = null;
+        isImbuing = false;
+    }
+
+    public Elemento ElementoActivo => armaImbuida != null ? armaImbuida.Activo : Elemento.Ninguno;
+
+    // El cambio de postura antiguo (enfundar con la E). Se conserva por si se
+    // recupera el combate sin arma, pero ya no se llama.
+    private void CambioDePosturaAntiguo()
     {
         // Con una hoguera a tiro, la E es para descansar y no cambia de arma.
         if (m_gatherInput.IsTogglingWeapon && Hoguera.Cercana != null && isGrounded && !isTogglingWeapon
@@ -2422,6 +2723,8 @@ public class PlayerControler : MonoBehaviour
     public void Destrabar()
     {
         CortarBebida();
+        CortarImbuir();
+        if (isAgarrado) SoltarAgarre(false);
         if (isBlocking) TerminarBloqueo();
         SoltarSuspensionAerea();
         m_rigitbody2D.linearVelocity = Vector2.zero;
@@ -2448,7 +2751,7 @@ public class PlayerControler : MonoBehaviour
             TextoFlotante.Mostrar("Sin pociones", (Vector2)m_transform.position + Vector2.up * 1.3f, new Color(0.7f, 0.7f, 0.7f), 0.8f);
             return;
         }
-        rutinaBeber = StartCoroutine(BeberRoutine(reserva.Curacion));
+        rutinaBeber = StartCoroutine(BeberRoutine(Mathf.RoundToInt(maxHealth * reserva.FraccionCuracion)));
     }
 
     private IEnumerator BeberRoutine(int curacion)
@@ -2456,6 +2759,7 @@ public class PlayerControler : MonoBehaviour
         isDrinking = true;
         isSprinting = false;
         ReproducirEstado(estadoBeber);
+        Sonido.Reproducir("beber", 0.8f);
         yield return new WaitForSeconds(momentoCurar);
 
         Heal(curacion);
@@ -2555,6 +2859,10 @@ public class PlayerControler : MonoBehaviour
 
         ventanaContra = counterWindow;
         estamina.Recuperar(parryStaminaGain);
+        // Choque metalico fuerte y, encima, el anillo de la hoja: el parry tiene
+        // que sonar distinto (y mas fuerte) que un golpe normal.
+        Sonido.ReproducirCanal("espada", "parry");
+        Sonido.Reproducir("parry_brillo", 0.8f);
         StartCoroutine(HitStop(parryHitStop));
         Sacudir(parryShake);
         ScreenFlash.Destello(parryFlashColor, parryFlashTime);
@@ -2572,6 +2880,7 @@ public class PlayerControler : MonoBehaviour
     // Bloqueo normal: sin dano, pero empuja hacia atras y gasta estamina.
     private void GolpeBloqueado()
     {
+        Sonido.ReproducirCanal("espada", "bloqueo", 0.8f);
         m_rigitbody2D.linearVelocity = new Vector2(-direction * blockPushback, m_rigitbody2D.linearVelocityY);
         StartCoroutine(HitStop(blockHitStop));
         Sacudir(blockShake);
@@ -2594,6 +2903,20 @@ public class PlayerControler : MonoBehaviour
             }
             else
                 PintarRGB(Color.Lerp(Color.white, counterGlowColor, 0.35f + 0.65f * pulso));
+            brillandoContra = true;
+        }
+        else if (isImbuing)
+        {
+            // El gesto de imbuir lleva su propio brillo.
+            brillandoContra = true;
+        }
+        else if (armaImbuida != null && armaImbuida.Activo != Elemento.Ninguno && PrepararBrilloHoja())
+        {
+            // Hoja imbuida: brilla del color del elemento, con un latido suave.
+            float pulso = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 4f);
+            brilloHoja.enabled = m_spriteRenderer.enabled;
+            materialHoja.SetColor("_GlowColor", Elementos.Color(armaImbuida.Activo));
+            materialHoja.SetFloat("_Amount", 0.4f + 0.25f * pulso);
             brillandoContra = true;
         }
         else if (brillandoContra)
@@ -3235,6 +3558,7 @@ public class PlayerControler : MonoBehaviour
 
         dodgeBuffer = 0f;
         estamina.Spend(estamina.DodgeCost);
+        Sonido.Reproducir("esquiva", 0.6f);
         if (isAttacking) CancelarAtaque();
 
         // Hacia donde se pulse; sin direccion, hacia donde mira.
@@ -3404,8 +3728,21 @@ public class PlayerControler : MonoBehaviour
     // rebotar (parry) o seguir de largo (barrido con invulnerabilidad).
     public enum ResultadoDano { Recibido, Bloqueado, Parry, Ignorado }
 
+    // Lo pone quien lance un hechizo justo antes de golpear, para que cuente
+    // como dano magico (la resistencia a hechizos lo reduce). Sin marcar, los
+    // golpes de un enemigo con cuerpo (EnemigoBase) son fisicos y el resto
+    // (proyectiles, peligros del escenario) magicos.
+    public static bool SiguienteGolpeMagico;
+    // Lo contrario: un proyectil fisico (una flecha) cuenta como golpe.
+    public static bool SiguienteGolpeFisico;
+
     public ResultadoDano TakeDamage(int damage, Component atacante)
     {
+        bool magico = SiguienteGolpeMagico || (!SiguienteGolpeFisico && atacante != null && !(atacante is EnemigoBase));
+        SiguienteGolpeMagico = false;
+        SiguienteGolpeFisico = false;
+        damage = ConResistencia(damage, magico);
+
         if (atacante != null && isBlocking && !isInvincible && GolpeDeFrente(atacante.transform))
         {
             if (tBloqueo <= ventanaParryActual) { Parry(atacante); return ResultadoDano.Parry; }
@@ -3420,7 +3757,15 @@ public class PlayerControler : MonoBehaviour
             // Sin estamina la guardia se rompe: el golpe entra.
         }
 
-        return TakeDamage(damage) ? ResultadoDano.Recibido : ResultadoDano.Ignorado;
+        return RecibirDano(damage) ? ResultadoDano.Recibido : ResultadoDano.Ignorado;
+    }
+
+    // Resistencias de la hoguera: quitan una parte del dano (minimo 1).
+    private static int ConResistencia(int dano, bool magico)
+    {
+        if (dano <= 0) return dano;
+        float r = magico ? Progreso.ResHechizos : Progreso.ResGolpes;
+        return Mathf.Max(1, Mathf.RoundToInt(dano * (1f - r)));
     }
 
     // Dano que entra a traves de la guardia: sin retroceso ni parpadeo, para que
@@ -3440,6 +3785,11 @@ public class PlayerControler : MonoBehaviour
     // Devuelve false si el golpe no ha entrado (invulnerable, barrido, estocada).
     public bool TakeDamage(int damage)
     {
+        return RecibirDano(ConResistencia(damage, false));
+    }
+
+    private bool RecibirDano(int damage)
+    {
         // Ignora el daño durante la invulnerabilidad. Esto evita recibir dos golpes a la vez
         // (el contacto del cuerpo del enemigo y el espadazo de su animación).
         if (isInvincible) return false;
@@ -3451,12 +3801,12 @@ public class PlayerControler : MonoBehaviour
         // enemigo, este atacaba en el mismo instante y el golpe del jugador
         // perdia; ademas el rebote tiene que salir limpio.
         if (isPlunging) return false;
+        if (isAgarrado) return false;
 
         currentHealth -= damage;
 
         PlayerHud.Get().Damage(currentHealth, maxHealth);
-
-        Debug.Log("Vida actual: " + currentHealth);
+        Sonido.Reproducir("dano_player", 0.8f);
 
         // Si el golpe entra con el barrido aun en marcha (fuera de la ventana de
         // invulnerabilidad), se corta: el retroceso tiene que mandar.
@@ -3466,6 +3816,7 @@ public class PlayerControler : MonoBehaviour
         if (isTogglingWeapon) CancelarCambioArma(false);
         if (golpeSinArmaActivo) CortarGolpeSinArma();
         if (isBlocking) TerminarBloqueo(false);
+        CortarImbuir();
         SoltarSuspensionAerea();
         CortarBebida();
 
@@ -3559,6 +3910,94 @@ public class PlayerControler : MonoBehaviour
         m_animator.SetBool("isKnockback", isKnocked);
     }
 
+    // Toma los maximos del nivel del personaje (Progreso). Al subir de nivel en la
+    // hoguera se llama con curar = true.
+    public void AplicarProgreso(bool curar)
+    {
+        int antes = maxHealth;
+        maxHealth = Progreso.VidaMax;
+        if (curar) currentHealth = maxHealth;
+        else if (currentHealth > 0 && antes > 0 && antes != maxHealth)
+            currentHealth = Mathf.Clamp(Mathf.RoundToInt(currentHealth * (float)maxHealth / antes), 1, maxHealth);
+        PlayerHud.Get().SetHealth(currentHealth, maxHealth);
+    }
+
+    public int VidaActual => currentHealth;
+    public int VidaMaxima => maxHealth;
+
+    // ------------------------------------------------------------------ Agarre del jefe
+
+    private float gravedadAntesDelAgarre = -1f;
+
+    // El jefe intenta agarrarlo. No lo consigue si el player es invulnerable en
+    // ese instante (barrido con invulnerabilidad, estocada...): esa es la ultima
+    // oportunidad de escapar.
+    public bool IntentarAgarre()
+    {
+        if (currentHealth <= 0 || isAgarrado || isInvincible || hasIFrames || isPlunging) return false;
+
+        if (isDodging) TerminarEsquiva();
+        if (isShooting) TerminarDisparo();
+        if (isBlocking) TerminarBloqueo(false);
+        if (isAttacking) CancelarAtaque();
+        CortarBebida();
+        CortarImbuir();
+        SoltarSuspensionAerea();
+
+        isAgarrado = true;
+        isSprinting = false;
+        gravedadAntesDelAgarre = m_rigitbody2D.gravityScale;
+        m_rigitbody2D.gravityScale = 0f;
+        m_rigitbody2D.linearVelocity = Vector2.zero;
+        IgnorarEnemigos(true);
+        m_animator.SetBool(idKnockDown, true);
+        ReproducirEstado("KnockDown");
+        return true;
+    }
+
+    // Quien lo agarra lo lleva a donde quiera (lanzado por los aires).
+    public void MoverAgarrado(Vector2 pos)
+    {
+        if (!isAgarrado) return;
+        m_rigitbody2D.position = pos;
+        m_transform.position = pos;
+        m_rigitbody2D.linearVelocity = Vector2.zero;
+    }
+
+    // Cada corte del agarre. No respeta la invulnerabilidad: es un castigo seguro.
+    public void CorteAgarre(int dano)
+    {
+        if (!isAgarrado || currentHealth <= 0) return;
+        currentHealth -= Mathf.Max(1, dano);
+        PlayerHud.Get().Damage(currentHealth, maxHealth);
+        Sonido.Reproducir("dano_player", 0.9f);
+        PintarRGB(new Color(1f, 0.4f, 0.4f));
+        StartCoroutine(QuitarTinte(0.08f));
+        if (currentHealth > 0) return;
+        isAgarrado = false;
+        Die();
+        GameManager.Instance.RespawnPlayer();
+    }
+
+    private IEnumerator QuitarTinte(float t)
+    {
+        yield return new WaitForSecondsRealtime(t);
+        if (!brillandoContra) PintarRGB(Color.white);
+    }
+
+    // Lo suelta. Si "caer", cae derribado y se levanta como tras un golpe en el aire.
+    public void SoltarAgarre(bool caer)
+    {
+        if (!isAgarrado) return;
+        isAgarrado = false;
+        if (gravedadAntesDelAgarre >= 0f) m_rigitbody2D.gravityScale = gravedadAntesDelAgarre;
+        gravedadAntesDelAgarre = -1f;
+        if (isActiveAndEnabled) StartCoroutine(EsperarASalirDeEnemigos());
+        if (caer) StartCoroutine(KnockDownRoutine());
+        else m_animator.SetBool(idKnockDown, false);
+        StartCoroutine(InvincibleRoutine());
+    }
+
     // Vida al maximo (la hoguera). Sin destello verde si ya estaba lleno.
     public void CurarCompleto()
     {
@@ -3635,6 +4074,9 @@ public class PlayerControler : MonoBehaviour
     // Actualiza la barra de vida a cero, instancia el VFX de muerte y destruye al player.
     public void Die()
     {
+        Progreso.Morir(ultimoSueloSeguro, SceneManager.GetActiveScene().name);
+        Sonido.Reproducir("muerte_player");
+        if (isAgarrado) isAgarrado = false;
         PantallaMuerte.Mostrar(ArenaJefe.EnCombate);
         PlayerHud.Get().Damage(0, maxHealth);
         GameObject deathVFXPrefab = Instantiate(deathVFX, m_transform.position, Quaternion.identity);

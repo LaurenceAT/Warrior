@@ -12,7 +12,13 @@ using UnityEngine.UI;
 // GameManager espera con EsperarContinuar() antes de hacer reaparecer al player.
 public class PantallaMuerte : MonoBehaviour
 {
-    private static readonly string[] BurlasJefe =
+    // Burlas del jefe que se esta combatiendo (las pone su arena). Si no hay, las
+    // del Espectro Carmesi.
+    public static string[] BurlasJefe;
+    // Frases del nivel (las pone DatosNivel). Si no hay, las de la cueva.
+    public static string[] FrasesNivel;
+
+    private static readonly string[] BurlasWraith =
     {
         "«Tu sangre ya me pertenece.»",
         "«Vuelve. La niebla siempre te trae de nuevo a mí.»",
@@ -47,7 +53,8 @@ public class PantallaMuerte : MonoBehaviour
     public static void Mostrar(bool contraJefe)
     {
         if (instancia == null) instancia = Crear();
-        string[] lista = contraJefe ? BurlasJefe : FrasesCueva;
+        string[] lista = contraJefe ? (BurlasJefe != null && BurlasJefe.Length > 0 ? BurlasJefe : BurlasWraith)
+                                    : (FrasesNivel != null && FrasesNivel.Length > 0 ? FrasesNivel : FrasesCueva);
         instancia.frase.text = lista[Random.Range(0, lista.Length)];
         instancia.activa = true;
         instancia.puedeContinuar = false;

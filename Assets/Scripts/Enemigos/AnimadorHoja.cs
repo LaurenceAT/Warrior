@@ -26,6 +26,8 @@ public class AnimadorHoja : MonoBehaviour
         public int cantidad = 1;
         public float fps = 10f;
         public bool bucle = true;
+        // Los fotogramas al reves (levantarse = caer hacia atras).
+        public bool alReves;
         // Pivote en proporcion de la celda: donde apoyan los pies.
         public Vector2 pivote = new Vector2(0.5f, 0.4f);
         public float pixelesPorUnidad = 28f;
@@ -58,6 +60,9 @@ public class AnimadorHoja : MonoBehaviour
     private float t;
     private int fotograma = -1;
     private float velocidad = 1f;
+    // Ritmo externo (la escarcha lo baja; congelado es 0). Se multiplica con la
+    // velocidad que pida cada clip.
+    [NonSerialized] public float multiplicador = 1f;
 
     public string Actual => actual != null ? actual.nombre : null;
     public int Fotograma => fotograma;
@@ -115,7 +120,7 @@ public class AnimadorHoja : MonoBehaviour
 
     private void Update()
     {
-        Avanzar(Time.deltaTime * velocidad);
+        Avanzar(Time.deltaTime * velocidad * multiplicador);
     }
 
     private void Avanzar(float dt)
@@ -164,6 +169,15 @@ public class AnimadorHoja : MonoBehaviour
     }
 
     private static Sprite[] Cortar(Clip c)
+    {
+        Sprite[] r = CortarNormal(c);
+        if (!c.alReves || r == null) return r;
+        Sprite[] inv = (Sprite[])r.Clone();
+        System.Array.Reverse(inv);
+        return inv;
+    }
+
+    private static Sprite[] CortarNormal(Clip c)
     {
         if (c.fotogramas != null && c.fotogramas.Length > 0) return Sueltos(c);
 

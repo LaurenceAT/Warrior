@@ -19,15 +19,12 @@ using UnityEngine;
 // FASE 2 (al 50%): se transforma en su forma grande. El escenario se tine de
 // rojo. Ataca mas rapido y con movimientos nuevos: zarpazo gigante con ondas,
 // lluvia de fuego por toda la arena, teletransporte a la espalda y pilares en
-// cadena. Su coraza resiste el filo (espada x0.6) y cede a los golpes sin arma
-// (punos x1.8): hay que cambiar de arma.
+// cadena. Su coraza resiste el filo sin imbuir (x0.6) y cede a la luz
+// sagrada (x1.8); la oscuridad apenas le hace nada. Hay que imbuir la espada.
 //
 // Los ataques grandes abren la camara (CamaraDinamica.Ampliar) para que se vean.
-public class JefeWraith : EnemigoBase, IModificadorDano
+public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
 {
-    public event System.Action AlAterrizar;
-    public event System.Action AlCambiarFase;
-    public event System.Action AlDerrotado;
 
     [Header("Dano")]
     [SerializeField] private int danoNormal = 40;
@@ -42,9 +39,13 @@ public class JefeWraith : EnemigoBase, IModificadorDano
     [SerializeField] private float velocidadDeslizar = 2.6f;
 
     [Header("Debilidad en la fase 2")]
+    // Espada sin imbuir, y cada elemento. Antes la debilidad eran los punos, pero
+    // el combate sin arma ya no esta disponible.
     [SerializeField] private float multEspada = 0.6f;
-    [SerializeField] private float multPunos = 1.8f;
     [SerializeField] private float multArco = 1f;
+    [SerializeField] private float multSagrado = 1.8f;
+    [SerializeField] private float multFuego = 1f;
+    [SerializeField] private float multOscuro = 0.4f;
 
     [Header("Parry")]
     // Aturdimiento al parar el impacto de la entrada, y el de un golpe normal.
@@ -85,7 +86,7 @@ public class JefeWraith : EnemigoBase, IModificadorDano
     private SpriteRenderer sr;
 
     // La arena la pone ArenaJefe al crearlo: limites y altura del suelo.
-    public void Configurar(Rect zona, float alturaSuelo)
+    public override void Configurar(Rect zona, float alturaSuelo)
     {
         arena = zona;
         suelo = alturaSuelo;
@@ -112,11 +113,26 @@ public class JefeWraith : EnemigoBase, IModificadorDano
         if (transformando || invisible) return 0;
         if (!fase2) return dano;
 
-        float m = arma == TipoArma.Espada ? multEspada : arma == TipoArma.Punos ? multPunos : arma == TipoArma.Arco ? multArco : 1f;
+        // Con la espada imbuida manda la afinidad (Multiplicador), que ya avisa.
+        if (arma == TipoArma.Espada && EnemyHealth.ElementoDelGolpe != Elemento.Ninguno) return dano;
+        float m = arma == TipoArma.Espada ? multEspada : arma == TipoArma.Arco ? multArco : 1f;
         Vector2 donde = (Vector2)transform.position + new Vector2(Random.Range(-0.6f, 0.6f), 3.2f);
         if (m > 1.01f) TextoFlotante.Mostrar("¡Débil!", donde, new Color(1f, 0.75f, 0.2f), 1.1f);
         else if (m < 0.99f) TextoFlotante.Mostrar("Resiste", donde, new Color(0.7f, 0.7f, 0.75f), 0.9f);
         return Mathf.Max(1, Mathf.RoundToInt(dano * m));
+    }
+
+    // En la fase 1 todos los elementos hacen lo normal. En la 2, la luz lo quema.
+    public float Multiplicador(Elemento e)
+    {
+        if (!fase2) return 1f;
+        switch (e)
+        {
+            case Elemento.Sagrado: return multSagrado;
+            case Elemento.Fuego: return multFuego;
+            case Elemento.Oscuro: return multOscuro;
+            default: return 1f;
+        }
     }
 
     // ------------------------------------------------------------------ Cerebro
@@ -242,10 +258,11 @@ public class JefeWraith : EnemigoBase, IModificadorDano
         // Impacto: polvo, sacudida y onda de choque alrededor.
         anim.Reproducir("impacto", true);
         Sacudir(1.4f);
+        CamaraDinamica.Acercar(4.3f, 0.45f);
         EfectoVisual.Crear(fxColumnaPolvo, new Vector2(x, suelo), 2.6f, new Color(0.8f, 0.6f, 0.6f));
         EfectoVisual.Crear(fxPolvo, new Vector2(x, suelo + 0.4f), 2.4f, new Color(0.8f, 0.6f, 0.6f));
         var r = GolpearMundo(new Vector2(x, suelo + 1.3f), new Vector2(5f, 2.6f), danoFuerte);
-        AlAterrizar?.Invoke();
+        AvisarAterrizaje();
 
         if (r == PlayerControler.ResultadoDano.Parry)
         {
@@ -269,6 +286,8 @@ public class JefeWraith : EnemigoBase, IModificadorDano
             yield return Esperar(aviso);
 
             anim.Reproducir("tajo", true);
+            Sonido.Reproducir("jefe_tajo", 0.8f);
+            if (i == golpes - 1) CamaraDinamica.Acercar(4.6f, 0.3f);
             float t = 0f;
             bool pego = false;
             while (t < anim.Duracion("tajo"))
@@ -386,6 +405,9 @@ public class JefeWraith : EnemigoBase, IModificadorDano
         rb.linearVelocity = Vector2.zero;
         anim.Reproducir("grande_rugido", true);
         CamaraDinamica.Ampliar(7f, 3.2f);
+        CamaraDinamica.Encuadrar((Vector2)transform.position + Vector2.up * 2.5f, 0.7f, 3f);
+        CamaraDinamica.CamaraLenta(0.35f, 0.6f);
+        Sonido.Reproducir("jefe_transformacion");
         ScreenFlash.Destello(new Color(0.9f, 0.05f, 0.1f, 0.45f), 0.5f);
         Sacudir(2f);
         EfectoVisual anillo = EfectoVisual.Crear(fxAnillo, (Vector2)transform.position + Vector2.up * 2.5f, 3f, carmesi);
@@ -393,7 +415,7 @@ public class JefeWraith : EnemigoBase, IModificadorDano
         cuerpo.size = cuerpoFase2;
         cuerpo.offset = new Vector2(0f, cuerpoFase2.y * 0.5f);
         fase2 = true;
-        AlCambiarFase?.Invoke();
+        AvisarCambioFase();
 
         // Onda de choque de la transformacion: un aro muestra su alcance mientras
         // crece y, al llenarse, estalla. Antes salia al instante y remataba al
@@ -415,7 +437,9 @@ public class JefeWraith : EnemigoBase, IModificadorDano
         yield return Temblar(0.7f, 0.04f);
 
         anim.Reproducir("grande_zarpazo", true);
-        Sacudir(1.2f);
+        Sacudir(1.5f);
+        CamaraDinamica.Acercar(4.5f, 0.4f);
+        Sonido.Reproducir("jefe_golpe_fuerte");
         rb.linearVelocity = new Vector2(mirada * 3f, 0f);
         var r = Golpear(new Vector2(2.8f, 2.2f), new Vector2(5.6f, 4.6f), danoFuerte);
         if (r == PlayerControler.ResultadoDano.Parry) { parado = true; yield break; }
@@ -524,6 +548,8 @@ public class JefeWraith : EnemigoBase, IModificadorDano
 
         anim.Reproducir(fase2 ? "grande_zarpazo" : "impacto", true);
         Sacudir(1.2f);
+        CamaraDinamica.Acercar(4.6f, 0.3f);
+        Sonido.Reproducir("jefe_impacto_suelo");
         EfectoVisual.Crear(fxPolvo, new Vector2(destino, suelo + 0.4f), 2.2f, new Color(0.8f, 0.6f, 0.6f));
         var r = GolpearMundo(new Vector2(destino, suelo + 1.2f), new Vector2(4.5f, 2.4f), fase2 ? danoFuerte : danoNormal);
         if (r == PlayerControler.ResultadoDano.Parry) { parado = true; yield break; }
@@ -586,6 +612,7 @@ public class JefeWraith : EnemigoBase, IModificadorDano
 
         EfectoVisual.Crear(fxAnillo, centro, 3.4f, carmesi);
         ScreenFlash.Destello(new Color(1f, 0.2f, 0.2f, 0.3f), 0.25f);
+        Sonido.Reproducir("jefe_nova");
         Sacudir(1.6f);
         var r = GolpearCirculo(centro, 5f, danoFuerte);
         if (r == PlayerControler.ResultadoDano.Parry) { parado = true; yield break; }
@@ -688,7 +715,7 @@ public class JefeWraith : EnemigoBase, IModificadorDano
         base.AlMorir();
         PeligrosJefe.LimpiarTodo();
         StartCoroutine(Muerte());
-        AlDerrotado?.Invoke();
+        AvisarDerrota();
     }
 
     private IEnumerator Muerte()

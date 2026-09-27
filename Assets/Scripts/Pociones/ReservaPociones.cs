@@ -16,6 +16,8 @@ public class ReservaPociones : MonoBehaviour
 
     [SerializeField] private int maximo = 3;
     [SerializeField] private int curacion = 40;
+    // Los frascos de sangre curan esta parte de la vida maxima (0.75 = 75 %).
+    [Range(0f, 1f)] [SerializeField] private float fraccionCuracion = 0.75f;
 
     private int cargas;
     private bool recompensaCogida;
@@ -24,6 +26,7 @@ public class ReservaPociones : MonoBehaviour
     public int Cargas => cargas;
     public int Maximo => maximo;
     public int Curacion => curacion;
+    public float FraccionCuracion => fraccionCuracion;
     public bool RecompensaCogida => recompensaCogida;
 
     public static ReservaPociones Get()
@@ -132,7 +135,10 @@ public class ContadorPociones : MonoBehaviour
 
         cp.icono = new GameObject("Frasco").AddComponent<Image>();
         cp.icono.transform.SetParent(cp.caja, false);
-        cp.icono.sprite = ReservaPociones.Frasco();
+        // Icono del pack (frasco rojo); si falta, el dibujado por codigo.
+        Sprite icono = RecursosRPG.Get().Icono("pocion");
+        cp.icono.sprite = icono != null ? icono : ReservaPociones.Frasco();
+        cp.icono.preserveAspect = true;
         RectTransform ri = cp.icono.rectTransform;
         ri.anchorMin = ri.anchorMax = new Vector2(0f, 0.5f);
         ri.pivot = new Vector2(0f, 0.5f);

@@ -73,6 +73,12 @@ public class PlayerHud : MonoBehaviour
     [SerializeField] private Color staminaLowColor = new Color(0.4f, 0.45f, 0.18f, 1f);
     [SerializeField] private float lowStaminaBlinkSpeed = 9f;
 
+    [Header("Barra de mana")]
+    [SerializeField] private float manaWidth = 290f;
+    [SerializeField] private float manaHeight = 7f;
+    [SerializeField] private Color manaColor = new Color(0.22f, 0.42f, 0.95f, 1f);
+    [SerializeField] private Color manaFlashColor = new Color(0.65f, 0.8f, 1f, 1f);
+
     [Header("Desvanecer sin combate")]
     [SerializeField] private bool autoFade = true;
     // Segundos sin que pase nada antes de empezar a desvanecerse.
@@ -102,6 +108,13 @@ public class PlayerHud : MonoBehaviour
     private Image vidaImagen;
     private RectTransform estaminaRelleno;
     private Image estaminaImagen;
+    private RectTransform manaRelleno;
+    private Image manaImagen;
+    private PlayerMana mana;
+    private float manaAntes = -1f;
+    private float destelloMana;
+    private ArmaImbuida arma;
+    private Sprite iconoBase;
     private Image aviso;
     private Image icono;
     private Text textoVida;
@@ -140,6 +153,7 @@ public class PlayerHud : MonoBehaviour
     public void SetIcon(Sprite sprite)
     {
         if (icono == null) return;
+        iconoBase = sprite;
         icono.sprite = sprite;
         icono.enabled = sprite != null;
     }
@@ -227,6 +241,8 @@ public class PlayerHud : MonoBehaviour
 
         ActualizarVida(dt);
         ActualizarEstamina(dt);
+        ActualizarMana(dt);
+        ActualizarArma();
         ActualizarTemblor(dt);
         ActualizarFundido(dt);
         ActualizarNumeros();
@@ -307,6 +323,44 @@ public class PlayerHud : MonoBehaviour
                 aviso.color = Color.Lerp(boxBorderColor, warningLowColor, parpadeo);
             else
                 aviso.color = boxBorderColor;
+        }
+    }
+
+    private void ActualizarMana(float dt)
+    {
+        if (mana == null)
+        {
+            if (buscarEstamina > 0.2f) return;
+            mana = FindFirstObjectByType<PlayerMana>();
+            manaAntes = -1f;
+            if (mana == null) return;
+        }
+        float f = mana.Fraccion;
+        Anclar(manaRelleno, f);
+        if (manaAntes >= 0f && Mathf.Abs(f - manaAntes) > 0.0001f) { Actividad(); if (f > manaAntes) destelloMana = 0.3f; }
+        manaAntes = f;
+        if (destelloMana > 0f) destelloMana -= dt;
+        manaImagen.color = destelloMana > 0f ? Color.Lerp(manaColor, manaFlashColor, destelloMana / 0.3f) : manaColor;
+    }
+
+    // Con la espada imbuida, el rombo lleva el icono del elemento y su borde se
+    // tine de su color (parpadea cuando le queda poco).
+    private void ActualizarArma()
+    {
+        if (arma == null) arma = FindFirstObjectByType<ArmaImbuida>();
+        if (icono == null) return;
+        Elemento e = arma != null ? arma.Activo : Elemento.Ninguno;
+        if (e == Elemento.Ninguno)
+        {
+            if (icono.sprite != iconoBase) { icono.sprite = iconoBase; icono.enabled = iconoBase != null; }
+            return;
+        }
+        Sprite s = RecursosRPG.Get().Icono("elemento_" + (int)e);
+        if (s != null && icono.sprite != s) { icono.sprite = s; icono.enabled = true; }
+        if (aviso != null && estamina != null && !estamina.Exhausted && estamina.Fraction >= lowStaminaThreshold)
+        {
+            float p = arma.Restante < 10f ? Mathf.Abs(Mathf.Sin(Time.unscaledTime * 8f)) : 0.75f + 0.25f * Mathf.Sin(Time.unscaledTime * 3f);
+            aviso.color = Color.Lerp(boxBorderColor, Elementos.Color(e), p);
         }
     }
 
@@ -391,7 +445,7 @@ public class PlayerHud : MonoBehaviour
         grupo.blocksRaycasts = false;
 
         float visible = rotateBox ? boxSize * 1.41421f : boxSize;
-        float altoBarras = healthHeight + barGap + staminaHeight;
+        float altoBarras = healthHeight + barGap + staminaHeight + barGap * 0.6f + manaHeight;
         float centroY = -visible * 0.5f;
 
         RectTransform borde = Rect("Rombo", raiz, boxBorderColor, out Image bordeImagen);
@@ -426,6 +480,9 @@ public class PlayerHud : MonoBehaviour
 
         RectTransform estFondo = Barra("Estamina", raiz, x, yEstamina, staminaWidth, staminaHeight);
         estaminaRelleno = Relleno("Relleno", estFondo, staminaColor, out estaminaImagen);
+
+        RectTransform manaFondo = Barra("Mana", raiz, x, yEstamina - staminaHeight - barGap * 0.6f, manaWidth, manaHeight);
+        manaRelleno = Relleno("Relleno", manaFondo, manaColor, out manaImagen);
 
         // Numeros a la derecha de cada barra, apagados salvo que se activen.
         textoVida = Numero("TextoVida", vidaFondo, healthHeight);

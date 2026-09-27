@@ -32,7 +32,10 @@ public class FrascoExtra : MonoBehaviour
         go.transform.position = pos;
         go.transform.localScale = Vector3.one * 1.6f;
         SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = ReservaPociones.Frasco();
+        Sprite icono = RecursosRPG.Get().Icono("pocion");
+        // El icono del pack, con el pivote en la base (como el frasco dibujado).
+        sr.sprite = icono != null ? Sprite.Create(icono.texture, icono.rect, new Vector2(0.5f, 0f), icono.rect.width * 0.9f)
+                                  : ReservaPociones.Frasco();
         sr.sortingLayerName = "Items";
         sr.sharedMaterial = EfectoVisual.MaterialSinLuz();
         CircleCollider2D c = go.AddComponent<CircleCollider2D>();

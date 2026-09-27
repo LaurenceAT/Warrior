@@ -10,6 +10,9 @@ using UnityEngine.UI;
 public class BarraJefe : MonoBehaviour
 {
     private RectTransform relleno, rastro;
+    private Image imagenRelleno, imagenBrillo;
+    private TextMeshProUGUI textoNombre;
+    private float llenando = -1f;
     private CanvasGroup grupo;
     private float objetivo = 1f, valorRastro = 1f, esperaRastro;
     private float alfaObjetivo;
@@ -39,10 +42,12 @@ public class BarraJefe : MonoBehaviour
         b.rastro = b.Caja("Rastro", fondo, new Color(1f, 0.8f, 0.55f, 1f));
         Estirar(b.rastro, 0f);
         b.relleno = b.Caja("Relleno", fondo, new Color(0.62f, 0.03f, 0.08f, 1f));
+        b.imagenRelleno = b.relleno.GetComponent<Image>();
         Estirar(b.relleno, 0f);
 
         // Brillo en la mitad de arriba del relleno, para que no sea plano.
         RectTransform brillo = b.Caja("Brillo", b.relleno, new Color(1f, 0.35f, 0.35f, 0.35f));
+        b.imagenBrillo = brillo.GetComponent<Image>();
         brillo.anchorMin = new Vector2(0f, 0.55f);
         brillo.anchorMax = Vector2.one;
         brillo.offsetMin = brillo.offsetMax = Vector2.zero;
@@ -58,6 +63,7 @@ public class BarraJefe : MonoBehaviour
         TextMeshProUGUI t = new GameObject("Nombre").AddComponent<TextMeshProUGUI>();
         t.transform.SetParent(marco, false);
         t.text = nombre;
+        b.textoNombre = t;
         t.fontSize = 30;
         t.color = new Color(0.92f, 0.86f, 0.8f);
         t.alignment = TextAlignmentOptions.BottomLeft;
@@ -74,8 +80,20 @@ public class BarraJefe : MonoBehaviour
 
     public void Mostrar(bool mostrar) => alfaObjetivo = mostrar ? 1f : 0f;
 
+    // Segunda fase con barra propia: se rellena entera con otro color y el nombre
+    // cambia. Mientras se rellena no hace caso de la vida.
+    public void NuevaFase(Color color, string nombre)
+    {
+        imagenRelleno.color = color;
+        imagenBrillo.color = new Color(Mathf.Min(1f, color.r + 0.4f), Mathf.Min(1f, color.g + 0.4f), Mathf.Min(1f, color.b + 0.4f), 0.35f);
+        if (!string.IsNullOrEmpty(nombre)) textoNombre.text = nombre;
+        llenando = 0f;
+        objetivo = 1f;
+    }
+
     public void Actualizar(int vida, int maxima)
     {
+        if (llenando >= 0f) return;
         float nuevo = maxima > 0 ? Mathf.Clamp01((float)vida / maxima) : 0f;
         if (nuevo < objetivo) esperaRastro = 0.6f;
         objetivo = nuevo;
@@ -86,6 +104,15 @@ public class BarraJefe : MonoBehaviour
         float dt = Time.unscaledDeltaTime;
         grupo.alpha = Mathf.MoveTowards(grupo.alpha, alfaObjetivo, dt * 1.5f);
 
+        if (llenando >= 0f)
+        {
+            llenando = Mathf.MoveTowards(llenando, 1f, dt * 0.8f);
+            Poner(relleno, llenando);
+            Poner(rastro, llenando);
+            valorRastro = llenando;
+            if (llenando >= 1f) llenando = -1f;
+            return;
+        }
         Poner(relleno, objetivo);
         if (esperaRastro > 0f) esperaRastro -= dt;
         else valorRastro = Mathf.MoveTowards(valorRastro, objetivo, dt * 0.35f);

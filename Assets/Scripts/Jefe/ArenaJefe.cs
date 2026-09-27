@@ -2,13 +2,18 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-// La arena del jefe. Al entrar el player (trigger de este objeto):
+// La arena de un jefe. Al entrar el player (trigger de este objeto):
 //   - La niebla de la puerta se vuelve solida: no se sale hasta vencer.
-//   - Empieza la musica del jefe con un fundido.
-//   - Aparece el jefe (cae del techo), su barra grande y su nombre.
-// En la fase 2 la luz de la cueva se tine de rojo y caen brasas.
+//   - Empieza la musica de la fase 1 con un fundido.
+//   - Aparece el jefe, su barra grande y su nombre.
+// En la fase 2 la luz se tine, caen particulas (brasas o nieve) y la musica pasa
+// a la pista de la fase 2, en el momento exacto del cambio.
 // Al vencer: se abre la niebla y la salida, se apaga la musica y sale el cartel.
 // Si el player muere, todo vuelve a como estaba antes de entrar.
+//
+// Musica por fases: cada fase tiene su pista, el segundo por el que empieza y el
+// tramo que se repite (bucle). Asi una misma pista puede dar la parte tranquila
+// a la fase 1 y el climax a la fase 2 sin empezar siempre desde el principio.
 [RequireComponent(typeof(Collider2D))]
 public class ArenaJefe : MonoBehaviour
 {
@@ -22,12 +27,21 @@ public class ArenaJefe : MonoBehaviour
     private enum Estado { Esperando, Combate, Vencido }
 
     [Header("Jefe")]
-    [SerializeField] private JefeWraith prefabJefe;
+    [SerializeField] private JefeBase prefabJefe;
     [SerializeField] private string nombre = "Crimson Wraith";
     [SerializeField] private string titulo = "El Espectro Carmesí";
     // Limites de la arena (para el jefe y sus ataques) y altura del suelo.
     [SerializeField] private Rect zona = Rect.MinMaxRect(140.5f, 4f, 176f, 22f);
     [SerializeField] private float suelo = 4f;
+    // Frases del jefe para la pantalla de muerte (vacio = las de siempre).
+    [SerializeField] private string[] burlas;
+
+    [Header("Barra")]
+    // Marca en la barra donde cambia de fase (0 = sin marca: cada fase tiene su barra).
+    [Range(0f, 1f)] [SerializeField] private float marcaFase = 0.5f;
+    [SerializeField] private bool barraPorFase;
+    [SerializeField] private Color colorBarraFase2 = new Color(0.25f, 0.6f, 0.95f, 1f);
+    [SerializeField] private string nombreFase2 = "";
 
     [Header("Niebla y salida")]
     [SerializeField] private Collider2D muroNiebla;
@@ -36,22 +50,39 @@ public class ArenaJefe : MonoBehaviour
     [SerializeField] private Color nieblaCerrada = new Color(0.9f, 0.1f, 0.15f, 0.75f);
     [SerializeField] private GameObject salida;
 
-    [Header("Musica")]
+    [Header("Musica: fase 1")]
     [SerializeField] private AudioClip musica;
     [Range(0f, 1f)] [SerializeField] private float volumen = 0.6f;
+    [SerializeField] private float inicioFase1;
+    // Tramo que se repite (x = desde, y = hasta). y <= 0: toda la pista.
+    [SerializeField] private Vector2 bucleFase1;
+
+    [Header("Musica: fase 2")]
+    [SerializeField] private AudioClip musicaFase2;
+    [Range(0f, 1f)] [SerializeField] private float volumenFase2 = 0.7f;
+    [SerializeField] private float inicioFase2;
+    [SerializeField] private Vector2 bucleFase2;
 
     [Header("Fase 2")]
     [SerializeField] private Color luzFase2 = new Color(1f, 0.55f, 0.55f, 1f);
+    [SerializeField] private string textoFase2 = "El Espectro Carmesí revela su verdadera forma...";
+    [SerializeField] private Color particulasFase2A = new Color(1f, 0.3f, 0.2f, 0.9f);
+    [SerializeField] private Color particulasFase2B = new Color(1f, 0.7f, 0.3f, 0.7f);
+    // true: las particulas caen (nieve); false: suben (brasas).
+    [SerializeField] private bool particulasCaen;
+    [SerializeField] private string bannerVictoria = "ENEMIGO CAÍDO";
 
     private Estado estado;
-    private JefeWraith jefe;
+    private JefeBase jefe;
     private BarraJefe barra;
-    private AudioSource audioSrc;
+    private AudioSource audioSrc, audioFase2;
+    private Vector2 bucleActual;
+    private AudioSource fuenteActual;
     private Light2D luzGlobal;
     private Color luzOriginal;
     private float intensidadOriginal;
     private ParticleSystem brasas;
-    private Coroutine fundido;
+    private Coroutine fundido, fundido2;
 
     // Reto opcional: vencer sin beber en el combate, y vencer al primer intento
     // (sin morir ni volver a la hoguera entre intentos).
@@ -61,10 +92,8 @@ public class ArenaJefe : MonoBehaviour
     private void Awake()
     {
         GetComponent<Collider2D>().isTrigger = true;
-        audioSrc = gameObject.AddComponent<AudioSource>();
-        audioSrc.loop = true;
-        audioSrc.playOnAwake = false;
-        audioSrc.volume = 0f;
+        audioSrc = NuevaFuente();
+        audioFase2 = NuevaFuente();
 
         foreach (Light2D l in FindObjectsByType<Light2D>(FindObjectsSortMode.None))
             if (l.lightType == Light2D.LightType.Global) { luzGlobal = l; break; }
@@ -72,6 +101,15 @@ public class ArenaJefe : MonoBehaviour
 
         PonerNiebla(false);
         if (salida != null) salida.SetActive(false);
+    }
+
+    private AudioSource NuevaFuente()
+    {
+        AudioSource a = gameObject.AddComponent<AudioSource>();
+        a.loop = true;
+        a.playOnAwake = false;
+        a.volume = 0f;
+        return a;
     }
 
     private void OnEnable()
@@ -87,12 +125,14 @@ public class ArenaJefe : MonoBehaviour
         ReservaPociones.AlBeber -= MarcarPocion;
         ControlVolumen.AlCambiar -= AjustarVolumen;
         EnCombate = false;
+        PantallaMuerte.BurlasJefe = null;
     }
 
     // Cambio de volumen desde el menu de pausa con la musica sonando.
     private void AjustarVolumen()
     {
-        if (estado == Estado.Combate && fundido == null) audioSrc.volume = volumen * ControlVolumen.Musica;
+        if (estado != Estado.Combate || fundido != null || fundido2 != null || fuenteActual == null) return;
+        fuenteActual.volume = (fuenteActual == audioFase2 ? volumenFase2 : volumen) * ControlVolumen.Musica;
     }
 
     private void MarcarPocion()
@@ -106,6 +146,13 @@ public class ArenaJefe : MonoBehaviour
         Empezar();
     }
 
+    // El bucle de cada tramo: al pasar del final vuelve al principio del tramo.
+    private void Update()
+    {
+        if (fuenteActual == null || !fuenteActual.isPlaying || bucleActual.y <= 0f) return;
+        if (fuenteActual.time >= bucleActual.y) fuenteActual.time = bucleActual.x;
+    }
+
     private void Empezar()
     {
         estado = Estado.Combate;
@@ -113,16 +160,12 @@ public class ArenaJefe : MonoBehaviour
         PonerNiebla(true);
         intentos++;
         pocionUsada = false;
+        PantallaMuerte.BurlasJefe = burlas != null && burlas.Length > 0 ? burlas : null;
         AlEmpezarCombate?.Invoke();
 
-        if (musica != null)
-        {
-            audioSrc.clip = musica;
-            audioSrc.Play();
-            Fundir(volumen * ControlVolumen.Musica, 2f);
-        }
+        if (musica != null) Sonar(audioSrc, musica, inicioFase1, bucleFase1, volumen, 2f);
 
-        barra = BarraJefe.Crear(nombre);
+        barra = BarraJefe.Crear(nombre, barraPorFase ? 0f : marcaFase);
         jefe = Instantiate(prefabJefe, new Vector3(zona.center.x, zona.yMax, 0f), Quaternion.identity);
         jefe.Configurar(zona, suelo);
         EnemyHealth salud = jefe.GetComponent<EnemyHealth>();
@@ -134,20 +177,49 @@ public class ArenaJefe : MonoBehaviour
         };
         jefe.AlCambiarFase += Fase2;
         jefe.AlDerrotado += Victoria;
+        jefe.AlSilencio += Silencio;
+    }
+
+    private void Sonar(AudioSource fuente, AudioClip clip, float inicio, Vector2 bucle, float vol, float entrada)
+    {
+        fuente.clip = clip;
+        fuente.time = Mathf.Clamp(inicio, 0f, Mathf.Max(0f, clip.length - 1f));
+        fuente.Play();
+        fuenteActual = fuente;
+        bucleActual = bucle;
+        if (fuente == audioFase2) Fundir2(vol * ControlVolumen.Musica, entrada);
+        else Fundir(vol * ControlVolumen.Musica, entrada);
+    }
+
+    // El jefe cae y parece muerto: la musica casi se apaga (la fase 2 entra despues).
+    private void Silencio()
+    {
+        if (fuenteActual == audioSrc) Fundir(volumen * ControlVolumen.Musica * 0.12f, 1.2f);
     }
 
     private void Fase2()
     {
-        MensajePantalla.Narrativo("El Espectro Carmesí revela su verdadera forma...", 3.5f);
+        if (!string.IsNullOrEmpty(textoFase2)) MensajePantalla.Narrativo(textoFase2, 3.5f);
         StartCoroutine(TenirLuz(luzFase2, intensidadOriginal * 0.9f, 2f));
-        CrearBrasas();
+        CrearParticulas();
+        if (barraPorFase && barra != null) barra.NuevaFase(colorBarraFase2, nombreFase2);
+
+        // La musica cambia justo ahora: la de la fase 2 entra rapido y fuerte.
+        if (musicaFase2 != null)
+        {
+            Fundir(0f, 0.8f);
+            Sonar(audioFase2, musicaFase2, inicioFase2, bucleFase2, volumenFase2, 0.6f);
+        }
+        else if (fuenteActual == audioSrc) Fundir(volumen * ControlVolumen.Musica, 0.8f);
     }
 
     private void Victoria()
     {
         estado = Estado.Vencido;
         EnCombate = false;
+        PantallaMuerte.BurlasJefe = null;
         Fundir(0f, 3f);
+        Fundir2(0f, 3f);
         if (barra != null) barra.Mostrar(false);
         StartCoroutine(TrasVictoria());
     }
@@ -155,7 +227,8 @@ public class ArenaJefe : MonoBehaviour
     private IEnumerator TrasVictoria()
     {
         yield return new WaitForSeconds(1.5f);
-        MensajePantalla.Banner("ENEMIGO CAÍDO", new Color(1f, 0.85f, 0.45f), 4f);
+        MensajePantalla.Banner(bannerVictoria, new Color(1f, 0.85f, 0.45f), 4f);
+        Sonido.Reproducir("victoria");
         PonerNiebla(false, true);
         if (salida != null) salida.SetActive(true);
         StartCoroutine(TenirLuz(luzOriginal, intensidadOriginal, 3f));
@@ -183,6 +256,7 @@ public class ArenaJefe : MonoBehaviour
         if (jefe != null) Destroy(jefe.gameObject);
         if (barra != null) Destroy(barra.gameObject);
         Fundir(0f, 1f);
+        Fundir2(0f, 1f);
         PonerNiebla(false);
         if (luzGlobal != null) { luzGlobal.color = luzOriginal; luzGlobal.intensity = intensidadOriginal; }
         if (brasas != null) Destroy(brasas.gameObject);
@@ -205,20 +279,26 @@ public class ArenaJefe : MonoBehaviour
     private void Fundir(float destino, float segundos)
     {
         if (fundido != null) StopCoroutine(fundido);
-        fundido = StartCoroutine(FundirMusica(destino, segundos));
+        fundido = StartCoroutine(FundirMusica(audioSrc, destino, segundos, () => fundido = null));
     }
 
-    private IEnumerator FundirMusica(float destino, float segundos)
+    private void Fundir2(float destino, float segundos)
     {
-        float inicio = audioSrc.volume;
+        if (fundido2 != null) StopCoroutine(fundido2);
+        fundido2 = StartCoroutine(FundirMusica(audioFase2, destino, segundos, () => fundido2 = null));
+    }
+
+    private IEnumerator FundirMusica(AudioSource fuente, float destino, float segundos, System.Action fin)
+    {
+        float inicio = fuente.volume;
         for (float t = 0f; t < segundos; t += Time.unscaledDeltaTime)
         {
-            audioSrc.volume = Mathf.Lerp(inicio, destino, t / segundos);
+            fuente.volume = Mathf.Lerp(inicio, destino, t / segundos);
             yield return null;
         }
-        audioSrc.volume = destino;
-        if (destino <= 0f) audioSrc.Stop();
-        fundido = null;
+        fuente.volume = destino;
+        if (destino <= 0f) fuente.Stop();
+        fin();
     }
 
     private IEnumerator TenirLuz(Color color, float intensidad, float segundos)
@@ -236,11 +316,11 @@ public class ArenaJefe : MonoBehaviour
         luzGlobal.intensity = intensidad;
     }
 
-    // Brasas rojas que suben por toda la arena en la fase 2.
-    private void CrearBrasas()
+    // Particulas por toda la arena en la fase 2: brasas que suben o nieve que cae.
+    private void CrearParticulas()
     {
-        GameObject go = new GameObject("BrasasArena");
-        go.transform.position = new Vector3(zona.center.x, zona.yMin, 0f);
+        GameObject go = new GameObject("ParticulasArena");
+        go.transform.position = new Vector3(zona.center.x, particulasCaen ? zona.yMax : zona.yMin, 0f);
         brasas = go.AddComponent<ParticleSystem>();
         brasas.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         var main = brasas.main;
@@ -248,8 +328,8 @@ public class ArenaJefe : MonoBehaviour
         main.startLifetime = new ParticleSystem.MinMaxCurve(3f, 6f);
         main.startSpeed = new ParticleSystem.MinMaxCurve(0.4f, 1.4f);
         main.startSize = new ParticleSystem.MinMaxCurve(0.05f, 0.14f);
-        main.startColor = new ParticleSystem.MinMaxGradient(new Color(1f, 0.3f, 0.2f, 0.9f), new Color(1f, 0.7f, 0.3f, 0.7f));
-        main.gravityModifier = -0.05f;
+        main.startColor = new ParticleSystem.MinMaxGradient(particulasFase2A, particulasFase2B);
+        main.gravityModifier = particulasCaen ? 0.04f : -0.05f;
         main.simulationSpace = ParticleSystemSimulationSpace.World;
         main.maxParticles = 300;
         var em = brasas.emission;
@@ -257,7 +337,7 @@ public class ArenaJefe : MonoBehaviour
         var sh = brasas.shape;
         sh.shapeType = ParticleSystemShapeType.Box;
         sh.scale = new Vector3(zona.width, 0.5f, 1f);
-        sh.rotation = new Vector3(-90f, 0f, 0f);
+        sh.rotation = new Vector3(particulasCaen ? 90f : -90f, 0f, 0f);
         var ruido = brasas.noise;
         ruido.enabled = true;
         ruido.strength = 0.4f;

@@ -14,10 +14,20 @@ public interface IModificadorDano
     int Modificar(int dano, TipoArma arma);
 }
 
+// Debilidades y resistencias a los elementos de la espada imbuida: multiplica el
+// dano (1.5 = debil, 0.5 = resiste, 0 = inmune).
+public interface IAfinidadElemental
+{
+    float Multiplicador(Elemento elemento);
+}
+
 public class EnemyHealth : MonoBehaviour
 {
     // Arma del golpe que esta a punto de entrar. Ver TipoArma.
     public static TipoArma ArmaDelGolpe = TipoArma.Ninguna;
+    // Elemento del golpe que esta a punto de entrar (espada imbuida). Lo gasta
+    // el primer golpe que entra, como ArmaDelGolpe.
+    public static Elemento ElementoDelGolpe = Elemento.Ninguno;
 
     [Header("Vida")]
     [SerializeField] private int maxHealth = 50;
@@ -105,6 +115,21 @@ public class EnemyHealth : MonoBehaviour
     // Vida actual y maxima, cada vez que cambia (la barra grande del jefe).
     public event System.Action<int, int> AlCambiarVida;
     private IModificadorDano modificador;
+    private IAfinidadElemental afinidad;
+
+    // Si devuelve false, el enemigo no muere al llegar a 0: se queda a 0 y se
+    // lanza AlAgotarse (el jefe que "revive" y pasa a la fase 2).
+    public System.Func<bool> PuedeMorir;
+    public event System.Action AlAgotarse;
+    private bool agotado;
+    // Ultimo golpe: cuanto dano ha entrado de verdad (tras debilidades) y con que
+    // elemento. Lo usa el player para el drenaje del elemento oscuro.
+    public int UltimoDano { get; private set; }
+
+    [Header("Almas")]
+    // Almas que suelta al morir. -1 = segun su vida maxima.
+    [SerializeField] private int almas = -1;
+    public int Almas { get => almas >= 0 ? almas : Mathf.Max(5, Mathf.RoundToInt(maxHealth * 0.45f)); set => almas = value; }
 
     [Header("Volador")]
     // Los voladores no caen al suelo tras un golpe: el aturdimiento dura solo su
@@ -135,6 +160,7 @@ public class EnemyHealth : MonoBehaviour
                 if (p.nameHash == IdIsHurt) { tieneIsHurt = true; break; }
         hitFlash = GetComponent<HitFlash>();
         modificador = GetComponent<IModificadorDano>();
+        afinidad = GetComponent<IAfinidadElemental>();
         currentHealth = maxHealth;
 
         if (showHealthBar)
@@ -202,8 +228,26 @@ public class EnemyHealth : MonoBehaviour
     {
         TipoArma arma = ArmaDelGolpe;
         ArmaDelGolpe = TipoArma.Ninguna;
-        if (muerto) return false;
+        Elemento elemento = ElementoDelGolpe;
+        UltimoDano = 0;
+        if (muerto || agotado) { ElementoDelGolpe = Elemento.Ninguno; return false; }
+        // El modificador puede mirar ElementoDelGolpe: se borra despues.
         if (modificador != null) damage = modificador.Modificar(damage, arma);
+        ElementoDelGolpe = Elemento.Ninguno;
+        if (elemento != Elemento.Ninguno && damage > 0)
+        {
+            float m = afinidad != null ? afinidad.Multiplicador(elemento) : 1f;
+            EstadosEnemigo estados = GetComponent<EstadosEnemigo>();
+            if (estados != null) m *= estados.MultiplicadorDano;
+            if (!Mathf.Approximately(m, 1f)) AvisarAfinidad(m);
+            damage = Mathf.Max(m > 0f ? 1 : 0, Mathf.RoundToInt(damage * m));
+        }
+        else if (damage > 0)
+        {
+            EstadosEnemigo estados = GetComponent<EstadosEnemigo>();
+            if (estados != null) damage = Mathf.RoundToInt(damage * estados.MultiplicadorDano);
+        }
+        UltimoDano = Mathf.Min(currentHealth, Mathf.Max(0, damage));
         currentHealth = Mathf.Max(0, currentHealth - Mathf.Max(0, damage));
         if (barra != null) barra.Mostrar(currentHealth, maxHealth);
         AlCambiarVida?.Invoke(currentHealth, maxHealth);
@@ -215,6 +259,12 @@ public class EnemyHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            if (PuedeMorir != null && !PuedeMorir())
+            {
+                agotado = true;
+                AlAgotarse?.Invoke();
+                return false;
+            }
             Die();
             return false;
         }
@@ -224,6 +274,45 @@ public class EnemyHealth : MonoBehaviour
 
         return true;
     }
+
+    // Texto sobre el enemigo cuando el elemento le hace mas o menos dano. Con
+    // pausa entre avisos para no llenar la pantalla en un combo.
+    private float siguienteAviso;
+    private void AvisarAfinidad(float m)
+    {
+        if (Time.time < siguienteAviso) return;
+        siguienteAviso = Time.time + 0.8f;
+        Vector2 donde = (Vector2)transform.position + healthBarOffset + new Vector2(Random.Range(-0.3f, 0.3f), 0.45f);
+        if (m <= 0.01f) TextoFlotante.Mostrar("Inmune", donde, new Color(0.7f, 0.7f, 0.75f), 0.8f);
+        else if (m > 1.01f) TextoFlotante.Mostrar("¡Débil!", donde, new Color(1f, 0.78f, 0.25f), 0.95f);
+        else TextoFlotante.Mostrar("Resiste", donde, new Color(0.7f, 0.72f, 0.8f), 0.8f);
+    }
+
+    // Dano de un estado (quemadura...): quita vida sin retroceso, sin interrumpir
+    // al enemigo y sin animacion de golpe.
+    public void DanoEstado(int dano)
+    {
+        if (muerto || agotado || dano <= 0) return;
+        currentHealth = Mathf.Max(0, currentHealth - dano);
+        if (barra != null) barra.Mostrar(currentHealth, maxHealth);
+        AlCambiarVida?.Invoke(currentHealth, maxHealth);
+        if (currentHealth > 0) return;
+        if (PuedeMorir != null && !PuedeMorir()) { agotado = true; AlAgotarse?.Invoke(); return; }
+        Die();
+    }
+
+    // Vuelve con vida nueva tras agotarse (fase 2 del jefe).
+    public void Revivir(int nuevaVidaMaxima)
+    {
+        agotado = false;
+        maxHealth = Mathf.Max(1, nuevaVidaMaxima);
+        currentHealth = maxHealth;
+        AlCambiarVida?.Invoke(currentHealth, maxHealth);
+    }
+
+    public bool Agotado => agotado;
+    public Vector2 OffsetBarra => healthBarOffset;
+    public bool TieneBarra => showHealthBar;
 
     // ------------------------------------------------------------------ Combo aereo
 
@@ -421,6 +510,9 @@ public class EnemyHealth : MonoBehaviour
         if (rutinaAturdido != null) StopCoroutine(rutinaAturdido);
         if (tieneIsHurt && animator != null) animator.SetBool(IdIsHurt, false);
         if (barra != null) barra.Ocultar();
+        OrbeAlma.Soltar((Vector2)transform.position + healthBarOffset * 0.5f, Almas);
+        EstadosEnemigo estados = GetComponent<EstadosEnemigo>();
+        if (estados != null) estados.Limpiar();
         if (deathVFX != null)
             Instantiate(deathVFX, transform.position, Quaternion.identity);
 

@@ -55,6 +55,23 @@ public class PlayerStamina : MonoBehaviour
 
     private void Awake()
     {
+        maxStamina = Progreso.EstaminaMax;
+        currentStamina = maxStamina;
+        exhausted = false;
+    }
+
+    private void OnEnable() { Progreso.AlSubirNivel += Recalcular; Hoguera.AlDescansar += Llenar; }
+    private void OnDisable() { Progreso.AlSubirNivel -= Recalcular; Hoguera.AlDescansar -= Llenar; }
+
+    // Tras subir de nivel: nuevo maximo, y llena.
+    private void Recalcular()
+    {
+        maxStamina = Progreso.EstaminaMax;
+        Llenar();
+    }
+
+    public void Llenar()
+    {
         currentStamina = maxStamina;
         exhausted = false;
     }

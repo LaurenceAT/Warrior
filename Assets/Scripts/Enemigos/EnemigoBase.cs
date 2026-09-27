@@ -34,6 +34,8 @@ public abstract class EnemigoBase : MonoBehaviour
     protected int mirada = 1;
     protected bool alerta;
     protected bool muerto;
+    // Ha visto al player y esta peleando (lo usa la musica de combate del nivel).
+    public bool EnCombate => alerta && !muerto && player != null;
     // Mientras sea true, los golpes quitan vida pero no interrumpen (el picado del
     // volador, por ejemplo).
     protected bool armadura;
@@ -197,6 +199,30 @@ public abstract class EnemigoBase : MonoBehaviour
         return null;
     }
 
+    // Espera a que el clip que suena llegue al fotograma "f" (o termine).
+    protected IEnumerator HastaFotograma(int f)
+    {
+        while (anim.Fotograma < f && !anim.Terminado) yield return null;
+    }
+
+    // Golpe activo mientras el sprite muestra el ataque (fotogramas desde..hasta del
+    // clip actual): la caja de dano va sincronizada con la animacion. Deja el
+    // resultado en "resultadoVentana" (null si no ha tocado).
+    protected PlayerControler.ResultadoDano? resultadoVentana;
+    protected IEnumerator VentanaGolpe(int desde, int hasta, Vector2 offset, Vector2 tamano, int dano, bool magico = false)
+    {
+        resultadoVentana = null;
+        yield return HastaFotograma(desde);
+        do
+        {
+            if (magico) PlayerControler.SiguienteGolpeMagico = true;
+            resultadoVentana = Golpear(offset, tamano, dano);
+            if (magico && !resultadoVentana.HasValue) PlayerControler.SiguienteGolpeMagico = false;
+            if (resultadoVentana.HasValue || anim.Terminado) yield break;
+            yield return null;
+        } while (anim.Fotograma <= hasta);
+    }
+
     // Destello de aviso antes de un ataque: late del color de aviso durante
     // "duracion". Es la senal de que va a pegar (no hay sonidos de aviso).
     protected IEnumerator Aviso(float duracion, float intensidad = 0.55f)
@@ -245,6 +271,20 @@ public abstract class EnemigoBase : MonoBehaviour
         while (!anim.Terminado && t < tope)
         {
             t += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    // 1 normal, menos si esta ralentizado por la escarcha (0 congelado).
+    protected float Ritmo => EstadosEnemigo.RitmoDe(this);
+
+    // Espera que se alarga si el enemigo esta ralentizado.
+    protected IEnumerator EsperarRitmo(float segundos)
+    {
+        float t = 0f;
+        while (t < segundos)
+        {
+            t += Time.deltaTime * Mathf.Max(0.3f, Ritmo);
             yield return null;
         }
     }

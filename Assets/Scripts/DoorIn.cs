@@ -12,12 +12,8 @@ public class DoorIn : MonoBehaviour
         if (!GameManager.Instance.hasCheckPointActive) return;
         if (!other.CompareTag("Player")) return;
 
-        // La puerta no se abre hasta juntar todos los diamantes del nivel.
-        if (!GameManager.Instance.AllDiamondsCollected)
-        {
-            Debug.Log($"Faltan diamantes: {GameManager.Instance.DiamondCollected} / {GameManager.Instance.TotalDiamonds}");
-            return;
-        }
+        // Antes la puerta pedia todos los diamantes. Ahora son cristales de alma
+        // (moneda para subir de nivel) y ya no hacen falta para salir.
 
         MyAnimator.SetTrigger(IdOpenDoor);
         PlayerControler player = other.GetComponent<PlayerControler>();
