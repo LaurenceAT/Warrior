@@ -26,6 +26,21 @@ public static class ActualizarProyecto
 
     // Segunda ronda: nieve lista para pintar y borrado aprobado.
     // Tercera ronda: tiles automaticos al dia y colisiones y bordes rehechos.
+    // Cuarta ronda: icono de la pocion de mana y paletas de decoracion.
+    // Quinta ronda: iconos, sonidos editables, menu principal y orden de niveles.
+    public static void Ronda5()
+    {
+        ConfigurarRecursosRPG.Configurar();
+        SonidosAccionesEditor.Crear();
+        CrearMenuPrincipal.Crear();
+    }
+
+    public static void Ronda4()
+    {
+        ConfigurarRecursosRPG.Configurar();
+        PaletasDecoracion.Todo();
+    }
+
     public static void Ronda3()
     {
         PaletaNieve.CrearPaleta();

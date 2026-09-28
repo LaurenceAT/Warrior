@@ -1,15 +1,14 @@
 using UnityEngine;
 
-// Mana del player. Solo lo gasta imbuir la espada. No se regenera solo: se
-// rellena al descansar en la hoguera y al reaparecer, y cada golpe de espada que
-// conecta devuelve un poco (asi un combate largo se puede mantener imbuido si se
-// pega bien).
+// Mana del player. Solo lo gasta imbuir la espada. Durante la partida solo se
+// recupera bebiendo pociones de mana (R): no vuelve al golpear ni al descansar (la
+// hoguera rellena las pociones). Al reaparecer tras morir sale lleno, como la vida.
 public class PlayerMana : MonoBehaviour
 {
     [SerializeField] private float maximo = 60f;
     [SerializeField] private float actual = 60f;
-    // Lo que devuelve cada golpe de espada que conecta.
-    [SerializeField] private float porGolpe = 1.5f;
+    // (Ya no se usa: el mana no vuelve al golpear.)
+    [SerializeField] private float porGolpe = 0f;
 
     public float Actual => actual;
     public float Maximo => maximo;
@@ -24,8 +23,8 @@ public class PlayerMana : MonoBehaviour
         actual = maximo;
     }
 
-    private void OnEnable() { Hoguera.AlDescansar += Llenar; Progreso.AlSubirNivel += Recalcular; }
-    private void OnDisable() { Hoguera.AlDescansar -= Llenar; Progreso.AlSubirNivel -= Recalcular; }
+    private void OnEnable() { Progreso.AlSubirNivel += Recalcular; }
+    private void OnDisable() { Progreso.AlSubirNivel -= Recalcular; }
 
     public bool Tiene(float cantidad) => actual >= cantidad;
 

@@ -566,13 +566,15 @@ MonoBehaviour:
     m_Bits: 0
   spriteMiraDerecha: 1
   colorAviso: {r: 1, g: 0.55, b: 0.15, a: 1}
+  sonidos: {fileID: 11400000, guid: 2534b6e7f9a343541b7ef9b4aa791186, type: 2}
   vidaFase1: 1500
   vidaFase2: 1700
   danoTajo: 30
   danoFuerte: 38
   danoHechizo: 24
   danoLeve: 16
-  corteAgarre: 0.12
+  danoTotalAgarre: 0.8
+  alcanceAgarre: {x: 5, y: 4.6}
   velocidadAndar: 2.4
   aceleracionFase2: 1.3
   aturdidoParry: 1.2

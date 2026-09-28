@@ -246,6 +246,27 @@ public static class ConfigurarRecursosRPG
         I("stat_resgolpes", "02-armor", 60);
         // Otros
         I("pocion", "03-potions-consumables", 0);
+        I("pocion_mana", "03-potions-consumables", 13);
+        // Pantalla de controles del menu principal.
+        I("ctrl_mover", "02-armor", 16);
+        I("ctrl_correr", "15-status-effects", 8);
+        I("ctrl_saltar", "15-status-effects", 24);
+        I("ctrl_doble", "15-status-effects", 40);
+        I("ctrl_pared", "14-dungeon-objects", 34);
+        I("ctrl_correr_pared", "15-status-effects", 56);
+        I("ctrl_cornisa", "02-armor", 20);
+        I("ctrl_esquiva", "15-status-effects", 43);
+        I("ctrl_espada", "01-weapons", 0);
+        I("ctrl_aereo", "01-weapons", 36);
+        I("ctrl_lanzador", "01-weapons", 51);
+        I("ctrl_estocada", "01-weapons", 12);
+        I("ctrl_bloqueo", "02-armor", 6);
+        I("ctrl_parry", "15-status-effects", 39);
+        I("ctrl_mancha", "14-dungeon-objects", 1);
+        I("ctrl_hoguera", "15-status-effects", 17);
+        I("ctrl_pausa", "14-dungeon-objects", 42);
+        I("ctrl_rueda", "15-status-effects", 26);
+        I("ctrl_vida", "15-status-effects", 9);
         I("almas", "07-magic-spells", 25);
         I("peligro", "15-status-effects", 39);
         return l;

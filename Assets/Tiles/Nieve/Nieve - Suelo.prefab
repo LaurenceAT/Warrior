@@ -430,7 +430,7 @@ GameObject:
   - component: {fileID: 5838981346903184506}
   - component: {fileID: 1385967176035813050}
   m_Layer: 0
-  m_Name: Paleta Nieve
+  m_Name: Nieve - Suelo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

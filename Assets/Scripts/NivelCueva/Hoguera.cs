@@ -16,8 +16,12 @@ public class Hoguera : MonoBehaviour
     public static Hoguera Cercana { get; private set; }
     // Se lanza cada vez que se descansa en cualquier hoguera.
     public static event Action AlDescansar;
+    // La ultima en la que se descanso (la partida guarda su nombre y su sitio).
+    public static Hoguera UltimaUsada { get; private set; }
 
     [Header("Uso")]
+    [Tooltip("Nombre del lugar (sale en la lista de partidas guardadas).")]
+    [SerializeField] private string nombreLugar = "";
     [SerializeField] private float radio = 1.8f;
     // Donde reaparece el player, respecto a la torre (a su lado, un poco alto).
     [SerializeField] private Vector2 puntoReaparicion = new Vector2(1.2f, 0.6f);
@@ -36,6 +40,9 @@ public class Hoguera : MonoBehaviour
     [SerializeField] private Color colorApagada = new Color(0.65f, 0.6f, 0.65f, 1f);
     [SerializeField] private float alturaAviso = 1.9f;
 
+    public string NombreLugar => string.IsNullOrEmpty(nombreLugar) ? "Hoguera" : nombreLugar;
+    public Vector2 PuntoReaparicion => (Vector2)transform.position + puntoReaparicion;
+
     private TextMeshPro aviso;
     private float alfaAviso;
     private bool encendida;
@@ -50,6 +57,14 @@ public class Hoguera : MonoBehaviour
         {
             escalaTorre = torre.transform.localScale;
             torre.color = colorApagada;
+        }
+        // La hoguera de la partida cargada ya estaba encendida.
+        Partida.Datos d = Partida.Actual;
+        if (d != null && d.enHoguera && d.escena == gameObject.scene.name && Vector2.Distance(PuntoReaparicion, new Vector2(d.x, d.y)) < 0.5f)
+        {
+            encendida = true;
+            UltimaUsada = this;
+            if (torre != null) torre.color = colorEncendida;
         }
         CrearAviso();
     }
@@ -89,6 +104,7 @@ public class Hoguera : MonoBehaviour
         GameManager.Instance.hasCheckPointActive = true;
         GameManager.Instance.checkpointRespawnPosition = transform.position + (Vector3)puntoReaparicion;
 
+        UltimaUsada = this;
         bool primeraVez = !encendida;
         encendida = true;
         AlDescansar?.Invoke();

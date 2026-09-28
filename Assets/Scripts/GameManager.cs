@@ -60,6 +60,25 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
 
         cinemachineCamera = FindFirstObjectByType<CinemachineCamera>();
+        AparecerEnPartidaCargada();
+    }
+
+    // Partida cargada desde el menu: el player aparece en la ultima hoguera en la que
+    // descanso (que queda como punto de reaparicion), no en la entrada del nivel.
+    private Vector3? camaraEn;
+
+    private void AparecerEnPartidaCargada()
+    {
+        Partida.Datos d = Partida.Actual;
+        if (!Partida.AparicionPendiente || d == null || d.escena != SceneManager.GetActiveScene().name) return;
+        Partida.AparicionHecha();
+        Vector3 pos = new Vector3(Partida.PosicionAparicion.x, Partida.PosicionAparicion.y, 0f);
+        hasCheckPointActive = true;
+        checkpointRespawnPosition = pos;
+        if (playerRespawnPoint != null) playerRespawnPoint.position = pos;
+        PlayerControler p = playerControler != null ? playerControler : FindFirstObjectByType<PlayerControler>();
+        if (p != null) p.transform.position = pos;
+        camaraEn = pos;
     }
 
     // Calcula el total de diamantes de la escena y actualiza la UI.
@@ -68,6 +87,12 @@ public class GameManager : MonoBehaviour
         // Solo cuenta diamantes activos: desactivar uno en el Inspector lo saca del total.
         Diamond[] diamonds = FindObjectsByType<Diamond>(FindObjectsSortMode.None);
         totalDiamonds = diamonds.Length;
+
+        if (camaraEn.HasValue && cinemachineCamera != null)
+        {
+            Vector3 c = camaraEn.Value;
+            cinemachineCamera.ForceCameraPosition(new Vector3(c.x, c.y, cinemachineCamera.transform.position.z), cinemachineCamera.transform.rotation);
+        }
 
         UpdateDiamondUI();
         ContadorAlmas.Asegurar();

@@ -45,6 +45,14 @@ public class PortalEntrada : MonoBehaviour
 
     private void Start()
     {
+        // Si el player empieza lejos (partida cargada en una hoguera), no sale por aqui.
+        GameObject p = GameObject.FindGameObjectWithTag("Player");
+        if (p != null && Vector2.Distance(p.transform.position, transform.position) > 4f)
+        {
+            visual.localScale = Vector3.zero;
+            if (visual != transform) visual.gameObject.SetActive(false);
+            return;
+        }
         Abrir();
     }
 

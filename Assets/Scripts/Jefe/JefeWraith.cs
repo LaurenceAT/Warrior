@@ -286,7 +286,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
             yield return Esperar(aviso);
 
             anim.Reproducir("tajo", true);
-            Sonido.Reproducir("jefe_tajo", 0.8f);
+            Sonar("jefe_tajo", 0.8f);
             if (i == golpes - 1) CamaraDinamica.Acercar(4.6f, 0.3f);
             float t = 0f;
             bool pego = false;
@@ -407,7 +407,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
         CamaraDinamica.Ampliar(7f, 3.2f);
         CamaraDinamica.Encuadrar((Vector2)transform.position + Vector2.up * 2.5f, 0.7f, 3f);
         CamaraDinamica.CamaraLenta(0.35f, 0.6f);
-        Sonido.Reproducir("jefe_transformacion");
+        Sonar("jefe_transformacion");
         ScreenFlash.Destello(new Color(0.9f, 0.05f, 0.1f, 0.45f), 0.5f);
         Sacudir(2f);
         EfectoVisual anillo = EfectoVisual.Crear(fxAnillo, (Vector2)transform.position + Vector2.up * 2.5f, 3f, carmesi);
@@ -439,7 +439,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
         anim.Reproducir("grande_zarpazo", true);
         Sacudir(1.5f);
         CamaraDinamica.Acercar(4.5f, 0.4f);
-        Sonido.Reproducir("jefe_golpe_fuerte");
+        Sonar("jefe_golpe_fuerte");
         rb.linearVelocity = new Vector2(mirada * 3f, 0f);
         var r = Golpear(new Vector2(2.8f, 2.2f), new Vector2(5.6f, 4.6f), danoFuerte);
         if (r == PlayerControler.ResultadoDano.Parry) { parado = true; yield break; }
@@ -549,7 +549,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
         anim.Reproducir(fase2 ? "grande_zarpazo" : "impacto", true);
         Sacudir(1.2f);
         CamaraDinamica.Acercar(4.6f, 0.3f);
-        Sonido.Reproducir("jefe_impacto_suelo");
+        Sonar("jefe_impacto_suelo");
         EfectoVisual.Crear(fxPolvo, new Vector2(destino, suelo + 0.4f), 2.2f, new Color(0.8f, 0.6f, 0.6f));
         var r = GolpearMundo(new Vector2(destino, suelo + 1.2f), new Vector2(4.5f, 2.4f), fase2 ? danoFuerte : danoNormal);
         if (r == PlayerControler.ResultadoDano.Parry) { parado = true; yield break; }
@@ -612,7 +612,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
 
         EfectoVisual.Crear(fxAnillo, centro, 3.4f, carmesi);
         ScreenFlash.Destello(new Color(1f, 0.2f, 0.2f, 0.3f), 0.25f);
-        Sonido.Reproducir("jefe_nova");
+        Sonar("jefe_nova");
         Sacudir(1.6f);
         var r = GolpearCirculo(centro, 5f, danoFuerte);
         if (r == PlayerControler.ResultadoDano.Parry) { parado = true; yield break; }

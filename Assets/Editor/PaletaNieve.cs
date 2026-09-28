@@ -9,14 +9,14 @@ using UnityEngine.Tilemaps;
 
 // Deja el nivel nevado listo para pintarlo a mano con la Tile Palette:
 //   - Tiles automaticos "Nieve (auto)" y "Hielo (auto)" (eligen solos la esquina,
-//     el borde o el centro) y una paleta "Paleta Nieve" con ellos y las 18 piezas.
+//     el borde o el centro) y una paleta "Nieve - Suelo" con ellos y las 18 piezas.
 //   - El Tilemap del suelo pone su propia colision: lo que se pinte se puede pisar
 //     y lo que se borre deja de estar (antes la colision eran cajas aparte).
 // Warrior > Preparar nivel Nieve para pintar.
 public static class PaletaNieve
 {
     private const string Carpeta = "Assets/Tiles/Nieve";
-    public const string RutaPaleta = Carpeta + "/Paleta Nieve.prefab";
+    public const string RutaPaleta = Carpeta + "/Nieve - Suelo.prefab";
     private static readonly string[] Piezas = { "esq_ai", "arriba", "esq_ad", "izq", "centro", "der", "esq_bi", "abajo", "esq_bd" };
 
     [MenuItem("Warrior/Preparar nivel Nieve para pintar")]
@@ -110,7 +110,7 @@ public static class PaletaNieve
 
         GameObject paleta = AssetDatabase.LoadAssetAtPath<GameObject>(RutaPaleta);
         if (paleta == null)
-            paleta = GridPaletteUtility.CreateNewPalette(Carpeta, "Paleta Nieve", GridLayout.CellLayout.Rectangle,
+            paleta = GridPaletteUtility.CreateNewPalette(Carpeta, "Nieve - Suelo", GridLayout.CellLayout.Rectangle,
                                                          GridPalette.CellSizing.Automatic, Vector3.one, GridLayout.CellSwizzle.XYZ);
         string ruta = AssetDatabase.GetAssetPath(paleta);
         GameObject contenido = PrefabUtility.LoadPrefabContents(ruta);

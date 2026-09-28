@@ -26,6 +26,8 @@ public class RecursosRPG : ScriptableObject
         public Sprite sprite;
     }
 
+    // Sonidos del player por accion (editable aparte): mandan sobre los de la lista.
+    public SonidosAcciones sonidosPlayer;
     public List<GrupoSonido> sonidos = new List<GrupoSonido>();
     public List<EntradaIcono> iconos = new List<EntradaIcono>();
     // Tajos de color: 3 por elemento (horizontal, curvo, ascendente), en el orden
@@ -59,6 +61,11 @@ public class RecursosRPG : ScriptableObject
         if (SonidosNivel != null)
             foreach (GrupoSonido n in SonidosNivel)
                 if (n != null && n.clave == clave && n.clips != null && n.clips.Length > 0) return n;
+        if (sonidosPlayer != null)
+        {
+            GrupoSonido p = sonidosPlayer.Buscar(clave);
+            if (p != null) return p;
+        }
 
         if (porClave == null)
         {
@@ -107,8 +114,11 @@ public static class Sonido
     public static void Reproducir(string clave, float volumen = 1f, float tono = 1f) => ReproducirYDevolver(clave, volumen, tono);
 
     private static AudioSource ReproducirYDevolver(string clave, float volumen, float tono)
+        => ReproducirGrupo(RecursosRPG.Get().Sonido(clave), clave, volumen, tono);
+
+    // Un grupo concreto (los jefes usan el suyo, de su SonidosAcciones).
+    public static AudioSource ReproducirGrupo(RecursosRPG.GrupoSonido g, string clave, float volumen = 1f, float tono = 1f)
     {
-        RecursosRPG.GrupoSonido g = RecursosRPG.Get().Sonido(clave);
         if (g == null || g.clips == null || g.clips.Length == 0) return null;
         if (ultimo.TryGetValue(clave, out float t) && Time.unscaledTime - t < 0.03f) return null;
         ultimo[clave] = Time.unscaledTime;
@@ -117,7 +127,7 @@ public static class Sonido
         if (clip == null) return null;
         AudioSource f = Libre();
         f.pitch = tono * (1f + UnityEngine.Random.Range(-g.variacionTono, g.variacionTono));
-        f.volume = g.volumen * volumen;
+        f.volume = g.volumen * volumen * ControlVolumen.Efectos;
         f.clip = clip;
         f.Play();
         return f;
@@ -151,7 +161,7 @@ public static class Sonido
         f.loop = true;
         f.playOnAwake = false;
         f.spatialBlend = 0f;
-        f.volume = g.volumen * volumen;
+        f.volume = g.volumen * volumen * ControlVolumen.Efectos;
         f.Play();
         return f;
     }

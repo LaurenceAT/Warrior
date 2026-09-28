@@ -60,11 +60,25 @@ public class GatherInput : MonoBehaviour
 
     #region Unity Lifecycle
 
-    // La Q se lee directamente del teclado (no esta en el mapa de acciones).
+    // Pulsacion de la pocion de mana (R, o el boton oeste del mando).
+    [SerializeField] private bool _isManaPotion;
+    public bool IsManaPotion { get => _isManaPotion; set => _isManaPotion = value; }
+    // La rueda de pociones (mantener Q) ya no se usa: Q es el frasco de sangre y R
+    // el de mana. Se conserva la propiedad por si se recupera.
+    [SerializeField] private bool _isPotionWheel;
+    public bool IsPotionWheel { get => _isPotionWheel; set => _isPotionWheel = value; }
+
+    [Header("Arco")]
+    [Tooltip("Apagado: la tecla del arco no hace nada (el sistema del arco sigue en el juego).")]
+    [SerializeField] private bool arcoActivo = false;
+
+    // Q y R se leen directamente del teclado (no estan en el mapa de acciones).
     private void Update()
     {
-        if (Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame) _isHealing = true;
-        if (Gamepad.current != null && Gamepad.current.buttonNorth.wasPressedThisFrame) _isHealing = true;
+        Keyboard k = Keyboard.current;
+        Gamepad g = Gamepad.current;
+        if ((k != null && k.qKey.wasPressedThisFrame) || (g != null && g.buttonNorth.wasPressedThisFrame)) _isHealing = true;
+        if ((k != null && k.rKey.wasPressedThisFrame) || (g != null && g.buttonWest.wasPressedThisFrame)) _isManaPotion = true;
     }
 
 
@@ -183,6 +197,8 @@ public class GatherInput : MonoBehaviour
     // Marca el disparo al pulsar el boton.
     private void StartShoot(InputAction.CallbackContext context)
     {
+        // Con el arco apagado, su tecla (R) queda para la pocion de mana.
+        if (!arcoActivo) return;
         _isShooting = true;
         _isShootHeld = true;
     }

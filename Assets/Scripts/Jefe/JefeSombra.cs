@@ -41,8 +41,11 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
     [SerializeField] private int danoFuerte = 38;
     [SerializeField] private int danoHechizo = 24;
     [SerializeField] private int danoLeve = 16;
-    // Cada corte del agarre (fraccion de la vida maxima del player); el ultimo mata.
-    [Range(0f, 0.5f)] [SerializeField] private float corteAgarre = 0.12f;
+    // Dano total del agarre, en fraccion de la vida maxima del player (0.8 = 80 %):
+    // con la vida llena se sobrevive; con menos del 80 %, mata.
+    [Range(0f, 1f)] [SerializeField] private float danoTotalAgarre = 0.8f;
+    // Alcance del tajo alzado que atrapa (mas grande que el del combo normal).
+    [SerializeField] private Vector2 alcanceAgarre = new Vector2(5f, 4.6f);
 
     [Header("Ritmo")]
     [SerializeField] private float velocidadAndar = 2.4f;
@@ -226,7 +229,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         transform.position = new Vector3(x, suelo, 0f);
         CamaraDinamica.Encuadrar(new Vector2(x, suelo + 2f), 0.6f, 3f);
         CamaraDinamica.Ampliar(6.2f, 3f);
-        Sonido.Reproducir("jefe_aparicion");
+        Sonar("jefe_aparicion");
         EfectoVisual portal = EfectoVisual.Crear(fxPortal, new Vector2(x, suelo + 1.4f), 2.4f, colorSombra);
         yield return Esperar(0.7f);
 
@@ -256,7 +259,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         {
             parrysCombo++;
             parrysSeguidos++;
-            Sonido.Reproducir("jefe_parry", 0.8f);
+            Sonar("jefe_parry", 0.8f);
             return;
         }
         parrysSeguidos = 0;
@@ -297,10 +300,10 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
     private IEnumerator Barrido(bool alzado)
     {
         MirarAlPlayer();
-        Sonido.Reproducir("jefe_carga_tajo", 0.6f);
+        Sonar("jefe_carga_tajo", 0.6f);
         yield return Preparar("tajo1", 2, 0.5f / Velocidad, 0.6f);
 
-        Sonido.Reproducir("jefe_tajo");
+        Sonar("jefe_tajo");
         rb.linearVelocity = new Vector2(mirada * 3f, rb.linearVelocity.y);
         if (fase2) ZonaEscarcha.Crear(new Vector2(transform.position.x + mirada * 2.6f, suelo), 4.5f, 5f);
         Sacudir(0.5f);
@@ -323,7 +326,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         anim.Reproducir("tajo1", false, 2f / 12f / 0.25f);
         while (anim.Fotograma < 6 && !anim.Terminado) yield return null;
         anim.Reproducir("tajo1", false, Velocidad);
-        Sonido.Reproducir("jefe_tajo_fuerte");
+        Sonar("jefe_tajo_fuerte");
         CamaraDinamica.Acercar(4.5f, 0.3f);
         Sacudir(0.9f);
         yield return Ventana(6, 7, new Vector2(1.4f, 1.9f), new Vector2(3.2f, 3.8f), danoFuerte);
@@ -338,7 +341,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         {
             MirarAlPlayer();
             yield return Preparar("tajo1", 2, 0.3f, 0.6f);
-            Sonido.Reproducir("jefe_tajo");
+            Sonar("jefe_tajo");
             rb.linearVelocity = new Vector2(mirada * 4f, rb.linearVelocity.y);
             ZonaEscarcha.Crear(new Vector2(transform.position.x + mirada * 2.6f, suelo), 4.5f, 5f);
             yield return Ventana(2, 3, new Vector2(2.6f, 0.6f), new Vector2(5.4f, 1.3f), danoTajo);
@@ -353,10 +356,10 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
     private IEnumerator Reves()
     {
         yield return Preparar("tajo2", 2, 0.4f / Velocidad, 0.7f);
-        Sonido.Reproducir("jefe_tajo");
+        Sonar("jefe_tajo");
         yield return Ventana(2, 3, new Vector2(-1.6f, 1.2f), new Vector2(2.6f, 2.6f), danoTajo);
         while (anim.Fotograma < 5 && !anim.Terminado) yield return null;
-        Sonido.Reproducir("jefe_tajo", 0.8f, 1.1f);
+        Sonar("jefe_tajo", 0.8f, 1.1f);
         yield return Ventana(5, 5, new Vector2(-1.6f, 1.2f), new Vector2(2.8f, 2.6f), danoTajo);
         while (anim.Fotograma < 6 && !anim.Terminado) yield return null;
         if (fase2) ZonaEscarcha.Crear(new Vector2(transform.position.x - mirada * 2.3f, suelo), 3f, 5f);
@@ -373,7 +376,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         yield return EsperarClip(1f);
         anim.Reproducir("esfera", true, Velocidad);
         invulnerable = true;
-        Sonido.Reproducir("teletransporte", 0.8f);
+        Sonar("teletransporte", 0.8f);
     }
 
     private IEnumerator Emerger(bool tajoCircular)
@@ -384,7 +387,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         if (!tajoCircular) { yield return EsperarClip(1.2f); yield break; }
         LanzarAviso(0.2f, 0.7f);
         while (anim.Fotograma < 2 && !anim.Terminado) yield return null;
-        Sonido.Reproducir("jefe_tajo_fuerte");
+        Sonar("jefe_tajo_fuerte");
         TajoFx(new Vector2(0.4f, 1.3f), 0f, 2.2f, true, true);
         Sacudir(0.8f);
         yield return Ventana(2, 3, new Vector2(0.4f, 1.3f), new Vector2(4.6f, 2.8f), danoFuerte);
@@ -436,7 +439,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         }
         transform.position = new Vector3(marca.x, suelo, 0f);
         MirarAlPlayer();
-        Sonido.Reproducir("jefe_impacto_suelo");
+        Sonar("jefe_impacto_suelo");
         Sacudir(1.3f);
         CamaraDinamica.Acercar(4.6f, 0.35f);
         golpesCombo++;
@@ -471,7 +474,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
             // Alterna alta y baja: una se salta, la otra se esquiva agachado con el barrido.
             bool baja = i % 2 == 0;
             Vector2 pos = (Vector2)transform.position + new Vector2(mirada * 1.5f, baja ? 0.6f : 1.6f);
-            Sonido.Reproducir("jefe_medialuna");
+            Sonar("jefe_medialuna");
             MedialunaSangre.Lanzar(fxMedialuna, pos, mirada, fase2 ? 11f : 9f, danoHechizo, transform, ColorFase);
             if (fase2)
                 foreach (MedialunaSangre m in FindObjectsByType<MedialunaSangre>(FindObjectsSortMode.None))
@@ -496,7 +499,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         colorAviso = new Color(1f, 0.1f, 0.15f, 1f);
         LanzarAviso(carga, 0.9f);
         colorAviso = previo;
-        Sonido.Reproducir("jefe_agarre_carga");
+        Sonar("jefe_agarre_carga");
         CamaraDinamica.Acercar(4.5f, carga);
         CamaraDinamica.Encuadrar((Vector2)transform.position + Vector2.up * 1.5f, 0.35f, carga);
         SpriteRenderer peligro = SimboloPeligro();
@@ -521,7 +524,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         // 2. Se desvanece en esfera y aparece donde marco.
         invulnerable = true;
         anim.Reproducir("esfera", true);
-        Sonido.Reproducir("teletransporte");
+        Sonar("teletransporte");
         yield return Desvanecerse(0.12f, false);
         yield return Esperar(0.15f);
         if (marca != null) Destroy(marca.gameObject);
@@ -530,19 +533,32 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         MirarAlPlayer();
         yield return Desvanecerse(0.08f, true);
 
-        // 3. La ultima oportunidad: camara lenta un instante y destello blanco.
-        anim.Reproducir("emerger", true, 0.8f);
-        LanzarAviso(0.25f, 1f);
+        // 3. El que alza es su segundo golpe basico, el tajo alzado (Attack 1,
+        //    fotogramas 6-7), con mas alcance que en el combo. Antes, la ultima
+        //    oportunidad: el barrido de preparacion va a camara lenta un instante.
+        anim.Reproducir("tajo1", true, 6f / 12f / 0.3f);
+        LanzarAviso(0.3f, 1f);
         CamaraDinamica.CamaraLenta(0.35f, 0.3f);
-        yield return new WaitForSecondsRealtime(0.3f);
+        Sonar("jefe_carga_tajo", 0.7f);
+        while (anim.Fotograma < 6 && !anim.Terminado) yield return null;
+        invulnerable = false;
+        anim.Reproducir("tajo1", false, Velocidad);
+        Sonar("jefe_tajo_fuerte");
+        TajoFx(new Vector2(1.6f, 2f), 70f, 2.4f, true);
+        Sacudir(0.9f);
 
         bool atrapado = false;
         PlayerControler p = player != null ? player.GetComponent<PlayerControler>() : null;
         if (p != null)
         {
-            Vector2 centro = (Vector2)transform.position + Vector2.up * 1.1f;
-            foreach (Collider2D c in Physics2D.OverlapBoxAll(centro, new Vector2(2.2f, 2.4f), 0f))
-                if (c.CompareTag("Player") && p.IntentarAgarre()) { atrapado = true; break; }
+            Vector2 centro = (Vector2)transform.position + new Vector2(mirada * alcanceAgarre.x * 0.35f, alcanceAgarre.y * 0.45f);
+            // Mientras duran los fotogramas del tajo (6-7), cualquiera de ellos atrapa.
+            while (!atrapado && anim.Fotograma <= 7 && !anim.Terminado)
+            {
+                foreach (Collider2D c in Physics2D.OverlapBoxAll(centro, alcanceAgarre, 0f))
+                    if (c.CompareTag("Player") && p.IntentarAgarre()) { atrapado = true; break; }
+                if (!atrapado) yield return null;
+            }
         }
 
         if (!atrapado)
@@ -560,7 +576,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
     // El player atrapado: lanzado al aire y cortado en diagonal.
     private IEnumerator Ejecucion(PlayerControler p)
     {
-        Sonido.Reproducir("jefe_agarre");
+        Sonar("jefe_agarre");
         Sacudir(1.2f);
         CamaraDinamica.Acercar(3.6f, 3.2f);
         CamaraDinamica.Encuadrar(p.transform.position + Vector3.up * 2.5f, 0.5f, 3.2f);
@@ -578,22 +594,27 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
             yield return null;
         }
 
-        // Cortes en diagonal desde lados distintos.
+        // Cortes en diagonal desde lados distintos y el ultimo desde arriba. Entre
+        // todos quitan danoTotalAgarre de la vida maxima (80 %): con la vida
+        // llena se sobrevive; con menos, mata.
         Vector2[] desde = { new Vector2(-1.6f, 1.6f), new Vector2(1.6f, 1.6f), new Vector2(-1.6f, -1.2f), new Vector2(1.6f, -1.2f) };
-        int vidaMax = p.VidaMaxima;
+        int total = Mathf.RoundToInt(p.VidaMaxima * danoTotalAgarre);
+        int porCorte = Mathf.Max(1, Mathf.RoundToInt(total * 0.15f));
+        int hecho = 0;
         for (int i = 0; i < desde.Length; i++)
         {
-            if (p == null) yield break;
+            if (p == null || !p.Agarrado) yield break;
             Vector2 centro = alto + new Vector2(0f, Mathf.Sin(i) * 0.1f);
             p.MoverAgarrado(centro);
             Corte(centro, desde[i]);
-            p.CorteAgarre(Mathf.RoundToInt(vidaMax * corteAgarre));
+            p.CorteAgarre(porCorte);
+            hecho += porCorte;
             yield return new WaitForSecondsRealtime(0.05f);
             yield return Esperar(0.22f);
         }
 
-        // El ultimo, desde arriba, mata.
-        if (p == null) yield break;
+        // El ultimo, desde arriba: lo que falte hasta el 80 %.
+        if (p == null || !p.Agarrado) yield break;
         transform.position = new Vector3(alto.x, suelo, 0f);
         MostrarSprite(true);
         anim.Reproducir("tajo1", true, 1.4f);
@@ -601,13 +622,15 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         Corte(alto, new Vector2(0.3f, 2.2f));
         Sacudir(2f);
         ScreenFlash.Destello(new Color(1f, 0.2f, 0.25f, 0.45f), 0.3f);
-        p.CorteAgarre(99999);
+        p.CorteAgarre(Mathf.Max(1, total - hecho));
+        // Si sobrevive, cae al suelo derribado.
+        if (p != null && p.Agarrado) p.SoltarAgarre(true);
         yield return Esperar(1f);
     }
 
     private void Corte(Vector2 centro, Vector2 desde)
     {
-        Sonido.Reproducir("jefe_corte_agarre", 1f, Random.Range(0.95f, 1.1f));
+        Sonar("jefe_corte_agarre", 1f, Random.Range(0.95f, 1.1f));
         float ang = Mathf.Atan2(-desde.y, -desde.x) * Mathf.Rad2Deg;
         AnimadorHoja.Clip c = fase2 ? fxCorteHielo : fxCorte;
         if (c != null) EfectoVisual.Crear(c, centro, 2.6f, Color.white, false, -1f, "VFX", 30, ang);
@@ -639,7 +662,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         tLanzas = Time.time;
         anim.Reproducir("carga", true, 0.6f);
         LanzarAviso(0.6f, 0.6f);
-        Sonido.Reproducir("hielo_conjuro");
+        Sonar("hielo_conjuro");
         CamaraDinamica.Ampliar(6.4f, 3f);
         yield return Esperar(0.5f);
         // Marcas alrededor del player; las lanzas caen en diagonal sobre ellas.
@@ -674,7 +697,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         MirarAlPlayer();
         anim.Reproducir("tajo2", true, 0.5f);
         LanzarAviso(0.45f, 0.6f);
-        Sonido.Reproducir("hielo_conjuro", 0.8f, 1.2f);
+        Sonar("hielo_conjuro", 0.8f, 1.2f);
         yield return Esperar(0.45f);
         // Una fila que avanza desde el jefe hacia el player (y le pasa).
         float x = transform.position.x + mirada * 1.6f;
@@ -710,7 +733,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         float cx = Mathf.Clamp(transform.position.x, arena.xMin + 5f, arena.xMax - 5f);
         transform.position = new Vector3(cx, suelo, 0f);
         CamaraDinamica.Ampliar(7f, 5f);
-        Sonido.Reproducir("ventisca_rafaga");
+        Sonar("ventisca_rafaga");
         AudioSource viento = Sonido.Bucle("ventisca", 0.8f);
         const float dur = 3.2f;
         float siguienteEsquirla = 0f;
@@ -741,7 +764,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         Vector2 centro = (Vector2)transform.position + Vector2.up * 1f;
         yield return AroDeAviso(centro, 3.6f, 0.8f);
         StartCoroutine(Estallido(centro, 3.6f));
-        Sonido.Reproducir("jefe_nova");
+        Sonar("jefe_nova");
         Sacudir(1.4f);
         ScreenFlash.Destello(new Color(0.7f, 0.9f, 1f, 0.3f), 0.2f);
         GolpeCirculo(centro, 3.6f, danoFuerte);
@@ -830,7 +853,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         PeligrosJefe.LimpiarTodo();
         rb.linearVelocity = Vector2.zero;
         AvisarSilencio();
-        Sonido.Reproducir("jefe_caida");
+        Sonar("jefe_caida");
 
         // Cae como si muriera: la camara se acerca y lo encuadra.
         CamaraDinamica.Encuadrar((Vector2)transform.position + Vector2.up * 1f, 0.8f, 6.5f);
@@ -841,7 +864,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         yield return Esperar(0.6f);
 
         // La escarcha se junta en su cuerpo.
-        Sonido.Reproducir("jefe_revivir_carga");
+        Sonar("jefe_revivir_carga");
         Vector2 cuerpo = (Vector2)transform.position + Vector2.up * 0.4f;
         for (float t = 0f; t < 2f; t += Time.deltaTime)
         {
@@ -860,7 +883,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         anim.Reproducir("levantarse", true);
         CamaraDinamica.Ampliar(7.2f, 3.2f);
         CamaraDinamica.Encuadrar((Vector2)transform.position + Vector2.up * 2f, 0.6f, 3f);
-        Sonido.Reproducir("jefe_revivir");
+        Sonar("jefe_revivir");
         yield return EsperarClip(2.5f);
         ScreenFlash.Destello(new Color(0.75f, 0.95f, 1f, 0.55f), 0.5f);
         Sacudir(2.2f);
@@ -979,7 +1002,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         TextoFlotante.Mostrar(texto, (Vector2)transform.position + Vector2.up * 3.2f, new Color(1f, 0.95f, 0.7f), postura ? 1.3f : 1f);
         if (postura)
         {
-            Sonido.Reproducir("jefe_postura");
+            Sonar("jefe_postura");
             ScreenFlash.Destello(new Color(1f, 1f, 1f, 0.25f), 0.2f);
             CamaraDinamica.Acercar(4.4f, 0.6f);
         }
@@ -1003,7 +1026,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
     private IEnumerator Muerte()
     {
         anim.Reproducir("caer", true);
-        Sonido.Reproducir("jefe_muerte");
+        Sonar("jefe_muerte");
         ScreenFlash.Destello(new Color(0.8f, 0.95f, 1f, 0.5f), 0.6f);
         CamaraDinamica.Encuadrar((Vector2)transform.position + Vector2.up, 0.8f, 3f);
         CamaraDinamica.Acercar(4f, 2.5f);

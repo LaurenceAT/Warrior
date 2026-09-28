@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 // Menu de pausa (Escape), montado por codigo. Sustituye al panel de pausa antiguo:
 //   - Reanudar.
-//   - Volumen general y de musica (se guardan entre partidas).
+//   - Volumen general, de musica y de efectos, y brillo (se guardan entre partidas).
 //   - Destrabar: devuelve al player al ultimo suelo seguro y limpia efectos
 //     que se hayan quedado atascados en pantalla.
 //   - Reiniciar desde el ultimo punto de control (hoguera o checkpoint).
@@ -83,7 +83,9 @@ public class MenuPausa : MonoBehaviour
             return;
         }
         Time.timeScale = 1f;
-        SceneManager.LoadScene(0);
+        Partida.Guardar();
+        if (GameManager.Instance != null) GameManager.Instance.ResumeGame();
+        PantallaCarga.Cargar(0);
     }
 
     // ------------------------------------------------------------------ Construccion
@@ -112,7 +114,7 @@ public class MenuPausa : MonoBehaviour
         Image panel = Caja("Panel", go.transform, new Color(0.07f, 0.05f, 0.06f, 0.92f));
         RectTransform rp = panel.rectTransform;
         rp.anchorMin = rp.anchorMax = new Vector2(0.5f, 0.5f);
-        rp.sizeDelta = new Vector2(700f, 650f);
+        rp.sizeDelta = new Vector2(700f, 810f);
         Image marco = Caja("Marco", panel.transform, new Color(0.6f, 0.15f, 0.18f, 0.9f));
         RectTransform rm = marco.rectTransform;
         rm.anchorMin = new Vector2(0f, 1f); rm.anchorMax = new Vector2(1f, 1f);
@@ -140,6 +142,8 @@ public class MenuPausa : MonoBehaviour
         m.primero = m.Boton("Reanudar", vl.transform, m.Reanudar).GetComponent<Button>();
         m.Deslizador("Volumen general", vl.transform, ControlVolumen.General, v => ControlVolumen.General = v);
         m.Deslizador("Volumen de la música", vl.transform, ControlVolumen.Musica, v => ControlVolumen.Musica = v);
+        m.Deslizador("Volumen de los efectos", vl.transform, ControlVolumen.Efectos, v => ControlVolumen.Efectos = v);
+        m.Deslizador("Brillo", vl.transform, ControlBrillo.Brillo - 0.5f, v => ControlBrillo.Brillo = 0.5f + v);
         m.Boton("Destrabar", vl.transform, m.Destrabar);
         m.Boton("Reiniciar desde el último punto de control", vl.transform, m.ReiniciarDesdeCheckpoint);
         m.textoSalir = m.Boton("Salir al menú", vl.transform, m.Salir).GetComponentInChildren<TextMeshProUGUI>();
@@ -238,27 +242,3 @@ public class MenuPausa : MonoBehaviour
     }
 }
 
-// Volumenes guardados. El general va a AudioListener; la musica la leen las
-// fuentes de musica (la del jefe, por ahora) multiplicando su volumen.
-public static class ControlVolumen
-{
-    public static event System.Action AlCambiar;
-
-    public static float General
-    {
-        get => PlayerPrefs.GetFloat("volGeneral", 1f);
-        set { PlayerPrefs.SetFloat("volGeneral", value); AudioListener.volume = value; AlCambiar?.Invoke(); }
-    }
-
-    public static float Musica
-    {
-        get => PlayerPrefs.GetFloat("volMusica", 1f);
-        set { PlayerPrefs.SetFloat("volMusica", value); AlCambiar?.Invoke(); }
-    }
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void Aplicar()
-    {
-        AudioListener.volume = General;
-    }
-}

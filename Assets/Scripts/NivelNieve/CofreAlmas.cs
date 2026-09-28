@@ -18,7 +18,7 @@ public class CofreAlmas : MonoBehaviour
     private void Awake()
     {
         GetComponent<Collider2D>().isTrigger = true;
-        cogido = PlayerPrefs.GetInt(Clave, 0) == 1;
+        cogido = Partida.Bandera(Clave);
         if (cogido && visual != null && abierto != null) visual.sprite = abierto;
     }
 
@@ -26,8 +26,7 @@ public class CofreAlmas : MonoBehaviour
     {
         if (cogido || !otro.CompareTag("Player")) return;
         cogido = true;
-        PlayerPrefs.SetInt(Clave, 1);
-        PlayerPrefs.Save();
+        Partida.PonerBandera(Clave);
         if (visual != null && abierto != null) visual.sprite = abierto;
         Sonido.Reproducir("menu_abrir", 0.8f);
         Sonido.Reproducir("alma_mancha");

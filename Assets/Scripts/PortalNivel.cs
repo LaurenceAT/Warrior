@@ -94,6 +94,9 @@ public class PortalNivel : MonoBehaviour
         if (sr != null) sr.enabled = false;
 
         // 3. Negro, carga y nivel siguiente.
+        // La partida pasa al nivel nuevo (si el siguiente es el menu, el juego termino).
+        if (PantallaCarga.IndiceDestino(escenaDestino) != 0) Partida.GuardarCambioNivel(PantallaCarga.NombreDestino(escenaDestino));
+        else Partida.Guardar();
         PantallaCarga.Cargar(escenaDestino, fundidoNegro);
     }
 

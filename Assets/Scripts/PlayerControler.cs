@@ -843,7 +843,7 @@ public class PlayerControler : MonoBehaviour
 
         // Con la rueda de imbuir o el menu de la hoguera abiertos, el player no
         // hace nada (y lo que se pulse ahi no cuenta como ataque o salto).
-        if (RuedaImbuir.Abierta || MenuHoguera.Abierto || isAgarrado)
+        if (RuedaImbuir.Abierta || RuedaPociones.Abierta || MenuHoguera.Abierto || isAgarrado)
         {
             LimpiarEntradas();
             if (!isAgarrado && isGrounded) m_rigitbody2D.linearVelocity = new Vector2(0f, m_rigitbody2D.linearVelocityY);
@@ -1185,6 +1185,8 @@ public class PlayerControler : MonoBehaviour
         m_gatherInput.IsKicking = false;
         m_gatherInput.IsDodging = false;
         m_gatherInput.IsShooting = false;
+        m_gatherInput.IsPotionWheel = false;
+        m_gatherInput.IsManaPotion = false;
         m_gatherInput.IsHealing = false;
         m_gatherInput.IsTogglingWeapon = false;
         attackBuffer = 0f;
@@ -1884,7 +1886,7 @@ public class PlayerControler : MonoBehaviour
         // Si el golpe no llego a entrar (enemigo ya muerto), que no se quede puesto.
         EnemyHealth.ElementoDelGolpe = Elemento.Ninguno;
         Sonido.ReproducirCanal("espada", "espada_impacto", 0.8f);
-        if (mana != null) mana.Recuperar(mana.PorGolpe);
+        // El mana ya no vuelve al golpear: solo con las pociones de mana.
 
         Elemento e = ElementoActivo;
         if (e == Elemento.Ninguno || enemigo == null) return;
@@ -2768,32 +2770,70 @@ public class PlayerControler : MonoBehaviour
 
     // Q: bebe una pocion si hay cargas y el player esta libre (en el suelo, sin
     // atacar, ni esquivar, ni bloquear).
+    // Peticiones de beber que no se pudieron atender en el momento (en el aire,
+    // atacando...): se guardan un instante y se beben en cuanto se pueda, asi un
+    // toque de Q o R no se pierde sin mas.
+    [SerializeField] private float esperaBeber = 0.4f;
+    private float pedidoVida = -10f, pedidoMana = -10f;
+    // Lo que se esta bebiendo (para devolver la carga si un golpe corta el trago).
+    private ReservaPociones.Tipo bebiendo;
+    private bool efectoAplicado;
+
+    // Q: frasco de sangre. R: frasco de mana.
     private void Beber()
     {
-        if (!m_gatherInput.IsHealing) return;
-        m_gatherInput.IsHealing = false;
+        if (m_gatherInput.IsHealing) { pedidoVida = Time.time; m_gatherInput.IsHealing = false; }
+        if (m_gatherInput.IsManaPotion) { pedidoMana = Time.time; m_gatherInput.IsManaPotion = false; }
+        m_gatherInput.IsPotionWheel = false;
+
+        bool quiereVida = Time.time - pedidoVida <= esperaBeber;
+        bool quiereMana = Time.time - pedidoMana <= esperaBeber;
+        if (!quiereVida && !quiereMana) return;
         if (isDrinking || !isGrounded || isAttacking || isShooting || isDodging || isBlocking || isTogglingWeapon || isKnocked) return;
 
+        ReservaPociones.Tipo tipo = quiereMana && (!quiereVida || pedidoMana > pedidoVida) ? ReservaPociones.Tipo.Mana : ReservaPociones.Tipo.Vida;
+        if (tipo == ReservaPociones.Tipo.Mana) pedidoMana = -10f; else pedidoVida = -10f;
+
         ReservaPociones reserva = ReservaPociones.Get();
-        if (!reserva.Gastar())
+        Vector2 aviso = (Vector2)m_transform.position + Vector2.up * 1.3f;
+        if (tipo == ReservaPociones.Tipo.Mana && (mana == null || mana.Actual >= mana.Maximo - 0.01f))
         {
-            TextoFlotante.Mostrar("Sin pociones", (Vector2)m_transform.position + Vector2.up * 1.3f, new Color(0.7f, 0.7f, 0.7f), 0.8f);
+            TextoFlotante.Mostrar("Maná lleno", aviso, new Color(0.7f, 0.8f, 1f), 0.8f);
             return;
         }
-        rutinaBeber = StartCoroutine(BeberRoutine(Mathf.RoundToInt(maxHealth * reserva.FraccionCuracion)));
+        if (!reserva.Gastar(tipo))
+        {
+            TextoFlotante.Mostrar(tipo == ReservaPociones.Tipo.Vida ? "Sin frascos de sangre" : "Sin frascos de maná", aviso, new Color(0.7f, 0.7f, 0.7f), 0.8f);
+            return;
+        }
+        bebiendo = tipo;
+        rutinaBeber = tipo == ReservaPociones.Tipo.Vida
+            ? StartCoroutine(BeberRoutine(Mathf.RoundToInt(maxHealth * reserva.FraccionCuracion), 0f))
+            : StartCoroutine(BeberRoutine(0, mana.Maximo * reserva.FraccionMana));
     }
 
-    private IEnumerator BeberRoutine(int curacion)
+    private IEnumerator BeberRoutine(int curacion, float manaDevuelto)
     {
         isDrinking = true;
+        efectoAplicado = false;
         isSprinting = false;
         ReproducirEstado(estadoBeber);
         Sonido.Reproducir("beber", 0.8f);
         yield return new WaitForSeconds(momentoCurar);
 
-        Heal(curacion);
-        ParticulasFx.Rafaga((Vector2)m_transform.position, 18, new Color(0.4f, 1f, 0.5f), new Color(0.9f, 1f, 0.7f),
-                            new Vector2(0.8f, 2.5f), -0.4f, new Vector2(0.05f, 0.1f), new Vector2(0.5f, 1f), 90f, 90f);
+        efectoAplicado = true;
+        if (curacion > 0)
+        {
+            Heal(curacion);
+            ParticulasFx.Rafaga((Vector2)m_transform.position, 18, new Color(0.4f, 1f, 0.5f), new Color(0.9f, 1f, 0.7f),
+                                new Vector2(0.8f, 2.5f), -0.4f, new Vector2(0.05f, 0.1f), new Vector2(0.5f, 1f), 90f, 90f);
+        }
+        if (manaDevuelto > 0f && mana != null)
+        {
+            mana.Recuperar(manaDevuelto);
+            ParticulasFx.Rafaga((Vector2)m_transform.position, 18, new Color(0.35f, 0.6f, 1f), new Color(0.75f, 0.9f, 1f),
+                                new Vector2(0.8f, 2.5f), -0.4f, new Vector2(0.05f, 0.1f), new Vector2(0.5f, 1f), 90f, 90f);
+        }
         yield return new WaitForSeconds(Mathf.Max(0f, tiempoBeber - momentoCurar));
 
         isDrinking = false;
@@ -2801,13 +2841,15 @@ public class PlayerControler : MonoBehaviour
         ReproducirEstado(isGrounded ? "PlayerIdle" : "Fall");
     }
 
-    // Un golpe recibido corta el trago (la carga ya se ha gastado).
+    // Un golpe recibido corta el trago. Si aun no habia hecho efecto, la carga se
+    // devuelve (antes se perdia, y parecia que la pocion "no funcionaba").
     private void CortarBebida()
     {
         if (!isDrinking) return;
         if (rutinaBeber != null) StopCoroutine(rutinaBeber);
         rutinaBeber = null;
         isDrinking = false;
+        if (!efectoAplicado) ReservaPociones.Get().Devolver(bebiendo);
     }
 
     #endregion

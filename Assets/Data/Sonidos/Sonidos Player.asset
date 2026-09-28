@@ -1,0 +1,213 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f38fa1c897005d4c8272add763682b5, type: 3}
+  m_Name: Sonidos Player
+  m_EditorClassIdentifier: 
+  volumenGeneral: 1
+  acciones:
+  - accion: Espadazo que no acierta (silbido)
+    clave: espada_tajo
+    clips:
+    - {fileID: 8300000, guid: 5e0a91ba18f917c419cca09a1198885e, type: 3}
+    - {fileID: 8300000, guid: 39031ad5889579f4ab1e45c8c394bd8b, type: 3}
+    volumen: 0.93
+    variacionTono: 0.086
+  - accion: Espadazo que acierta
+    clave: espada_impacto
+    clips:
+    - {fileID: 8300000, guid: 4749aca64f7a6904e931b1052cd9d72f, type: 3}
+    - {fileID: 8300000, guid: ce47ddd483fe61b469ee04a2ad51a704, type: 3}
+    - {fileID: 8300000, guid: 4749aca64f7a6904e931b1052cd9d72f, type: 3}
+    volumen: 1.5
+    variacionTono: 0.12
+  - accion: Parry (choque de metal)
+    clave: parry
+    clips:
+    - {fileID: 8300000, guid: b74c8b16aa1236540b8e7a10191edd57, type: 3}
+    - {fileID: 8300000, guid: 8cad1e8bb651b2c40954610691e1b9e6, type: 3}
+    volumen: 1
+    variacionTono: 0.06
+  - accion: Parry (destello)
+    clave: parry_brillo
+    clips:
+    - {fileID: 8300000, guid: 76f932805282a174aa056fb55400ed24, type: 3}
+    - {fileID: 8300000, guid: 5359708ce6830e54bbcff9e329209b8d, type: 3}
+    - {fileID: 8300000, guid: ca23e636692074d45b4bdd0cb3bf4d99, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - accion: Bloquear un golpe
+    clave: bloqueo
+    clips:
+    - {fileID: 8300000, guid: e30bdad31da6792498552337d136c477, type: 3}
+    - {fileID: 8300000, guid: 2b5564dd64b22b64bbdc4e2517e9190f, type: 3}
+    - {fileID: 8300000, guid: cd6727e5da5ac6f43a04e335466e5fa9, type: 3}
+    volumen: 0.75
+    variacionTono: 0.06
+  - accion: Recibir dano
+    clave: dano_player
+    clips:
+    - {fileID: 8300000, guid: efbcb17b3aa1be94e9deb394ceff6f03, type: 3}
+    - {fileID: 8300000, guid: 794877ad592d15c44a09b832a7f65581, type: 3}
+    - {fileID: 8300000, guid: 22fae5550770e8740ba5e31037d18737, type: 3}
+    - {fileID: 8300000, guid: 4241b3ea74384b84e8f6597ef03b0d65, type: 3}
+    volumen: 0.65
+    variacionTono: 0.06
+  - accion: Morir
+    clave: muerte_player
+    clips:
+    - {fileID: 8300000, guid: fff91c7870f5c8c44b92cff683c64733, type: 3}
+    volumen: 0.8
+    variacionTono: 0.06
+  - accion: Barrido / esquiva (C)
+    clave: esquiva
+    clips:
+    - {fileID: 8300000, guid: 6a768a2875db2cc45b5f57038c31a3b1, type: 3}
+    - {fileID: 8300000, guid: 366b65e1e04107047a8e2874f953928e, type: 3}
+    - {fileID: 8300000, guid: d824487ba42c23941ab4c852546795ee, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - accion: Saltar
+    clave: salto
+    clips:
+    - {fileID: 8300000, guid: 6a15a4be53254e44a8d6925747b5cce0, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - accion: Aterrizar / agarrarse a una cornisa
+    clave: aterrizaje
+    clips:
+    - {fileID: 8300000, guid: 2d9ace98d7a2d224184e37e85a693b0a, type: 3}
+    volumen: 0.55
+    variacionTono: 0.06
+  - accion: Esfuerzo (subir una cornisa)
+    clave: esfuerzo
+    clips:
+    - {fileID: 8300000, guid: e06cf52357e3d3e4284c9a20b9b0efad, type: 3}
+    - {fileID: 8300000, guid: d287db167574cf74b98ecf8397629c14, type: 3}
+    - {fileID: 8300000, guid: 4ab41c8f1a964ef478b89e052b02cfa9, type: 3}
+    - {fileID: 8300000, guid: bf076d37e40786e4599d35e25781d399, type: 3}
+    volumen: 0.45
+    variacionTono: 0.06
+  - accion: Pasos
+    clave: pasos
+    clips:
+    - {fileID: 8300000, guid: 4ecfd3c45e57c8d44afe57045598618d, type: 3}
+    - {fileID: 8300000, guid: 8e86a151d567d1d499ede496196f26e6, type: 3}
+    - {fileID: 8300000, guid: 6a346ca8091881d479913bc3d45b210a, type: 3}
+    - {fileID: 8300000, guid: 6bbbc76306522e24ba6a62399a5a51b6, type: 3}
+    - {fileID: 8300000, guid: 9d82ba344a4db4a49a940ee1e259993b, type: 3}
+    volumen: 0.35
+    variacionTono: 0.06
+  - accion: Pasos sobre hielo
+    clave: pasos_hielo
+    clips:
+    - {fileID: 8300000, guid: 6469e245822a7804a8cdc8d1ff2c7aa3, type: 3}
+    - {fileID: 8300000, guid: 1692fb1a3b849cd4e8f93ce60336da22, type: 3}
+    - {fileID: 8300000, guid: ab96e26050829ea49a8440d9239be3c1, type: 3}
+    - {fileID: 8300000, guid: 0c923c1727699a947add324fa7b89cbe, type: 3}
+    - {fileID: 8300000, guid: c52c66b747a552b499da7583f5b5f8ce, type: 3}
+    volumen: 0.35
+    variacionTono: 0.06
+  - accion: Beber un frasco
+    clave: beber
+    clips:
+    - {fileID: 8300000, guid: 3329602dee2fb3f4eb06c7ad11e3d2e4, type: 3}
+    - {fileID: 8300000, guid: 61b0a3d2227e4b34e85145e6cd7c09b2, type: 3}
+    - {fileID: 8300000, guid: d1ff77bdc3a19aa40ba6df23cb40762c, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - accion: 'Imbuir: fuego'
+    clave: imbuir_0
+    clips:
+    - {fileID: 8300000, guid: 225d26d294a284743b801e42aa600da6, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - accion: 'Imbuir: hielo'
+    clave: imbuir_1
+    clips:
+    - {fileID: 8300000, guid: 296e1d117a286d440a6d213e21508dd2, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - accion: 'Imbuir: oscuridad'
+    clave: imbuir_2
+    clips:
+    - {fileID: 8300000, guid: 6e692211f11739945870b20ea0c8d669, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - accion: 'Imbuir: sagrado'
+    clave: imbuir_3
+    clips:
+    - {fileID: 8300000, guid: 73531fdf37d264c47a7963b0a0dfe7db, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - accion: 'Imbuir: acido'
+    clave: imbuir_4
+    clips:
+    - {fileID: 8300000, guid: 7e8d2794dad0af2479bfea1988da5b61, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06
+  - accion: 'Golpe imbuido: fuego'
+    clave: golpe_0
+    clips:
+    - {fileID: 8300000, guid: b584033b000798d4fb5c9ef09664a8e7, type: 3}
+    - {fileID: 8300000, guid: 499fa9680682a174e8665ec915ede798, type: 3}
+    - {fileID: 8300000, guid: b0d16c4ec9933a94383f8a2908d7390d, type: 3}
+    - {fileID: 8300000, guid: e412ebfe0ce3de349b8fc9c9947e1b73, type: 3}
+    - {fileID: 8300000, guid: e2003b006d2917f4aa21df2d633b177a, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - accion: 'Golpe imbuido: hielo'
+    clave: golpe_1
+    clips:
+    - {fileID: 8300000, guid: 03a5d306d09fa244d8b694af33d798f3, type: 3}
+    - {fileID: 8300000, guid: 0720067b90c18a04c89b7e1a697e317c, type: 3}
+    - {fileID: 8300000, guid: dcc05b74074123c418b19dc7fcca2a3c, type: 3}
+    - {fileID: 8300000, guid: 6d4d2928ab3714642927f32ec8d38d95, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - accion: 'Golpe imbuido: oscuridad'
+    clave: golpe_2
+    clips:
+    - {fileID: 8300000, guid: 41df6acd221132f4699b5e07a10e4d35, type: 3}
+    - {fileID: 8300000, guid: 3c1c24ed60f5b2845a75ee5ce34f7783, type: 3}
+    - {fileID: 8300000, guid: 2f9e82b8bbd10b843a6be661dae889c7, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - accion: 'Golpe imbuido: sagrado'
+    clave: golpe_3
+    clips:
+    - {fileID: 8300000, guid: e025f01dbbd7a2b47845c9a05d144362, type: 3}
+    - {fileID: 8300000, guid: 68a83b969f7189c4a993e095980b1889, type: 3}
+    - {fileID: 8300000, guid: bf1eeb2d907af6c438e5fabb8d92ff99, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - accion: 'Golpe imbuido: acido'
+    clave: golpe_4
+    clips:
+    - {fileID: 8300000, guid: d5e9830c202fd7e42932e2a10c2e823b, type: 3}
+    - {fileID: 8300000, guid: ba9ebc9188db69e42a82088c4dcc7ded, type: 3}
+    - {fileID: 8300000, guid: aff5fe0407a18ae4892ecacd6f724a60, type: 3}
+    - {fileID: 8300000, guid: 4c9accfa44fe32d498d9e976ed392a4b, type: 3}
+    volumen: 0.5
+    variacionTono: 0.06
+  - accion: Recoger almas
+    clave: alma_recoger
+    clips:
+    - {fileID: 8300000, guid: 3d4316c6c2ba4714a904483a3a37a97c, type: 3}
+    - {fileID: 8300000, guid: 25314be8c42244449a36750b943bff87, type: 3}
+    volumen: 0.25
+    variacionTono: 0.06
+  - accion: Mancha de almas
+    clave: alma_mancha
+    clips:
+    - {fileID: 8300000, guid: ff78724c5e2d6664984c7cfe37a60326, type: 3}
+    volumen: 0.7
+    variacionTono: 0.06

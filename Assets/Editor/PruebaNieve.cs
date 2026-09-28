@@ -30,6 +30,9 @@ public static class PruebaNieve
     public static void Cueva() => Lanzar("cueva", "Assets/Scenes/Nivel Cueva.unity");
     // Fotos del nivel en los puntos de la variable de entorno VISTAS ("x,y;x,y").
     public static void PintarCuevaPrueba() => Lanzar("pintarcueva", "Assets/Scenes/Nivel Cueva.unity");
+    public static void DecoracionPrueba() => Lanzar("decoracion", System.Environment.GetEnvironmentVariable("VISTAS_ESCENA") ?? Escena);
+    public static void PocionesPrueba() => Lanzar("pociones", Escena);
+    public static void MenuPrueba() => Lanzar("menu", "Assets/Scenes/Menu Principal.unity");
     public static void PintarPrueba() => Lanzar("pintar", Escena);
     public static void CornisaPrueba() => Lanzar("cornisa", Escena);
     public static void PortalPrueba() => Lanzar("portal", System.Environment.GetEnvironmentVariable("VISTAS_ESCENA") ?? Escena);
@@ -70,6 +73,15 @@ public static class PruebaNieve
             Directory.CreateDirectory(carpeta);
             Progreso.Reiniciar();
             PlayerPrefs.DeleteKey("cofre_Nivel Nieve_cofre");
+            if (modo == "menu")
+            {
+                Object.DontDestroyOnLoad(gameObject);
+                IEnumerator rm = Menu();
+                while (rm.MoveNext()) yield return rm.Current;
+                Debug.Log("[Prueba] fin");
+                EditorApplication.ExitPlaymode();
+                yield break;
+            }
             for (int k = 0; k < 8; k++)
             {
                 yield return new WaitForSeconds(0.25f);
@@ -89,7 +101,7 @@ public static class PruebaNieve
             if (p == null) { Debug.LogError("[Prueba] sin player"); EditorApplication.ExitPlaymode(); yield break; }
             Debug.Log($"[Prueba] modo={modo} player={(p != null)} vida={Vida()}/{p.VidaMaxima}");
             IEnumerator rutina = modo == "sistemas" ? Sistemas() : modo == "nivel" ? Nivel() : modo == "enemigos" ? Enemigos()
-                               : modo == "jefe" ? Jefe() : modo == "vistas" ? Vistas() : modo == "cornisa" ? Cornisa() : modo == "pintar" ? Pintar() : modo == "pintarcueva" ? PintarCueva() : modo == "portal" ? Portal() : Cueva();
+                               : modo == "jefe" ? Jefe() : modo == "vistas" ? Vistas() : modo == "cornisa" ? Cornisa() : modo == "pintar" ? Pintar() : modo == "pintarcueva" ? PintarCueva() : modo == "decoracion" ? PintarDecoracion() : modo == "pociones" ? Pociones() : modo == "portal" ? Portal() : Cueva();
             float limite = Time.realtimeSinceStartup + 240f;
             while (rutina.MoveNext())
             {
@@ -348,9 +360,24 @@ public static class PruebaNieve
             }
             Debug.Log($"[Jefe] ataques fase 1 vistos: {string.Join(", ", vistos)}");
 
-            // Agarre: sin invulnerabilidad, a ver si conecta y mata.
+            // Agarre con la vida llena: quita el 80 % y se sobrevive.
             SetCampo(p, "isInvincible", false);
+            Curar();
             SetCampo(j, "ultimoAtaque", "");
+            j.StopAllCoroutines();
+            j.StartCoroutine((IEnumerator)Llamar(j, "Agarre"));
+            for (float t = 0f; t < 5f; t += 0.25f)
+            {
+                if (Mathf.Approximately(t % 0.5f, 0f)) yield return Captura($"j03_agarre_lleno_{t:0.0}", true);
+                yield return new WaitForSecondsRealtime(0.25f);
+            }
+            Debug.Log($"[Jefe] agarre con vida llena: vida={Vida()}/{p.VidaMaxima} agarrado={p.Agarrado}");
+
+            // Otra vez, con el 75 % de la vida: mata.
+            yield return new WaitForSeconds(1.5f);
+            SetCampo(p, "isInvincible", false);
+            SetCampo(p, "hasIFrames", false);
+            SetCampo(p, "currentHealth", Mathf.RoundToInt(p.VidaMaxima * 0.75f));
             j.StopAllCoroutines();
             j.StartCoroutine((IEnumerator)Llamar(j, "Agarre"));
             for (float t = 0f; t < 5f; t += 0.25f)
@@ -512,6 +539,149 @@ public static class PruebaNieve
             yield return new WaitForSeconds(0.6f);
             Debug.Log($"[PintarCueva] tras cruzar: x={p.transform.position.x:0.00} (la pared esta en 10-11)");
             yield return Captura("pc2_detras", true);
+        }
+
+        // ------------------------------------------------------------------ Decoracion pintada
+
+        private IEnumerator PintarDecoracion()
+        {
+            var tm = Object.FindObjectsByType<UnityEngine.Tilemaps.Tilemap>(FindObjectsSortMode.None).First(t => t.name == "Decoracion");
+            string carpeta = System.Environment.GetEnvironmentVariable("VISTAS_DECO") ?? "Assets/Tiles/Nieve/Decoracion";
+            var tiles = Directory.GetFiles(carpeta, "*.asset").Select(f => AssetDatabase.LoadAssetAtPath<UnityEngine.Tilemaps.Tile>(f.Replace(Path.DirectorySeparatorChar, '/'))).Where(t => t != null).ToArray();
+            // En fila sobre el suelo del campamento (y = 0), cada 3 casillas.
+            int y = int.Parse(System.Environment.GetEnvironmentVariable("VISTAS_DECO_Y") ?? "0");
+            for (int i = 0; i < tiles.Length; i++) tm.SetTile(new Vector3Int(4 + i * 3, y, 0), tiles[i]);
+            Debug.Log($"[Deco] pintados {tiles.Length} adornos");
+            Invulnerable();
+            for (int k = 0; k < 3; k++)
+            {
+                Teletransportar(new Vector3(10 + k * 16, y + 0.7f, 0f));
+                yield return new WaitForSeconds(1f);
+                yield return Captura($"d{k}", true);
+            }
+        }
+
+        // ------------------------------------------------------------------ Pociones
+
+        private IEnumerator Pociones()
+        {
+            PlayerMana mana = p.GetComponent<PlayerMana>();
+            ReservaPociones r = ReservaPociones.Get();
+            Invulnerable();
+            // Gastar mana imbuyendo y comprobar que golpear no lo devuelve.
+            Imbuir(Elemento.Oscuro);
+            mana.Gastar(40f);
+            yield return new WaitForSeconds(0.3f);
+            float tras = mana.Actual;
+            EnemyHealth rata = Cercano<EnemigoRata>();
+            if (rata != null)
+            {
+                Teletransportar(rata.transform.position + Vector3.left * 1f);
+                yield return Atacar(1, 4);
+            }
+            Debug.Log($"[Pociones] mana tras imbuir={tras:0} tras golpear={mana.Actual:0} (no debe subir)");
+
+            // R: frasco de mana.
+            float m0 = mana.Actual;
+            int c0 = r.CargasMana;
+            Entrada().IsManaPotion = true;
+            yield return new WaitForSeconds(1.5f);
+            Debug.Log($"[Pociones] pocion de mana: mana {m0:0}->{mana.Actual:0} cargas {c0}->{r.CargasMana} vida cargas={r.Cargas}");
+            // Beber cortado por un golpe: la carga se devuelve.
+            mana.Gastar(30f);
+            int c1 = r.CargasMana;
+            Entrada().IsManaPotion = true;
+            yield return new WaitForSeconds(0.1f);
+            Llamar(p, "CortarBebida");
+            yield return new WaitForSeconds(0.5f);
+            Debug.Log($"[Pociones] trago cortado: cargas {c1}->{r.CargasMana} (deben ser iguales)");
+            // Q: frasco de sangre.
+            SetCampo(p, "currentHealth", 40);
+            int v0 = r.Cargas;
+            Entrada().IsHealing = true;
+            yield return new WaitForSeconds(1.5f);
+            Debug.Log($"[Pociones] Q: vida 40->{Vida()} cargas vida {v0}->{r.Cargas}");
+            yield return Captura("po1_hud", true);
+
+            // La hoguera rellena las pociones pero no el mana.
+            float m1 = mana.Actual;
+            (typeof(Hoguera).GetField("AlDescansar", BindingFlags.NonPublic | BindingFlags.Static)?.GetValue(null) as System.Action)?.Invoke();
+            yield return new WaitForSeconds(0.3f);
+            Debug.Log($"[Pociones] tras hoguera: mana {m1:0}->{mana.Actual:0} cargas mana={r.CargasMana}/{r.MaximoMana}");
+        }
+
+        // ------------------------------------------------------------------ Menu principal
+
+        private IEnumerator Menu()
+        {
+            Partida.CarpetaPruebas = Path.Combine(carpeta, "Partidas");
+            if (Directory.Exists(Partida.CarpetaPruebas)) Directory.Delete(Partida.CarpetaPruebas, true);
+            yield return new WaitForSeconds(2.5f);
+            MenuPrincipal m = Object.FindFirstObjectByType<MenuPrincipal>();
+            Debug.Log($"[Menu] menu={(m != null)} escena={UnityEngine.SceneManagement.SceneManager.GetActiveScene().name}");
+            yield return Captura("m0_principal", true);
+            foreach (string panel in new[] { "panelControles", "panelOpciones", "panelCargar" })
+            {
+                Llamar(m, "Mostrar", GetCampo(m, panel));
+                yield return new WaitForSecondsRealtime(0.4f);
+                yield return Captura("m1_" + panel, true);
+            }
+            var sr = ((GameObject)GetCampo(m, "panelControles")).GetComponentInChildren<UnityEngine.UI.ScrollRect>(true);
+            Llamar(m, "Mostrar", GetCampo(m, "panelControles"));
+            yield return null;
+            sr.verticalNormalizedPosition = 0.35f;
+            yield return new WaitForSecondsRealtime(0.3f);
+            yield return Captura("m2_controles_medio", true);
+            sr.verticalNormalizedPosition = 0f;
+            yield return new WaitForSecondsRealtime(0.3f);
+            yield return Captura("m2_controles_fin", true);
+            Llamar(m, "Mostrar", GetCampo(m, "panelPrincipal"));
+
+            // Nueva partida: al primer nivel (nieve), personaje a nivel 1.
+            Progreso.SumarAlmas(999);
+            Llamar(m, "NuevaPartida");
+            yield return EsperarEscena("Nivel Nieve");
+            yield return new WaitForSeconds(2f);
+            p = Object.FindFirstObjectByType<PlayerControler>();
+            Debug.Log($"[Menu] nueva: escena={UnityEngine.SceneManagement.SceneManager.GetActiveScene().name} almas={Progreso.Almas} nivel={Progreso.NivelTotal} ranura={Partida.Actual?.ranura} player={p?.transform.position}");
+
+            // Descansar en la segunda hoguera: guarda ahi.
+            Hoguera h = Object.FindObjectsByType<Hoguera>(FindObjectsSortMode.None).OrderBy(x => Mathf.Abs(x.transform.position.x - 116f)).First();
+            Invulnerable();
+            Teletransportar(h.transform.position + Vector3.right * 0.5f + Vector3.up * 0.6f);
+            yield return new WaitForSeconds(0.5f);
+            Progreso.SumarAlmas(1234);
+            h.Usar(p);
+            yield return new WaitForSecondsRealtime(0.5f);
+            Llamar(Object.FindFirstObjectByType<MenuHoguera>(), "CerrarInterno");
+            yield return new WaitForSecondsRealtime(0.5f);
+            Debug.Log($"[Menu] tras hoguera: lugar={Partida.Actual.lugar} enHoguera={Partida.Actual.enHoguera} pos=({Partida.Actual.x:0.0},{Partida.Actual.y:0.0}) almas={Partida.Actual.almas}");
+
+            // Salir al menu y cargarla.
+            PantallaCarga.Cargar(0);
+            yield return EsperarEscena("Menu Principal");
+            yield return new WaitForSeconds(2f);
+            m = Object.FindFirstObjectByType<MenuPrincipal>();
+            Llamar(m, "Mostrar", GetCampo(m, "panelCargar"));
+            yield return new WaitForSecondsRealtime(0.5f);
+            yield return Captura("m3_lista_partidas", true);
+            var lista = Partida.Listar();
+            Debug.Log($"[Menu] partidas={lista.Count} primera={lista[0].escena}/{lista[0].lugar} tiempo={Partida.Tiempo(lista[0].segundosJugados)}");
+            Progreso.Reiniciar();
+            Llamar(m, "CargarPartida", lista[0]);
+            yield return EsperarEscena("Nivel Nieve");
+            yield return new WaitForSeconds(2f);
+            p = Object.FindFirstObjectByType<PlayerControler>();
+            Debug.Log($"[Menu] cargada: player={p?.transform.position} almas={Progreso.Almas} checkpoint={GameManager.Instance.hasCheckPointActive}");
+            yield return Captura("m4_cargada", true);
+            Partida.CarpetaPruebas = null;
+        }
+
+        private IEnumerator EsperarEscena(string nombre)
+        {
+            float t0 = Time.realtimeSinceStartup;
+            while (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != nombre && Time.realtimeSinceStartup - t0 < 20f) yield return null;
+            while (PantallaCarga.Cargando && Time.realtimeSinceStartup - t0 < 25f) yield return null;
         }
 
         // ------------------------------------------------------------------ Vistas

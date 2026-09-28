@@ -6,11 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Nivel Cueva.unity
-    guid: 5997edbd1b1fb9848a259a5530be8a53
+    path: Assets/Scenes/Menu Principal.unity
+    guid: 1600fecdd753a2b4e83046fb595a6fe9
   - enabled: 1
     path: Assets/Scenes/Nivel Nieve.unity
     guid: ec9a5dd3530b01640b2a5978ae25d7c7
+  - enabled: 1
+    path: Assets/Scenes/Nivel Cueva.unity
+    guid: 5997edbd1b1fb9848a259a5530be8a53
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

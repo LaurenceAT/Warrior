@@ -116,6 +116,13 @@ public class ArenaJefe : MonoBehaviour
 
         PonerNiebla(false);
         if (salida != null) salida.SetActive(false);
+
+        // Jefe ya vencido en esta partida: la arena queda abierta y la salida puesta.
+        if (Partida.Bandera("jefe_" + gameObject.scene.name))
+        {
+            estado = Estado.Vencido;
+            if (salida != null) salida.SetActive(true);
+        }
     }
 
     private AudioSource NuevaFuente()

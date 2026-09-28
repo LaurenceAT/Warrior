@@ -14,7 +14,7 @@ using UnityEngine.Tilemaps;
 //   - Las dos: Tilemaps "ParedesFalsas" (se ve roca, se atraviesa) y
 //     "ZonasOcultas" (sombra que se aparta al entrar). El escondite de la nieve
 //     pasa a estar hecho asi.
-//   - Paletas: "Paleta Cueva" (roca y sombra) y la de la nieve con la sombra.
+//   - Paletas: "Cueva - Roca" (roca y sombra) y la de la nieve con la sombra.
 // Tambien borra las escenas viejas y deja Build Settings con cueva y nieve.
 public static class NivelesPintables
 {
@@ -22,7 +22,7 @@ public static class NivelesPintables
     private const string CarpetaComun = "Assets/Tiles/Comun";
     private const string RutaSombra = CarpetaComun + "/Sombra.asset";
     private const string RutaRocaCueva = CarpetaCueva + "/Roca cueva.asset";
-    private const string RutaPaletaCueva = CarpetaCueva + "/Paleta Cueva.prefab";
+    private const string RutaPaletaCueva = CarpetaCueva + "/Cueva - Roca.prefab";
 
     private static readonly string[] EscenasViejas =
     {
@@ -252,7 +252,7 @@ public static class NivelesPintables
     {
         GameObject p = AssetDatabase.LoadAssetAtPath<GameObject>(RutaPaletaCueva);
         if (p == null)
-            GridPaletteUtility.CreateNewPalette(CarpetaCueva, "Paleta Cueva", GridLayout.CellLayout.Rectangle,
+            GridPaletteUtility.CreateNewPalette(CarpetaCueva, "Cueva - Roca", GridLayout.CellLayout.Rectangle,
                                                 GridPalette.CellSizing.Automatic, Vector3.one, GridLayout.CellSwizzle.XYZ);
         AnadirAPaleta(RutaPaletaCueva, roca, new Vector3Int(0, 0, 0));
         AnadirAPaleta(RutaPaletaCueva, sombra, new Vector3Int(2, 0, 0));

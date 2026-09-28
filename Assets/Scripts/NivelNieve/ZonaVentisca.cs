@@ -60,7 +60,7 @@ public class ZonaVentisca : MonoBehaviour
         OverlayVentisca.Poner(this, intensidad, neblina, clipVentisca);
 
         if (sonido == null) sonido = Sonido.Bucle("ventisca", 0f);
-        if (sonido != null) sonido.volume = Mathf.Lerp(0f, 0.55f, OverlayVentisca.IntensidadMaxima) * Mathf.Max(0.3f, DatosNivel.FactorAmbiente);
+        if (sonido != null) sonido.volume = Mathf.Lerp(0f, 0.55f, OverlayVentisca.IntensidadMaxima) * Mathf.Max(0.3f, DatosNivel.FactorAmbiente) * ControlVolumen.Efectos;
     }
 
     // 0 sin rafaga, sube durante el aviso y vale 1 durante la rafaga.

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5799999b75f5714f81a5cab46f45749, type: 3}
   m_Name: RecursosRPG
   m_EditorClassIdentifier: 
+  sonidosPlayer: {fileID: 11400000, guid: e4341fd5775c72f499d23690ea8d6c62, type: 2}
   sonidos:
   - clave: espada_tajo
     clips:
@@ -566,6 +567,46 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 50dbb3b8974268c44b3d29c86f1d05e9, type: 3}
   - clave: peligro
     sprite: {fileID: 21300000, guid: 41a4d878a0c59ca47848542c51dc6400, type: 3}
+  - clave: pocion_mana
+    sprite: {fileID: 21300000, guid: d9b6f23dae3dc7e48b5ff93a60b3b612, type: 3}
+  - clave: ctrl_mover
+    sprite: {fileID: 21300000, guid: c0203998cc56618438a43e80d2667a8f, type: 3}
+  - clave: ctrl_correr
+    sprite: {fileID: 21300000, guid: 94b307016d75af345a62cc02537f0779, type: 3}
+  - clave: ctrl_saltar
+    sprite: {fileID: 21300000, guid: a338f787f7dfef94f99be92cee1acca7, type: 3}
+  - clave: ctrl_doble
+    sprite: {fileID: 21300000, guid: f024420a0a8ab8041a5c7158194ced9c, type: 3}
+  - clave: ctrl_pared
+    sprite: {fileID: 21300000, guid: 2d3cc4e4e83e50143b9e7c0a253b1a81, type: 3}
+  - clave: ctrl_correr_pared
+    sprite: {fileID: 21300000, guid: 405502d6131e7584da2e208377011a09, type: 3}
+  - clave: ctrl_cornisa
+    sprite: {fileID: 21300000, guid: 6b6377ea862878e44bb34b2922de66f1, type: 3}
+  - clave: ctrl_esquiva
+    sprite: {fileID: 21300000, guid: ae7af658219ca2444b6bd964a7036329, type: 3}
+  - clave: ctrl_espada
+    sprite: {fileID: 21300000, guid: 7b99612df52a959438339629a08946a9, type: 3}
+  - clave: ctrl_aereo
+    sprite: {fileID: 21300000, guid: c8a513d44727d9f459d1f1ce91ff1c98, type: 3}
+  - clave: ctrl_lanzador
+    sprite: {fileID: 21300000, guid: 613a629d87932544d91fae4539fdb534, type: 3}
+  - clave: ctrl_estocada
+    sprite: {fileID: 21300000, guid: 3eb073390e2ee5441a7118eb53428c94, type: 3}
+  - clave: ctrl_bloqueo
+    sprite: {fileID: 21300000, guid: 5258cc2196feff2488cbe8a9a04cc8a4, type: 3}
+  - clave: ctrl_parry
+    sprite: {fileID: 21300000, guid: 41a4d878a0c59ca47848542c51dc6400, type: 3}
+  - clave: ctrl_mancha
+    sprite: {fileID: 21300000, guid: 904ae483f41e9824197e952c4ed862ac, type: 3}
+  - clave: ctrl_hoguera
+    sprite: {fileID: 21300000, guid: d82e21449a384834e9bdcb8fd920a444, type: 3}
+  - clave: ctrl_pausa
+    sprite: {fileID: 21300000, guid: 9b017c20229c90b4296634ee50530b92, type: 3}
+  - clave: ctrl_rueda
+    sprite: {fileID: 21300000, guid: 51d1c94baf3d4a449aa36fe23dffffc5, type: 3}
+  - clave: ctrl_vida
+    sprite: {fileID: 21300000, guid: 872bbc6eedcdd9a40820b55023d46138, type: 3}
   tajosElemento:
   - nombre: tajo_h_Fuego
     hoja: {fileID: 0}

@@ -25,6 +25,21 @@ public class PantallaCarga : MonoBehaviour
     public static void Cargar(string escena, float fundido = 0.6f)
     {
         if (Cargando) return;
+        Crear().StartCoroutine(Secuencia(IndiceDestino(escena), fundido));
+    }
+
+    public static void Cargar(int indice, float fundido = 0.6f)
+    {
+        if (Cargando) return;
+        Crear().StartCoroutine(Secuencia(Mathf.Clamp(indice, 0, SceneManager.sceneCountInBuildSettings - 1), fundido));
+    }
+
+    // Nombre de la escena a la que llevaria Cargar(escena).
+    public static string NombreDestino(string escena) =>
+        System.IO.Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(IndiceDestino(escena)));
+
+    public static int IndiceDestino(string escena)
+    {
         int indice;
         if (!string.IsNullOrEmpty(escena)) indice = SceneUtility.GetBuildIndexByScenePath(escena);
         else indice = SceneManager.GetActiveScene().buildIndex + 1;
@@ -37,7 +52,7 @@ public class PantallaCarga : MonoBehaviour
         }
         if (indice < 0) indice = SceneManager.GetActiveScene().buildIndex + 1;
         if (indice >= SceneManager.sceneCountInBuildSettings) indice = 0;
-        Crear().StartCoroutine(Secuencia(indice, fundido));
+        return indice;
     }
 
     private static IEnumerator Secuencia(int indice, float fundido)

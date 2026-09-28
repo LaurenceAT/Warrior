@@ -3,8 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Las pociones de curacion, al estilo del Estus de los Souls: pocas cargas, que se
-// recargan al descansar en la hoguera. Vive en la escena (no en el player), asi
+// Las pociones, al estilo del Estus de los Souls: pocas cargas, que se recargan al
+// descansar en la hoguera. Hay dos: las de vida (frascos de sangre) y las de
+// mana (el mana solo se recupera con ellas). Q bebe el de sangre y R el de mana. Vive en la escena (no en el player), asi
 // las cargas se mantienen aunque el player muera y reaparezca.
 //
 // No hay sprite de pocion: el frasco del contador se dibuja por codigo.
@@ -13,13 +14,24 @@ public class ReservaPociones : MonoBehaviour
     // Cada vez que se bebe (el reto del jefe mira esto).
     public static event Action AlBeber;
     public static event Action<int, int> AlCambiar;
+    // Cualquier cambio (cargas de las dos, o la elegida).
+    public static event Action AlCambiarAlgo;
+
+    public enum Tipo { Vida = 0, Mana = 1 }
 
     [SerializeField] private int maximo = 3;
     [SerializeField] private int curacion = 40;
     // Los frascos de sangre curan esta parte de la vida maxima (0.75 = 75 %).
     [Range(0f, 1f)] [SerializeField] private float fraccionCuracion = 0.75f;
 
+    [Header("Pociones de mana")]
+    [SerializeField] private int maximoMana = 3;
+    [Tooltip("Parte del mana maximo que devuelve cada una (0.5 = 50 %).")]
+    [Range(0f, 1f)] [SerializeField] private float fraccionMana = 0.5f;
+
     private int cargas;
+    private int cargasMana;
+    private Tipo elegida = Tipo.Vida;
     private bool recompensaCogida;
     private static ReservaPociones instancia;
 
@@ -28,6 +40,12 @@ public class ReservaPociones : MonoBehaviour
     public int Curacion => curacion;
     public float FraccionCuracion => fraccionCuracion;
     public bool RecompensaCogida => recompensaCogida;
+    public int CargasMana => cargasMana;
+    public int MaximoMana => maximoMana;
+    public float FraccionMana => fraccionMana;
+    public Tipo Elegida => elegida;
+    public int CargasDe(Tipo t) => t == Tipo.Vida ? cargas : cargasMana;
+    public int MaximoDe(Tipo t) => t == Tipo.Vida ? maximo : maximoMana;
 
     public static ReservaPociones Get()
     {
@@ -41,7 +59,10 @@ public class ReservaPociones : MonoBehaviour
     {
         if (instancia != null && instancia != this) { Destroy(gameObject); return; }
         instancia = this;
+        // El frasco extra del camino secreto (si esta partida ya lo cogio).
+        if (Partida.Bandera("frasco_extra")) { maximo++; recompensaCogida = true; }
         cargas = maximo;
+        cargasMana = maximoMana;
         ContadorPociones.Crear(this);
     }
 
@@ -50,19 +71,39 @@ public class ReservaPociones : MonoBehaviour
     private void OnDisable() { Hoguera.AlDescansar -= Rellenar; GameManager.AlReaparecerPlayer -= Rellenar; }
     private void OnDestroy() { if (instancia == this) instancia = null; }
 
-    public bool Gastar()
+    public bool Gastar() => Gastar(Tipo.Vida);
+
+    public bool Gastar(Tipo t)
     {
-        if (cargas <= 0) return false;
-        cargas--;
+        if (CargasDe(t) <= 0) return false;
+        if (t == Tipo.Vida) cargas--; else cargasMana--;
         AlCambiar?.Invoke(cargas, maximo);
+        AlCambiarAlgo?.Invoke();
         AlBeber?.Invoke();
         return true;
+    }
+
+    // Un trago cortado antes de hacer efecto no gasta la carga.
+    public void Devolver(Tipo t)
+    {
+        if (t == Tipo.Vida) cargas = Mathf.Min(maximo, cargas + 1);
+        else cargasMana = Mathf.Min(maximoMana, cargasMana + 1);
+        AlCambiar?.Invoke(cargas, maximo);
+        AlCambiarAlgo?.Invoke();
+    }
+
+    public void Elegir(Tipo t)
+    {
+        elegida = t;
+        AlCambiarAlgo?.Invoke();
     }
 
     public void Rellenar()
     {
         cargas = maximo;
+        cargasMana = maximoMana;
         AlCambiar?.Invoke(cargas, maximo);
+        AlCambiarAlgo?.Invoke();
     }
 
     // La recompensa del camino secreto: una carga mas para siempre (y llena).
@@ -71,7 +112,9 @@ public class ReservaPociones : MonoBehaviour
         maximo++;
         cargas++;
         recompensaCogida = true;
+        Partida.PonerBandera("frasco_extra");
         AlCambiar?.Invoke(cargas, maximo);
+        AlCambiarAlgo?.Invoke();
     }
 
     // Frasco de pixel art dibujado a mano en codigo (16x20): cristal, liquido rojo
@@ -105,13 +148,21 @@ public class ReservaPociones : MonoBehaviour
     }
 }
 
-// Contador de pociones en pantalla, bajo la vida: el frasco y "x3".
+// Contador de pociones en pantalla, bajo la vida: el frasco de sangre (Q) y el de
+// mana (R) con sus cargas.
 public class ContadorPociones : MonoBehaviour
 {
-    private Image icono;
-    private TextMeshProUGUI texto;
-    private RectTransform caja;
-    private float pulso;
+    private class Hueco
+    {
+        public RectTransform caja;
+        public Image icono;
+        public TextMeshProUGUI texto;
+        public float pulso;
+    }
+
+    private readonly Hueco[] huecos = new Hueco[2];
+    private readonly int[] cargasAntes = new int[2];
+    private ReservaPociones reserva;
 
     public static void Crear(ReservaPociones r)
     {
@@ -125,64 +176,96 @@ public class ContadorPociones : MonoBehaviour
         cs.referenceResolution = new Vector2(1920, 1080);
         cs.matchWidthOrHeight = 0.5f;
         ContadorPociones cp = go.AddComponent<ContadorPociones>();
+        cp.reserva = r;
 
-        cp.caja = new GameObject("Caja").AddComponent<RectTransform>();
-        cp.caja.SetParent(go.transform, false);
-        cp.caja.anchorMin = cp.caja.anchorMax = new Vector2(0f, 1f);
-        cp.caja.pivot = new Vector2(0f, 1f);
-        cp.caja.anchoredPosition = new Vector2(44f, -168f);
-        cp.caja.sizeDelta = new Vector2(200f, 70f);
+        RecursosRPG rec = RecursosRPG.Get();
+        Sprite vida = rec.Icono("pocion");
+        cp.huecos[0] = cp.NuevoHueco(go.transform, "Vida", vida != null ? vida : ReservaPociones.Frasco(), new Vector2(44f, -168f));
+        cp.huecos[1] = cp.NuevoHueco(go.transform, "Mana", rec.Icono("pocion_mana"), new Vector2(214f, -168f));
 
-        cp.icono = new GameObject("Frasco").AddComponent<Image>();
-        cp.icono.transform.SetParent(cp.caja, false);
-        // Icono del pack (frasco rojo); si falta, el dibujado por codigo.
-        Sprite icono = RecursosRPG.Get().Icono("pocion");
-        cp.icono.sprite = icono != null ? icono : ReservaPociones.Frasco();
-        cp.icono.preserveAspect = true;
-        RectTransform ri = cp.icono.rectTransform;
+        ReservaPociones.AlCambiarAlgo += cp.Actualizar;
+        ReservaPociones.AlBeber += cp.Pulso;
+        cp.Actualizar();
+    }
+
+    private Hueco NuevoHueco(Transform padre, string nombre, Sprite icono, Vector2 pos)
+    {
+        Hueco h = new Hueco();
+        h.caja = new GameObject(nombre).AddComponent<RectTransform>();
+        h.caja.SetParent(padre, false);
+        h.caja.anchorMin = h.caja.anchorMax = new Vector2(0f, 1f);
+        h.caja.pivot = new Vector2(0f, 1f);
+        h.caja.anchoredPosition = pos;
+        h.caja.sizeDelta = new Vector2(170f, 70f);
+
+        h.icono = new GameObject("Frasco").AddComponent<Image>();
+        h.icono.transform.SetParent(h.caja, false);
+        h.icono.sprite = icono;
+        h.icono.enabled = icono != null;
+        h.icono.preserveAspect = true;
+        RectTransform ri = h.icono.rectTransform;
         ri.anchorMin = ri.anchorMax = new Vector2(0f, 0.5f);
         ri.pivot = new Vector2(0f, 0.5f);
         ri.sizeDelta = new Vector2(48f, 60f);
 
-        cp.texto = new GameObject("Cargas").AddComponent<TextMeshProUGUI>();
-        cp.texto.transform.SetParent(cp.caja, false);
-        cp.texto.fontSize = 34;
-        cp.texto.fontStyle = FontStyles.Bold;
-        cp.texto.alignment = TextAlignmentOptions.MidlineLeft;
-        cp.texto.outlineWidth = 0.2f;
-        cp.texto.outlineColor = new Color32(0, 0, 0, 255);
-        RectTransform rt = cp.texto.rectTransform;
+        h.texto = new GameObject("Cargas").AddComponent<TextMeshProUGUI>();
+        h.texto.transform.SetParent(h.caja, false);
+        h.texto.fontSize = 34;
+        h.texto.fontStyle = FontStyles.Bold;
+        h.texto.alignment = TextAlignmentOptions.MidlineLeft;
+        h.texto.outlineWidth = 0.2f;
+        h.texto.outlineColor = new Color32(0, 0, 0, 255);
+        RectTransform rt = h.texto.rectTransform;
         rt.anchorMin = rt.anchorMax = new Vector2(0f, 0.5f);
         rt.pivot = new Vector2(0f, 0.5f);
         rt.anchoredPosition = new Vector2(56f, 0f);
-        rt.sizeDelta = new Vector2(150f, 50f);
-
-        ReservaPociones.AlCambiar += cp.Actualizar;
-        ReservaPociones.AlBeber += cp.Pulso;
-        cp.Actualizar(r.Cargas, r.Maximo);
+        rt.sizeDelta = new Vector2(120f, 50f);
+        return h;
     }
 
     private void OnDestroy()
     {
-        ReservaPociones.AlCambiar -= Actualizar;
+        ReservaPociones.AlCambiarAlgo -= Actualizar;
         ReservaPociones.AlBeber -= Pulso;
     }
 
-    private void Actualizar(int cargas, int maximo)
+    private void Actualizar()
     {
-        texto.text = $"x{cargas} <size=60%><color=#bbbbbb>[Q]</color></size>";
-        bool quedan = cargas > 0;
-        icono.color = quedan ? Color.white : new Color(0.4f, 0.4f, 0.4f, 0.8f);
-        texto.color = quedan ? new Color(1f, 0.92f, 0.85f) : new Color(0.6f, 0.6f, 0.6f);
-        pulso = 1f;
+        if (reserva == null) return;
+        for (int i = 0; i < 2; i++)
+        {
+            ReservaPociones.Tipo t = (ReservaPociones.Tipo)i;
+            Hueco h = huecos[i];
+            const bool elegida = true;
+            string tecla = t == ReservaPociones.Tipo.Vida ? "Q" : "R";
+            int cargas = reserva.CargasDe(t);
+            bool quedan = cargas > 0;
+            h.texto.text = $"x{cargas} <size=60%><color=#bbbbbb>[{tecla}]</color></size>";
+            float a = elegida ? 1f : 0.55f;
+            h.icono.color = quedan ? new Color(1f, 1f, 1f, a) : new Color(0.4f, 0.4f, 0.4f, 0.8f * a);
+            Color tc = quedan ? (t == ReservaPociones.Tipo.Vida ? new Color(1f, 0.92f, 0.85f) : new Color(0.8f, 0.9f, 1f)) : new Color(0.6f, 0.6f, 0.6f);
+            h.texto.color = new Color(tc.r, tc.g, tc.b, a);
+            h.caja.localScale = Vector3.one * (elegida ? 1f : 0.85f);
+            if (cargas < cargasAntes[i]) h.pulso = 1f;
+            cargasAntes[i] = cargas;
+        }
     }
 
-    private void Pulso() { pulso = 1f; }
+    private void Pulso()
+    {
+        // El latido lo pone Actualizar en el frasco que ha bajado.
+    }
 
     private void Update()
     {
-        if (pulso <= 0f) return;
-        pulso = Mathf.Max(0f, pulso - Time.unscaledDeltaTime * 3f);
-        caja.localScale = Vector3.one * (1f + 0.2f * pulso);
+        if (reserva == null) return;
+        for (int i = 0; i < 2; i++)
+        {
+            Hueco h = huecos[i];
+            if (h.pulso <= 0f) continue;
+            h.pulso = Mathf.Max(0f, h.pulso - Time.unscaledDeltaTime * 3f);
+            const float baseEscala = 1f;
+            h.caja.localScale = Vector3.one * baseEscala * (1f + 0.2f * h.pulso);
+        }
     }
 }

@@ -151,6 +151,19 @@ public static class Progreso
         PlayerPrefs.Save();
     }
 
+    // Lo pone una partida guardada al cargarla.
+    public static void Establecer(int nuevasAlmas, int[] nuevosNiveles, int manchaAlmas, Vector2 manchaPos, string manchaEscena)
+    {
+        cargado = true;
+        almas = nuevasAlmas;
+        for (int i = 0; i < NumEstadisticas; i++) niveles[i] = nuevosNiveles != null && i < nuevosNiveles.Length ? nuevosNiveles[i] : 0;
+        AlmasPerdidas = manchaAlmas;
+        PosicionMancha = manchaPos;
+        EscenaMancha = manchaEscena ?? "";
+        Guardar();
+        AlCambiarAlmas?.Invoke();
+    }
+
     // Empieza de cero (lo usan las pruebas automaticas).
     public static void Reiniciar()
     {

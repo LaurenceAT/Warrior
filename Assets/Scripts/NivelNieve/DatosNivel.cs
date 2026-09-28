@@ -84,7 +84,7 @@ public class DatosNivel : MonoBehaviour
         estado = DecidirEstado();
 
         float musicaObjetivo = estado == Estado.Combate ? volumenMusica * ControlVolumen.Musica : 0f;
-        float ambienteObjetivo = estado == Estado.Explorando ? volumenAmbiente : estado == Estado.Combate ? volumenAmbiente * 0.12f : 0f;
+        float ambienteObjetivo = (estado == Estado.Explorando ? volumenAmbiente : estado == Estado.Combate ? volumenAmbiente * 0.12f : 0f) * ControlVolumen.Efectos;
         FactorAmbiente = estado == Estado.Explorando ? 1f : estado == Estado.Combate ? 0.25f : 0f;
 
         // Entrar en combate o en el jefe es rapido; volver a la calma, lento.

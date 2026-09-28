@@ -11,7 +11,19 @@ public abstract class JefeBase : EnemigoBase
     // La musica baja casi del todo (el jefe cae y parece muerto antes de revivir).
     public event System.Action AlSilencio;
 
+    [Header("Sonidos")]
+    [Tooltip("Los sonidos de este jefe, accion por accion (Assets/Data/Sonidos). Lo que no este aqui suena de la biblioteca general.")]
+    [SerializeField] protected SonidosAcciones sonidos;
+
     public abstract void Configurar(Rect zona, float alturaSuelo);
+
+    // Un sonido del jefe: el de su archivo si lo tiene, si no el de la biblioteca.
+    protected void Sonar(string clave, float volumen = 1f, float tono = 1f)
+    {
+        RecursosRPG.GrupoSonido g = sonidos != null ? sonidos.Buscar(clave) : null;
+        if (g != null) Sonido.ReproducirGrupo(g, "jefe:" + clave, volumen, tono);
+        else Sonido.Reproducir(clave, volumen, tono);
+    }
 
     protected void AvisarAterrizaje() => AlAterrizar?.Invoke();
     protected void AvisarCambioFase() => AlCambiarFase?.Invoke();
