@@ -32,6 +32,7 @@ public static class PruebaNieve
     public static void PintarCuevaPrueba() => Lanzar("pintarcueva", "Assets/Scenes/Nivel Cueva.unity");
     public static void DecoracionPrueba() => Lanzar("decoracion", System.Environment.GetEnvironmentVariable("VISTAS_ESCENA") ?? Escena);
     public static void PocionesPrueba() => Lanzar("pociones", Escena);
+    public static void Ronda6Prueba() => Lanzar("ronda6", Escena);
     public static void MenuPrueba() => Lanzar("menu", "Assets/Scenes/Menu Principal.unity");
     public static void PintarPrueba() => Lanzar("pintar", Escena);
     public static void CornisaPrueba() => Lanzar("cornisa", Escena);
@@ -101,7 +102,7 @@ public static class PruebaNieve
             if (p == null) { Debug.LogError("[Prueba] sin player"); EditorApplication.ExitPlaymode(); yield break; }
             Debug.Log($"[Prueba] modo={modo} player={(p != null)} vida={Vida()}/{p.VidaMaxima}");
             IEnumerator rutina = modo == "sistemas" ? Sistemas() : modo == "nivel" ? Nivel() : modo == "enemigos" ? Enemigos()
-                               : modo == "jefe" ? Jefe() : modo == "vistas" ? Vistas() : modo == "cornisa" ? Cornisa() : modo == "pintar" ? Pintar() : modo == "pintarcueva" ? PintarCueva() : modo == "decoracion" ? PintarDecoracion() : modo == "pociones" ? Pociones() : modo == "portal" ? Portal() : Cueva();
+                               : modo == "jefe" ? Jefe() : modo == "vistas" ? Vistas() : modo == "cornisa" ? Cornisa() : modo == "pintar" ? Pintar() : modo == "pintarcueva" ? PintarCueva() : modo == "decoracion" ? PintarDecoracion() : modo == "pociones" ? Pociones() : modo == "portal" ? Portal() : modo == "ronda6" ? Ronda6() : Cueva();
             float limite = Time.realtimeSinceStartup + 240f;
             while (rutina.MoveNext())
             {
@@ -165,7 +166,7 @@ public static class PruebaNieve
             Teletransportar(h.transform.position + Vector3.right * 0.5f + Vector3.up * 0.6f);
             yield return new WaitForSeconds(0.5f);
             Progreso.SumarAlmas(3000);
-            Entrada().IsTogglingWeapon = true;
+            Entrada().IsInteracting = true;
             yield return new WaitForSecondsRealtime(0.6f);
             Debug.Log($"[Sistemas] menu hoguera={MenuHoguera.Abierto} timeScale={Time.timeScale}");
             MenuHoguera menu = Object.FindFirstObjectByType<MenuHoguera>();
@@ -175,7 +176,7 @@ public static class PruebaNieve
             yield return new WaitForSecondsRealtime(0.4f);
             Debug.Log($"[Sistemas] nivel={Progreso.NivelTotal} almas={Progreso.Almas} vida {vidaAntes}->{p.VidaMaxima} mana max={mana.Maximo} resGolpes={Progreso.ResGolpes}");
             yield return Captura("s06_hoguera", true);
-            Llamar(menu, "CerrarInterno");
+            Llamar(menu, "Cerrar");
             yield return new WaitForSecondsRealtime(0.5f);
 
             // Resistencia a golpes: un golpe de 40 ahora quita menos.
@@ -610,6 +611,231 @@ public static class PruebaNieve
             Debug.Log($"[Pociones] tras hoguera: mana {m1:0}->{mana.Actual:0} cargas mana={r.CargasMana}/{r.MaximoMana}");
         }
 
+        // ------------------------------------------------------------------ Ronda 6
+
+        private IEnumerator Ronda6()
+        {
+            PlayerMana mana = p.GetComponent<PlayerMana>();
+            PlayerStamina est = p.GetComponent<PlayerStamina>();
+            ReservaPociones r = ReservaPociones.Get();
+            PlayerHud hud = PlayerHud.Get();
+            Invulnerable();
+            yield return new WaitForSeconds(1.5f);
+
+            // 1. Valores y largos iniciales.
+            float Ancho(string barra) => ((RectTransform)hud.transform.Find("HUD/" + barra)).sizeDelta.x;
+            Debug.Log($"[R6] inicial vida={Vida()}/{p.VidaMaxima} estamina={est.Max} mana={mana.Actual}/{mana.Maximo} " +
+                      $"anchos vida={Ancho("Vida"):0} estamina={Ancho("Estamina"):0} mana={Ancho("Mana"):0}");
+            yield return Captura("r6_01_hud_inicial", true);
+
+            // 2. Mana: la barra sigue al mana (antes se quedaba quieta).
+            float Relleno(string barra) => ((RectTransform)PlayerHud.Get().transform.Find("HUD/" + barra + "/Relleno")).anchorMax.x;
+            mana.Gastar(50f);
+            yield return null;
+            yield return null;
+            Debug.Log($"[R6] mana gastado={mana.Actual:0} fraccion={mana.Fraccion:0.00} barra={Relleno("Mana"):0.00}");
+            Entrada().IsManaPotion = true;
+            yield return new WaitForSeconds(1.6f);
+            Debug.Log($"[R6] frasco mana: mana={mana.Actual:0} barra={Relleno("Mana"):0.00} cargas={r.CargasMana}/{r.MaximoMana}");
+            Entrada().IsManaPotion = true;
+            yield return new WaitForSeconds(0.6f);
+            Debug.Log($"[R6] segundo intento sin cargas: cargas={r.CargasMana}");
+            yield return Captura("r6_02_frascos", true);
+
+            // 3. Imbuir sangrado: anillo del rombo y sangrado en una rata.
+            mana.Llenar();
+            Llamar(p, "EmpezarImbuir", Elemento.Sangrado);
+            yield return new WaitForSeconds(1.2f);
+            ArmaImbuida arma = p.GetComponent<ArmaImbuida>();
+            UnityEngine.UI.Image anillo = hud.transform.Find("HUD/Anillo").GetComponent<UnityEngine.UI.Image>();
+            Debug.Log($"[R6] imbuido={arma.Activo} mana={mana.Actual:0} anillo={anillo.enabled} fill={anillo.fillAmount:0.00} restante={arma.FraccionRestante:0.00}");
+            EnemyHealth rata = Cercano<EnemigoRata>();
+            if (rata != null)
+            {
+                SetCampo(rata, "maxHealth", 2000);
+                SetCampo(rata, "currentHealth", 2000);
+                Teletransportar(rata.transform.position + Vector3.left * 1f);
+                for (int i = 0; i < 4; i++)
+                {
+                    yield return Atacar(1, 1);
+                    EstadosEnemigo ee = rata != null ? rata.GetComponent<EstadosEnemigo>() : null;
+                    Debug.Log($"[R6] golpe {i + 1}: vida rata={(rata != null ? rata.CurrentHealth : -1)} sangrado={(ee != null ? ee.SangradoFraccion : 0f):0.00} iconos={(ee != null ? ee.Activos().Count : 0)}");
+                    if (i == 1) yield return Captura("r6_03_iconos_enemigo", true);
+                }
+                EstadosEnemigo e2 = rata != null ? rata.GetComponent<EstadosEnemigo>() : null;
+                yield return new WaitForSeconds(0.5f);
+                float s0 = e2 != null ? e2.SangradoFraccion : 0f;
+                yield return new WaitForSeconds(3f);
+                Debug.Log($"[R6] sangrado baja solo: {s0:0.00}->{(e2 != null ? e2.SangradoFraccion : 0f):0.00}");
+            }
+            yield return Captura("r6_04_anillo", true);
+
+            // 4. Resistencias: separadas por tipo y con tope.
+            int Golpe(PlayerControler.TipoDano tipo)
+            {
+                Curar();
+                SetCampo(p, "isInvincible", false);
+                SetCampo(p, "hasIFrames", false);
+                int v = Vida();
+                p.TakeDamage(100, null, tipo);
+                int d = v - Vida();
+                Curar();
+                return d;
+            }
+            foreach (int n in new[] { 0, 1, 5, 10, 20 })
+            {
+                Progreso.Establecer(0, new[] { 0, 0, 0, 0, n }, 0, Vector2.zero, "");
+                Debug.Log($"[R6] resGolpes nivel {n}: fisico 100 -> {Golpe(PlayerControler.TipoDano.Fisico)}  magico 100 -> {Golpe(PlayerControler.TipoDano.Magico)}  ({Progreso.ResGolpes * 100f:0} %)");
+                yield return new WaitForSeconds(0.1f);
+            }
+            Progreso.Establecer(0, new[] { 0, 0, 0, 10, 0 }, 0, Vector2.zero, "");
+            Debug.Log($"[R6] resHechizos 10: fisico -> {Golpe(PlayerControler.TipoDano.Fisico)}  magico -> {Golpe(PlayerControler.TipoDano.Magico)}");
+            // El agarre (fisico) con resistencia a golpes 10.
+            Progreso.Establecer(0, new[] { 0, 0, 0, 0, 10 }, 0, Vector2.zero, "");
+            Curar();
+            SetCampo(p, "isInvincible", false);
+            SetCampo(p, "hasIFrames", false);
+            yield return null;
+            bool agarrado = p.IntentarAgarre();
+            int total = Mathf.RoundToInt(p.VidaMaxima * 0.8f);
+            int v1 = Vida();
+            for (int i = 0; i < 4; i++) p.CorteAgarre(Mathf.RoundToInt(total * 0.15f));
+            p.CorteAgarre(total - 4 * Mathf.RoundToInt(total * 0.15f));
+            Debug.Log($"[R6] agarre={agarrado} (80 % = {total}) con resGolpes 10: quita {v1 - Vida()}");
+            p.SoltarAgarre(false);
+            Progreso.Reiniciar();
+            yield return new WaitForSeconds(1.5f);
+            Curar();
+
+            // 5. Estados del player: se llena, baja sola y desaparece; al llenarse, salta.
+            SetCampo(p, "isInvincible", true);
+            EstadosPlayer.Acumular(p, EstadoPlayer.Sangrado, 70f);
+            EstadosPlayer.Acumular(p, EstadoPlayer.Congelacion, 40f);
+            EstadosPlayer ep = p.GetComponent<EstadosPlayer>();
+            yield return new WaitForSeconds(0.4f);
+            yield return Captura("r6_05_estados_player", true);
+            string Fr() => $"sangrado={ep.Fraccion(EstadoPlayer.Sangrado):0.00} congelacion={ep.Fraccion(EstadoPlayer.Congelacion):0.00}";
+            Debug.Log($"[R6] estados al recibir: {Fr()}");
+            float antes = ep.Fraccion(EstadoPlayer.Sangrado);
+            yield return new WaitForSeconds(2.5f);
+            float a1 = ep.Fraccion(EstadoPlayer.Sangrado);
+            yield return new WaitForSeconds(1f);
+            float a2 = ep.Fraccion(EstadoPlayer.Sangrado);
+            yield return new WaitForSeconds(1f);
+            float a3 = ep.Fraccion(EstadoPlayer.Sangrado);
+            Debug.Log($"[R6] bajada sangrado: {antes:0.00} -> {a1:0.00} -> {a2:0.00} -> {a3:0.00} (lenta arriba, rapida abajo)");
+            yield return new WaitForSeconds(6f);
+            Transform filaS = hud.transform.Find("HUD/Estado_Sangrado");
+            Debug.Log($"[R6] tras bajar: {Fr()} fila visible={filaS.gameObject.activeSelf}");
+            Curar();
+            int vs = Vida();
+            EstadosPlayer.Acumular(p, EstadoPlayer.Sangrado, 110f);
+            Debug.Log($"[R6] sangrado lleno: vida {vs}->{Vida()} en efecto={ep.EnEfecto(EstadoPlayer.Sangrado)}");
+            Curar();
+
+            // 6. Hoguera con F: menu, subir nivel (con numeros exactos), mejorar.
+            Hoguera h = Object.FindObjectsByType<Hoguera>(FindObjectsSortMode.None).OrderBy(x => Vector2.Distance(x.transform.position, p.transform.position)).First();
+            Teletransportar(h.transform.position + Vector3.right * 0.5f + Vector3.up * 0.6f);
+            yield return new WaitForSeconds(0.6f);
+            Progreso.SumarAlmas(5000);
+            Equipo.Sumar(Equipo.Objeto.PiedraForja, 1);
+            Equipo.Sumar(Equipo.Objeto.LagrimaSagrada, 1);
+            Debug.Log($"[R6] interactuable cerca={(Interacciones.Actual as Component)?.name}");
+            Entrada().IsInteracting = true;
+            yield return new WaitForSecondsRealtime(0.6f);
+            MenuHoguera menu = Object.FindFirstObjectByType<MenuHoguera>();
+            Debug.Log($"[R6] menu hoguera abierto={MenuHoguera.Abierto}");
+            yield return Captura("r6_06_hoguera_principal", true);
+            Llamar(menu, "Descansar");
+            yield return new WaitForSecondsRealtime(0.3f);
+            Debug.Log($"[R6] descansar: cargas mana={r.CargasMana}/{r.MaximoMana} vida={r.Cargas}/{r.Maximo}");
+            Llamar(menu, "Mostrar", Enum("MenuHoguera+Pagina", "Nivel"));
+            yield return new WaitForSecondsRealtime(0.3f);
+            int vmax0 = p.VidaMaxima;
+            float emax0 = est.Max, mmax0 = mana.Maximo;
+            Llamar(menu, "Subir", Progreso.Estadistica.Vida);
+            Llamar(menu, "Subir", Progreso.Estadistica.Estamina);
+            Llamar(menu, "Subir", Progreso.Estadistica.Mana);
+            Llamar(menu, "Subir", Progreso.Estadistica.ResGolpes);
+            yield return new WaitForSecondsRealtime(0.3f);
+            yield return Captura("r6_07_hoguera_nivel", true);
+            Llamar(menu, "Mostrar", Enum("MenuHoguera+Pagina", "Equipo"));
+            yield return new WaitForSecondsRealtime(0.3f);
+            yield return Captura("r6_08_hoguera_equipo_antes", true);
+            Llamar(menu, "MejorarEspada");
+            Llamar(menu, "MejorarFrascos");
+            yield return new WaitForSecondsRealtime(0.3f);
+            yield return Captura("r6_09_hoguera_equipo_despues", true);
+            Debug.Log($"[R6] espada +{Equipo.NivelEspada} x{Equipo.MultiplicadorEspada:0.00} frascos +{Equipo.NivelFrascos} cura={Equipo.CuraFrasco:0.00} mana={Equipo.ManaFrasco:0.00}");
+            float anchoAntes = Ancho("Vida");
+            Llamar(menu, "Cerrar");
+            yield return new WaitForSeconds(0.45f);
+            yield return Captura("r6_10_barras_creciendo", true);
+            float anchoMedio = Ancho("Vida");
+            yield return new WaitForSeconds(1.2f);
+            Debug.Log($"[R6] subir: vida {vmax0}->{p.VidaMaxima} estamina {emax0}->{est.Max} mana {mmax0}->{mana.Maximo}; ancho vida {anchoAntes:0} -> {anchoMedio:0} -> {Ancho("Vida"):0}");
+            yield return Captura("r6_11_barras_crecidas", true);
+
+            // 7. Cofre de mejora: se abre con F y se levanta el objeto.
+            CofreMejora cofre = Object.FindFirstObjectByType<CofreMejora>();
+            if (cofre != null)
+            {
+                int l0 = Equipo.Cantidad(Equipo.Objeto.LagrimaSagrada), p0 = Equipo.Cantidad(Equipo.Objeto.PiedraForja);
+                Teletransportar(cofre.transform.position + Vector3.left * 0.6f + Vector3.up * 0.4f);
+                yield return new WaitForSeconds(1f);
+                yield return Captura("r6_12_cofre_brillo", false);
+                Entrada().IsInteracting = true;
+                yield return new WaitForSeconds(1.1f);
+                Debug.Log($"[R6] cofre abierto={cofre.Abierto} levantando={p.LevantandoObjeto} lagrimas {l0}->{Equipo.Cantidad(Equipo.Objeto.LagrimaSagrada)} piedras {p0}->{Equipo.Cantidad(Equipo.Objeto.PiedraForja)}");
+                yield return Captura("r6_13_objeto_levantado", true);
+                yield return new WaitForSeconds(2.5f);
+                Debug.Log($"[R6] tras levantar: levantando={p.LevantandoObjeto}");
+            }
+            else Debug.LogWarning("[R6] no hay cofre de mejora en la escena");
+
+            // 8. Recompensa del jefe.
+            ArenaJefe arena = Object.FindFirstObjectByType<ArenaJefe>();
+            if (arena != null)
+            {
+                int pi = Equipo.Cantidad(Equipo.Objeto.PiedraForja);
+                arena.StartCoroutine((IEnumerator)Llamar(arena, "DarRecompensa"));
+                yield return new WaitForSeconds(3.5f);
+                Debug.Log($"[R6] recompensa jefe: piedras {pi}->{Equipo.Cantidad(Equipo.Objeto.PiedraForja)} levantando={p.LevantandoObjeto}");
+                yield return Captura("r6_14_recompensa_jefe", true);
+                yield return new WaitForSeconds(3f);
+            }
+
+            // 9. Pausa.
+            GameManager.Instance.PauseGame();
+            yield return new WaitForSecondsRealtime(0.4f);
+            yield return Captura("r6_15_pausa", true);
+            GameManager.Instance.ResumeGame();
+
+            // 10. Muerte y reaparicion: el mana vuelve lleno (y la barra tambien).
+            mana.Gastar(40f);
+            Debug.Log($"[R6] antes de morir: mana={mana.Actual:0} barra={Relleno("Mana"):0.00}");
+            p.DanoEstado(99999);
+            for (int i = 0; i < 30; i++)
+            {
+                yield return new WaitForSeconds(0.5f);
+                if (PantallaMuerte.Activa) { PantallaMuerte pm = Object.FindFirstObjectByType<PantallaMuerte>(); SetCampo(pm, "puedeContinuar", true); SetCampo(pm, "continuar", true); }
+                PlayerControler nuevo = Object.FindObjectsByType<PlayerControler>(FindObjectsSortMode.None).FirstOrDefault(x => x.VidaActual > 0);
+                if (nuevo != null) { p = nuevo; break; }
+            }
+            yield return new WaitForSeconds(1f);
+            if (p != null)
+            {
+                PlayerMana m2 = p.GetComponent<PlayerMana>();
+                Debug.Log($"[R6] reaparecido: vida={p.VidaActual} mana={m2.Actual:0}/{m2.Maximo:0} barra={Relleno("Mana"):0.00} cargas mana={r.CargasMana}");
+            }
+        }
+
+        private static object Enum(string tipo, string valor)
+        {
+            System.Type t = typeof(MenuHoguera).Assembly.GetType(tipo);
+            return System.Enum.Parse(t, valor);
+        }
+
         // ------------------------------------------------------------------ Menu principal
 
         private IEnumerator Menu()
@@ -653,7 +879,8 @@ public static class PruebaNieve
             Progreso.SumarAlmas(1234);
             h.Usar(p);
             yield return new WaitForSecondsRealtime(0.5f);
-            Llamar(Object.FindFirstObjectByType<MenuHoguera>(), "CerrarInterno");
+            Llamar(Object.FindFirstObjectByType<MenuHoguera>(), "Descansar");
+            Llamar(Object.FindFirstObjectByType<MenuHoguera>(), "Cerrar");
             yield return new WaitForSecondsRealtime(0.5f);
             Debug.Log($"[Menu] tras hoguera: lugar={Partida.Actual.lugar} enHoguera={Partida.Actual.enHoguera} pos=({Partida.Actual.x:0.0},{Partida.Actual.y:0.0}) almas={Partida.Actual.almas}");
 

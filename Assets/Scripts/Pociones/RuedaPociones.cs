@@ -50,7 +50,7 @@ public class RuedaPociones : MonoBehaviour
         Time.timeScale = CamaraLenta;
         grupo.alpha = 0f;
         gameObject.SetActive(true);
-        Sonido.Reproducir("menu_abrir", 0.7f);
+        SonidoMenu.Abrir();
         Refrescar();
     }
 
@@ -72,7 +72,7 @@ public class RuedaPociones : MonoBehaviour
 
         int antes = elegido;
         LeerSeleccion();
-        if (elegido != antes) { Sonido.Reproducir("menu_mover", 0.5f); Refrescar(); }
+        if (elegido != antes) { SonidoMenu.Mover(); Refrescar(); }
 
         Keyboard k = Keyboard.current;
         Mouse m = Mouse.current;
@@ -84,7 +84,7 @@ public class RuedaPociones : MonoBehaviour
         bool cancelar = (k != null && k.escapeKey.wasPressedThisFrame) || (m != null && m.rightButton.wasPressedThisFrame)
                         || (g != null && g.buttonEast.wasPressedThisFrame);
 
-        if (cancelar) { Sonido.Reproducir("menu_cancelar", 0.6f); Cerrar(); return; }
+        if (cancelar) { SonidoMenu.Cancelar(); Cerrar(); return; }
         if (!confirmar) return;
         ReservaPociones.Tipo t = (ReservaPociones.Tipo)elegido;
         Cerrar();

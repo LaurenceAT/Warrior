@@ -5,13 +5,14 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-// Menu de pausa (Escape), montado por codigo. Sustituye al panel de pausa antiguo:
-//   - Reanudar.
-//   - Volumen general, de musica y de efectos, y brillo (se guardan entre partidas).
-//   - Destrabar: devuelve al player al ultimo suelo seguro y limpia efectos
-//     que se hayan quedado atascados en pantalla.
-//   - Reiniciar desde el ultimo punto de control (hoguera o checkpoint).
-//   - Salir al menu (pide confirmacion).
+// Menu de pausa (Escape), montado por codigo, con el mismo estilo que el resto
+// de menus del juego (EstiloMenu). Dos columnas:
+//   - Partida: Reanudar, Destrabar (devuelve al player al ultimo suelo seguro y
+//     limpia efectos atascados), Reiniciar desde el ultimo punto de control y
+//     Salir al menu (pide confirmacion).
+//   - Ajustes: volumen general, de musica y de efectos, y brillo (se guardan
+//     entre partidas).
+// Arriba, donde estas: el nivel, el nivel del personaje y las almas.
 // Se maneja con raton, teclado o mando (flechas / stick y Enter / boton sur).
 public class MenuPausa : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class MenuPausa : MonoBehaviour
 
     private CanvasGroup grupo;
     private Button primero;
-    private TextMeshProUGUI textoSalir;
+    private TextMeshProUGUI textoSalir, textoLugar;
     private bool confirmarSalir;
 
     public static MenuPausa Get()
@@ -33,9 +34,16 @@ public class MenuPausa : MonoBehaviour
         StopAllCoroutines();
         confirmarSalir = false;
         if (textoSalir != null) textoSalir.text = "Salir al menú";
+        if (textoLugar != null)
+            textoLugar.text = $"{Partida.NombreNivel(SceneManager.GetActiveScene().name)}   ·   Nivel {Progreso.NivelTotal}   ·   Almas {Progreso.Almas:N0}";
         gameObject.SetActive(true);
+        if (mostrar) SonidoMenu.Abrir();
         StartCoroutine(Fundido(mostrar));
-        if (mostrar && EventSystem.current != null) EventSystem.current.SetSelectedGameObject(primero.gameObject);
+        if (mostrar && EventSystem.current != null)
+        {
+            SonidoMenu.Silenciar();
+            EventSystem.current.SetSelectedGameObject(primero.gameObject);
+        }
     }
 
     private IEnumerator Fundido(bool mostrar)
@@ -49,6 +57,13 @@ public class MenuPausa : MonoBehaviour
             yield return null;
         }
         grupo.alpha = hasta;
+    }
+
+    private void Update()
+    {
+        if (grupo == null || !grupo.interactable) return;
+        if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject == null && primero != null)
+            EventSystem.current.SetSelectedGameObject(primero.gameObject);
     }
 
     // ------------------------------------------------------------------ Acciones
@@ -93,152 +108,134 @@ public class MenuPausa : MonoBehaviour
     private static MenuPausa Crear()
     {
         GameObject go = new GameObject("MenuPausa");
-        Canvas c = go.AddComponent<Canvas>();
-        c.renderMode = RenderMode.ScreenSpaceOverlay;
-        c.sortingOrder = 100;
-        CanvasScaler cs = go.AddComponent<CanvasScaler>();
-        cs.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        cs.referenceResolution = new Vector2(1920, 1080);
-        cs.matchWidthOrHeight = 0.5f;
-        go.AddComponent<GraphicRaycaster>();
         MenuPausa m = go.AddComponent<MenuPausa>();
-        m.grupo = go.AddComponent<CanvasGroup>();
-        m.grupo.alpha = 0f;
-        m.grupo.interactable = false;
-        m.grupo.blocksRaycasts = false;
+        m.grupo = EstiloMenu.Lienzo(go, 100);
 
-        // Velo oscuro y panel central.
-        Image velo = Caja("Velo", go.transform, new Color(0f, 0f, 0f, 0.65f));
-        Estirar(velo.rectTransform);
+        RectTransform panel = EstiloMenu.Panel(go.transform, "PAUSA", new Vector2(1240f, 700f));
+        m.textoLugar = EstiloMenu.Texto("", panel, 24, new Color(0.82f, 0.76f, 0.68f));
+        m.textoLugar.fontStyle = FontStyles.Italic;
+        EstiloMenu.Arriba(m.textoLugar.rectTransform, -108f, 34f);
 
-        Image panel = Caja("Panel", go.transform, new Color(0.07f, 0.05f, 0.06f, 0.92f));
-        RectTransform rp = panel.rectTransform;
-        rp.anchorMin = rp.anchorMax = new Vector2(0.5f, 0.5f);
-        rp.sizeDelta = new Vector2(700f, 810f);
-        Image marco = Caja("Marco", panel.transform, new Color(0.6f, 0.15f, 0.18f, 0.9f));
-        RectTransform rm = marco.rectTransform;
-        rm.anchorMin = new Vector2(0f, 1f); rm.anchorMax = new Vector2(1f, 1f);
-        rm.sizeDelta = new Vector2(0f, 4f); rm.anchoredPosition = new Vector2(0f, -112f);
+        // Columna izquierda: la partida.
+        RectTransform izq = Zona(panel, 0f, 0.46f);
+        Cabecera(izq, "PARTIDA");
+        VerticalLayoutGroup ci = EstiloMenu.Columna(izq, 0f, 0f, 56f, 0f, 6f);
+        m.primero = EstiloMenu.Opcion(ci.transform, "Reanudar", m.Reanudar, 60f, 30f, null, TextAlignmentOptions.Left);
+        EstiloMenu.Opcion(ci.transform, "Destrabar", m.Destrabar, 60f, 30f, null, TextAlignmentOptions.Left);
+        EstiloMenu.Opcion(ci.transform, "Reiniciar desde el último punto de control", m.ReiniciarDesdeCheckpoint, 60f, 26f, null, TextAlignmentOptions.Left);
+        m.textoSalir = EstiloMenu.Opcion(ci.transform, "Salir al menú", m.Salir, 60f, 30f, null, TextAlignmentOptions.Left)
+                                 .GetComponentInChildren<TextMeshProUGUI>();
 
-        TextMeshProUGUI titulo = Texto("PAUSA", panel.transform, 64, new Color(0.95f, 0.85f, 0.8f));
-        titulo.fontStyle = FontStyles.Bold;
-        titulo.characterSpacing = 18f;
-        RectTransform rtit = titulo.rectTransform;
-        rtit.anchorMin = new Vector2(0f, 1f); rtit.anchorMax = new Vector2(1f, 1f);
-        rtit.pivot = new Vector2(0.5f, 1f);
-        rtit.sizeDelta = new Vector2(0f, 80f);
-        rtit.anchoredPosition = new Vector2(0f, -24f);
+        // Linea vertical entre columnas.
+        Image divisor = EstiloMenu.Caja("Divisor", panel, EstiloMenu.FiloTenue);
+        divisor.rectTransform.anchorMin = new Vector2(0.5f, 0f);
+        divisor.rectTransform.anchorMax = new Vector2(0.5f, 1f);
+        divisor.rectTransform.sizeDelta = new Vector2(2f, 0f);
+        divisor.rectTransform.offsetMin = new Vector2(-1f, 70f);
+        divisor.rectTransform.offsetMax = new Vector2(1f, -170f);
 
-        VerticalLayoutGroup vl = new GameObject("Opciones").AddComponent<VerticalLayoutGroup>();
-        vl.transform.SetParent(panel.transform, false);
-        RectTransform ro = (RectTransform)vl.transform;
-        ro.anchorMin = new Vector2(0f, 0f); ro.anchorMax = new Vector2(1f, 1f);
-        ro.offsetMin = new Vector2(50f, 30f); ro.offsetMax = new Vector2(-50f, -136f);
-        vl.spacing = 14f;
-        vl.childForceExpandHeight = false;
-        vl.childControlHeight = false;
-        vl.childAlignment = TextAnchor.UpperCenter;
+        // Columna derecha: ajustes.
+        RectTransform der = Zona(panel, 0.54f, 1f);
+        Cabecera(der, "AJUSTES");
+        VerticalLayoutGroup cd = EstiloMenu.Columna(der, 0f, 0f, 56f, 0f, 10f);
+        Deslizador("Volumen general", cd.transform, ControlVolumen.General, v => ControlVolumen.General = v);
+        Deslizador("Música", cd.transform, ControlVolumen.Musica, v => ControlVolumen.Musica = v);
+        Deslizador("Efectos", cd.transform, ControlVolumen.Efectos, v => ControlVolumen.Efectos = v);
+        Deslizador("Brillo", cd.transform, ControlBrillo.Brillo - 0.5f, v => ControlBrillo.Brillo = 0.5f + v);
 
-        m.primero = m.Boton("Reanudar", vl.transform, m.Reanudar).GetComponent<Button>();
-        m.Deslizador("Volumen general", vl.transform, ControlVolumen.General, v => ControlVolumen.General = v);
-        m.Deslizador("Volumen de la música", vl.transform, ControlVolumen.Musica, v => ControlVolumen.Musica = v);
-        m.Deslizador("Volumen de los efectos", vl.transform, ControlVolumen.Efectos, v => ControlVolumen.Efectos = v);
-        m.Deslizador("Brillo", vl.transform, ControlBrillo.Brillo - 0.5f, v => ControlBrillo.Brillo = 0.5f + v);
-        m.Boton("Destrabar", vl.transform, m.Destrabar);
-        m.Boton("Reiniciar desde el último punto de control", vl.transform, m.ReiniciarDesdeCheckpoint);
-        m.textoSalir = m.Boton("Salir al menú", vl.transform, m.Salir).GetComponentInChildren<TextMeshProUGUI>();
+        TextMeshProUGUI ayuda = EstiloMenu.Texto("Enter / clic: elegir      ← →: ajustar      Esc: volver al juego", go.transform, 22, new Color(0.8f, 0.78f, 0.75f, 0.6f));
+        ayuda.rectTransform.anchorMin = ayuda.rectTransform.anchorMax = new Vector2(0.5f, 0.08f);
+        ayuda.rectTransform.sizeDelta = new Vector2(1400f, 40f);
 
         go.SetActive(false);
         return m;
     }
 
-    private GameObject Boton(string texto, Transform padre, UnityEngine.Events.UnityAction accion)
+    private static RectTransform Zona(RectTransform panel, float desde, float hasta)
     {
-        Image fondo = Caja("Boton_" + texto, padre, new Color(0.16f, 0.1f, 0.12f, 1f));
-        fondo.rectTransform.sizeDelta = new Vector2(600f, 60f);
-        Button b = fondo.gameObject.AddComponent<Button>();
-        ColorBlock cb = b.colors;
-        cb.normalColor = Color.white;
-        cb.highlightedColor = new Color(1.9f, 1.2f, 1.2f);
-        cb.selectedColor = new Color(1.9f, 1.2f, 1.2f);
-        cb.pressedColor = new Color(2.4f, 1.6f, 1.4f);
-        cb.colorMultiplier = 1.5f;
-        b.colors = cb;
-        b.onClick.AddListener(accion);
-
-        TextMeshProUGUI t = Texto(texto, fondo.transform, 28, new Color(0.93f, 0.87f, 0.82f));
-        t.enableWordWrapping = false;
-        Estirar(t.rectTransform);
-        return fondo.gameObject;
+        RectTransform r = new GameObject("Columna", typeof(RectTransform)).GetComponent<RectTransform>();
+        r.SetParent(panel, false);
+        r.anchorMin = new Vector2(desde, 0f);
+        r.anchorMax = new Vector2(hasta, 1f);
+        r.offsetMin = new Vector2(desde == 0f ? 60f : 20f, 70f);
+        r.offsetMax = new Vector2(hasta >= 1f ? -60f : -20f, -165f);
+        return r;
     }
 
-    private void Deslizador(string etiqueta, Transform padre, float valor, System.Action<float> alCambiar)
+    private static void Cabecera(RectTransform zona, string texto)
     {
-        RectTransform fila = new GameObject("Fila_" + etiqueta).AddComponent<RectTransform>();
+        TextMeshProUGUI t = EstiloMenu.Texto(texto, zona, 22, new Color(0.78f, 0.66f, 0.46f));
+        t.characterSpacing = 8f;
+        t.alignment = TextAlignmentOptions.Left;
+        EstiloMenu.Arriba(t.rectTransform, 0f, 30f);
+        Image l = EstiloMenu.Caja("Linea", zona, EstiloMenu.FiloTenue);
+        l.rectTransform.anchorMin = new Vector2(0f, 1f);
+        l.rectTransform.anchorMax = new Vector2(1f, 1f);
+        l.rectTransform.sizeDelta = new Vector2(0f, 1f);
+        l.rectTransform.anchoredPosition = new Vector2(0f, -38f);
+    }
+
+    // Deslizador con su nombre y el valor en %. Suena suave al elegirlo.
+    private static void Deslizador(string etiqueta, Transform padre, float valor, System.Action<float> alCambiar)
+    {
+        RectTransform fila = new GameObject("Fila_" + etiqueta, typeof(RectTransform)).GetComponent<RectTransform>();
         fila.SetParent(padre, false);
-        fila.sizeDelta = new Vector2(600f, 66f);
+        LayoutElement le = fila.gameObject.AddComponent<LayoutElement>();
+        le.preferredHeight = le.minHeight = 72f;
 
-        TextMeshProUGUI t = Texto(etiqueta, fila, 24, new Color(0.8f, 0.75f, 0.72f));
+        TextMeshProUGUI t = EstiloMenu.Texto(etiqueta, fila, 26, EstiloMenu.TextoNormal);
         t.alignment = TextAlignmentOptions.TopLeft;
-        t.rectTransform.anchorMin = new Vector2(0f, 1f); t.rectTransform.anchorMax = new Vector2(1f, 1f);
-        t.rectTransform.pivot = new Vector2(0.5f, 1f);
-        t.rectTransform.sizeDelta = new Vector2(0f, 30f);
-        t.rectTransform.anchoredPosition = Vector2.zero;
+        EstiloMenu.Arriba(t.rectTransform, 0f, 32f);
+        TextMeshProUGUI pct = EstiloMenu.Texto("", fila, 24, EstiloMenu.TextoNormal);
+        pct.alignment = TextAlignmentOptions.TopRight;
+        EstiloMenu.Arriba(pct.rectTransform, 0f, 32f);
 
-        Slider s = new GameObject("Slider").AddComponent<Slider>();
+        Slider s = new GameObject("Slider", typeof(RectTransform)).AddComponent<Slider>();
         s.transform.SetParent(fila, false);
         RectTransform rs = (RectTransform)s.transform;
         rs.anchorMin = new Vector2(0f, 0f); rs.anchorMax = new Vector2(1f, 0f);
         rs.pivot = new Vector2(0.5f, 0f);
-        rs.sizeDelta = new Vector2(0f, 26f);
-        rs.anchoredPosition = new Vector2(0f, 4f);
+        rs.sizeDelta = new Vector2(0f, 22f);
+        rs.anchoredPosition = new Vector2(0f, 6f);
 
-        Image fondo = Caja("Fondo", s.transform, new Color(0.16f, 0.1f, 0.12f, 1f));
-        Estirar(fondo.rectTransform);
-        RectTransform area = new GameObject("Relleno").AddComponent<RectTransform>();
+        Image fondo = EstiloMenu.Caja("Fondo", s.transform, new Color(0.12f, 0.1f, 0.1f, 1f));
+        fondo.raycastTarget = true;
+        EstiloMenu.Estirar(fondo.rectTransform, 0f);
+        fondo.rectTransform.anchorMin = new Vector2(0f, 0.3f);
+        fondo.rectTransform.anchorMax = new Vector2(1f, 0.7f);
+        RectTransform area = new GameObject("Relleno", typeof(RectTransform)).GetComponent<RectTransform>();
         area.SetParent(s.transform, false);
-        Estirar(area);
-        Image relleno = Caja("Barra", area, new Color(0.62f, 0.05f, 0.1f, 1f));
-        Estirar(relleno.rectTransform);
-        RectTransform zonaAsa = new GameObject("ZonaAsa").AddComponent<RectTransform>();
+        EstiloMenu.Estirar(area);
+        area.anchorMin = new Vector2(0f, 0.3f);
+        area.anchorMax = new Vector2(1f, 0.7f);
+        Image relleno = EstiloMenu.Caja("Barra", area, new Color(0.62f, 0.48f, 0.28f, 1f));
+        EstiloMenu.Estirar(relleno.rectTransform);
+        RectTransform zonaAsa = new GameObject("ZonaAsa", typeof(RectTransform)).GetComponent<RectTransform>();
         zonaAsa.SetParent(s.transform, false);
-        Estirar(zonaAsa);
-        Image asa = Caja("Asa", zonaAsa, new Color(0.95f, 0.85f, 0.8f, 1f));
-        asa.rectTransform.sizeDelta = new Vector2(18f, 0f);
+        EstiloMenu.Estirar(zonaAsa);
+        Image asa = EstiloMenu.Caja("Asa", zonaAsa, new Color(0.95f, 0.88f, 0.75f, 1f));
+        asa.raycastTarget = true;
+        asa.rectTransform.sizeDelta = new Vector2(12f, 0f);
+        asa.rectTransform.localRotation = Quaternion.identity;
 
         s.fillRect = relleno.rectTransform;
         s.handleRect = asa.rectTransform;
         s.targetGraphic = asa;
+        s.transition = Selectable.Transition.None;
         s.minValue = 0f;
         s.maxValue = 1f;
         s.value = valor;
-        s.onValueChanged.AddListener(v => alCambiar(v));
-    }
+        pct.text = Mathf.RoundToInt(valor * 100f) + " %";
+        s.onValueChanged.AddListener(v => { alCambiar(v); pct.text = Mathf.RoundToInt(v * 100f) + " %"; });
 
-    private static Image Caja(string nombre, Transform padre, Color color)
-    {
-        Image i = new GameObject(nombre).AddComponent<Image>();
-        i.transform.SetParent(padre, false);
-        i.color = color;
-        return i;
-    }
-
-    private static TextMeshProUGUI Texto(string texto, Transform padre, float tamano, Color color)
-    {
-        TextMeshProUGUI t = new GameObject("Texto").AddComponent<TextMeshProUGUI>();
-        t.transform.SetParent(padre, false);
-        t.text = texto;
-        t.fontSize = tamano;
-        t.color = color;
-        t.alignment = TextAlignmentOptions.Center;
-        return t;
-    }
-
-    private static void Estirar(RectTransform r)
-    {
-        r.anchorMin = Vector2.zero;
-        r.anchorMax = Vector2.one;
-        r.offsetMin = r.offsetMax = Vector2.zero;
+        // Al elegirlo se ilumina el nombre, como las opciones.
+        OpcionEstilo o = s.gameObject.AddComponent<OpcionEstilo>();
+        o.texto = t;
+        o.marca = EstiloMenu.Caja("Marca", fila, EstiloMenu.Filo);
+        o.marca.rectTransform.anchorMin = new Vector2(0f, 0.2f);
+        o.marca.rectTransform.anchorMax = new Vector2(0f, 0.8f);
+        o.marca.rectTransform.sizeDelta = new Vector2(3f, 0f);
+        o.marca.rectTransform.anchoredPosition = new Vector2(-12f, 0f);
+        o.marca.enabled = false;
     }
 }
-

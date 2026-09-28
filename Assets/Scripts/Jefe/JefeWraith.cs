@@ -103,7 +103,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
         salud.Inamovible = true;
         // Nada interrumpe al jefe salvo el parry (lo gestiona el propio jefe).
         armadura = true;
-        SangradoPlayer.efectoEstallido = fxSangre;
+        EstadosPlayer.efectoSangrado = fxSangre;
     }
 
     // ------------------------------------------------------------------ Debilidad
@@ -356,8 +356,8 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
         for (int i = 0; i < oleadas; i++)
         {
             Vector2 pie = new Vector2(transform.position.x, suelo);
-            OndaCarmesi.Lanzar(fxOnda, pie + Vector2.right * 1.2f, 1, fase2 ? 10.5f : 9f, danoNormal, 22f, colorOnda, 1.2f);
-            OndaCarmesi.Lanzar(fxOnda, pie + Vector2.left * 1.2f, -1, fase2 ? 10.5f : 9f, danoNormal, 22f, colorOnda, 1.2f);
+            OndaCarmesi.Lanzar(fxOnda, pie + Vector2.right * 1.2f, 1, fase2 ? 10.5f : 9f, danoNormal, 22f, colorOnda, 1.2f, EstadoPlayer.Sangrado, 20f);
+            OndaCarmesi.Lanzar(fxOnda, pie + Vector2.left * 1.2f, -1, fase2 ? 10.5f : 9f, danoNormal, 22f, colorOnda, 1.2f, EstadoPlayer.Sangrado, 20f);
             yield return Esperar(0.55f);
         }
         yield return Esperar(0.3f);
@@ -446,8 +446,8 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
 
         // El zarpazo levanta ondas a los dos lados.
         Vector2 pie = new Vector2(transform.position.x, suelo);
-        OndaCarmesi.Lanzar(fxOnda, pie + Vector2.right * mirada * 3f, mirada, 11f, danoNormal, 18f, colorOnda, 1.2f);
-        OndaCarmesi.Lanzar(fxOnda, pie - Vector2.right * mirada * 1.5f, -mirada, 11f, danoNormal, 18f, colorOnda, 1.2f);
+        OndaCarmesi.Lanzar(fxOnda, pie + Vector2.right * mirada * 3f, mirada, 11f, danoNormal, 18f, colorOnda, 1.2f, EstadoPlayer.Sangrado, 20f);
+        OndaCarmesi.Lanzar(fxOnda, pie - Vector2.right * mirada * 1.5f, -mirada, 11f, danoNormal, 18f, colorOnda, 1.2f, EstadoPlayer.Sangrado, 20f);
         yield return Esperar(0.25f);
         rb.linearVelocity = Vector2.zero;
         yield return Esperar(0.45f);
@@ -467,7 +467,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
         for (int i = 0; i < 9; i++)
         {
             float x = i % 3 == 0 ? PosPlayer.x : Random.Range(arena.xMin + 1f, arena.xMax - 1f);
-            Meteoro.Caer(fxMeteoro, fxExplosion, fxGlifo, new Vector2(x, suelo), arena.yMax + 1f, 1f, danoNormal, new Color(1f, 0.45f, 0.2f));
+            Meteoro.Caer(fxMeteoro, fxExplosion, fxGlifo, new Vector2(x, suelo), arena.yMax + 1f, 1f, danoNormal, new Color(1f, 0.45f, 0.2f), EstadoPlayer.Quemadura, 45f);
             yield return Esperar(0.28f);
         }
         yield return Esperar(1f);
@@ -551,12 +551,12 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
         CamaraDinamica.Acercar(4.6f, 0.3f);
         Sonar("jefe_impacto_suelo");
         EfectoVisual.Crear(fxPolvo, new Vector2(destino, suelo + 0.4f), 2.2f, new Color(0.8f, 0.6f, 0.6f));
-        var r = GolpearMundo(new Vector2(destino, suelo + 1.2f), new Vector2(4.5f, 2.4f), fase2 ? danoFuerte : danoNormal);
+        var r = GolpearMundo(new Vector2(destino, suelo + 1.2f), new Vector2(4.5f, 2.4f), fase2 ? danoFuerte : danoNormal, EstadoPlayer.Sangrado, 30f);
         if (r == PlayerControler.ResultadoDano.Parry) { parado = true; yield break; }
         if (fase2)
         {
-            OndaCarmesi.Lanzar(fxOnda, new Vector2(destino + 1.5f, suelo), 1, 9f, danoNormal, 12f, colorOnda, 1.2f);
-            OndaCarmesi.Lanzar(fxOnda, new Vector2(destino - 1.5f, suelo), -1, 9f, danoNormal, 12f, colorOnda, 1.2f);
+            OndaCarmesi.Lanzar(fxOnda, new Vector2(destino + 1.5f, suelo), 1, 9f, danoNormal, 12f, colorOnda, 1.2f, EstadoPlayer.Sangrado, 20f);
+            OndaCarmesi.Lanzar(fxOnda, new Vector2(destino - 1.5f, suelo), -1, 9f, danoNormal, 12f, colorOnda, 1.2f, EstadoPlayer.Sangrado, 20f);
         }
         yield return Esperar(0.6f);
     }
@@ -571,7 +571,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
 
         anim.Reproducir("tajo", true);
         Sacudir(0.4f);
-        MedialunaSangre.Lanzar(fxMedialuna, (Vector2)transform.position + new Vector2(mirada * 2f, 1.1f), mirada, 10f, danoNormal, transform, carmesi);
+        MedialunaSangre.Lanzar(fxMedialuna, (Vector2)transform.position + new Vector2(mirada * 2f, 1.1f), mirada, 10f, danoNormal, transform, carmesi, EstadoPlayer.Sangrado, 30f);
         yield return Esperar(0.5f);
     }
 
@@ -614,7 +614,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
         ScreenFlash.Destello(new Color(1f, 0.2f, 0.2f, 0.3f), 0.25f);
         Sonar("jefe_nova");
         Sacudir(1.6f);
-        var r = GolpearCirculo(centro, 5f, danoFuerte);
+        var r = GolpearCirculo(centro, 5f, danoFuerte, EstadoPlayer.Sangrado, 50f);
         if (r == PlayerControler.ResultadoDano.Parry) { parado = true; yield break; }
         yield return Esperar(0.7f);
     }
@@ -646,13 +646,15 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
         Destroy(aro.gameObject);
     }
 
-    private PlayerControler.ResultadoDano? GolpearCirculo(Vector2 centro, float radio, int dano)
+    // Area magica alrededor del jefe (onda de la transformacion, nova).
+    private PlayerControler.ResultadoDano? GolpearCirculo(Vector2 centro, float radio, int dano,
+                                                          EstadoPlayer estado = EstadoPlayer.Ninguno, float acumulacion = 0f)
     {
         foreach (Collider2D c in Physics2D.OverlapCircleAll(centro, radio))
         {
             if (!c.CompareTag("Player")) continue;
             PlayerControler p = c.GetComponent<PlayerControler>();
-            if (p != null) return p.TakeDamage(dano, this);
+            if (p != null) return p.TakeDamage(dano, this, PlayerControler.TipoDano.Magico, estado, acumulacion);
         }
         return null;
     }
@@ -786,10 +788,11 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
         sr.color = c;
     }
 
-    // Golpe en una caja del mundo (no relativa a la mirada).
-    private PlayerControler.ResultadoDano? GolpearMundo(Vector2 centro, Vector2 tamano, int dano)
+    // Golpe del cuerpo en una caja del mundo (no relativa a la mirada): fisico.
+    private PlayerControler.ResultadoDano? GolpearMundo(Vector2 centro, Vector2 tamano, int dano,
+                                                        EstadoPlayer estado = EstadoPlayer.Ninguno, float acumulacion = 0f)
     {
-        return PeligrosJefe.GolpearCaja(centro, tamano, dano, this, out _);
+        return PeligrosJefe.GolpearCaja(centro, tamano, dano, this, out _, PlayerControler.TipoDano.Fisico, estado, acumulacion);
     }
 
     private void Sacudir(float fuerza)

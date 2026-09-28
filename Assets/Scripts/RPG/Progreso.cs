@@ -53,10 +53,14 @@ public static class Progreso
     public static int VidaMax => A.vidaBase + A.vidaPorNivel * Nivel(Estadistica.Vida);
     public static float EstaminaMax => A.estaminaBase + A.estaminaPorNivel * Nivel(Estadistica.Estamina);
     public static float ManaMax => A.manaBase + A.manaPorNivel * Nivel(Estadistica.Mana);
-    // Fraccion del dano que se quita (por defecto 0.03 por nivel, hasta 0.45).
+    // Parte del dano que se quita. Cada nivel acerca la resistencia al tope
+    // (AjustesProgreso.resistenciaMaxima) un poco: al principio se nota mucho y
+    // luego cada vez menos, sin pasarse nunca del tope. Con los valores por
+    // defecto: nivel 1 = 7 %, 5 = 26 %, 10 = 40 %, 20 = 51 %, tope 55 %.
     public static float ResHechizos => Resistencia(Nivel(Estadistica.ResHechizos));
     public static float ResGolpes => Resistencia(Nivel(Estadistica.ResGolpes));
-    private static float Resistencia(int nivel) => Mathf.Min(A.resistenciaMaxima, A.resistenciaPorNivel * nivel);
+    public static float Resistencia(int nivel) =>
+        Mathf.Clamp01(A.resistenciaMaxima) * (1f - Mathf.Pow(1f - Mathf.Clamp(A.resistenciaCurva, 0.001f, 1f), Mathf.Max(0, nivel)));
 
     // Valor de una estadistica a un nivel dado (para la vista previa del menu).
     public static string Describir(Estadistica e, int nivel)

@@ -16,6 +16,15 @@ public class BarraJefe : MonoBehaviour
     private CanvasGroup grupo;
     private float objetivo = 1f, valorRastro = 1f, esperaRastro;
     private float alfaObjetivo;
+    private RectTransform marco;
+
+    // Iconos de los estados del jefe (quemado, sangrado...), bajo la barra.
+    public void PonerEstados(EnemyHealth salud)
+    {
+        if (salud == null || marco == null) return;
+        salud.BarraExterna = true;
+        FilaEstados.Crear(marco, salud, 34f, 5f, -8f, false);
+    }
 
     public static BarraJefe Crear(string nombre, float marcaFase = 0.5f)
     {
@@ -36,6 +45,7 @@ public class BarraJefe : MonoBehaviour
         marco.anchorMin = new Vector2(0.18f, 0.075f);
         marco.anchorMax = new Vector2(0.82f, 0.075f);
         marco.sizeDelta = new Vector2(0f, 22f);
+        b.marco = marco;
 
         RectTransform fondo = b.Caja("Fondo", marco, new Color(0.05f, 0.02f, 0.03f, 1f));
         Estirar(fondo, 2f);

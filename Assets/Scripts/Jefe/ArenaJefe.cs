@@ -43,6 +43,10 @@ public class ArenaJefe : MonoBehaviour
     [SerializeField] private Color colorBarraFase2 = new Color(0.25f, 0.6f, 0.95f, 1f);
     [SerializeField] private string nombreFase2 = "";
 
+    [Header("Recompensa")]
+    [Tooltip("Objetos de mejora que da el jefe al caer (uno por entrada). El player los levanta, como en los Souls. Solo la primera vez.")]
+    [SerializeField] private Equipo.Objeto[] recompensa = new Equipo.Objeto[0];
+
     [Header("Niebla y salida")]
     [SerializeField] private Collider2D muroNiebla;
     [SerializeField] private SpriteRenderer[] visualNiebla;
@@ -106,6 +110,7 @@ public class ArenaJefe : MonoBehaviour
                 musicaFase2 = config.jefeFase2.pista; volumenFase2 = config.jefeFase2.volumen;
                 inicioFase2 = config.jefeFase2.inicio; bucleFase2 = config.jefeFase2.bucle;
             }
+            if (config.frasesJefe != null && config.frasesJefe.Length > 0) burlas = config.frasesJefe;
         }
         audioSrc = NuevaFuente();
         audioFase2 = NuevaFuente();
@@ -192,6 +197,7 @@ public class ArenaJefe : MonoBehaviour
         jefe.Configurar(zona, suelo);
         EnemyHealth salud = jefe.GetComponent<EnemyHealth>();
         salud.AlCambiarVida += barra.Actualizar;
+        barra.PonerEstados(salud);
         jefe.AlAterrizar += () =>
         {
             MensajePantalla.Titulo(nombre.ToUpper(), titulo);
@@ -256,6 +262,7 @@ public class ArenaJefe : MonoBehaviour
         StartCoroutine(TenirLuz(luzOriginal, intensidadOriginal, 3f));
         if (brasas != null) brasas.Stop();
         AlVencer?.Invoke();
+        StartCoroutine(DarRecompensa());
 
         // Reconocimientos del reto, despues del cartel.
         yield return new WaitForSeconds(4.5f);
@@ -266,6 +273,27 @@ public class ArenaJefe : MonoBehaviour
         }
         if (intentos == 1)
             MensajePantalla.Banner("RETO: A LA PRIMERA", new Color(1f, 0.75f, 0.35f), 3.5f);
+    }
+
+    // Tras el cartel de victoria, el player levanta lo que suelta el jefe (una vez
+    // por partida).
+    private IEnumerator DarRecompensa()
+    {
+        string clave = "recompensa_" + gameObject.scene.name;
+        if (recompensa == null || recompensa.Length == 0 || Partida.Bandera(clave)) yield break;
+        Partida.PonerBandera(clave);
+        yield return new WaitForSeconds(2.5f);
+        foreach (Equipo.Objeto o in recompensa)
+        {
+            Equipo.Sumar(o);
+            PlayerControler p = FindFirstObjectByType<PlayerControler>();
+            Sprite icono = RecursosRPG.Get().Icono(Equipo.ClaveIcono(o));
+            if (p == null) { AvisoObjeto.Mostrar(icono, Equipo.Nombre(o), Equipo.Descripcion(o)); continue; }
+            p.LevantarObjeto(icono, Equipo.Nombre(o), Equipo.Descripcion(o));
+            yield return new WaitForSeconds(0.5f);
+            while (p != null && p.LevantandoObjeto) yield return null;
+            yield return new WaitForSeconds(0.3f);
+        }
     }
 
     // El player ha muerto: se deshace el intento.

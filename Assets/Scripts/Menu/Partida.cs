@@ -32,6 +32,8 @@ public static class Partida
         public float segundosJugados;
         public string fecha;
         public List<string> banderas = new List<string>();
+        // Equipo (ver Equipo): objetos de mejora y nivel de la espada y los frascos.
+        public int piedrasForja, lagrimas, nivelEspada, nivelFrascos;
 
         public int NivelPersonaje => 1 + (niveles?.Sum() ?? 0);
     }
@@ -64,6 +66,7 @@ public static class Partida
     {
         int ranura = Listar().Select(d => d.ranura).DefaultIfEmpty(0).Max() + 1;
         Progreso.Reiniciar();
+        Equipo.Reiniciar();
         Actual = new Datos { ranura = ranura, escena = primeraEscena, lugar = "Inicio", fecha = DateTime.Now.ToString("dd/MM/yyyy HH:mm") };
         AparicionPendiente = false;
         Guardar();
@@ -187,6 +190,8 @@ public static class Partida
         };
         ArenaJefe.AlVencer += () => PonerBandera("jefe_" + SceneManager.GetActiveScene().name);
         GameManager.AlReaparecerPlayer += () => Guardar();
+        // Las mejoras de la hoguera (estadisticas) se guardan al momento.
+        Progreso.AlSubirNivel += () => Guardar();
     }
 
     // Cuenta el tiempo jugado (no en el menu, ni en pausa) y guarda de vez en cuando.

@@ -36,7 +36,7 @@ public class EfectosGolpePlayer : MonoBehaviour
         // ocupa algo menos, por eso el 1.35.
         float escala = Mathf.Clamp(tamano * 1.35f / 2f, 0.5f, 2f);
         float rot = angulo + (TipoTajo[perfil] == 2 ? 20f * direccion : 0f);
-        EfectoVisual ef = EfectoVisual.Crear(ce, centro, escala, Color.white, direccion < 0, -1f, "VFX", 20, rot);
+        EfectoVisual ef = EfectoVisual.Crear(ce, centro, escala, Elementos.TinteTajo(elemento), direccion < 0, -1f, "VFX", 20, rot);
         if (ef != null) ef.transform.SetParent(transform, true);
     }
 

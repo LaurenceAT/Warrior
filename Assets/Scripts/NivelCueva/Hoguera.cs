@@ -1,36 +1,32 @@
 using System;
 using System.Collections;
-using TMPro;
 using UnityEngine;
 
 // Hoguera al estilo Souls (la torre de la luna de sangre). Al acercarse aparece
-// "Presiona E"; al pulsarla cura del todo, guarda el punto de reaparicion, y
-// avisa a quien escuche AlDescansar (recarga de pociones, reaparicion de los
-// enemigos comunes).
-//
-// La E es tambien la tecla de la espada: el PlayerControler mira Hoguera.Cercana
-// y, si hay una a tiro, la E va a la hoguera en vez de enfundar.
-public class Hoguera : MonoBehaviour
+// "Presiona F"; al pulsarla se enciende (la primera vez) y se abre su menu:
+//   1. Descansar: cura del todo, rellena los frascos, reaparecen los enemigos,
+//      queda como punto de reaparicion y se guarda la partida.
+//   2. Subir de nivel y estadisticas.
+//   3. Mejorar equipamiento (espada y frascos).
+// Quien quiera enterarse de un descanso escucha AlDescansar.
+public class Hoguera : MonoBehaviour, IInteractuable
 {
-    // La hoguera que el player tiene a tiro ahora mismo (o null).
-    public static Hoguera Cercana { get; private set; }
     // Se lanza cada vez que se descansa en cualquier hoguera.
     public static event Action AlDescansar;
     // La ultima en la que se descanso (la partida guarda su nombre y su sitio).
     public static Hoguera UltimaUsada { get; private set; }
 
     [Header("Uso")]
-    [Tooltip("Nombre del lugar (sale en la lista de partidas guardadas).")]
+    [Tooltip("Nombre del lugar (sale en la lista de partidas guardadas y en el menu).")]
     [SerializeField] private string nombreLugar = "";
     [SerializeField] private float radio = 1.8f;
     // Donde reaparece el player, respecto a la torre (a su lado, un poco alto).
     [SerializeField] private Vector2 puntoReaparicion = new Vector2(1.2f, 0.6f);
-    [SerializeField] private string textoAviso = "Presiona E para descansar";
+    [SerializeField] private string textoInteractuar = "Presiona F para usar la hoguera";
+    [SerializeField] private string textoEncender = "Presiona F para encender la hoguera";
     [SerializeField] private string textoDescanso = "Has descansado";
-    // Al descansar se abre el menu de la hoguera (subir de nivel).
-    [SerializeField] private bool abrirMenu = true;
 
-    [Header("Efecto (no hay sonido: todo es visual)")]
+    [Header("Efecto")]
     [SerializeField] private SpriteRenderer torre;
     [SerializeField] private Color colorDestello = new Color(1f, 0.2f, 0.15f, 0.35f);
     [SerializeField] private float tiempoDestello = 0.35f;
@@ -42,13 +38,21 @@ public class Hoguera : MonoBehaviour
 
     public string NombreLugar => string.IsNullOrEmpty(nombreLugar) ? "Hoguera" : nombreLugar;
     public Vector2 PuntoReaparicion => (Vector2)transform.position + puntoReaparicion;
+    public bool Encendida => encendida;
 
-    private TextMeshPro aviso;
-    private float alfaAviso;
+    // IInteractuable
+    public Vector2 PuntoInteraccion => transform.position;
+    public float RadioInteraccion => radio;
+    public bool PuedeInteractuar => !MenuHoguera.Abierto;
+    public string TextoInteraccion => encendida ? textoInteractuar : textoEncender;
+
+    private AvisoInteraccion aviso;
     private bool encendida;
-    private Transform player;
     private Vector3 escalaTorre;
     private Coroutine efecto;
+
+    private void OnEnable() => Interacciones.Registrar(this);
+    private void OnDisable() => Interacciones.Quitar(this);
 
     private void Start()
     {
@@ -66,56 +70,43 @@ public class Hoguera : MonoBehaviour
             UltimaUsada = this;
             if (torre != null) torre.color = colorEncendida;
         }
-        CrearAviso();
+        aviso = AvisoInteraccion.Crear(transform, this, alturaAviso);
     }
 
-    private void OnDisable()
-    {
-        if (Cercana == this) Cercana = null;
-    }
+    // F con la hoguera a tiro: se enciende si hacia falta y se abre el menu.
+    public void Interactuar(PlayerControler p) => Usar(p);
 
-    private void Update()
-    {
-        if (player == null)
-        {
-            GameObject p = GameObject.FindGameObjectWithTag("Player");
-            if (p != null) player = p.transform;
-        }
-
-        bool cerca = player != null && Vector2.Distance(player.position, transform.position) <= radio;
-        if (cerca) Cercana = this;
-        else if (Cercana == this) Cercana = null;
-
-        // El aviso aparece y se va con un fundido.
-        alfaAviso = Mathf.MoveTowards(alfaAviso, cerca ? 1f : 0f, Time.deltaTime * 5f);
-        if (aviso != null)
-        {
-            Color c = aviso.color;
-            c.a = alfaAviso;
-            aviso.color = c;
-        }
-    }
-
-    // Lo llama el PlayerControler al pulsar E con esta hoguera a tiro.
     public void Usar(PlayerControler p)
     {
-        p.CurarCompleto();
-
-        GameManager.Instance.hasCheckPointActive = true;
-        GameManager.Instance.checkpointRespawnPosition = transform.position + (Vector3)puntoReaparicion;
-
-        UltimaUsada = this;
-        bool primeraVez = !encendida;
-        encendida = true;
-        AlDescansar?.Invoke();
-        Sonido.Reproducir(primeraVez ? "hoguera_encender" : "hoguera_descansar");
-        if (abrirMenu) MenuHoguera.Abrir();
-
-        if (efecto != null) StopCoroutine(efecto);
-        efecto = StartCoroutine(Efecto());
+        if (!encendida)
+        {
+            encendida = true;
+            Sonido.Reproducir("hoguera_encender");
+            if (efecto != null) StopCoroutine(efecto);
+            efecto = StartCoroutine(Efecto(false));
+        }
+        MenuHoguera.Abrir(this, p);
     }
 
-    private IEnumerator Efecto()
+    // "Descansar" en el menu: cura, rellena, reaparecen los enemigos y se guarda.
+    public void Descansar(PlayerControler p)
+    {
+        if (p != null) p.CurarCompleto();
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.hasCheckPointActive = true;
+            GameManager.Instance.checkpointRespawnPosition = transform.position + (Vector3)puntoReaparicion;
+        }
+        UltimaUsada = this;
+        encendida = true;
+        AlDescansar?.Invoke();
+        Sonido.Reproducir("hoguera_descansar");
+        if (efecto != null) StopCoroutine(efecto);
+        efecto = StartCoroutine(Efecto(true));
+    }
+
+    // Va con el tiempo real: el juego esta parado con el menu abierto.
+    private IEnumerator Efecto(bool descanso)
     {
         ScreenFlash.Destello(colorDestello, tiempoDestello);
 
@@ -125,20 +116,17 @@ public class Hoguera : MonoBehaviour
         ParticulasFx.Rafaga(punta, 28, new Color(1f, 0.35f, 0.2f), new Color(1f, 0.85f, 0.4f),
                             new Vector2(1.5f, 4f), -0.25f, new Vector2(0.05f, 0.12f), new Vector2(0.6f, 1.3f));
 
-        if (aviso != null) aviso.text = textoDescanso;
+        if (descanso && aviso != null) aviso.Forzar(textoDescanso, 1.8f);
 
         // Pulso de la torre: crece un poco y se tine de rojo, y vuelve.
-        float t = 0f;
         const float dur = 0.9f;
-        while (t < dur)
+        for (float t = 0f; t < dur; t += Time.unscaledDeltaTime)
         {
-            t += Time.deltaTime;
             float u = t / dur;
             if (torre != null)
             {
                 torre.color = Color.Lerp(colorActivacion, colorEncendida, u * u);
-                float s = 1f + 0.12f * Mathf.Sin(u * Mathf.PI);
-                torre.transform.localScale = escalaTorre * s;
+                torre.transform.localScale = escalaTorre * (1f + 0.12f * Mathf.Sin(u * Mathf.PI));
             }
             yield return null;
         }
@@ -147,30 +135,7 @@ public class Hoguera : MonoBehaviour
             torre.color = colorEncendida;
             torre.transform.localScale = escalaTorre;
         }
-
-        yield return new WaitForSeconds(0.8f);
-        if (aviso != null) aviso.text = textoAviso;
         efecto = null;
-    }
-
-    private void CrearAviso()
-    {
-        GameObject go = new GameObject("Aviso");
-        go.transform.SetParent(transform, false);
-        go.transform.localPosition = new Vector3(0f, alturaAviso, 0f);
-
-        aviso = go.AddComponent<TextMeshPro>();
-        aviso.text = textoAviso;
-        aviso.fontSize = 2.2f;
-        aviso.alignment = TextAlignmentOptions.Center;
-        aviso.enableWordWrapping = false;
-        aviso.color = new Color(1f, 0.9f, 0.85f, 0f);
-        aviso.outlineWidth = 0.2f;
-        aviso.outlineColor = new Color(0f, 0f, 0f, 1f);
-
-        MeshRenderer mr = go.GetComponent<MeshRenderer>();
-        mr.sortingLayerName = "VFX";
-        mr.sortingOrder = 30;
     }
 
     private void OnDrawGizmosSelected()

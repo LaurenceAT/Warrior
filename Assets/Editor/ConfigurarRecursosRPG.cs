@@ -187,6 +187,15 @@ public static class ConfigurarRecursosRPG
         G("jefe_muerte", 0.9f, Hielo + "Ice_Spell_cast_and_impact_12.ogg");
         G("victoria", 0.8f, Sagrado + "Holy_spell_special_power.ogg");
 
+        // Menus (los dos primeros son sonidos propios, suaves: Assets/Audio/UI)
+        G("menu_confirmar", 0.4f, "Assets/Audio/UI/ui_confirmar.wav");
+        // Estados, cofres y mejoras
+        G("jugador_sangrado", 0.8f, Oscuro + "dark_spell_cast_smash_head_blood_01.ogg");
+        G("sangrado_enemigo", 0.75f, CE + "Main Sounds/Sword Stabs/w_Gore/GOREStab_SwordStabGore_HoveAud_SwordCombat_11.wav");
+        G("cofre_abrir", 0.8f, FG + "SFX/Doors Gates and Chests/Chest Open 1.ogg", FG + "SFX/Doors Gates and Chests/Chest Open 2.ogg");
+        G("objeto_obtenido", 0.75f, Sagrado + "Holy_spell_revive_cast_04.ogg");
+        G("mejorar_equipo", 0.8f, FG + "SFX/Chopping and Mining/mine 1.ogg", FG + "SFX/Chopping and Mining/mine 2.ogg");
+
         foreach (var g in l)
             if (g.clips.Length == 0) Debug.LogWarning("[RPG] Sin clips para el sonido " + g.clave);
         return l;
@@ -269,6 +278,16 @@ public static class ConfigurarRecursosRPG
         I("ctrl_vida", "15-status-effects", 9);
         I("almas", "07-magic-spells", 25);
         I("peligro", "15-status-effects", 39);
+        // Estados del player (bajo las barras), del enemigo y objetos de mejora.
+        I("jugador_sangrado", "15-status-effects", 5);
+        I("jugador_congelacion", "15-status-effects", 18);
+        I("jugador_quemadura", "15-status-effects", 17);
+        I("estado_sangrado", "15-status-effects", 21);
+        I("objeto_piedra", "04-gems-materials", 53);
+        I("objeto_lagrima", "04-gems-materials", 61);
+        I("ctrl_interactuar", "14-dungeon-objects", 15);
+        I("cofre_especial", "08-loot-treasure", 19);
+        I("ctrl_estados", "15-status-effects", 45);
         return l;
     }
 

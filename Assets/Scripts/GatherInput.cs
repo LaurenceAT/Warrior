@@ -68,17 +68,22 @@ public class GatherInput : MonoBehaviour
     [SerializeField] private bool _isPotionWheel;
     public bool IsPotionWheel { get => _isPotionWheel; set => _isPotionWheel = value; }
 
+    // Interactuar con hogueras, cofres... (F, o arriba en la cruceta del mando).
+    [SerializeField] private bool _isInteracting;
+    public bool IsInteracting { get => _isInteracting; set => _isInteracting = value; }
+
     [Header("Arco")]
     [Tooltip("Apagado: la tecla del arco no hace nada (el sistema del arco sigue en el juego).")]
     [SerializeField] private bool arcoActivo = false;
 
-    // Q y R se leen directamente del teclado (no estan en el mapa de acciones).
+    // Q, R y F se leen directamente del teclado (no estan en el mapa de acciones).
     private void Update()
     {
         Keyboard k = Keyboard.current;
         Gamepad g = Gamepad.current;
         if ((k != null && k.qKey.wasPressedThisFrame) || (g != null && g.buttonNorth.wasPressedThisFrame)) _isHealing = true;
         if ((k != null && k.rKey.wasPressedThisFrame) || (g != null && g.buttonWest.wasPressedThisFrame)) _isManaPotion = true;
+        if ((k != null && k.fKey.wasPressedThisFrame) || (g != null && g.dpad.up.wasPressedThisFrame)) _isInteracting = true;
     }
 
 

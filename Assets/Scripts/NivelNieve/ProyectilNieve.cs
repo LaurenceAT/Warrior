@@ -30,6 +30,9 @@ public class ProyectilNieve : MonoBehaviour
         public AnimadorHoja.Clip clipEscarcha;
         public string sonidoImpacto;
         public bool registrarPeligro;
+        // Estado que acumula al dar (solo en ataques especiales de los jefes).
+        public EstadoPlayer estado = EstadoPlayer.Ninguno;
+        public float acumulacion;
     }
 
     private Datos d;
@@ -110,9 +113,8 @@ public class ProyectilNieve : MonoBehaviour
         {
             PlayerControler p = otro.GetComponent<PlayerControler>();
             if (p == null) return;
-            if (d.magico) PlayerControler.SiguienteGolpeMagico = true;
-            else PlayerControler.SiguienteGolpeFisico = true;
-            switch (p.TakeDamage(d.dano, this))
+            switch (p.TakeDamage(d.dano, this, d.magico ? PlayerControler.TipoDano.Magico : PlayerControler.TipoDano.Fisico,
+                                 d.estado, d.acumulacion))
             {
                 case PlayerControler.ResultadoDano.Parry: Devolver(); break;
                 case PlayerControler.ResultadoDano.Ignorado: break;

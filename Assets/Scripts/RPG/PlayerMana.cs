@@ -1,19 +1,17 @@
 using UnityEngine;
 
 // Mana del player. Solo lo gasta imbuir la espada. Durante la partida solo se
-// recupera bebiendo pociones de mana (R): no vuelve al golpear ni al descansar (la
-// hoguera rellena las pociones). Al reaparecer tras morir sale lleno, como la vida.
+// recupera bebiendo el frasco de mana (R): no vuelve al golpear ni al descansar
+// (la hoguera rellena el frasco). Al reaparecer tras morir sale lleno, como la
+// vida (el player es nuevo y empieza con el maximo).
 public class PlayerMana : MonoBehaviour
 {
-    [SerializeField] private float maximo = 60f;
-    [SerializeField] private float actual = 60f;
-    // (Ya no se usa: el mana no vuelve al golpear.)
-    [SerializeField] private float porGolpe = 0f;
+    [SerializeField] private float maximo = 75f;
+    [SerializeField] private float actual = 75f;
 
     public float Actual => actual;
     public float Maximo => maximo;
-    public float Fraccion => maximo > 0f ? actual / maximo : 0f;
-    public float PorGolpe => porGolpe;
+    public float Fraccion => maximo > 0f ? Mathf.Clamp01(actual / maximo) : 0f;
 
     public event System.Action AlCambiar;
 
@@ -26,21 +24,24 @@ public class PlayerMana : MonoBehaviour
     private void OnEnable() { Progreso.AlSubirNivel += Recalcular; }
     private void OnDisable() { Progreso.AlSubirNivel -= Recalcular; }
 
-    public bool Tiene(float cantidad) => actual >= cantidad;
+    public bool Tiene(float cantidad) => actual + 0.001f >= cantidad;
 
     public bool Gastar(float cantidad)
     {
-        if (actual < cantidad) return false;
-        actual -= cantidad;
+        if (!Tiene(cantidad)) return false;
+        actual = Mathf.Max(0f, actual - cantidad);
         AlCambiar?.Invoke();
         return true;
     }
 
-    public void Recuperar(float cantidad)
+    // Devuelve lo que ha subido de verdad (0 si ya estaba lleno).
+    public float Recuperar(float cantidad)
     {
-        if (cantidad <= 0f) return;
+        if (cantidad <= 0f) return 0f;
+        float antes = actual;
         actual = Mathf.Min(maximo, actual + cantidad);
         AlCambiar?.Invoke();
+        return actual - antes;
     }
 
     public void Llenar()
@@ -49,12 +50,15 @@ public class PlayerMana : MonoBehaviour
         AlCambiar?.Invoke();
     }
 
-    // Tras subir de nivel el maximo cambia; se conserva la proporcion.
+    // Tras subir de nivel el maximo cambia: lo ganado se suma a lo que se tenia
+    // (antes se conservaba la proporcion y, con la barra a medias, parecia que
+    // subir el mana no daba nada).
     private void Recalcular()
     {
-        float f = Fraccion;
-        maximo = Progreso.ManaMax;
-        actual = maximo * f;
+        float nuevo = Progreso.ManaMax;
+        float diferencia = nuevo - maximo;
+        maximo = nuevo;
+        actual = Mathf.Clamp(actual + Mathf.Max(0f, diferencia), 0f, maximo);
         AlCambiar?.Invoke();
     }
 }

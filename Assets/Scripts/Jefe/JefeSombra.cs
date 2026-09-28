@@ -88,6 +88,9 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
     private Material materialBrillo;
 
     private Color ColorFase => fase2 ? colorHielo : colorSombra;
+    // Estado de los ataques especiales: sangrado en la fase 1 (la hoja de
+    // sombra) y congelacion en la 2 (hielo). Los golpes basicos no llevan.
+    private EstadoPlayer EstadoEspecial => fase2 ? EstadoPlayer.Congelacion : EstadoPlayer.Sangrado;
     private float Velocidad => fase2 ? aceleracionFase2 : 1f;
 
     public override void Configurar(Rect zona, float alturaSuelo)
@@ -136,7 +139,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
             case Elemento.Fuego: return fuegoFase2;
             case Elemento.Hielo: return hieloFase2;
             case Elemento.Oscuro: return 0.8f;
-            case Elemento.Acido: return 1.1f;
+            case Elemento.Sangrado: return 1.1f;
             default: return 1f;
         }
     }
@@ -268,18 +271,21 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
     // Golpe cuerpo a cuerpo activo mientras el sprite muestra el tajo: de
     // "desde" a "hasta" (fotogramas del clip que suena ahora). Asi la caja de
     // dano coincide con lo que se ve y el parry se lee en la animacion.
-    private IEnumerator Ventana(int desde, int hasta, Vector2 offset, Vector2 tamano, int dano)
+    // Los golpes basicos no llevan estado; los especiales (tajo circular del paso
+    // sombrio) pasan el suyo.
+    private IEnumerator Ventana(int desde, int hasta, Vector2 offset, Vector2 tamano, int dano,
+                                EstadoPlayer estado = EstadoPlayer.Ninguno, float acumulacion = 0f)
     {
         while (anim.Fotograma < desde && !anim.Terminado) yield return null;
         golpesCombo++;
         PlayerControler.ResultadoDano? r = null;
         while (!r.HasValue && anim.Fotograma <= hasta && !anim.Terminado)
         {
-            r = Golpear(offset, tamano, dano);
+            r = Golpear(offset, tamano, dano, PlayerControler.TipoDano.Fisico, estado, acumulacion);
             if (!r.HasValue) yield return null;
         }
         // En el ultimo fotograma (el clip ya termino) tambien cuenta una vez.
-        if (!r.HasValue && anim.Fotograma <= hasta) r = Golpear(offset, tamano, dano);
+        if (!r.HasValue && anim.Fotograma <= hasta) r = Golpear(offset, tamano, dano, PlayerControler.TipoDano.Fisico, estado, acumulacion);
         Registrar(r);
     }
 
@@ -305,7 +311,6 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
 
         Sonar("jefe_tajo");
         rb.linearVelocity = new Vector2(mirada * 3f, rb.linearVelocity.y);
-        if (fase2) ZonaEscarcha.Crear(new Vector2(transform.position.x + mirada * 2.6f, suelo), 4.5f, 5f);
         Sacudir(0.5f);
         yield return Ventana(2, 3, new Vector2(2.6f, 0.6f), new Vector2(5.4f, 1.3f), danoTajo);
         while (anim.Fotograma < 4 && !anim.Terminado) yield return null;
@@ -343,7 +348,6 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
             yield return Preparar("tajo1", 2, 0.3f, 0.6f);
             Sonar("jefe_tajo");
             rb.linearVelocity = new Vector2(mirada * 4f, rb.linearVelocity.y);
-            ZonaEscarcha.Crear(new Vector2(transform.position.x + mirada * 2.6f, suelo), 4.5f, 5f);
             yield return Ventana(2, 3, new Vector2(2.6f, 0.6f), new Vector2(5.4f, 1.3f), danoTajo);
             while (anim.Fotograma < 4 && !anim.Terminado) yield return null;
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
@@ -362,7 +366,6 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         Sonar("jefe_tajo", 0.8f, 1.1f);
         yield return Ventana(5, 5, new Vector2(-1.6f, 1.2f), new Vector2(2.8f, 2.6f), danoTajo);
         while (anim.Fotograma < 6 && !anim.Terminado) yield return null;
-        if (fase2) ZonaEscarcha.Crear(new Vector2(transform.position.x - mirada * 2.3f, suelo), 3f, 5f);
         EfectoVisual.Crear(fxPolvo, new Vector2(transform.position.x - mirada * 2f, suelo + 0.3f), 1.6f, new Color(0.95f, 0.97f, 1f, 0.8f), mirada > 0);
         yield return Ventana(6, 7, new Vector2(-2.7f, 0.3f), new Vector2(3.2f, 0.6f), danoLeve);
         yield return EsperarClip(1.5f);
@@ -390,9 +393,9 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         Sonar("jefe_tajo_fuerte");
         TajoFx(new Vector2(0.4f, 1.3f), 0f, 2.2f, true, true);
         Sacudir(0.8f);
-        yield return Ventana(2, 3, new Vector2(0.4f, 1.3f), new Vector2(4.6f, 2.8f), danoFuerte);
+        yield return Ventana(2, 3, new Vector2(0.4f, 1.3f), new Vector2(4.6f, 2.8f), danoFuerte, EstadoEspecial, 35f);
         if (fase2) ZonaEscarcha.Crear(new Vector2(transform.position.x + mirada, suelo), 4f, 5f);
-        yield return Ventana(5, 5, new Vector2(1f, 0.3f), new Vector2(4f, 0.6f), danoLeve);
+        yield return Ventana(5, 5, new Vector2(1f, 0.3f), new Vector2(4f, 0.6f), danoLeve, EstadoEspecial, 20f);
         yield return EsperarClip(1f);
     }
 
@@ -443,11 +446,11 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         Sacudir(1.3f);
         CamaraDinamica.Acercar(4.6f, 0.35f);
         golpesCombo++;
-        Registrar(Golpear(new Vector2(0f, 0.8f), new Vector2(3.2f, 1.8f), danoFuerte));
+        Registrar(Golpear(new Vector2(0f, 0.8f), new Vector2(3.2f, 1.8f), danoFuerte, PlayerControler.TipoDano.Fisico, EstadoEspecial, 40f));
         EfectoVisual.Crear(fxPolvo, new Vector2(marca.x, suelo + 0.3f), 2.2f, new Color(0.95f, 0.97f, 1f, 0.9f));
         // Ondas a los dos lados, a ras de suelo: se saltan.
-        OndaCarmesi.Lanzar(fxOnda, new Vector2(marca.x + 1.2f, suelo), 1, 9f, danoLeve, 10f, ColorFase, 1f);
-        OndaCarmesi.Lanzar(fxOnda, new Vector2(marca.x - 1.2f, suelo), -1, 9f, danoLeve, 10f, ColorFase, 1f);
+        OndaCarmesi.Lanzar(fxOnda, new Vector2(marca.x + 1.2f, suelo), 1, 9f, danoLeve, 10f, ColorFase, 1f, EstadoEspecial, 25f);
+        OndaCarmesi.Lanzar(fxOnda, new Vector2(marca.x - 1.2f, suelo), -1, 9f, danoLeve, 10f, ColorFase, 1f, EstadoEspecial, 25f);
         if (fase2) EscarchaEnOndas();
         yield return Emerger(false);
     }
@@ -475,7 +478,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
             bool baja = i % 2 == 0;
             Vector2 pos = (Vector2)transform.position + new Vector2(mirada * 1.5f, baja ? 0.6f : 1.6f);
             Sonar("jefe_medialuna");
-            MedialunaSangre.Lanzar(fxMedialuna, pos, mirada, fase2 ? 11f : 9f, danoHechizo, transform, ColorFase);
+            MedialunaSangre.Lanzar(fxMedialuna, pos, mirada, fase2 ? 11f : 9f, danoHechizo, transform, ColorFase, EstadoEspecial, 30f);
             if (fase2)
                 foreach (MedialunaSangre m in FindObjectsByType<MedialunaSangre>(FindObjectsSortMode.None))
                     if (baja && m.GetComponent<RastroEscarcha>() == null) m.gameObject.AddComponent<RastroEscarcha>();
@@ -608,6 +611,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
             p.MoverAgarrado(centro);
             Corte(centro, desde[i]);
             p.CorteAgarre(porCorte);
+            EstadosPlayer.Acumular(p, EstadoEspecial, 15f);
             hecho += porCorte;
             yield return new WaitForSecondsRealtime(0.05f);
             yield return Esperar(0.22f);
@@ -684,6 +688,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
             {
                 clip = fxLanza, impacto = fxLanzaImpacto, color = Color.white, escala = 0.9f, escalaImpacto = 0.8f,
                 dano = danoHechizo, magico = true, radio = 0.25f, escarcha = 1.6f, sonidoImpacto = "hielo_impacto",
+                estado = EstadoPlayer.Congelacion, acumulacion = 20f,
                 registrarPeligro = true,
             }, ini, vel, transform);
             yield return Esperar(0.09f);
@@ -704,7 +709,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
         for (int i = 0; i < 12; i++)
         {
             if (x < arena.xMin + 0.5f || x > arena.xMax - 0.5f) break;
-            EstacaHielo.Invocar(null, fxEstaca, new Vector2(x, suelo), 0.45f, danoHechizo, this, null);
+            EstacaHielo.Invocar(null, fxEstaca, new Vector2(x, suelo), 0.45f, danoHechizo, this, null, 1f, EstadoPlayer.Congelacion, 30f);
             x += mirada * 1.3f;
             yield return Esperar(0.09f);
         }
@@ -716,7 +721,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
             for (int i = 0; i < 6; i++)
             {
                 if (y < arena.xMin + 0.5f || y > arena.xMax - 0.5f) break;
-                EstacaHielo.Invocar(null, fxEstaca, new Vector2(y, suelo), 0.45f, danoHechizo, this, null);
+                EstacaHielo.Invocar(null, fxEstaca, new Vector2(y, suelo), 0.45f, danoHechizo, this, null, 1f, EstadoPlayer.Congelacion, 30f);
                 y -= mirada * 1.3f;
                 yield return Esperar(0.09f);
             }
@@ -754,6 +759,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
                 {
                     clip = fxLanza, color = new Color(0.8f, 0.95f, 1f), escala = 0.5f, dano = danoLeve, magico = true,
                     radio = 0.18f, sonidoImpacto = "hielo_impacto", registrarPeligro = true,
+                    estado = EstadoPlayer.Congelacion, acumulacion = 12f,
                 }, boca, dir * 9f, transform);
             }
             yield return null;
@@ -837,8 +843,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
             if (!c.CompareTag("Player")) continue;
             PlayerControler p = c.GetComponent<PlayerControler>();
             if (p == null) continue;
-            PlayerControler.SiguienteGolpeMagico = true;
-            if (p.TakeDamage(dano, this) == PlayerControler.ResultadoDano.Parry) parado = true;
+            if (p.TakeDamage(dano, this, PlayerControler.TipoDano.Magico, EstadoPlayer.Congelacion, 45f) == PlayerControler.ResultadoDano.Parry) parado = true;
             return;
         }
     }

@@ -5,37 +5,63 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-// Menu de la hoguera (se abre al descansar con la E). El juego se para mientras
-// esta abierto. Arriba el nivel del personaje, las almas y lo que cuesta el
-// siguiente nivel; debajo una fila por estadistica: pulsarla sube un nivel (si
-// hay almas). "Levantarse" (o Escape) cierra.
+// Menu de la hoguera (F junto a una hoguera). El juego se para mientras esta
+// abierto. Tres pantallas:
+//   - Principal: Descansar / Subir de nivel y estadisticas / Mejorar
+//     equipamiento / Levantarse.
+//   - Nivel: una fila por estadistica (pulsarla sube un nivel si hay almas) y, a
+//     la derecha, todas las estadisticas del personaje con sus numeros exactos,
+//     como en Elden Ring.
+//   - Equipo: mejorar la espada (Piedras de forja) y los frascos (Lagrimas
+//     sagradas).
+// Escape (o el boton este del mando) vuelve atras; en la principal, se levanta.
+// Al salir, las barras que hayan subido se ven crecer en el HUD.
 public class MenuHoguera : MonoBehaviour
 {
     private static MenuHoguera instancia;
     public static bool Abierto => instancia != null && (instancia.abierto || instancia.cerradoEnFrame == Time.frameCount);
+    // Momento (tiempo real) en que se cerro: la tecla que lo cierra no debe reabrirlo.
+    public static float UltimoCierre { get; private set; } = -10f;
+
+    private enum Pagina { Principal, Nivel, Equipo }
 
     private CanvasGroup grupo;
-    private TextMeshProUGUI textoNivel, textoAlmas, textoCoste, textoAviso;
-    private readonly Fila[] filas = new Fila[Progreso.NumEstadisticas];
-    private Button primero;
+    private RectTransform paginaPrincipal, paginaNivel, paginaEquipo;
+    private Pagina pagina;
     private bool abierto;
     private int cerradoEnFrame = -1;
-    // Momento (tiempo real) en que se cerro: la E que lo cierra no debe reabrirlo.
-    public static float UltimoCierre { get; private set; } = -10f;
     private float escalaPrevia = 1f;
     private float abiertoDesde;
+    private Hoguera hoguera;
+    private PlayerControler player;
+
+    // Principal
+    private TextMeshProUGUI textoLugar, avisoPrincipal;
+    private Button botonDescansar;
+
+    // Nivel
+    private TextMeshProUGUI textoNivel, textoAlmas, textoCoste, avisoNivel, textoFicha;
+    private readonly Fila[] filas = new Fila[Progreso.NumEstadisticas];
+
+    // Equipo
+    private TextMeshProUGUI textoEspada, textoFrascos, textoInventario, avisoEquipo;
+    private Button botonEspada, botonFrascos;
 
     private class Fila
     {
         public Progreso.Estadistica estadistica;
         public Button boton;
+        public OpcionEstilo estilo;
         public TextMeshProUGUI nivel, valor;
-        public Image fondo;
     }
 
-    public static void Abrir()
+    public static void Abrir() => Abrir(null, Object.FindFirstObjectByType<PlayerControler>());
+
+    public static void Abrir(Hoguera h, PlayerControler p)
     {
         if (instancia == null) instancia = Crear();
+        instancia.hoguera = h;
+        instancia.player = p;
         instancia.AbrirInterno();
     }
 
@@ -47,21 +73,20 @@ public class MenuHoguera : MonoBehaviour
         escalaPrevia = Time.timeScale > 0.01f ? Time.timeScale : 1f;
         Time.timeScale = 0f;
         gameObject.SetActive(true);
-        textoAviso.text = "";
-        Refrescar();
+        SonidoMenu.Abrir();
+        Mostrar(Pagina.Principal);
         StopAllCoroutines();
         StartCoroutine(Fundido(true));
-        if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(primero.gameObject);
     }
 
-    private void CerrarInterno()
+    private void Cerrar()
     {
         if (!abierto) return;
         abierto = false;
         cerradoEnFrame = Time.frameCount;
         UltimoCierre = Time.unscaledTime;
         Time.timeScale = escalaPrevia;
-        Sonido.Reproducir("menu_cancelar", 0.6f);
+        SonidoMenu.Cancelar();
         StopAllCoroutines();
         StartCoroutine(Fundido(false));
     }
@@ -80,68 +105,168 @@ public class MenuHoguera : MonoBehaviour
         if (!mostrar) gameObject.SetActive(false);
     }
 
+    private void Mostrar(Pagina p)
+    {
+        pagina = p;
+        paginaPrincipal.gameObject.SetActive(p == Pagina.Principal);
+        paginaNivel.gameObject.SetActive(p == Pagina.Nivel);
+        paginaEquipo.gameObject.SetActive(p == Pagina.Equipo);
+        avisoPrincipal.text = avisoNivel.text = avisoEquipo.text = "";
+        Refrescar();
+        GameObject primero = p == Pagina.Principal ? botonDescansar.gameObject : p == Pagina.Nivel ? filas[0].boton.gameObject : botonEspada.gameObject;
+        SonidoMenu.Silenciar();
+        if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(primero);
+    }
+
     private void Update()
     {
         if (!abierto) return;
+        if (Time.unscaledTime - abiertoDesde < 0.2f) return;
         Keyboard k = Keyboard.current;
         Gamepad g = Gamepad.current;
-        if (Time.unscaledTime - abiertoDesde < 0.2f) return;
-        if ((k != null && (k.escapeKey.wasPressedThisFrame || k.eKey.wasPressedThisFrame)) || (g != null && g.buttonEast.wasPressedThisFrame))
-            CerrarInterno();
-
-        // Sin raton ni teclado sobre nada: que siempre haya algo seleccionado.
+        bool atras = (k != null && k.escapeKey.wasPressedThisFrame) || (g != null && g.buttonEast.wasPressedThisFrame);
+        bool f = k != null && k.fKey.wasPressedThisFrame;
+        if (atras || (f && pagina == Pagina.Principal))
+        {
+            if (pagina == Pagina.Principal) Cerrar();
+            else { SonidoMenu.Cancelar(); Mostrar(Pagina.Principal); }
+            return;
+        }
+        // Que siempre haya algo elegido (tras un clic en el fondo).
         if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject == null)
-            EventSystem.current.SetSelectedGameObject(primero.gameObject);
+            EventSystem.current.SetSelectedGameObject(pagina == Pagina.Principal ? botonDescansar.gameObject
+                                                     : pagina == Pagina.Nivel ? filas[0].boton.gameObject : botonEspada.gameObject);
+    }
+
+    // ------------------------------------------------------------------ Acciones
+
+    private void Descansar()
+    {
+        if (hoguera != null) hoguera.Descansar(player);
+        else { if (player != null) player.CurarCompleto(); ReservaPociones.Get().Rellenar(); }
+        avisoPrincipal.text = "Has descansado. Tus frascos se han rellenado.";
     }
 
     private void Subir(Progreso.Estadistica e)
     {
-        if (Progreso.Nivel(e) >= Progreso.NivelMaximo)
-        {
-            textoAviso.text = "Esa estadística ya está al máximo";
-            Sonido.Reproducir("menu_error", 0.7f);
-            return;
-        }
-        if (!Progreso.Subir(e))
-        {
-            textoAviso.text = "No tienes almas suficientes";
-            Sonido.Reproducir("menu_error", 0.7f);
-            return;
-        }
-        textoAviso.text = $"{Progreso.Nombre(e)} sube a nivel {Progreso.Nivel(e)}";
+        if (Progreso.Nivel(e) >= Progreso.NivelMaximo) { avisoNivel.text = "Esa estadística ya está al máximo"; SonidoMenu.Error(); return; }
+        if (!Progreso.Subir(e)) { avisoNivel.text = "No tienes almas suficientes"; SonidoMenu.Error(); return; }
+        avisoNivel.text = $"{Progreso.Nombre(e)} sube a nivel {Progreso.Nivel(e)}";
         Sonido.Reproducir("subir_nivel");
         // El player aplica el nuevo maximo (vida, estamina, mana) y se cura.
-        PlayerControler p = FindFirstObjectByType<PlayerControler>();
-        if (p != null) p.AplicarProgreso(true);
+        if (player == null) player = FindFirstObjectByType<PlayerControler>();
+        if (player != null) player.AplicarProgreso(true);
         Refrescar();
-        StartCoroutine(Pulso(filas[(int)e].fondo.rectTransform));
+        StartCoroutine(Pulso((RectTransform)filas[(int)e].boton.transform));
+    }
+
+    private void MejorarEspada()
+    {
+        if (Equipo.NivelEspada >= Equipo.NivelMaximoEspada) { avisoEquipo.text = "La espada ya está al máximo"; SonidoMenu.Error(); return; }
+        if (!Equipo.MejorarEspada()) { avisoEquipo.text = "Te faltan Piedras de forja"; SonidoMenu.Error(); return; }
+        avisoEquipo.text = $"Espada mejorada a +{Equipo.NivelEspada}";
+        Sonido.Reproducir("mejorar_equipo");
+        Refrescar();
+        StartCoroutine(Pulso((RectTransform)botonEspada.transform));
+    }
+
+    private void MejorarFrascos()
+    {
+        if (Equipo.NivelFrascos >= Equipo.NivelMaximoFrascos) { avisoEquipo.text = "Los frascos ya están al máximo"; SonidoMenu.Error(); return; }
+        if (!Equipo.MejorarFrascos()) { avisoEquipo.text = "Te faltan Lágrimas sagradas"; SonidoMenu.Error(); return; }
+        avisoEquipo.text = $"Frascos mejorados a +{Equipo.NivelFrascos}";
+        Sonido.Reproducir("mejorar_equipo");
+        Refrescar();
+        StartCoroutine(Pulso((RectTransform)botonFrascos.transform));
     }
 
     private IEnumerator Pulso(RectTransform r)
     {
         for (float t = 0f; t < 0.3f; t += Time.unscaledDeltaTime)
         {
-            r.localScale = Vector3.one * (1f + 0.05f * Mathf.Sin(t / 0.3f * Mathf.PI));
+            r.localScale = Vector3.one * (1f + 0.04f * Mathf.Sin(t / 0.3f * Mathf.PI));
             yield return null;
         }
         r.localScale = Vector3.one;
     }
 
+    // ------------------------------------------------------------------ Textos
+
+    private const string Gris = "#8a8580", Verde = "#9fe0a0", Rojo = "#e08a80", Oro = "#f0d49a";
+
     private void Refrescar()
     {
-        textoNivel.text = $"Nivel <b>{Progreso.NivelTotal}</b>";
+        textoLugar.text = hoguera != null ? hoguera.NombreLugar : "Hoguera";
+
+        // Nivel
+        textoNivel.text = $"Nivel  <b><color={Oro}>{Progreso.NivelTotal}</color></b>";
         textoAlmas.text = $"Almas  <b>{Progreso.Almas:N0}</b>";
         bool alcanza = Progreso.Almas >= Progreso.CosteSiguiente;
-        textoCoste.text = $"Siguiente nivel: <color={(alcanza ? "#9fe0a0" : "#e08a80")}><b>{Progreso.CosteSiguiente:N0}</b></color> almas";
-
+        textoCoste.text = $"Siguiente nivel: <color={(alcanza ? Verde : Rojo)}><b>{Progreso.CosteSiguiente:N0}</b></color> almas";
         foreach (Fila f in filas)
         {
             int n = Progreso.Nivel(f.estadistica);
             bool max = n >= Progreso.NivelMaximo;
             f.nivel.text = max ? "MÁX" : n.ToString();
             f.valor.text = max ? Progreso.Describir(f.estadistica, n)
-                               : $"{Progreso.Describir(f.estadistica, n)}  <color=#888>→</color>  <color={(alcanza ? "#9fe0a0" : "#aaaaaa")}>{Progreso.Describir(f.estadistica, n + 1)}</color>";
+                               : $"{Progreso.Describir(f.estadistica, n)}  <color={Gris}>→</color>  <color={(alcanza ? Verde : "#aaaaaa")}>{Progreso.Describir(f.estadistica, n + 1)}</color>";
+            f.estilo.PonerActiva(alcanza && !max);
         }
+        textoFicha.text = Ficha();
+
+        // Equipo
+        int ne = Equipo.NivelEspada, nf = Equipo.NivelFrascos;
+        int piedras = Equipo.Cantidad(Equipo.Objeto.PiedraForja), lagrimas = Equipo.Cantidad(Equipo.Objeto.LagrimaSagrada);
+        bool espadaMax = ne >= Equipo.NivelMaximoEspada, frascosMax = nf >= Equipo.NivelMaximoFrascos;
+        textoEspada.text = $"<size=120%><b>Espada +{ne}</b></size>  <color={Gris}>/ +{Equipo.NivelMaximoEspada}</color>\n" +
+            (espadaMax ? $"Daño  <color={Oro}>x{Equipo.MultiplicadorEspadaEn(ne):0.00}</color>   <color={Gris}>(al máximo)</color>"
+                       : $"Daño  x{Equipo.MultiplicadorEspadaEn(ne):0.00}  <color={Gris}>→</color>  <color={Verde}>x{Equipo.MultiplicadorEspadaEn(ne + 1):0.00}</color>\n" +
+                         $"Cuesta {Equipo.CosteEspada} Piedra de forja  <color={(piedras >= Equipo.CosteEspada ? Verde : Rojo)}>(tienes {piedras})</color>");
+        textoFrascos.text = $"<size=120%><b>Frascos +{nf}</b></size>  <color={Gris}>/ +{Equipo.NivelMaximoFrascos}</color>\n" +
+            (frascosMax ? $"Sangre cura {Pct(Equipo.CuraFrascoEn(nf))}  ·  Maná devuelve {Pct(Equipo.ManaFrascoEn(nf))}   <color={Gris}>(al máximo)</color>"
+                        : $"Sangre cura {Pct(Equipo.CuraFrascoEn(nf))} <color={Gris}>→</color> <color={Verde}>{Pct(Equipo.CuraFrascoEn(nf + 1))}</color>   ·   " +
+                          $"Maná devuelve {Pct(Equipo.ManaFrascoEn(nf))} <color={Gris}>→</color> <color={Verde}>{Pct(Equipo.ManaFrascoEn(nf + 1))}</color>\n" +
+                          $"Cuesta {Equipo.CosteFrascos} Lágrima sagrada  <color={(lagrimas >= Equipo.CosteFrascos ? Verde : Rojo)}>(tienes {lagrimas})</color>");
+        botonEspada.GetComponent<OpcionEstilo>().PonerActiva(!espadaMax && piedras >= Equipo.CosteEspada);
+        botonFrascos.GetComponent<OpcionEstilo>().PonerActiva(!frascosMax && lagrimas >= Equipo.CosteFrascos);
+        textoInventario.text = $"Piedras de forja: <b>{piedras}</b>      Lágrimas sagradas: <b>{lagrimas}</b>";
+    }
+
+    private static string Pct(float f) => Mathf.RoundToInt(f * 100f) + " %";
+
+    // Todas las estadisticas con sus numeros exactos.
+    private string Ficha()
+    {
+        PlayerControler p = player != null ? player : FindFirstObjectByType<PlayerControler>();
+        PlayerMana m = p != null ? p.GetComponent<PlayerMana>() : null;
+        PlayerStamina s = p != null ? p.GetComponent<PlayerStamina>() : null;
+        ReservaPociones r = ReservaPociones.Get();
+        int vidaMax = Progreso.VidaMax;
+        int vida = p != null ? Mathf.Min(p.VidaActual, vidaMax) : vidaMax;
+        int manaMax = Mathf.RoundToInt(Progreso.ManaMax);
+        int mana = m != null ? Mathf.RoundToInt(Mathf.Min(m.Actual, Progreso.ManaMax)) : manaMax;
+        int estMax = Mathf.RoundToInt(Progreso.EstaminaMax);
+
+        string L(string nombre, string valor) => $"<color=#b8b0a6>{nombre}</color><pos=58%>{valor}\n";
+        return
+            $"<color={Oro}><b>ATRIBUTOS</b></color>\n" +
+            L("Nivel", Progreso.NivelTotal.ToString()) +
+            L("Almas", Progreso.Almas.ToString("N0")) +
+            "\n" +
+            $"<color={Oro}><b>ESTADO</b></color>\n" +
+            L("Vida", $"{vida} / {vidaMax}") +
+            L("Estamina", $"{(s != null ? Mathf.RoundToInt(Mathf.Min(s.Current, estMax)) : estMax)} / {estMax}") +
+            L("Maná", $"{mana} / {manaMax}") +
+            "\n" +
+            $"<color={Oro}><b>DEFENSA</b></color>\n" +
+            L("Resist. a golpes", $"-{Mathf.RoundToInt(Progreso.ResGolpes * 100f)} % físico") +
+            L("Resist. a hechizos", $"-{Mathf.RoundToInt(Progreso.ResHechizos * 100f)} % mágico") +
+            $"<size=80%><color={Gris}>Tope de las resistencias: {Mathf.RoundToInt(AjustesProgreso.Get().resistenciaMaxima * 100f)} %</color></size>\n" +
+            "\n" +
+            $"<color={Oro}><b>EQUIPO</b></color>\n" +
+            L("Espada", $"+{Equipo.NivelEspada}  (daño x{Equipo.MultiplicadorEspada:0.00})") +
+            L("Frasco de sangre", $"{r.Cargas}/{r.Maximo}  · cura {Mathf.RoundToInt(vidaMax * Equipo.CuraFrasco)}") +
+            L("Frasco de maná", $"{r.CargasMana}/{r.MaximoMana}  · da {Mathf.RoundToInt(Progreso.ManaMax * Equipo.ManaFrasco)}");
     }
 
     // ------------------------------------------------------------------ Construccion
@@ -149,176 +274,151 @@ public class MenuHoguera : MonoBehaviour
     private static MenuHoguera Crear()
     {
         GameObject go = new GameObject("MenuHoguera");
-        Canvas c = go.AddComponent<Canvas>();
-        c.renderMode = RenderMode.ScreenSpaceOverlay;
-        c.sortingOrder = 95;
-        CanvasScaler cs = go.AddComponent<CanvasScaler>();
-        cs.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        cs.referenceResolution = new Vector2(1920, 1080);
-        cs.matchWidthOrHeight = 0.5f;
-        go.AddComponent<GraphicRaycaster>();
-        if (FindFirstObjectByType<EventSystem>() == null)
-        {
-            GameObject es = new GameObject("EventSystem", typeof(EventSystem));
-            es.AddComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
-        }
-
         MenuHoguera m = go.AddComponent<MenuHoguera>();
-        m.grupo = go.AddComponent<CanvasGroup>();
-        m.grupo.alpha = 0f;
+        m.grupo = EstiloMenu.Lienzo(go, 95);
+        m.ConstruirPrincipal(go.transform);
+        m.ConstruirNivel(go.transform);
+        m.ConstruirEquipo(go.transform);
 
-        Image velo = Caja("Velo", go.transform, new Color(0.02f, 0.01f, 0.01f, 0.72f));
-        Estirar(velo.rectTransform);
-
-        Image panel = Caja("Panel", go.transform, new Color(0.07f, 0.05f, 0.05f, 0.94f));
-        RectTransform rp = panel.rectTransform;
-        rp.anchorMin = rp.anchorMax = new Vector2(0.5f, 0.5f);
-        rp.sizeDelta = new Vector2(980f, 780f);
-        Image linea = Caja("Linea", panel.transform, new Color(0.85f, 0.45f, 0.2f, 0.85f));
-        linea.rectTransform.anchorMin = new Vector2(0f, 1f); linea.rectTransform.anchorMax = new Vector2(1f, 1f);
-        linea.rectTransform.sizeDelta = new Vector2(0f, 3f); linea.rectTransform.anchoredPosition = new Vector2(0f, -110f);
-
-        TextMeshProUGUI titulo = Texto("HOGUERA", panel.transform, 60, new Color(1f, 0.85f, 0.65f));
-        titulo.fontStyle = FontStyles.Bold;
-        titulo.characterSpacing = 16f;
-        Arriba(titulo.rectTransform, -22f, 70f);
-
-        m.textoNivel = Texto("", panel.transform, 30, new Color(0.92f, 0.88f, 0.84f));
-        m.textoNivel.alignment = TextAlignmentOptions.Left;
-        Arriba(m.textoNivel.rectTransform, -130f, 40f, 60f);
-        m.textoAlmas = Texto("", panel.transform, 30, new Color(0.78f, 0.9f, 1f));
-        m.textoAlmas.alignment = TextAlignmentOptions.Right;
-        Arriba(m.textoAlmas.rectTransform, -130f, 40f, 60f);
-        m.textoCoste = Texto("", panel.transform, 24, new Color(0.8f, 0.76f, 0.72f));
-        Arriba(m.textoCoste.rectTransform, -176f, 34f, 60f);
-
-        VerticalLayoutGroup vl = new GameObject("Estadisticas").AddComponent<VerticalLayoutGroup>();
-        vl.transform.SetParent(panel.transform, false);
-        RectTransform rv = (RectTransform)vl.transform;
-        rv.anchorMin = new Vector2(0f, 0f); rv.anchorMax = new Vector2(1f, 1f);
-        rv.offsetMin = new Vector2(50f, 150f); rv.offsetMax = new Vector2(-50f, -224f);
-        vl.spacing = 12f;
-        vl.childForceExpandHeight = false;
-        vl.childControlHeight = false;
-        vl.childAlignment = TextAnchor.UpperCenter;
-
-        string[] iconos = { "stat_vida", "stat_estamina", "stat_mana", "stat_reshechizos", "stat_resgolpes" };
-        for (int i = 0; i < Progreso.NumEstadisticas; i++)
-        {
-            Progreso.Estadistica e = (Progreso.Estadistica)i;
-            Fila f = new Fila { estadistica = e };
-            f.fondo = Caja("Fila_" + e, vl.transform, new Color(0.14f, 0.1f, 0.09f, 1f));
-            f.fondo.raycastTarget = true;
-            f.fondo.rectTransform.sizeDelta = new Vector2(880f, 66f);
-            f.boton = f.fondo.gameObject.AddComponent<Button>();
-            ColorBlock cb = f.boton.colors;
-            cb.normalColor = Color.white;
-            cb.highlightedColor = new Color(1.9f, 1.45f, 1.1f);
-            cb.selectedColor = new Color(1.9f, 1.45f, 1.1f);
-            cb.pressedColor = new Color(2.4f, 1.8f, 1.3f);
-            cb.colorMultiplier = 1.5f;
-            f.boton.colors = cb;
-            f.boton.onClick.AddListener(() => m.Subir(e));
-            AnadirSonidoSeleccion(f.fondo.gameObject);
-
-            Image ico = Caja("Icono", f.fondo.transform, Color.white);
-            ico.sprite = RecursosRPG.Get().Icono(iconos[i]);
-            ico.enabled = ico.sprite != null;
-            ico.preserveAspect = true;
-            ico.rectTransform.anchorMin = ico.rectTransform.anchorMax = new Vector2(0f, 0.5f);
-            ico.rectTransform.anchoredPosition = new Vector2(38f, 0f);
-            ico.rectTransform.sizeDelta = new Vector2(48f, 48f);
-
-            TextMeshProUGUI nombre = Texto(Progreso.Nombre(e), f.fondo.transform, 28, new Color(0.93f, 0.88f, 0.82f));
-            nombre.alignment = TextAlignmentOptions.Left;
-            nombre.rectTransform.anchorMin = new Vector2(0f, 0f); nombre.rectTransform.anchorMax = new Vector2(0.5f, 1f);
-            nombre.rectTransform.offsetMin = new Vector2(80f, 0f); nombre.rectTransform.offsetMax = Vector2.zero;
-
-            f.nivel = Texto("", f.fondo.transform, 30, new Color(1f, 0.85f, 0.6f));
-            f.nivel.fontStyle = FontStyles.Bold;
-            f.nivel.rectTransform.anchorMin = new Vector2(0.5f, 0f); f.nivel.rectTransform.anchorMax = new Vector2(0.6f, 1f);
-            f.nivel.rectTransform.offsetMin = f.nivel.rectTransform.offsetMax = Vector2.zero;
-
-            f.valor = Texto("", f.fondo.transform, 26, new Color(0.9f, 0.9f, 0.9f));
-            f.valor.alignment = TextAlignmentOptions.Right;
-            f.valor.rectTransform.anchorMin = new Vector2(0.6f, 0f); f.valor.rectTransform.anchorMax = new Vector2(1f, 1f);
-            f.valor.rectTransform.offsetMin = Vector2.zero; f.valor.rectTransform.offsetMax = new Vector2(-24f, 0f);
-            m.filas[i] = f;
-        }
-        m.primero = m.filas[0].boton;
-
-        m.textoAviso = Texto("", panel.transform, 24, new Color(1f, 0.8f, 0.55f));
-        m.textoAviso.rectTransform.anchorMin = new Vector2(0f, 0f); m.textoAviso.rectTransform.anchorMax = new Vector2(1f, 0f);
-        m.textoAviso.rectTransform.sizeDelta = new Vector2(0f, 34f);
-        m.textoAviso.rectTransform.anchoredPosition = new Vector2(0f, 120f);
-
-        Image levantarse = Caja("Levantarse", panel.transform, new Color(0.2f, 0.12f, 0.1f, 1f));
-        levantarse.raycastTarget = true;
-        levantarse.rectTransform.anchorMin = levantarse.rectTransform.anchorMax = new Vector2(0.5f, 0f);
-        levantarse.rectTransform.sizeDelta = new Vector2(420f, 62f);
-        levantarse.rectTransform.anchoredPosition = new Vector2(0f, 58f);
-        Button bl = levantarse.gameObject.AddComponent<Button>();
-        bl.colors = m.filas[0].boton.colors;
-        bl.onClick.AddListener(m.CerrarInterno);
-        AnadirSonidoSeleccion(levantarse.gameObject);
-        TextMeshProUGUI tl = Texto("Levantarse", levantarse.transform, 30, new Color(0.95f, 0.88f, 0.82f));
-        Estirar(tl.rectTransform);
-
-        TextMeshProUGUI ayuda = Texto("Clic o Enter en una estadística para subirla     E / Esc: levantarse", go.transform, 22, new Color(0.8f, 0.78f, 0.75f, 0.7f));
-        ayuda.rectTransform.anchorMin = ayuda.rectTransform.anchorMax = new Vector2(0.5f, 0.06f);
+        TextMeshProUGUI ayuda = EstiloMenu.Texto("Enter / clic: elegir      Esc: volver      F: levantarse", go.transform, 22, new Color(0.8f, 0.78f, 0.75f, 0.6f));
+        ayuda.rectTransform.anchorMin = ayuda.rectTransform.anchorMax = new Vector2(0.5f, 0.05f);
         ayuda.rectTransform.sizeDelta = new Vector2(1400f, 40f);
 
         go.SetActive(false);
         return m;
     }
 
-    // Sonido al pasar por una opcion (raton o teclado).
-    private static void AnadirSonidoSeleccion(GameObject go)
+    private TextMeshProUGUI Aviso(RectTransform padre, float y)
     {
-        EventTrigger et = go.AddComponent<EventTrigger>();
-        EventTrigger.Entry sel = new EventTrigger.Entry { eventID = EventTriggerType.Select };
-        sel.callback.AddListener(_ => Sonido.Reproducir("menu_mover", 0.45f));
-        et.triggers.Add(sel);
-        EventTrigger.Entry encima = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
-        encima.callback.AddListener(_ => EventSystem.current?.SetSelectedGameObject(go));
-        et.triggers.Add(encima);
-    }
-
-    private static void Arriba(RectTransform r, float y, float alto, float margen = 0f)
-    {
-        r.anchorMin = new Vector2(0f, 1f); r.anchorMax = new Vector2(1f, 1f);
-        r.pivot = new Vector2(0.5f, 1f);
-        r.offsetMin = new Vector2(margen, 0f); r.offsetMax = new Vector2(-margen, 0f);
-        r.sizeDelta = new Vector2(r.sizeDelta.x, alto);
-        r.anchoredPosition = new Vector2(0f, y);
-    }
-
-    private static Image Caja(string nombre, Transform padre, Color color)
-    {
-        Image i = new GameObject(nombre).AddComponent<Image>();
-        i.transform.SetParent(padre, false);
-        i.color = color;
-        i.raycastTarget = false;
-        return i;
-    }
-
-    private static TextMeshProUGUI Texto(string texto, Transform padre, float tamano, Color color)
-    {
-        TextMeshProUGUI t = new GameObject("Texto").AddComponent<TextMeshProUGUI>();
-        t.transform.SetParent(padre, false);
-        t.text = texto;
-        t.fontSize = tamano;
-        t.color = color;
-        t.alignment = TextAlignmentOptions.Center;
-        t.enableWordWrapping = false;
-        t.raycastTarget = false;
+        TextMeshProUGUI t = EstiloMenu.Texto("", padre, 24, new Color(1f, 0.8f, 0.55f));
+        t.rectTransform.anchorMin = new Vector2(0f, 0f);
+        t.rectTransform.anchorMax = new Vector2(1f, 0f);
+        t.rectTransform.sizeDelta = new Vector2(0f, 34f);
+        t.rectTransform.anchoredPosition = new Vector2(0f, y);
         return t;
     }
 
-    private static void Estirar(RectTransform r)
+    private void ConstruirPrincipal(Transform raiz)
     {
-        r.anchorMin = Vector2.zero;
-        r.anchorMax = Vector2.one;
-        r.offsetMin = r.offsetMax = Vector2.zero;
+        RectTransform panel = EstiloMenu.Panel(raiz, "HOGUERA", new Vector2(720f, 600f));
+        paginaPrincipal = (RectTransform)panel.parent;
+        textoLugar = EstiloMenu.Texto("", panel, 26, new Color(0.85f, 0.78f, 0.68f));
+        textoLugar.fontStyle = FontStyles.Italic;
+        EstiloMenu.Arriba(textoLugar.rectTransform, -110f, 36f);
+
+        VerticalLayoutGroup col = EstiloMenu.Columna(panel, 70f, 70f, 170f, 110f, 8f);
+        RecursosRPG r = RecursosRPG.Get();
+        botonDescansar = EstiloMenu.Opcion(col.transform, "Descansar", Descansar, 64f, 32f, r.Icono("ctrl_hoguera"), TextAlignmentOptions.Left);
+        EstiloMenu.Opcion(col.transform, "Subir de nivel y estadísticas", () => Mostrar(Pagina.Nivel), 64f, 32f, r.Icono("stat_vida"), TextAlignmentOptions.Left);
+        EstiloMenu.Opcion(col.transform, "Mejorar equipamiento", () => Mostrar(Pagina.Equipo), 64f, 32f, r.Icono("ctrl_espada"), TextAlignmentOptions.Left);
+        EstiloMenu.Opcion(col.transform, "Levantarse", Cerrar, 64f, 32f, null, TextAlignmentOptions.Left);
+        avisoPrincipal = Aviso(panel, 50f);
+    }
+
+    private void ConstruirNivel(Transform raiz)
+    {
+        RectTransform panel = EstiloMenu.Panel(raiz, "SUBIR DE NIVEL", new Vector2(1500f, 820f));
+        paginaNivel = (RectTransform)panel.parent;
+
+        // Cabecera: nivel, almas y coste.
+        textoNivel = EstiloMenu.Texto("", panel, 30, EstiloMenu.TextoElegido);
+        textoNivel.alignment = TextAlignmentOptions.Left;
+        EstiloMenu.Arriba(textoNivel.rectTransform, -112f, 40f, 60f);
+        textoAlmas = EstiloMenu.Texto("", panel, 30, new Color(0.78f, 0.9f, 1f));
+        textoAlmas.alignment = TextAlignmentOptions.Right;
+        textoAlmas.rectTransform.anchorMin = new Vector2(0f, 1f);
+        textoAlmas.rectTransform.anchorMax = new Vector2(0.62f, 1f);
+        textoAlmas.rectTransform.pivot = new Vector2(0.5f, 1f);
+        textoAlmas.rectTransform.sizeDelta = new Vector2(0f, 40f);
+        textoAlmas.rectTransform.anchoredPosition = new Vector2(-30f, -112f);
+        textoCoste = EstiloMenu.Texto("", panel, 24, new Color(0.8f, 0.76f, 0.72f));
+        textoCoste.alignment = TextAlignmentOptions.Left;
+        EstiloMenu.Arriba(textoCoste.rectTransform, -154f, 34f, 60f);
+
+        // Izquierda: las estadisticas que se pueden subir.
+        RectTransform izq = new GameObject("Estadisticas", typeof(RectTransform)).GetComponent<RectTransform>();
+        izq.SetParent(panel, false);
+        izq.anchorMin = new Vector2(0f, 0f);
+        izq.anchorMax = new Vector2(0.62f, 1f);
+        izq.offsetMin = new Vector2(40f, 110f);
+        izq.offsetMax = new Vector2(-10f, -205f);
+        VerticalLayoutGroup col = EstiloMenu.Columna(izq, 0f, 0f, 0f, 0f, 8f);
+
+        string[] iconos = { "stat_vida", "stat_estamina", "stat_mana", "stat_reshechizos", "stat_resgolpes" };
+        RecursosRPG r = RecursosRPG.Get();
+        for (int i = 0; i < Progreso.NumEstadisticas; i++)
+        {
+            Progreso.Estadistica e = (Progreso.Estadistica)i;
+            Button b = EstiloMenu.Opcion(col.transform, Progreso.Nombre(e), () => Subir(e), 72f, 28f, r.Icono(iconos[i]), TextAlignmentOptions.Left);
+            Fila f = new Fila { estadistica = e, boton = b, estilo = b.GetComponent<OpcionEstilo>() };
+            // El nombre ocupa la mitad izquierda; luego el nivel y el valor.
+            TextMeshProUGUI nombre = b.GetComponentInChildren<TextMeshProUGUI>();
+            nombre.rectTransform.anchorMax = new Vector2(0.5f, 1f);
+            f.nivel = EstiloMenu.Texto("", b.transform, 30, new Color(1f, 0.85f, 0.6f));
+            f.nivel.fontStyle = FontStyles.Bold;
+            f.nivel.rectTransform.anchorMin = new Vector2(0.5f, 0f); f.nivel.rectTransform.anchorMax = new Vector2(0.6f, 1f);
+            f.nivel.rectTransform.offsetMin = f.nivel.rectTransform.offsetMax = Vector2.zero;
+            f.valor = EstiloMenu.Texto("", b.transform, 26, new Color(0.9f, 0.9f, 0.9f));
+            f.valor.alignment = TextAlignmentOptions.Right;
+            f.valor.rectTransform.anchorMin = new Vector2(0.6f, 0f); f.valor.rectTransform.anchorMax = new Vector2(1f, 1f);
+            f.valor.rectTransform.offsetMin = Vector2.zero; f.valor.rectTransform.offsetMax = new Vector2(-20f, 0f);
+            filas[i] = f;
+        }
+        EstiloMenu.Opcion(col.transform, "Volver", () => Mostrar(Pagina.Principal), 56f, 26f);
+
+        // Derecha: la ficha con todos los numeros.
+        Image ficha = EstiloMenu.Caja("Ficha", panel, new Color(0f, 0f, 0f, 0.35f));
+        RectTransform rf = ficha.rectTransform;
+        rf.anchorMin = new Vector2(0.62f, 0f);
+        rf.anchorMax = new Vector2(1f, 1f);
+        rf.offsetMin = new Vector2(20f, 110f);
+        rf.offsetMax = new Vector2(-40f, -112f);
+        Image filo = EstiloMenu.Caja("Filo", ficha.transform, EstiloMenu.FiloTenue);
+        filo.rectTransform.anchorMin = new Vector2(0f, 0f); filo.rectTransform.anchorMax = new Vector2(0f, 1f);
+        filo.rectTransform.sizeDelta = new Vector2(2f, 0f);
+        textoFicha = EstiloMenu.Texto("", ficha.transform, 23, EstiloMenu.TextoElegido);
+        textoFicha.alignment = TextAlignmentOptions.TopLeft;
+        textoFicha.enableWordWrapping = true;
+        textoFicha.lineSpacing = 6f;
+        EstiloMenu.Estirar(textoFicha.rectTransform, 22f);
+
+        avisoNivel = Aviso(panel, 55f);
+    }
+
+    private void ConstruirEquipo(Transform raiz)
+    {
+        RectTransform panel = EstiloMenu.Panel(raiz, "MEJORAR EQUIPAMIENTO", new Vector2(1100f, 760f));
+        paginaEquipo = (RectTransform)panel.parent;
+
+        textoInventario = EstiloMenu.Texto("", panel, 24, new Color(0.85f, 0.8f, 0.72f));
+        EstiloMenu.Arriba(textoInventario.rectTransform, -112f, 34f);
+
+        RecursosRPG r = RecursosRPG.Get();
+        VerticalLayoutGroup col = EstiloMenu.Columna(panel, 60f, 60f, 170f, 110f, 18f);
+        botonEspada = Seccion(col.transform, "Mejorar espada", r.Icono("objeto_piedra"), MejorarEspada, out textoEspada);
+        botonFrascos = Seccion(col.transform, "Mejorar frascos (sangre y maná)", r.Icono("objeto_lagrima"), MejorarFrascos, out textoFrascos);
+        EstiloMenu.Opcion(col.transform, "Volver", () => Mostrar(Pagina.Principal), 56f, 26f);
+        avisoEquipo = Aviso(panel, 55f);
+    }
+
+    // Una seccion: la opcion (con su icono) y debajo lo que cambia y lo que cuesta.
+    private Button Seccion(Transform padre, string titulo, Sprite icono, UnityEngine.Events.UnityAction accion, out TextMeshProUGUI detalle)
+    {
+        Button b = EstiloMenu.Opcion(padre, titulo, accion, 170f, 30f, icono, TextAlignmentOptions.TopLeft);
+        TextMeshProUGUI t = b.GetComponentInChildren<TextMeshProUGUI>();
+        t.rectTransform.offsetMax = new Vector2(-20f, -16f);
+        // El icono, algo mas grande y arriba.
+        Image ico = b.transform.Find("Icono")?.GetComponent<Image>();
+        if (ico != null) { ico.rectTransform.sizeDelta = new Vector2(84f, 84f); ico.rectTransform.anchoredPosition = new Vector2(70f, 0f); }
+        t.rectTransform.offsetMin = new Vector2(140f, 0f);
+        detalle = EstiloMenu.Texto("", b.transform, 24, new Color(0.88f, 0.86f, 0.82f));
+        detalle.alignment = TextAlignmentOptions.TopLeft;
+        detalle.enableWordWrapping = true;
+        detalle.lineSpacing = 8f;
+        detalle.rectTransform.anchorMin = Vector2.zero;
+        detalle.rectTransform.anchorMax = Vector2.one;
+        detalle.rectTransform.offsetMin = new Vector2(140f, 10f);
+        detalle.rectTransform.offsetMax = new Vector2(-20f, -60f);
+        return b;
     }
 }

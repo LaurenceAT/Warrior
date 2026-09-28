@@ -814,6 +814,7 @@ public class PlayerControler : MonoBehaviour
         currentHealth = maxHealth;
 
         PlayerHud.Get().SetHealth(currentHealth, maxHealth);
+        PlayerHud.Get().Vincular(this);
         ReservaPociones.Get();
         ContadorAlmas.Asegurar();
         ultimoSueloSeguro = m_transform.position;
@@ -843,7 +844,7 @@ public class PlayerControler : MonoBehaviour
 
         // Con la rueda de imbuir o el menu de la hoguera abiertos, el player no
         // hace nada (y lo que se pulse ahi no cuenta como ataque o salto).
-        if (RuedaImbuir.Abierta || RuedaPociones.Abierta || MenuHoguera.Abierto || isAgarrado)
+        if (RuedaImbuir.Abierta || RuedaPociones.Abierta || MenuHoguera.Abierto || isAgarrado || levantandoObjeto)
         {
             LimpiarEntradas();
             if (!isAgarrado && isGrounded) m_rigitbody2D.linearVelocity = new Vector2(0f, m_rigitbody2D.linearVelocityY);
@@ -872,6 +873,8 @@ public class PlayerControler : MonoBehaviour
             m_rigitbody2D.linearVelocity = new Vector2(vxi, m_rigitbody2D.linearVelocityY);
             return;
         }
+
+        Interactuar();
 
         // Enfundar o desenfundar: quieto y sin atacar, disparar ni barrer hasta
         // que termine, para que no se corte a medias. Saltar si se puede, y lo cancela.
@@ -1189,6 +1192,7 @@ public class PlayerControler : MonoBehaviour
         m_gatherInput.IsManaPotion = false;
         m_gatherInput.IsHealing = false;
         m_gatherInput.IsTogglingWeapon = false;
+        m_gatherInput.IsInteracting = false;
         attackBuffer = 0f;
         dodgeBuffer = 0f;
         bufferBloqueo = 0f;
@@ -2560,8 +2564,22 @@ public class PlayerControler : MonoBehaviour
 
     #region Espada
 
-    // La E: descansar en la hoguera si hay una a tiro; si no, la rueda de imbuir.
-    // Ya no cambia entre espada y punos: la espada es el unico moveset.
+    // La F: usar lo que haya a tiro (hoguera, cofre...). Solo en el suelo y sin
+    // estar a mitad de otra accion.
+    private void Interactuar()
+    {
+        IInteractuable cerca = Interacciones.Buscar(m_transform.position);
+        if (!m_gatherInput.IsInteracting) return;
+        m_gatherInput.IsInteracting = false;
+        // La F que cierra un menu no debe volver a abrirlo.
+        if (Time.unscaledTime - MenuHoguera.UltimoCierre < 0.3f) return;
+        if (cerca == null || !isGrounded) return;
+        if (isAttacking || isDodging || isShooting || isDrinking || isImbuing || isBlocking || isTogglingWeapon) return;
+        cerca.Interactuar(this);
+    }
+
+    // La E: la rueda de imbuir. Ya no cambia entre espada y punos: la espada es
+    // el unico moveset (la hoguera y los cofres van con la F).
     private void CambioDeArma()
     {
         if (!m_gatherInput.IsTogglingWeapon) return;
@@ -2572,12 +2590,6 @@ public class PlayerControler : MonoBehaviour
         float desdeCierre = Time.unscaledTime - Mathf.Max(MenuHoguera.UltimoCierre, RuedaImbuir.UltimoCierre);
         if (desdeCierre < 0.3f) return;
         if (isAttacking || isDodging || isShooting || isDrinking || isImbuing || isBlocking) return;
-
-        if (Hoguera.Cercana != null && isGrounded)
-        {
-            Hoguera.Cercana.Usar(this);
-            return;
-        }
 
         RuedaImbuir.Abrir(armaImbuida.Activo, () => armaImbuida.Impedimento(mana), EmpezarImbuir);
     }
@@ -2642,16 +2654,6 @@ public class PlayerControler : MonoBehaviour
     // recupera el combate sin arma, pero ya no se llama.
     private void CambioDePosturaAntiguo()
     {
-        // Con una hoguera a tiro, la E es para descansar y no cambia de arma.
-        if (m_gatherInput.IsTogglingWeapon && Hoguera.Cercana != null && isGrounded && !isTogglingWeapon
-            && !isAttacking && !isDodging && !isShooting)
-        {
-            m_gatherInput.IsTogglingWeapon = false;
-            cambioArmaPendiente = false;
-            Hoguera.Cercana.Usar(this);
-            return;
-        }
-
         if (m_gatherInput.IsTogglingWeapon)
         {
             m_gatherInput.IsTogglingWeapon = false;
@@ -2808,8 +2810,8 @@ public class PlayerControler : MonoBehaviour
         }
         bebiendo = tipo;
         rutinaBeber = tipo == ReservaPociones.Tipo.Vida
-            ? StartCoroutine(BeberRoutine(Mathf.RoundToInt(maxHealth * reserva.FraccionCuracion), 0f))
-            : StartCoroutine(BeberRoutine(0, mana.Maximo * reserva.FraccionMana));
+            ? StartCoroutine(BeberRoutine(Mathf.RoundToInt(maxHealth * Equipo.CuraFrasco), 0f))
+            : StartCoroutine(BeberRoutine(0, mana.Maximo * Equipo.ManaFrasco));
     }
 
     private IEnumerator BeberRoutine(int curacion, float manaDevuelto)
@@ -3802,17 +3804,30 @@ public class PlayerControler : MonoBehaviour
     // Lo pone quien lance un hechizo justo antes de golpear, para que cuente
     // como dano magico (la resistencia a hechizos lo reduce). Sin marcar, los
     // golpes de un enemigo con cuerpo (EnemigoBase) son fisicos y el resto
-    // (proyectiles, peligros del escenario) magicos.
+    // (proyectiles, peligros del escenario) magicos. Los jefes no usan esto:
+    // dicen el tipo de cada ataque (TakeDamage con TipoDano).
     public static bool SiguienteGolpeMagico;
     // Lo contrario: un proyectil fisico (una flecha) cuenta como golpe.
     public static bool SiguienteGolpeFisico;
 
+    // Tipo de un golpe: la resistencia a golpes solo reduce los fisicos y la
+    // resistencia a hechizos solo los magicos.
+    public enum TipoDano { Fisico, Magico }
+
     public ResultadoDano TakeDamage(int damage, Component atacante)
     {
         bool magico = SiguienteGolpeMagico || (!SiguienteGolpeFisico && atacante != null && !(atacante is EnemigoBase));
+        return TakeDamage(damage, atacante, magico ? TipoDano.Magico : TipoDano.Fisico);
+    }
+
+    // Golpe de un tipo concreto. Si trae un estado (sangrado, congelacion...),
+    // llena su barra: entera si el golpe entra y un poco si se para con la guardia.
+    public ResultadoDano TakeDamage(int damage, Component atacante, TipoDano tipo,
+                                    EstadoPlayer estado = EstadoPlayer.Ninguno, float acumulacion = 0f)
+    {
         SiguienteGolpeMagico = false;
         SiguienteGolpeFisico = false;
-        damage = ConResistencia(damage, magico);
+        damage = ConResistencia(damage, tipo == TipoDano.Magico);
 
         if (atacante != null && isBlocking && !isInvincible && GolpeDeFrente(atacante.transform))
         {
@@ -3823,20 +3838,42 @@ public class PlayerControler : MonoBehaviour
                 estamina.Spend(blockStaminaCost);
                 GolpeBloqueado();
                 DanoReducido(Mathf.Max(1, Mathf.RoundToInt(damage * blockDamageFactor)));
+                EstadosPlayer.Acumular(this, estado, acumulacion * 0.3f);
                 return ResultadoDano.Bloqueado;
             }
             // Sin estamina la guardia se rompe: el golpe entra.
         }
 
-        return RecibirDano(damage) ? ResultadoDano.Recibido : ResultadoDano.Ignorado;
+        if (!RecibirDano(damage)) return ResultadoDano.Ignorado;
+        EstadosPlayer.Acumular(this, estado, acumulacion);
+        return ResultadoDano.Recibido;
     }
 
-    // Resistencias de la hoguera: quitan una parte del dano (minimo 1).
-    private static int ConResistencia(int dano, bool magico)
+    // Resistencias de la hoguera: quitan una parte del dano (minimo 1). La
+    // congelacion, mientras dura, hace que entre algo mas.
+    private int ConResistencia(int dano, bool magico)
     {
         if (dano <= 0) return dano;
         float r = magico ? Progreso.ResHechizos : Progreso.ResGolpes;
-        return Mathf.Max(1, Mathf.RoundToInt(dano * (1f - r)));
+        EstadosPlayer ep = GetComponent<EstadosPlayer>();
+        float extra = ep != null ? ep.MultiplicadorDanoRecibido : 1f;
+        return Mathf.Max(1, Mathf.RoundToInt(dano * (1f - r) * extra));
+    }
+
+    // Dano de un estado que salta (sangrado, congelacion, quemadura): sin
+    // retroceso ni invulnerabilidad, y no lo reducen las resistencias. Si mata, mata.
+    public void DanoEstado(int dano)
+    {
+        if (currentHealth <= 0 || dano <= 0) return;
+        currentHealth -= dano;
+        PlayerHud.Get().Damage(currentHealth, maxHealth);
+        PintarRGB(new Color(1f, 0.45f, 0.45f));
+        StartCoroutine(QuitarTinte(0.1f));
+        if (currentHealth > 0) return;
+        if (isBlocking) TerminarBloqueo(false);
+        if (isAgarrado) isAgarrado = false;
+        Die();
+        GameManager.Instance.RespawnPlayer();
     }
 
     // Dano que entra a traves de la guardia: sin retroceso ni parpadeo, para que
@@ -4039,7 +4076,8 @@ public class PlayerControler : MonoBehaviour
     public void CorteAgarre(int dano)
     {
         if (!isAgarrado || currentHealth <= 0) return;
-        currentHealth -= Mathf.Max(1, dano);
+        // Es un golpe fisico: la resistencia a golpes lo reduce.
+        currentHealth -= ConResistencia(Mathf.Max(1, dano), false);
         PlayerHud.Get().Damage(currentHealth, maxHealth);
         Sonido.Reproducir("dano_player", 0.9f);
         PintarRGB(new Color(1f, 0.4f, 0.4f));
@@ -4067,6 +4105,94 @@ public class PlayerControler : MonoBehaviour
         if (caer) StartCoroutine(KnockDownRoutine());
         else m_animator.SetBool(idKnockDown, false);
         StartCoroutine(InvincibleRoutine());
+    }
+
+    // ------------------------------------------------------------------ Objeto obtenido
+
+    // Como en los Souls: al conseguir un objeto importante (lo suelta un jefe o
+    // sale de un cofre especial), el player se para, lo levanta sobre la cabeza y
+    // sale el cartel con su nombre. Usa el ultimo fotograma de "UsarObjeto", con
+    // la mano en alto.
+    [Header("Objeto obtenido")]
+    [SerializeField] private string estadoLevantar = "UsarObjeto";
+    [SerializeField] private float tiempoLevantado = 2.4f;
+    private bool levantandoObjeto;
+    public bool LevantandoObjeto => levantandoObjeto;
+
+    public void LevantarObjeto(Sprite icono, string nombre, string descripcion)
+    {
+        if (!isActiveAndEnabled) { AvisoObjeto.Mostrar(icono, nombre, descripcion); return; }
+        StartCoroutine(LevantarObjetoRoutine(icono, nombre, descripcion));
+    }
+
+    private IEnumerator LevantarObjetoRoutine(Sprite icono, string nombre, string descripcion)
+    {
+        // Espera a estar libre y en el suelo (con un tope).
+        for (float t = 0f; t < 3f && (!isGrounded || isAttacking || isDodging || isKnocked || isAgarrado || isPlunging); t += Time.deltaTime)
+            yield return null;
+        if (currentHealth <= 0) yield break;
+
+        levantandoObjeto = true;
+        if (isBlocking) TerminarBloqueo(false);
+        CortarBebida();
+        CortarImbuir();
+        isSprinting = false;
+        m_rigitbody2D.linearVelocity = new Vector2(0f, m_rigitbody2D.linearVelocityY);
+        ReproducirEstado(estadoLevantar);
+
+        // Hasta el final del gesto (la mano arriba) y ahi se queda.
+        for (float t = 0f; t < 0.7f; t += Time.deltaTime)
+        {
+            AnimatorStateInfo st = m_animator.GetCurrentAnimatorStateInfo(0);
+            if (st.IsName(estadoLevantar) && st.normalizedTime >= 0.92f) break;
+            yield return null;
+        }
+        float velocidadAnim = m_animator.speed;
+        m_animator.speed = 0f;
+
+        // El objeto sobre la mano, con un halo dorado.
+        int lado = direction >= 0 ? 1 : -1;
+        Vector3 mano = m_transform.position + new Vector3(0.28f * lado, 0.95f, 0f);
+        GameObject go = new GameObject("ObjetoLevantado");
+        go.transform.position = mano;
+        SpriteRenderer halo = new GameObject("Halo").AddComponent<SpriteRenderer>();
+        halo.transform.SetParent(go.transform, false);
+        halo.sprite = EstiloMenu.Resplandor();
+        halo.sharedMaterial = EfectoVisual.MaterialSinLuz();
+        halo.sortingLayerName = "VFX";
+        halo.sortingOrder = 44;
+        SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
+        sr.sprite = icono;
+        sr.sharedMaterial = EfectoVisual.MaterialSinLuz();
+        sr.sortingLayerName = "VFX";
+        sr.sortingOrder = 45;
+        float lado01 = icono != null ? Mathf.Max(icono.bounds.size.x, icono.bounds.size.y) : 1f;
+        float escala = 0.55f / Mathf.Max(0.01f, lado01);
+        go.transform.localScale = Vector3.one * escala;
+
+        Sonido.Reproducir("objeto_obtenido");
+        ScreenFlash.Destello(new Color(1f, 0.9f, 0.6f, 0.25f), 0.3f);
+        ParticulasFx.Rafaga(mano, 24, new Color(1f, 0.92f, 0.6f), new Color(1f, 0.7f, 0.3f), new Vector2(1f, 3f), -0.3f,
+                            new Vector2(0.04f, 0.09f), new Vector2(0.4f, 0.9f));
+        AvisoObjeto.Mostrar(icono, nombre, descripcion);
+
+        for (float t = 0f; t < tiempoLevantado; t += Time.deltaTime)
+        {
+            float u = Mathf.Clamp01(t / 0.45f);
+            go.transform.position = mano + Vector3.up * (0.35f * (1f - (1f - u) * (1f - u)) + 0.04f * Mathf.Sin(t * 4f));
+            float h = (1.3f + 0.15f * Mathf.Sin(t * 5f)) / escala;
+            halo.transform.localScale = new Vector3(h, h, 1f);
+            halo.color = new Color(1f, 0.85f, 0.45f, 0.35f * u);
+            if (UnityEngine.Random.value < 0.15f)
+                ParticulasFx.Rafaga(go.transform.position, 1, new Color(1f, 0.95f, 0.7f), Color.white, new Vector2(0.2f, 0.6f), -0.2f,
+                                    new Vector2(0.03f, 0.06f), new Vector2(0.3f, 0.6f));
+            yield return null;
+        }
+
+        Destroy(go);
+        m_animator.speed = velocidadAnim > 0f ? velocidadAnim : 1f;
+        ReproducirEstado(isGrounded ? "PlayerIdle" : "Fall");
+        levantandoObjeto = false;
     }
 
     // Vida al maximo (la hoguera). Sin destello verde si ya estaba lleno.

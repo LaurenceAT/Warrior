@@ -164,7 +164,7 @@ public class EnemyHealth : MonoBehaviour
         currentHealth = maxHealth;
 
         if (showHealthBar)
-            barra = EnemyHealthBar.Crear(transform, healthBarOffset, healthBarWidth);
+            barra = EnemyHealthBar.Crear(transform, healthBarOffset, healthBarWidth, this);
     }
 
     // ------------------------------------------------------------------ Recibir golpes
@@ -234,6 +234,8 @@ public class EnemyHealth : MonoBehaviour
         // El modificador puede mirar ElementoDelGolpe: se borra despues.
         if (modificador != null) damage = modificador.Modificar(damage, arma);
         ElementoDelGolpe = Elemento.Ninguno;
+        // Las mejoras de la espada (Piedras de forja) suben su dano.
+        if (arma == TipoArma.Espada && damage > 0) damage = Mathf.Max(1, Mathf.RoundToInt(damage * Equipo.MultiplicadorEspada));
         if (elemento != Elemento.Ninguno && damage > 0)
         {
             float m = afinidad != null ? afinidad.Multiplicador(elemento) : 1f;
@@ -312,7 +314,10 @@ public class EnemyHealth : MonoBehaviour
 
     public bool Agotado => agotado;
     public Vector2 OffsetBarra => healthBarOffset;
-    public bool TieneBarra => showHealthBar;
+    public bool TieneBarra => showHealthBar || BarraExterna;
+    // La vida se ve en otra barra (la grande del jefe): ahi van tambien los iconos
+    // de estado.
+    public bool BarraExterna { get; set; }
 
     // ------------------------------------------------------------------ Combo aereo
 

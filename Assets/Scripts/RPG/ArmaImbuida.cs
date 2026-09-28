@@ -93,6 +93,9 @@ public class ArmaImbuida : MonoBehaviour
         float pulso = 0.5f + 0.5f * Mathf.Sin(Time.time * 3.2f);
         float cantidad = 0.45f + 0.3f * pulso;
         if (Restante < 10f) cantidad *= 0.55f + 0.45f * Mathf.Abs(Mathf.Sin(Time.time * 8f));
+        // El rojo del sangrado es muy intenso: con el aura normal el player se veia
+        // todo rojo, como si le hubieran golpeado.
+        if (activo == Elemento.Sangrado) cantidad *= 0.45f;
         materialAura.SetColor("_AuraColor", c);
         materialAura.SetFloat("_Amount", cantidad);
 
@@ -101,7 +104,7 @@ public class ArmaImbuida : MonoBehaviour
         {
             siguienteChispa = Time.time + Random.Range(0.15f, 0.3f);
             Vector2 p = (Vector2)transform.position + new Vector2(Random.Range(-0.3f, 0.3f), Random.Range(-0.4f, 0.3f));
-            float grav = activo == Elemento.Acido ? 0.3f : activo == Elemento.Hielo ? 0.1f : -0.4f;
+            float grav = activo == Elemento.Sangrado ? 0.6f : activo == Elemento.Hielo ? 0.1f : -0.4f;
             ParticulasFx.Rafaga(p, 1, c, Color.Lerp(c, Color.white, 0.5f), new Vector2(0.3f, 0.8f), grav,
                                 new Vector2(0.04f, 0.07f), new Vector2(0.4f, 0.8f), 50f, 90f);
         }

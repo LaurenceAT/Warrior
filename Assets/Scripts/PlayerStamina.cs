@@ -53,6 +53,14 @@ public class PlayerStamina : MonoBehaviour
     public float PlungeCost => plungeCost;
     public float DodgeCost => dodgeCost;
 
+    // La congelacion (un estado de los jefes) frena la recuperacion.
+    private EstadosPlayer estados;
+    private float RitmoEstados()
+    {
+        if (estados == null) estados = GetComponent<EstadosPlayer>();
+        return estados != null ? estados.MultiplicadorRegenEstamina : 1f;
+    }
+
     private void Awake()
     {
         maxStamina = Progreso.EstaminaMax;
@@ -125,7 +133,7 @@ public class PlayerStamina : MonoBehaviour
         }
 
         if (currentStamina < maxStamina)
-            currentStamina = Mathf.Min(maxStamina, currentStamina + regenRate * Time.deltaTime);
+            currentStamina = Mathf.Min(maxStamina, currentStamina + regenRate * RitmoEstados() * Time.deltaTime);
 
         if (exhausted && currentStamina >= maxStamina * exhaustedRecoverFraction)
             exhausted = false;

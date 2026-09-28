@@ -5,13 +5,19 @@ using UnityEngine;
 // marca que late en el suelo (aviso) y luego las estacas: hieren y dejan escarcha.
 public class EstacaHielo : MonoBehaviour
 {
+    private EstadoPlayer estado = EstadoPlayer.Ninguno;
+    private float acumulacion;
+
     public static void Invocar(AnimadorHoja.Clip marca, AnimadorHoja.Clip estaca, Vector2 suelo, float aviso, int dano,
-                               Component atacante, AnimadorHoja.Clip clipEscarcha, float escala = 1f)
+                               Component atacante, AnimadorHoja.Clip clipEscarcha, float escala = 1f,
+                               EstadoPlayer estado = EstadoPlayer.Ninguno, float acumulacion = 0f)
     {
         GameObject go = new GameObject("EstacaHielo");
         go.transform.position = suelo;
         EstacaHielo e = go.AddComponent<EstacaHielo>();
         PeligrosJefe.Registrar(go);
+        e.estado = estado;
+        e.acumulacion = acumulacion;
         e.StartCoroutine(e.Rutina(marca, estaca, suelo, aviso, dano, atacante, clipEscarcha, escala));
     }
 
@@ -44,9 +50,8 @@ public class EstacaHielo : MonoBehaviour
         Sonido.Reproducir("hielo_estaca", 0.6f);
         EfectoVisual e = EfectoVisual.Crear(estaca, suelo + Vector2.up * 0.05f, 1.2f * escala, Color.white, Random.value < 0.5f, -1f, "VFX", 11);
         if (e != null) e.transform.SetParent(transform, true);
-        PlayerControler.SiguienteGolpeMagico = true;
-        var r = PeligrosJefe.GolpearCaja(suelo + new Vector2(0f, 0.9f * escala), new Vector2(1.3f * escala, 1.8f * escala), dano, atacante, out _);
-        if (!r.HasValue) PlayerControler.SiguienteGolpeMagico = false;
+        PeligrosJefe.GolpearCaja(suelo + new Vector2(0f, 0.9f * escala), new Vector2(1.3f * escala, 1.8f * escala), dano, atacante, out _,
+                                 PlayerControler.TipoDano.Magico, estado, acumulacion);
         ZonaEscarcha.Crear(suelo, 1.4f * escala, 6f, 0.55f, null);
         yield return new WaitForSeconds(estaca != null ? estaca.Duracion + 0.1f : 0.6f);
         Destroy(gameObject);

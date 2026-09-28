@@ -3,10 +3,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Las pociones, al estilo del Estus de los Souls: pocas cargas, que se recargan al
-// descansar en la hoguera. Hay dos: las de vida (frascos de sangre) y las de
-// mana (el mana solo se recupera con ellas). Q bebe el de sangre y R el de mana. Vive en la escena (no en el player), asi
-// las cargas se mantienen aunque el player muera y reaparezca.
+// Los frascos, al estilo del Estus de los Souls: pocas cargas, que se recargan al
+// descansar en la hoguera (y al reaparecer tras morir). Hay dos:
+//   - Frasco de sangre (Q): varias cargas; cura vida.
+//   - Frasco de mana (R): una sola carga; el mana solo se recupera con el.
+// Lo que cura cada uno sube con las mejoras de la hoguera (Equipo: Lagrimas
+// sagradas). Vive en la escena (no en el player), asi las cargas se mantienen
+// aunque el player muera y reaparezca.
 //
 // No hay sprite de pocion: el frasco del contador se dibuja por codigo.
 public class ReservaPociones : MonoBehaviour
@@ -21,13 +24,10 @@ public class ReservaPociones : MonoBehaviour
 
     [SerializeField] private int maximo = 3;
     [SerializeField] private int curacion = 40;
-    // Los frascos de sangre curan esta parte de la vida maxima (0.75 = 75 %).
-    [Range(0f, 1f)] [SerializeField] private float fraccionCuracion = 0.75f;
 
-    [Header("Pociones de mana")]
-    [SerializeField] private int maximoMana = 3;
-    [Tooltip("Parte del mana maximo que devuelve cada una (0.5 = 50 %).")]
-    [Range(0f, 1f)] [SerializeField] private float fraccionMana = 0.5f;
+    [Header("Frasco de mana")]
+    [Tooltip("Cargas del frasco de mana (una, como el de los Souls).")]
+    [SerializeField] private int maximoMana = 1;
 
     private int cargas;
     private int cargasMana;
@@ -38,11 +38,11 @@ public class ReservaPociones : MonoBehaviour
     public int Cargas => cargas;
     public int Maximo => maximo;
     public int Curacion => curacion;
-    public float FraccionCuracion => fraccionCuracion;
+    public float FraccionCuracion => Equipo.CuraFrasco;
     public bool RecompensaCogida => recompensaCogida;
     public int CargasMana => cargasMana;
     public int MaximoMana => maximoMana;
-    public float FraccionMana => fraccionMana;
+    public float FraccionMana => Equipo.ManaFrasco;
     public Tipo Elegida => elegida;
     public int CargasDe(Tipo t) => t == Tipo.Vida ? cargas : cargasMana;
     public int MaximoDe(Tipo t) => t == Tipo.Vida ? maximo : maximoMana;
@@ -148,7 +148,7 @@ public class ReservaPociones : MonoBehaviour
     }
 }
 
-// Contador de pociones en pantalla, bajo la vida: el frasco de sangre (Q) y el de
+// Contador de frascos en pantalla, abajo a la izquierda: el frasco de sangre (Q) y el de
 // mana (R) con sus cargas.
 public class ContadorPociones : MonoBehaviour
 {
@@ -180,8 +180,8 @@ public class ContadorPociones : MonoBehaviour
 
         RecursosRPG rec = RecursosRPG.Get();
         Sprite vida = rec.Icono("pocion");
-        cp.huecos[0] = cp.NuevoHueco(go.transform, "Vida", vida != null ? vida : ReservaPociones.Frasco(), new Vector2(44f, -168f));
-        cp.huecos[1] = cp.NuevoHueco(go.transform, "Mana", rec.Icono("pocion_mana"), new Vector2(214f, -168f));
+        cp.huecos[0] = cp.NuevoHueco(go.transform, "Vida", vida != null ? vida : ReservaPociones.Frasco(), new Vector2(44f, 60f));
+        cp.huecos[1] = cp.NuevoHueco(go.transform, "Mana", rec.Icono("pocion_mana"), new Vector2(214f, 60f));
 
         ReservaPociones.AlCambiarAlgo += cp.Actualizar;
         ReservaPociones.AlBeber += cp.Pulso;
@@ -193,8 +193,10 @@ public class ContadorPociones : MonoBehaviour
         Hueco h = new Hueco();
         h.caja = new GameObject(nombre).AddComponent<RectTransform>();
         h.caja.SetParent(padre, false);
-        h.caja.anchorMin = h.caja.anchorMax = new Vector2(0f, 1f);
-        h.caja.pivot = new Vector2(0f, 1f);
+        // Abajo a la izquierda, como los objetos rapidos de los Souls (arriba, bajo
+        // las barras, van los estados que se acumulan).
+        h.caja.anchorMin = h.caja.anchorMax = new Vector2(0f, 0f);
+        h.caja.pivot = new Vector2(0f, 0f);
         h.caja.anchoredPosition = pos;
         h.caja.sizeDelta = new Vector2(170f, 70f);
 
@@ -240,7 +242,7 @@ public class ContadorPociones : MonoBehaviour
             string tecla = t == ReservaPociones.Tipo.Vida ? "Q" : "R";
             int cargas = reserva.CargasDe(t);
             bool quedan = cargas > 0;
-            h.texto.text = $"x{cargas} <size=60%><color=#bbbbbb>[{tecla}]</color></size>";
+            h.texto.text = $"{cargas}/{reserva.MaximoDe(t)} <size=60%><color=#bbbbbb>[{tecla}]</color></size>";
             float a = elegida ? 1f : 0.55f;
             h.icono.color = quedan ? new Color(1f, 1f, 1f, a) : new Color(0.4f, 0.4f, 0.4f, 0.8f * a);
             Color tc = quedan ? (t == ReservaPociones.Tipo.Vida ? new Color(1f, 0.92f, 0.85f) : new Color(0.8f, 0.9f, 1f)) : new Color(0.6f, 0.6f, 0.6f);

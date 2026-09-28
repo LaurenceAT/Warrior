@@ -110,7 +110,7 @@ public class MenuPrincipal : MonoBehaviour
         Gamepad g = Gamepad.current;
         bool atras = (k != null && k.escapeKey.wasPressedThisFrame) || (m != null && m.rightButton.wasPressedThisFrame)
                      || (g != null && g.buttonEast.wasPressedThisFrame);
-        if (atras && !panelPrincipal.activeSelf && !saliendo) { Sonido.Reproducir("menu_cancelar", 0.6f); Mostrar(panelPrincipal); }
+        if (atras && !panelPrincipal.activeSelf && !saliendo) { SonidoMenu.Cancelar(); Mostrar(panelPrincipal); }
 
         // Las listas largas (controles) bajan con las flechas, W/S o el stick.
         if (!panelPrincipal.activeSelf)
@@ -207,7 +207,6 @@ public class MenuPrincipal : MonoBehaviour
     {
         if (saliendo) return;
         saliendo = true;
-        Sonido.Reproducir("menu_abrir", 0.8f);
         Partida.Nueva(primerNivel);
         PantallaCarga.Cargar(primerNivel, 1.2f);
     }
@@ -216,14 +215,12 @@ public class MenuPrincipal : MonoBehaviour
     {
         if (saliendo) return;
         saliendo = true;
-        Sonido.Reproducir("menu_abrir", 0.8f);
         Partida.Cargar(d);
         PantallaCarga.Cargar(d.escena, 1.2f);
     }
 
     private void Salir()
     {
-        Sonido.Reproducir("menu_cancelar", 0.6f);
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
@@ -238,6 +235,7 @@ public class MenuPrincipal : MonoBehaviour
         panelOpciones.SetActive(panel == panelOpciones);
         panelControles.SetActive(panel == panelControles);
         if (panel == panelCargar) RellenarPartidas();
+        SonidoMenu.Silenciar();
         SeleccionarPrimero();
     }
 
@@ -369,7 +367,7 @@ public class MenuPrincipal : MonoBehaviour
 
         Button b = fondo.gameObject.AddComponent<Button>();
         b.transition = Selectable.Transition.None;
-        b.onClick.AddListener(() => { if (!saliendo) accion(); });
+        b.onClick.AddListener(() => { if (saliendo) return; SonidoMenu.Confirmar(); accion(); });
         OpcionMenu om = fondo.gameObject.AddComponent<OpcionMenu>();
         om.franja = franja;
         om.texto = t;
@@ -378,7 +376,7 @@ public class MenuPrincipal : MonoBehaviour
 
     private void Volver(Transform padre)
     {
-        Opcion("Volver", padre, () => { Sonido.Reproducir("menu_cancelar", 0.6f); Mostrar(panelPrincipal); }, 50f, 28f);
+        Opcion("Volver", padre, () => Mostrar(panelPrincipal), 50f, 28f);
     }
 
     // ------------------------------------------------------------------ Cargar
@@ -532,27 +530,35 @@ public class MenuPrincipal : MonoBehaviour
         }),
         ("OBJETOS", new[]
         {
-            F("pocion", "Q", "Frasco de sangre: cura el 75 % de la vida. Se recargan en la hoguera"),
-            F("pocion_mana", "R", "Frasco de maná: devuelve el 50 % del maná. Es la única forma de recuperarlo"),
+            F("pocion", "Q", "Frasco de sangre: cura vida. Tiene varias cargas y se recargan al descansar en la hoguera"),
+            F("pocion_mana", "R", "Frasco de maná: una carga (1/1). Es la única forma de recuperar maná; se recarga en la hoguera"),
+            F("ctrl_interactuar", "F", "Interactuar: usar hogueras y abrir cofres"),
+            F("objeto_piedra", "—", "Piedra de forja: mejora la espada en la hoguera. Sale de cofres escondidos y de los jefes"),
+            F("objeto_lagrima", "—", "Lágrima sagrada: mejora los dos frascos en la hoguera. Sale de cofres escondidos y de los jefes"),
+            F("cofre_especial", "—", "Los cofres con un brillo dorado suave guardan objetos de mejora"),
             F("almas", "—", "Almas: las sueltan los enemigos. Se gastan en la hoguera para subir de nivel"),
             F("ctrl_mancha", "—", "Al morir, tus almas se quedan donde caíste. Recógelas antes de volver a morir"),
         }),
         ("HOGUERAS Y MENÚS", new[]
         {
-            F("ctrl_hoguera", "E junto a una hoguera", "Descansar: cura, rellena los frascos, guarda la partida y abre la subida de nivel"),
+            F("ctrl_hoguera", "F junto a una hoguera", "Abre su menú: Descansar (cura, rellena los frascos y guarda), Subir de nivel y estadísticas, y Mejorar equipamiento"),
+            F("stat_resgolpes", "Resistencias", "Resistencia a golpes: reduce el daño físico. Resistencia a hechizos: reduce el mágico. Nunca más de un 55 %"),
             F("ctrl_rueda", "En la rueda de imbuir", "Ratón, WASD o 1-5: elegir  ·  Clic o E: imbuir  ·  Clic derecho o Esc: cancelar"),
             F("ctrl_pausa", "Esc", "Pausa: opciones, destrabar al personaje, volver a la última hoguera o salir al menú"),
         }),
         ("BARRAS Y ESTADOS", new[]
         {
-            F("ctrl_vida", "Barra roja", "Vida"),
+            F("ctrl_vida", "Barra roja", "Vida. Las barras se alargan al subir su estadística"),
             F("stat_estamina", "Barra verde", "Estamina: la gastan correr, atacar, esquivar y bloquear. Se recupera sola"),
-            F("stat_mana", "Barra azul", "Maná: lo gasta imbuir la espada. Solo vuelve con frascos de maná"),
+            F("stat_mana", "Barra azul", "Maná: lo gasta imbuir la espada. Solo vuelve con el frasco de maná"),
+            F("elemento_3", "Anillo del rombo", "Con la espada imbuida, el anillo se vacía con el tiempo que le queda"),
+            F("jugador_sangrado", "Bajo tus barras", "Sangrado, congelación y quemadura: los ataques especiales de los jefes llenan su barra. Si se llena, te afecta; si dejas de recibirlos, baja sola"),
             F("estado_quemado", "Fuego", "Quemado: el enemigo pierde vida un rato"),
             F("estado_lento", "Hielo", "Lento: se mueve más despacio. Varios golpes seguidos lo congelan"),
             F("estado_aturdido", "Sagrado", "Aturdido: a veces lo deja quieto un momento"),
-            F("estado_corroido", "Ácido", "Corroído: recibe más daño mientras dura"),
+            F("estado_sangrado", "Sangrado", "Cada golpe acumula sangrado; al llenarse, el enemigo pierde de golpe parte de su vida"),
             F("estado_drenado", "Oscuridad", "Drenado: te curas con parte del daño que haces"),
+            F("ctrl_estados", "Bajo su barra de vida", "Los iconos muestran los estados del enemigo. Parpadean cuando están por acabar"),
         }),
     };
 
@@ -740,7 +746,7 @@ public class MenuPrincipal : MonoBehaviour
             if (!guardado && texto != null) { normal = texto.color; guardado = true; }
             if (franja != null) franja.enabled = true;
             if (texto != null) texto.color = new Color(0.95f, 0.9f, 0.85f);
-            Sonido.Reproducir("menu_mover", 0.4f);
+            SonidoMenu.Mover();
         }
 
         public void OnDeselect(BaseEventData e)

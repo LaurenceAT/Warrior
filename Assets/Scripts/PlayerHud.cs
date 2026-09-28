@@ -1,22 +1,27 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// HUD de vida y estamina al estilo de Elden Ring: un rombo a la izquierda y, pegadas
-// a el, una barra de vida roja y debajo una de estamina verde, mas fina.
-// Todo son Image de color plano, sin sprites.
+// HUD del player al estilo de Elden Ring: un rombo a la izquierda y, pegadas a
+// el, la barra de vida (roja), la de estamina (verde) y la de mana (azul).
+// Todo son Image de color plano, sin sprites (salvo el anillo del rombo).
 //
 // Se construye solo por codigo. Si en la escena no hay ninguno, el player crea uno
 // al aparecer, asi que no hay que montar nada en cada nivel. Si quieres cambiar
 // colores o medidas, pon este componente en un objeto vacio de la escena y ajustalo
 // ahi: el player usara ese en vez de crear otro.
 //
-// Extras:
-//  - La estamina se apaga y parpadea cuando queda poca.
-//  - La barra de vida tiembla con los golpes fuertes.
+//  - El largo de cada barra depende de su maximo (como en Elden Ring): al subir
+//    de nivel en la hoguera, al salir se ve crecer la barra y llenarse.
+//  - Al empezar: la vida algo mas larga que la estamina, y el mana un poco mas
+//    corto que la estamina.
+//  - Anillo alrededor del rombo con la espada imbuida: se vacia con el tiempo
+//    que le queda a la imbuicion (cuando se vacia, se acaba).
+//  - Debajo de las barras, una fila por cada estado que se esta acumulando
+//    (sangrado, congelacion, quemadura) con su icono; desaparece al llegar a cero.
+//  - La estamina se apaga y parpadea cuando queda poca; la vida tiembla con los
+//    golpes fuertes; la estela de dano baja rapido al principio y frena al final.
 //  - El HUD se desvanece si no pasa nada durante un rato y vuelve al instante.
-//  - Numeros exactos opcionales (desactivados por defecto).
-//  - El borde del rombo late con la estamina baja; en el centro va el icono.
-//  - La estela de dano baja rapido al principio y frena al final.
 //
 // Nota: el relleno no usa Image tipo Filled porque Filled no funciona sin sprite.
 // En su lugar se estira el ancho del rectangulo con sus anclas, que se ve igual.
@@ -31,62 +36,73 @@ public class PlayerHud : MonoBehaviour
     [SerializeField] private float boxBorder = 3f;
     [SerializeField] private Color boxBorderColor = new Color(0.78f, 0.72f, 0.58f, 0.9f);
     [SerializeField] private Color boxFillColor = new Color(0.08f, 0.07f, 0.06f, 0.75f);
-
-    [Header("Rombo: icono")]
-    // Lado del icono en pixeles. Va recto aunque el rombo este girado. A 38 cabe
-    // entero dentro de un rombo de 54 (la mitad de su diagonal).
+    // Lado del icono en pixeles. Va recto aunque el rombo este girado.
     [SerializeField] private float iconSize = 38f;
 
     [Header("Rombo: aviso de estamina")]
-    // El borde del rombo late cuando queda poca estamina. El centro es para el icono.
     [SerializeField] private bool staminaWarningInBox = true;
     [SerializeField] private Color warningLowColor = new Color(0.95f, 0.78f, 0.25f, 1f);
     [SerializeField] private Color warningExhaustedColor = new Color(0.75f, 0.2f, 0.15f, 1f);
 
+    [Header("Rombo: anillo de la imbuicion")]
+    [SerializeField] private float ringSize = 96f;
+    [SerializeField] private Color ringBackColor = new Color(0f, 0f, 0f, 0.55f);
+    [Tooltip("Segundos finales en los que el anillo parpadea.")]
+    [SerializeField] private float ringWarning = 10f;
+
+    [Header("Largo de las barras segun su maximo")]
+    [Tooltip("Largo de cada barra con los valores iniciales (vida 150, estamina 100, mana 75).")]
+    [SerializeField] private float anchoVida = 360f;
+    [SerializeField] private float anchoEstamina = 300f;
+    [SerializeField] private float anchoMana = 285f;
+    [Tooltip("Pixeles que crece cada barra por cada punto de maximo por encima del inicial.")]
+    [SerializeField] private float healthPerPoint = 2f;
+    [SerializeField] private float staminaPerPoint = 3.5f;
+    [SerializeField] private float manaPerPoint = 3.5f;
+    [SerializeField] private float maxBarWidth = 820f;
+    [Tooltip("Segundos que tarda una barra en crecer tras subir de nivel.")]
+    [SerializeField] private float growDuration = 1.1f;
+    [SerializeField] private Color growFlashColor = new Color(1f, 0.95f, 0.8f, 0.8f);
+
     [Header("Barra de vida")]
-    [SerializeField] private float healthWidth = 420f;
     [SerializeField] private float healthHeight = 12f;
     [SerializeField] private Color healthColor = new Color(0.62f, 0.07f, 0.07f, 1f);
     [SerializeField] private Color trailColor = new Color(0.92f, 0.86f, 0.78f, 0.9f);
-    // Cuanto se queda quieta la estela antes de empezar a bajar.
     [SerializeField] private float trailDelay = 0.6f;
-    // Rapidez con la que baja: a mas valor, mas rapido. Baja rapido al principio y
-    // frena al llegar, en vez de caer a velocidad constante.
     [SerializeField] private float trailSharpness = 3.5f;
     [SerializeField] private Color healFlashColor = new Color(1f, 0.55f, 0.45f, 1f);
     [SerializeField] private float healDuration = 0.35f;
 
     [Header("Temblor al recibir un golpe fuerte")]
-    // Solo tiembla si el golpe quita al menos esta parte de la vida maxima.
     [Range(0f, 1f)] [SerializeField] private float shakeMinDamage = 0.15f;
     [SerializeField] private float shakeDuration = 0.18f;
-    // Pixeles de desplazamiento maximo; crece con el tamano del golpe.
     [SerializeField] private float shakeStrength = 6f;
 
     [Header("Barra de estamina")]
-    [SerializeField] private float staminaWidth = 330f;
-    [SerializeField] private float staminaHeight = 7f;
+    [SerializeField] private float staminaHeight = 8f;
     [SerializeField] private Color staminaColor = new Color(0.25f, 0.55f, 0.22f, 1f);
     [SerializeField] private Color staminaExhaustedColor = new Color(0.33f, 0.36f, 0.3f, 1f);
-    // Por debajo de esta parte se considera "poca" y la barra avisa.
     [Range(0f, 1f)] [SerializeField] private float lowStaminaThreshold = 0.2f;
     [SerializeField] private Color staminaLowColor = new Color(0.4f, 0.45f, 0.18f, 1f);
     [SerializeField] private float lowStaminaBlinkSpeed = 9f;
 
     [Header("Barra de mana")]
-    [SerializeField] private float manaWidth = 290f;
     [SerializeField] private float manaHeight = 7f;
     [SerializeField] private Color manaColor = new Color(0.22f, 0.42f, 0.95f, 1f);
     [SerializeField] private Color manaFlashColor = new Color(0.65f, 0.8f, 1f, 1f);
 
+    [Header("Estados que se acumulan (bajo las barras)")]
+    [SerializeField] private float statusWidth = 210f;
+    [SerializeField] private float statusHeight = 6f;
+    [SerializeField] private float statusIcon = 24f;
+    [SerializeField] private float statusGap = 6f;
+
     [Header("Desvanecer sin combate")]
     [SerializeField] private bool autoFade = true;
-    // Segundos sin que pase nada antes de empezar a desvanecerse.
     [SerializeField] private float fadeDelay = 4f;
     [Range(0f, 1f)] [SerializeField] private float fadedAlpha = 0.3f;
     [SerializeField] private float fadeOutSpeed = 1.5f;
     [SerializeField] private float fadeInSpeed = 8f;
-    // Con poca vida no se desvanece: es justo cuando mas importa verla.
     [Range(0f, 1f)] [SerializeField] private float stayVisibleBelowHealth = 0.35f;
 
     [Header("Numeros (accesibilidad / debug)")]
@@ -100,25 +116,40 @@ public class PlayerHud : MonoBehaviour
 
     private static PlayerHud instancia;
 
+    // Una barra que crece: su fondo, el ancho mostrado y el destello al crecer.
+    private class Largo
+    {
+        public RectTransform fondo;
+        public Image brillo;
+        public float mostrado = -1f, desde, hasta, t = 1f;
+    }
+
+    private class FilaEstado
+    {
+        public RectTransform raiz;
+        public Image icono, relleno;
+        public CanvasGroup grupo;
+        public float alfa;
+    }
+
     private CanvasGroup grupo;
-    private RectTransform vidaFondo;
+    private RectTransform raiz;
     private Vector2 vidaFondoPos;
-    private RectTransform vidaRelleno;
-    private RectTransform vidaEstela;
+    private RectTransform vidaRelleno, vidaEstela;
     private Image vidaImagen;
     private RectTransform estaminaRelleno;
     private Image estaminaImagen;
     private RectTransform manaRelleno;
     private Image manaImagen;
-    private PlayerMana mana;
+    private readonly Largo largoVida = new Largo(), largoEstamina = new Largo(), largoMana = new Largo();
     private float manaAntes = -1f;
     private float destelloMana;
-    private ArmaImbuida arma;
     private Sprite iconoBase;
-    private Image aviso;
-    private Image icono;
-    private Text textoVida;
-    private Text textoEstamina;
+    private Image aviso, icono;
+    private Image anilloFondo, anillo;
+    private Text textoVida, textoEstamina, textoMana;
+    private readonly List<FilaEstado> filas = new List<FilaEstado>();
+    private float yEstados;
 
     private int vidaActual = 1;
     private int vidaMaxima = 1;
@@ -128,28 +159,39 @@ public class PlayerHud : MonoBehaviour
     private float esperaEstela;
     private float curando;
     private float curaDesde;
-
-    private float temblor;
-    private float fuerzaTemblor;
-
+    private float temblor, fuerzaTemblor;
     private float sinActividad;
     private float estaminaAntes = -1f;
 
+    // Lo que se muestra es siempre del player de ahora (tras morir aparece otro).
+    private PlayerControler player;
     private PlayerStamina estamina;
-    private float buscarEstamina;
+    private PlayerMana mana;
+    private ArmaImbuida arma;
+    private EstadosPlayer estados;
+    private float buscar;
 
     public static PlayerHud Get()
     {
         if (instancia != null) return instancia;
-
         instancia = FindFirstObjectByType<PlayerHud>();
         if (instancia == null)
             instancia = new GameObject("PlayerHud").AddComponent<PlayerHud>();
-
         return instancia;
     }
 
-    // Pone el icono del rombo. null lo deja vacio.
+    // El player se presenta al aparecer: asi el HUD siempre mira al actual.
+    public void Vincular(PlayerControler p)
+    {
+        if (p == null) return;
+        player = p;
+        estamina = p.GetComponent<PlayerStamina>();
+        mana = p.GetComponent<PlayerMana>();
+        arma = p.GetComponent<ArmaImbuida>();
+        estados = p.GetComponent<EstadosPlayer>();
+        estaminaAntes = manaAntes = -1f;
+    }
+
     public void SetIcon(Sprite sprite)
     {
         if (icono == null) return;
@@ -158,12 +200,12 @@ public class PlayerHud : MonoBehaviour
         icono.enabled = sprite != null;
     }
 
-    // Activa o quita los numeros en marcha (por ejemplo desde un menu de opciones).
     public void SetShowNumbers(bool mostrar)
     {
         showNumbers = mostrar;
         if (textoVida != null) textoVida.enabled = mostrar;
         if (textoEstamina != null) textoEstamina.enabled = mostrar;
+        if (textoMana != null) textoMana.enabled = mostrar;
     }
 
     private void Awake()
@@ -189,13 +231,10 @@ public class PlayerHud : MonoBehaviour
         Dibujar();
     }
 
-    // Dano: la roja baja de golpe, la estela se queda un momento y, si el golpe es
-    // fuerte, la barra tiembla.
     public void Damage(int actual, int maximo)
     {
         float antes = vidaMostrada;
         Guardar(actual, maximo);
-
         estela = Mathf.Max(estela, antes);
         vidaMostrada = vida;
         curando = 0f;
@@ -207,7 +246,6 @@ public class PlayerHud : MonoBehaviour
             temblor = shakeDuration;
             fuerzaTemblor = shakeStrength * Mathf.Clamp(golpe / Mathf.Max(0.01f, shakeMinDamage), 1f, 2.5f);
         }
-
         Actividad();
         Dibujar();
     }
@@ -227,26 +265,78 @@ public class PlayerHud : MonoBehaviour
         vida = Mathf.Clamp01((float)vidaActual / vidaMaxima);
     }
 
-    // Algo ha pasado: el HUD vuelve a verse del todo.
-    private void Actividad()
-    {
-        sinActividad = 0f;
-    }
+    private void Actividad() => sinActividad = 0f;
 
     // ------------------------------------------------------------------ Bucle
 
     private void Update()
     {
         float dt = Time.unscaledDeltaTime;
+        BuscarPlayer(dt);
 
+        ActualizarLargos();
         ActualizarVida(dt);
-        ActualizarEstamina(dt);
+        ActualizarEstamina();
         ActualizarMana(dt);
         ActualizarArma();
+        ActualizarEstados(dt);
         ActualizarTemblor(dt);
         ActualizarFundido(dt);
         ActualizarNumeros();
         Dibujar();
+    }
+
+    // Por si el player no se presento (o se acaba de destruir al morir).
+    private void BuscarPlayer(float dt)
+    {
+        if (player != null) { if (estados == null) estados = player.GetComponent<EstadosPlayer>(); return; }
+        buscar -= dt;
+        if (buscar > 0f) return;
+        buscar = 0.25f;
+        PlayerControler p = FindFirstObjectByType<PlayerControler>();
+        if (p != null) Vincular(p);
+    }
+
+    // El largo sigue al maximo de cada estadistica. Crece con tiempo de juego (no
+    // real): con la hoguera abierta el juego esta parado, y el crecimiento se ve
+    // justo al salir de ella.
+    private void ActualizarLargos()
+    {
+        float refVida = AjustesProgreso.Get().vidaBase, refEst = AjustesProgreso.Get().estaminaBase, refMana = AjustesProgreso.Get().manaBase;
+        Crecer(largoVida, AnchoPara(anchoVida, healthPerPoint, vidaMaxima, refVida));
+        if (estamina != null) Crecer(largoEstamina, AnchoPara(anchoEstamina, staminaPerPoint, estamina.Max, refEst));
+        if (mana != null) Crecer(largoMana, AnchoPara(anchoMana, manaPerPoint, mana.Maximo, refMana));
+    }
+
+    private float AnchoPara(float baseAncho, float porPunto, float maximo, float referencia) =>
+        Mathf.Clamp(baseAncho + (maximo - referencia) * porPunto, 60f, maxBarWidth);
+
+    private void Crecer(Largo l, float objetivo)
+    {
+        if (l.fondo == null) return;
+        if (l.mostrado < 0f) { l.mostrado = l.desde = l.hasta = objetivo; l.t = 1f; }
+        if (!Mathf.Approximately(objetivo, l.hasta))
+        {
+            l.desde = l.mostrado;
+            l.hasta = objetivo;
+            l.t = 0f;
+            Actividad();
+        }
+        if (l.t < 1f)
+        {
+            l.t = Mathf.Min(1f, l.t + Time.deltaTime / Mathf.Max(0.05f, growDuration));
+            float k = 1f - Mathf.Pow(1f - l.t, 3f);
+            l.mostrado = Mathf.Lerp(l.desde, l.hasta, k);
+            if (Time.deltaTime > 0f) Actividad();
+        }
+        l.fondo.sizeDelta = new Vector2(l.mostrado, l.fondo.sizeDelta.y);
+        // Destello mientras crece: se ve bien que ha subido.
+        if (l.brillo != null)
+        {
+            float a = l.t < 1f && l.hasta > l.desde ? Mathf.Sin(l.t * Mathf.PI) : 0f;
+            l.brillo.color = new Color(growFlashColor.r, growFlashColor.g, growFlashColor.b, growFlashColor.a * a);
+            l.brillo.enabled = a > 0.01f;
+        }
     }
 
     private void ActualizarVida(float dt)
@@ -265,140 +355,127 @@ public class PlayerHud : MonoBehaviour
             vidaImagen.color = healthColor;
         }
 
-        // Estela: espera y luego se acerca a la vida real recorriendo cada fotograma
-        // una parte de lo que le falta. Asi baja rapido al principio y frena al final.
         if (estela > vidaMostrada)
         {
-            if (esperaEstela > 0f)
-            {
-                esperaEstela -= dt;
-            }
+            if (esperaEstela > 0f) esperaEstela -= dt;
             else
             {
                 float paso = (estela - vidaMostrada) * (1f - Mathf.Exp(-trailSharpness * dt));
-                // Un minimo, para que el final no se eternice.
                 estela = Mathf.Max(vidaMostrada, estela - Mathf.Max(paso, 0.03f * dt));
             }
         }
         else estela = vidaMostrada;
     }
 
-    private void ActualizarEstamina(float dt)
+    private void ActualizarEstamina()
     {
-        if (estamina == null)
-        {
-            buscarEstamina -= dt;
-            if (buscarEstamina <= 0f)
-            {
-                buscarEstamina = 0.25f;
-                estamina = FindFirstObjectByType<PlayerStamina>();
-                estaminaAntes = -1f;
-            }
-        }
         if (estamina == null) return;
-
         float f = estamina.Fraction;
         Anclar(estaminaRelleno, f);
-
-        // Gastar o regenerar cuenta como actividad: el HUD se ve mientras cambia.
         if (estaminaAntes >= 0f && Mathf.Abs(f - estaminaAntes) > 0.0001f) Actividad();
         estaminaAntes = f;
 
         bool poca = f < lowStaminaThreshold;
         float parpadeo = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * lowStaminaBlinkSpeed);
-
-        if (estamina.Exhausted)
-            estaminaImagen.color = staminaExhaustedColor;
-        else if (poca)
-            // Mas apagada y latiendo: ya no da para mucho.
-            estaminaImagen.color = Color.Lerp(staminaLowColor, staminaColor, parpadeo * 0.6f);
-        else
-            estaminaImagen.color = staminaColor;
+        if (estamina.Exhausted) estaminaImagen.color = staminaExhaustedColor;
+        else if (poca) estaminaImagen.color = Color.Lerp(staminaLowColor, staminaColor, parpadeo * 0.6f);
+        else estaminaImagen.color = staminaColor;
 
         if (aviso != null)
         {
-            if (estamina.Exhausted)
-                aviso.color = warningExhaustedColor;
-            else if (poca)
-                aviso.color = Color.Lerp(boxBorderColor, warningLowColor, parpadeo);
-            else
-                aviso.color = boxBorderColor;
+            if (estamina.Exhausted) aviso.color = warningExhaustedColor;
+            else if (poca) aviso.color = Color.Lerp(boxBorderColor, warningLowColor, parpadeo);
+            else aviso.color = boxBorderColor;
         }
     }
 
     private void ActualizarMana(float dt)
     {
-        if (mana == null)
-        {
-            if (buscarEstamina > 0.2f) return;
-            mana = FindFirstObjectByType<PlayerMana>();
-            manaAntes = -1f;
-            if (mana == null) return;
-        }
+        if (mana == null) return;
         float f = mana.Fraccion;
         Anclar(manaRelleno, f);
-        if (manaAntes >= 0f && Mathf.Abs(f - manaAntes) > 0.0001f) { Actividad(); if (f > manaAntes) destelloMana = 0.3f; }
+        if (manaAntes >= 0f && Mathf.Abs(f - manaAntes) > 0.0001f) { Actividad(); if (f > manaAntes) destelloMana = 0.35f; }
         manaAntes = f;
         if (destelloMana > 0f) destelloMana -= dt;
-        manaImagen.color = destelloMana > 0f ? Color.Lerp(manaColor, manaFlashColor, destelloMana / 0.3f) : manaColor;
+        manaImagen.color = destelloMana > 0f ? Color.Lerp(manaColor, manaFlashColor, destelloMana / 0.35f) : manaColor;
     }
 
-    // Con la espada imbuida, el rombo lleva el icono del elemento y su borde se
-    // tine de su color (parpadea cuando le queda poco).
+    // Con la espada imbuida: el icono del elemento en el rombo, su borde del color
+    // del elemento y el anillo que se vacia con el tiempo que le queda.
     private void ActualizarArma()
     {
-        if (arma == null) arma = FindFirstObjectByType<ArmaImbuida>();
         if (icono == null) return;
         Elemento e = arma != null ? arma.Activo : Elemento.Ninguno;
-        if (e == Elemento.Ninguno)
+        bool imbuida = e != Elemento.Ninguno;
+        anillo.enabled = anilloFondo.enabled = imbuida;
+        if (!imbuida)
         {
             if (icono.sprite != iconoBase) { icono.sprite = iconoBase; icono.enabled = iconoBase != null; }
             return;
         }
         Sprite s = RecursosRPG.Get().Icono("elemento_" + (int)e);
         if (s != null && icono.sprite != s) { icono.sprite = s; icono.enabled = true; }
+
+        Color c = Elementos.Color(e);
+        bool acabando = arma.Restante < ringWarning;
+        float p = acabando ? Mathf.Abs(Mathf.Sin(Time.unscaledTime * 8f)) : 1f;
+        anillo.fillAmount = arma.FraccionRestante;
+        anillo.color = new Color(c.r, c.g, c.b, Mathf.Lerp(0.35f, 1f, p));
         if (aviso != null && estamina != null && !estamina.Exhausted && estamina.Fraction >= lowStaminaThreshold)
+            aviso.color = Color.Lerp(boxBorderColor, c, acabando ? p : 0.6f);
+    }
+
+    // Una fila por estado que se este acumulando, en el orden en que aparecen.
+    private void ActualizarEstados(float dt)
+    {
+        float y = yEstados;
+        for (int i = 0; i < EstadosPlayer.Cantidad; i++)
         {
-            float p = arma.Restante < 10f ? Mathf.Abs(Mathf.Sin(Time.unscaledTime * 8f)) : 0.75f + 0.25f * Mathf.Sin(Time.unscaledTime * 3f);
-            aviso.color = Color.Lerp(boxBorderColor, Elementos.Color(e), p);
+            EstadoPlayer e = (EstadoPlayer)i;
+            FilaEstado f = filas[i];
+            float u = estados != null ? estados.Fraccion(e) : 0f;
+            bool visible = u > 0.001f;
+            f.alfa = Mathf.MoveTowards(f.alfa, visible ? 1f : 0f, dt * (visible ? 8f : 4f));
+            f.grupo.alpha = f.alfa;
+            bool activa = f.alfa > 0.01f;
+            if (f.raiz.gameObject.activeSelf != activa) f.raiz.gameObject.SetActive(activa);
+            if (!activa) continue;
+            if (visible) Actividad();
+            Anclar(f.relleno.rectTransform, u);
+            Color c = EstadosPlayer.ColorDe(e);
+            // Durante el efecto (ya ha saltado) late; si no, mas vivo cuanto mas lleno.
+            bool efecto = estados != null && estados.EnEfecto(e);
+            float k = efecto ? 0.55f + 0.45f * Mathf.Abs(Mathf.Sin(Time.unscaledTime * 6f)) : Mathf.Lerp(0.7f, 1f, u);
+            f.relleno.color = new Color(c.r * k, c.g * k, c.b * k, 1f);
+            if (f.icono.sprite == null) f.icono.sprite = RecursosRPG.Get().Icono(EstadosPlayer.ClaveIcono(e));
+            f.icono.enabled = f.icono.sprite != null;
+            // Se colocan una debajo de otra, sin huecos.
+            f.raiz.anchoredPosition = new Vector2(f.raiz.anchoredPosition.x, Mathf.Lerp(f.raiz.anchoredPosition.y, y, 1f - Mathf.Exp(-14f * dt)));
+            y -= (statusIcon + 4f) * f.alfa;
         }
     }
 
     private void ActualizarTemblor(float dt)
     {
-        if (vidaFondo == null) return;
-
+        RectTransform vf = largoVida.fondo;
+        if (vf == null) return;
         if (temblor > 0f)
         {
             temblor -= dt;
-            // Se va calmando mientras dura.
             float k = Mathf.Clamp01(temblor / Mathf.Max(0.01f, shakeDuration));
             Vector2 desvio = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * (fuerzaTemblor * k);
-            vidaFondo.anchoredPosition = vidaFondoPos + desvio;
+            vf.anchoredPosition = vidaFondoPos + desvio;
         }
-        else
-        {
-            vidaFondo.anchoredPosition = vidaFondoPos;
-        }
+        else vf.anchoredPosition = vidaFondoPos;
     }
 
     private void ActualizarFundido(float dt)
     {
         if (grupo == null) return;
-
-        if (!autoFade)
-        {
-            grupo.alpha = 1f;
-            return;
-        }
-
+        if (!autoFade) { grupo.alpha = 1f; return; }
         sinActividad += dt;
-
-        bool debeVerse = sinActividad < fadeDelay
-                         || vida < stayVisibleBelowHealth
-                         || estela > vidaMostrada
-                         || curando > 0f;
-
+        bool debeVerse = sinActividad < fadeDelay || vida < stayVisibleBelowHealth || estela > vidaMostrada || curando > 0f
+                         || (arma != null && arma.Activo != Elemento.Ninguno && arma.Restante < ringWarning);
         float objetivo = debeVerse ? 1f : fadedAlpha;
         float velocidad = debeVerse ? fadeInSpeed : fadeOutSpeed;
         grupo.alpha = Mathf.MoveTowards(grupo.alpha, objetivo, velocidad * dt);
@@ -407,10 +484,11 @@ public class PlayerHud : MonoBehaviour
     private void ActualizarNumeros()
     {
         if (!showNumbers || textoVida == null) return;
-
         textoVida.text = vidaActual + " / " + vidaMaxima;
         if (textoEstamina != null && estamina != null)
             textoEstamina.text = Mathf.CeilToInt(estamina.Current) + " / " + Mathf.RoundToInt(estamina.Max);
+        if (textoMana != null && mana != null)
+            textoMana.text = Mathf.CeilToInt(mana.Actual) + " / " + Mathf.RoundToInt(mana.Maximo);
     }
 
     private void Dibujar()
@@ -434,25 +512,37 @@ public class PlayerHud : MonoBehaviour
         escalador.referenceResolution = new Vector2(1920f, 1080f);
         escalador.matchWidthOrHeight = 0.5f;
 
-        RectTransform raiz = Crear("HUD", transform, out GameObject raizGo);
+        raiz = Crear("HUD", transform, out GameObject raizGo);
         raiz.anchorMin = raiz.anchorMax = new Vector2(0f, 1f);
         raiz.pivot = new Vector2(0f, 1f);
         raiz.anchoredPosition = new Vector2(margin.x, -margin.y);
 
-        // El fundido se hace sobre todo el HUD de una vez.
         grupo = raizGo.AddComponent<CanvasGroup>();
         grupo.interactable = false;
         grupo.blocksRaycasts = false;
 
         float visible = rotateBox ? boxSize * 1.41421f : boxSize;
+        float hueco = Mathf.Max(visible, ringSize) + 6f;
         float altoBarras = healthHeight + barGap + staminaHeight + barGap * 0.6f + manaHeight;
-        float centroY = -visible * 0.5f;
+        float centroY = -hueco * 0.5f;
+        Vector2 centroRombo = new Vector2(hueco * 0.5f, centroY);
+
+        // Anillo de la imbuicion: detras del rombo, un aro oscuro y encima el que se vacia.
+        anilloFondo = Rect("AnilloFondo", raiz, ringBackColor, out _).GetComponent<Image>();
+        Anillo(anilloFondo, centroRombo);
+        anillo = Rect("Anillo", raiz, Color.white, out _).GetComponent<Image>();
+        Anillo(anillo, centroRombo);
+        anillo.type = Image.Type.Filled;
+        anillo.fillMethod = Image.FillMethod.Radial360;
+        anillo.fillOrigin = (int)Image.Origin360.Top;
+        anillo.fillClockwise = false;
+        anillo.enabled = anilloFondo.enabled = false;
 
         RectTransform borde = Rect("Rombo", raiz, boxBorderColor, out Image bordeImagen);
         if (staminaWarningInBox) aviso = bordeImagen;
         borde.anchorMin = borde.anchorMax = new Vector2(0f, 1f);
         borde.sizeDelta = new Vector2(boxSize, boxSize);
-        borde.anchoredPosition = new Vector2(visible * 0.5f, centroY);
+        borde.anchoredPosition = centroRombo;
         if (rotateBox) borde.localRotation = Quaternion.Euler(0f, 0f, 45f);
 
         RectTransform interior = Rect("Interior", borde, boxFillColor, out _);
@@ -461,35 +551,94 @@ public class PlayerHud : MonoBehaviour
         interior.offsetMin = new Vector2(boxBorder, boxBorder);
         interior.offsetMax = new Vector2(-boxBorder, -boxBorder);
 
-        // Icono: hermano del rombo y no hijo, para que no gire con el.
         RectTransform ico = Rect("Icono", raiz, Color.white, out icono);
         ico.anchorMin = ico.anchorMax = new Vector2(0f, 1f);
         ico.sizeDelta = new Vector2(iconSize, iconSize);
-        ico.anchoredPosition = borde.anchoredPosition;
+        ico.anchoredPosition = centroRombo;
         icono.preserveAspect = true;
         icono.enabled = false;
 
-        float x = visible;
+        float x = hueco - 4f;
         float yVida = centroY + altoBarras * 0.5f;
         float yEstamina = yVida - healthHeight - barGap;
+        float yMana = yEstamina - staminaHeight - barGap * 0.6f;
 
-        vidaFondo = Barra("Vida", raiz, x, yVida, healthWidth, healthHeight);
-        vidaFondoPos = vidaFondo.anchoredPosition;
-        vidaEstela = Relleno("Estela", vidaFondo, trailColor, out _);
-        vidaRelleno = Relleno("Relleno", vidaFondo, healthColor, out vidaImagen);
+        largoVida.fondo = Barra("Vida", raiz, x, yVida, anchoVida, healthHeight);
+        vidaFondoPos = largoVida.fondo.anchoredPosition;
+        vidaEstela = Relleno("Estela", largoVida.fondo, trailColor, out _);
+        vidaRelleno = Relleno("Relleno", largoVida.fondo, healthColor, out vidaImagen);
+        largoVida.brillo = Brillo(largoVida.fondo);
 
-        RectTransform estFondo = Barra("Estamina", raiz, x, yEstamina, staminaWidth, staminaHeight);
-        estaminaRelleno = Relleno("Relleno", estFondo, staminaColor, out estaminaImagen);
+        largoEstamina.fondo = Barra("Estamina", raiz, x, yEstamina, anchoEstamina, staminaHeight);
+        estaminaRelleno = Relleno("Relleno", largoEstamina.fondo, staminaColor, out estaminaImagen);
+        largoEstamina.brillo = Brillo(largoEstamina.fondo);
 
-        RectTransform manaFondo = Barra("Mana", raiz, x, yEstamina - staminaHeight - barGap * 0.6f, manaWidth, manaHeight);
-        manaRelleno = Relleno("Relleno", manaFondo, manaColor, out manaImagen);
+        largoMana.fondo = Barra("Mana", raiz, x, yMana, anchoMana, manaHeight);
+        manaRelleno = Relleno("Relleno", largoMana.fondo, manaColor, out manaImagen);
+        largoMana.brillo = Brillo(largoMana.fondo);
 
-        // Numeros a la derecha de cada barra, apagados salvo que se activen.
-        textoVida = Numero("TextoVida", vidaFondo, healthHeight);
-        textoEstamina = Numero("TextoEstamina", estFondo, staminaHeight);
+        // Estados: empiezan bajo el rombo y las barras.
+        yEstados = Mathf.Min(-hueco, yMana - manaHeight) - statusGap;
+        for (int i = 0; i < EstadosPlayer.Cantidad; i++) filas.Add(NuevaFila((EstadoPlayer)i, x));
+
+        textoVida = Numero("TextoVida", largoVida.fondo, healthHeight);
+        textoEstamina = Numero("TextoEstamina", largoEstamina.fondo, staminaHeight);
+        textoMana = Numero("TextoMana", largoMana.fondo, manaHeight);
         SetShowNumbers(showNumbers);
 
         Dibujar();
+    }
+
+    private void Anillo(Image img, Vector2 centro)
+    {
+        img.sprite = RuedaImbuir.Anillo();
+        RectTransform r = img.rectTransform;
+        r.anchorMin = r.anchorMax = new Vector2(0f, 1f);
+        r.sizeDelta = new Vector2(ringSize, ringSize);
+        r.anchoredPosition = centro;
+    }
+
+    private FilaEstado NuevaFila(EstadoPlayer e, float x)
+    {
+        FilaEstado f = new FilaEstado();
+        f.raiz = Crear("Estado_" + e, raiz, out GameObject go);
+        f.raiz.anchorMin = f.raiz.anchorMax = new Vector2(0f, 1f);
+        f.raiz.pivot = new Vector2(0f, 1f);
+        f.raiz.sizeDelta = new Vector2(statusIcon + 8f + statusWidth, statusIcon);
+        f.raiz.anchoredPosition = new Vector2(x - statusIcon - 8f, yEstados);
+        f.grupo = go.AddComponent<CanvasGroup>();
+        f.grupo.alpha = 0f;
+
+        RectTransform ri = Rect("Icono", f.raiz, Color.white, out f.icono);
+        ri.anchorMin = ri.anchorMax = new Vector2(0f, 0.5f);
+        ri.pivot = new Vector2(0f, 0.5f);
+        ri.sizeDelta = new Vector2(statusIcon, statusIcon);
+        f.icono.preserveAspect = true;
+        f.icono.sprite = RecursosRPG.Get().Icono(EstadosPlayer.ClaveIcono(e));
+        f.icono.enabled = f.icono.sprite != null;
+
+        RectTransform fondo = Rect("Barra", f.raiz, backColor, out _);
+        fondo.anchorMin = fondo.anchorMax = new Vector2(0f, 0.5f);
+        fondo.pivot = new Vector2(0f, 0.5f);
+        fondo.anchoredPosition = new Vector2(statusIcon + 8f, 0f);
+        fondo.sizeDelta = new Vector2(statusWidth, statusHeight);
+        RectTransform rr = Rect("Relleno", fondo, EstadosPlayer.ColorDe(e), out Image img);
+        f.relleno = img;
+        rr.pivot = new Vector2(0f, 0.5f);
+        Anclar(rr, 0f);
+        go.SetActive(false);
+        return f;
+    }
+
+    private Image Brillo(RectTransform fondo)
+    {
+        RectTransform r = Rect("Brillo", fondo, new Color(1f, 1f, 1f, 0f), out Image img);
+        r.anchorMin = Vector2.zero;
+        r.anchorMax = Vector2.one;
+        r.offsetMin = new Vector2(-2f, -2f);
+        r.offsetMax = new Vector2(2f, 2f);
+        img.enabled = false;
+        return img;
     }
 
     private Text Numero(string nombre, RectTransform barra, float altoBarra)

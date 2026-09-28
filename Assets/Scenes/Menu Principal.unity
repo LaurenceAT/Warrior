@@ -158,7 +158,7 @@ MonoBehaviour:
   colorBrasaA: {r: 1, g: 0.62, b: 0.2, a: 1}
   colorBrasaB: {r: 1, g: 0.28, b: 0.06, a: 1}
   intensidadLuz: 0.35
-  ambiente: {fileID: 0}
+  ambiente: {fileID: 8300000, guid: 6d9ab6059251a6c47b1fcd947e7c1d8b, type: 3}
   volumenAmbiente: 0.5
   primerNivel: Nivel Nieve
 --- !u!4 &137134853

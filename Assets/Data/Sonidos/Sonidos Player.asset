@@ -32,10 +32,9 @@ MonoBehaviour:
   - accion: Parry (choque de metal)
     clave: parry
     clips:
-    - {fileID: 8300000, guid: b74c8b16aa1236540b8e7a10191edd57, type: 3}
-    - {fileID: 8300000, guid: 8cad1e8bb651b2c40954610691e1b9e6, type: 3}
-    volumen: 1
-    variacionTono: 0.06
+    - {fileID: 8300000, guid: d86457ca37657ec49aea23ecfd29acea, type: 3}
+    volumen: 1.166
+    variacionTono: 0.155
   - accion: Parry (destello)
     clave: parry_brillo
     clips:
@@ -65,8 +64,8 @@ MonoBehaviour:
     clave: muerte_player
     clips:
     - {fileID: 8300000, guid: fff91c7870f5c8c44b92cff683c64733, type: 3}
-    volumen: 0.8
-    variacionTono: 0.06
+    volumen: 0.341
+    variacionTono: 0.037
   - accion: Barrido / esquiva (C)
     clave: esquiva
     clips:
@@ -104,7 +103,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 6a346ca8091881d479913bc3d45b210a, type: 3}
     - {fileID: 8300000, guid: 6bbbc76306522e24ba6a62399a5a51b6, type: 3}
     - {fileID: 8300000, guid: 9d82ba344a4db4a49a940ee1e259993b, type: 3}
-    volumen: 0.35
+    volumen: 1.107
     variacionTono: 0.06
   - accion: Pasos sobre hielo
     clave: pasos_hielo
@@ -114,7 +113,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: ab96e26050829ea49a8440d9239be3c1, type: 3}
     - {fileID: 8300000, guid: 0c923c1727699a947add324fa7b89cbe, type: 3}
     - {fileID: 8300000, guid: c52c66b747a552b499da7583f5b5f8ce, type: 3}
-    volumen: 0.35
+    volumen: 0.871
     variacionTono: 0.06
   - accion: Beber un frasco
     clave: beber
@@ -122,31 +121,31 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 3329602dee2fb3f4eb06c7ad11e3d2e4, type: 3}
     - {fileID: 8300000, guid: 61b0a3d2227e4b34e85145e6cd7c09b2, type: 3}
     - {fileID: 8300000, guid: d1ff77bdc3a19aa40ba6df23cb40762c, type: 3}
-    volumen: 0.5
-    variacionTono: 0.06
+    volumen: 0.146
+    variacionTono: 0.031
   - accion: 'Imbuir: fuego'
     clave: imbuir_0
     clips:
-    - {fileID: 8300000, guid: 225d26d294a284743b801e42aa600da6, type: 3}
+    - {fileID: 8300000, guid: 4fd02229e91e2794caad99dc5932b674, type: 3}
     volumen: 0.7
     variacionTono: 0.06
   - accion: 'Imbuir: hielo'
     clave: imbuir_1
     clips:
-    - {fileID: 8300000, guid: 296e1d117a286d440a6d213e21508dd2, type: 3}
-    volumen: 0.7
-    variacionTono: 0.06
+    - {fileID: 8300000, guid: 54d3d3039649c884e88017e876379840, type: 3}
+    volumen: 0.588
+    variacionTono: 0.043
   - accion: 'Imbuir: oscuridad'
     clave: imbuir_2
     clips:
-    - {fileID: 8300000, guid: 6e692211f11739945870b20ea0c8d669, type: 3}
-    volumen: 0.7
-    variacionTono: 0.06
+    - {fileID: 8300000, guid: 50be585575ee99a4698dd4bf17691230, type: 3}
+    volumen: 0.602
+    variacionTono: 0.042
   - accion: 'Imbuir: sagrado'
     clave: imbuir_3
     clips:
-    - {fileID: 8300000, guid: 73531fdf37d264c47a7963b0a0dfe7db, type: 3}
-    volumen: 0.7
+    - {fileID: 8300000, guid: 50f799376c295b64a83d646302126dfc, type: 3}
+    volumen: 0.615
     variacionTono: 0.06
   - accion: 'Imbuir: acido'
     clave: imbuir_4

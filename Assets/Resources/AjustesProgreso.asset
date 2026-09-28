@@ -16,11 +16,20 @@ MonoBehaviour:
   costePorNivel: 70
   costeCurva: 14
   nivelMaximo: 20
-  vidaBase: 100
-  vidaPorNivel: 10
+  vidaBase: 150
+  vidaPorNivel: 15
   estaminaBase: 100
   estaminaPorNivel: 8
-  manaBase: 60
-  manaPorNivel: 10
-  resistenciaPorNivel: 0.03
-  resistenciaMaxima: 0.45
+  manaBase: 75
+  manaPorNivel: 8
+  resistenciaCurva: 0.12
+  resistenciaMaxima: 0.55
+  espadaNivelMaximo: 5
+  espadaDanoPorNivel: 0.12
+  espadaCoste: 1
+  frascosNivelMaximo: 5
+  frascoVidaBase: 0.6
+  frascoVidaPorNivel: 0.06
+  frascoManaBase: 0.5
+  frascoManaPorNivel: 0.1
+  frascosCoste: 1

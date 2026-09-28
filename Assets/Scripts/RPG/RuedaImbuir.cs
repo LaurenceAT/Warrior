@@ -59,7 +59,7 @@ public class RuedaImbuir : MonoBehaviour
         Time.timeScale = CamaraLenta;
         grupo.alpha = 0f;
         gameObject.SetActive(true);
-        Sonido.Reproducir("menu_abrir", 0.7f);
+        SonidoMenu.Abrir();
         Refrescar();
     }
 
@@ -83,7 +83,7 @@ public class RuedaImbuir : MonoBehaviour
 
         int antes = elegido;
         LeerSeleccion();
-        if (elegido != antes) { Sonido.Reproducir("menu_mover", 0.5f); Refrescar(); }
+        if (elegido != antes) { SonidoMenu.Mover(); Refrescar(); }
 
         // Pulsar la E al abrir no debe confirmar en el mismo fotograma.
         bool listo = Time.unscaledTime - abiertaDesde > 0.12f;
@@ -96,7 +96,7 @@ public class RuedaImbuir : MonoBehaviour
         bool cancelar = (k != null && k.escapeKey.wasPressedThisFrame) || (m != null && m.rightButton.wasPressedThisFrame)
                         || (g != null && g.buttonEast.wasPressedThisFrame);
 
-        if (cancelar) { Sonido.Reproducir("menu_cancelar", 0.6f); CerrarInterno(); return; }
+        if (cancelar) { SonidoMenu.Cancelar(); CerrarInterno(); return; }
         if (!confirmar) return;
 
         if (elegido < 0) { CerrarInterno(); return; }
@@ -105,7 +105,7 @@ public class RuedaImbuir : MonoBehaviour
         {
             aviso.text = motivo;
             aviso.color = new Color(1f, 0.45f, 0.4f);
-            Sonido.Reproducir("menu_error", 0.7f);
+            SonidoMenu.Error();
             return;
         }
         Elemento e = Elementos.Todos[elegido];

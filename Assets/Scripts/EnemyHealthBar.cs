@@ -30,6 +30,7 @@ public class EnemyHealthBar : MonoBehaviour
     private CanvasGroup grupo;
     private RectTransform relleno;
     private RectTransform estela;
+    private FilaEstados estados;
 
     private float vida = 1f;
     private float vidaEstela = 1f;
@@ -38,13 +39,15 @@ public class EnemyHealthBar : MonoBehaviour
     private bool mostrada;
     private bool muriendo;
 
-    public static EnemyHealthBar Crear(Transform enemigo, Vector2 offset, float ancho)
+    public static EnemyHealthBar Crear(Transform enemigo, Vector2 offset, float ancho, EnemyHealth salud = null)
     {
         GameObject go = new GameObject($"BarraVida ({enemigo.name})");
         EnemyHealthBar barra = go.AddComponent<EnemyHealthBar>();
         barra.objetivo = enemigo;
         barra.offset = offset;
         barra.Construir(ancho);
+        // Debajo, los iconos de los estados que tenga (quemado, sangrado...).
+        if (salud != null) barra.estados = FilaEstados.Crear((RectTransform)barra.transform, salud, 20f, 3f, -3f, true);
         barra.Seguir();
         return barra;
     }
@@ -93,6 +96,8 @@ public class EnemyHealthBar : MonoBehaviour
         if (mostrada)
         {
             sinDano += dt;
+            // Con algun estado encima no se desvanece: se ven sus iconos.
+            if (estados != null && estados.HayEstados) sinDano = 0f;
             bool visible = !muriendo && (sinDano < fadeDelay || vidaEstela > vida);
             grupo.alpha = Mathf.MoveTowards(grupo.alpha, visible ? 1f : 0f, (muriendo ? fadeSpeed * 2f : fadeSpeed) * dt);
         }

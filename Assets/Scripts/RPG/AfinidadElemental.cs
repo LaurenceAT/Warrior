@@ -9,7 +9,8 @@ public class AfinidadElemental : MonoBehaviour, IAfinidadElemental
     public float hielo = 1f;
     public float oscuro = 1f;
     public float sagrado = 1f;
-    public float acido = 1f;
+    [UnityEngine.Serialization.FormerlySerializedAs("acido")]
+    public float sangrado = 1f;
 
     public float Multiplicador(Elemento e)
     {
@@ -19,13 +20,13 @@ public class AfinidadElemental : MonoBehaviour, IAfinidadElemental
             case Elemento.Hielo: return hielo;
             case Elemento.Oscuro: return oscuro;
             case Elemento.Sagrado: return sagrado;
-            case Elemento.Acido: return acido;
+            case Elemento.Sangrado: return sangrado;
             default: return 1f;
         }
     }
 
-    public void Poner(float fuego, float hielo, float oscuro, float sagrado, float acido)
+    public void Poner(float fuego, float hielo, float oscuro, float sagrado, float sangrado)
     {
-        this.fuego = fuego; this.hielo = hielo; this.oscuro = oscuro; this.sagrado = sagrado; this.acido = acido;
+        this.fuego = fuego; this.hielo = hielo; this.oscuro = oscuro; this.sagrado = sagrado; this.sangrado = sangrado;
     }
 }

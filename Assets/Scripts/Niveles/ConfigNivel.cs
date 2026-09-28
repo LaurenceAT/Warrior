@@ -96,5 +96,8 @@ public class ConfigNivel : ScriptableObject
     public List<RecursosRPG.GrupoSonido> sonidos = new List<RecursosRPG.GrupoSonido>();
 
     [Header("Pantalla de muerte")]
+    [Tooltip("Al morir en el nivel (enemigos, trampas, caidas...).")]
     [TextArea] public string[] frasesMuerte;
+    [Tooltip("Al morir contra el jefe del nivel: lo que te dice el jefe. Vacio = las que tenga la ArenaJefe.")]
+    [TextArea] public string[] frasesJefe;
 }

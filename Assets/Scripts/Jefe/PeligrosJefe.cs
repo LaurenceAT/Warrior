@@ -32,15 +32,19 @@ public static class PeligrosJefe
     }
 
     // Aplica el golpe al player si esta dentro de la caja. Devuelve el resultado.
+    // Estos peligros son hechizos: por defecto, dano magico. Los ataques
+    // especiales pasan ademas el estado que acumulan (sangrado, congelacion...).
     public static PlayerControler.ResultadoDano? GolpearCaja(Vector2 centro, Vector2 tamano, int dano, Component atacante,
-                                                            out PlayerControler player)
+                                                            out PlayerControler player,
+                                                            PlayerControler.TipoDano tipo = PlayerControler.TipoDano.Magico,
+                                                            EstadoPlayer estado = EstadoPlayer.Ninguno, float acumulacion = 0f)
     {
         player = null;
         foreach (Collider2D c in Physics2D.OverlapBoxAll(centro, tamano, 0f))
         {
             if (!c.CompareTag("Player")) continue;
             player = c.GetComponent<PlayerControler>();
-            if (player != null) return player.TakeDamage(dano, atacante);
+            if (player != null) return player.TakeDamage(dano, atacante, tipo, estado, acumulacion);
         }
         return null;
     }
@@ -49,6 +53,8 @@ public static class PeligrosJefe
 // Onda que recorre el suelo. Se esquiva saltando. Un parry la deshace.
 public class OndaCarmesi : MonoBehaviour
 {
+    private EstadoPlayer estado = EstadoPlayer.Ninguno;
+    private float acumulacion;
     private int dir;
     private float velocidad, alcance, recorrido;
     private int dano;
@@ -56,7 +62,8 @@ public class OndaCarmesi : MonoBehaviour
     private bool pego, acabada;
     private EfectoVisual fx;
 
-    public static void Lanzar(AnimadorHoja.Clip clip, Vector2 pos, int dir, float velocidad, int dano, float alcance, Color color, float escala)
+    public static void Lanzar(AnimadorHoja.Clip clip, Vector2 pos, int dir, float velocidad, int dano, float alcance, Color color, float escala,
+                              EstadoPlayer estado = EstadoPlayer.Ninguno, float acumulacion = 0f)
     {
         EfectoVisual fx = EfectoVisual.Crear(clip, pos, escala, color, dir < 0, -1f, "VFX", 12);
         if (fx == null) return;
@@ -67,6 +74,8 @@ public class OndaCarmesi : MonoBehaviour
         o.dano = dano;
         o.alcance = alcance;
         o.tamano = new Vector2(1.5f, 1.1f) * escala;
+        o.estado = estado;
+        o.acumulacion = acumulacion;
         PeligrosJefe.Registrar(fx.gameObject);
     }
 
@@ -88,7 +97,8 @@ public class OndaCarmesi : MonoBehaviour
         if (recorrido >= alcance) { Acabar(); return; }
 
         if (pego) return;
-        var r = PeligrosJefe.GolpearCaja((Vector2)transform.position + Vector2.up * tamano.y * 0.5f, tamano, dano, this, out _);
+        var r = PeligrosJefe.GolpearCaja((Vector2)transform.position + Vector2.up * tamano.y * 0.5f, tamano, dano, this, out _,
+                                         PlayerControler.TipoDano.Magico, estado, acumulacion);
         if (!r.HasValue) return;
         pego = true;
         if (r.Value == PlayerControler.ResultadoDano.Parry) Acabar();
@@ -156,13 +166,9 @@ public class PilarSangre : MonoBehaviour
             t += Time.deltaTime;
             if (!pego && t > 0.08f)
             {
-                var r = PeligrosJefe.GolpearCaja(suelo + Vector2.up * alto * 0.5f, caja, dano, this, out PlayerControler p);
-                if (r.HasValue)
-                {
-                    pego = true;
-                    if (r.Value == PlayerControler.ResultadoDano.Recibido) SangradoPlayer.Aplicar(p, sangrado);
-                    else if (r.Value == PlayerControler.ResultadoDano.Bloqueado) SangradoPlayer.Aplicar(p, sangrado * 0.3f);
-                }
+                var r = PeligrosJefe.GolpearCaja(suelo + Vector2.up * alto * 0.5f, caja, dano, this, out _,
+                                                 PlayerControler.TipoDano.Magico, EstadoPlayer.Sangrado, sangrado);
+                if (r.HasValue) pego = true;
             }
             yield return null;
         }
@@ -233,7 +239,8 @@ public class OrbeSangre : MonoBehaviour
             return;
         }
 
-        var r = PeligrosJefe.GolpearCaja(transform.position, new Vector2(0.6f, 0.6f), dano, this, out PlayerControler pc);
+        var r = PeligrosJefe.GolpearCaja(transform.position, new Vector2(0.6f, 0.6f), dano, this, out _,
+                                         PlayerControler.TipoDano.Magico, EstadoPlayer.Sangrado, sangrado);
         if (!r.HasValue) return;
         switch (r.Value)
         {
@@ -244,11 +251,7 @@ public class OrbeSangre : MonoBehaviour
                 fx.Render.color = new Color(1f, 0.9f, 0.6f);
                 break;
             case PlayerControler.ResultadoDano.Recibido:
-                SangradoPlayer.Aplicar(pc, sangrado);
-                Estallar();
-                break;
             case PlayerControler.ResultadoDano.Bloqueado:
-                SangradoPlayer.Aplicar(pc, sangrado * 0.3f);
                 Estallar();
                 break;
             // Ignorado: el barrido lo atraviesa, sigue.
@@ -272,19 +275,23 @@ public class OrbeSangre : MonoBehaviour
 // Meteoro: glifo en el suelo y, al acabar el aviso, cae en diagonal y estalla.
 public class Meteoro : MonoBehaviour
 {
+    private EstadoPlayer estado = EstadoPlayer.Ninguno;
+    private float acumulacion;
     private AnimadorHoja.Clip clipMeteoro, clipExplosion, clipGlifo;
     private float aviso, techo;
     private int dano;
     private Color color;
 
     public static void Caer(AnimadorHoja.Clip meteoro, AnimadorHoja.Clip explosion, AnimadorHoja.Clip glifo,
-                            Vector2 suelo, float techo, float aviso, int dano, Color color)
+                            Vector2 suelo, float techo, float aviso, int dano, Color color,
+                            EstadoPlayer estado = EstadoPlayer.Ninguno, float acumulacion = 0f)
     {
         GameObject go = new GameObject("Meteoro");
         go.transform.position = suelo;
         Meteoro m = go.AddComponent<Meteoro>();
         m.clipMeteoro = meteoro; m.clipExplosion = explosion; m.clipGlifo = glifo;
         m.aviso = aviso; m.techo = techo; m.dano = dano; m.color = color;
+        m.estado = estado; m.acumulacion = acumulacion;
         PeligrosJefe.Registrar(go);
     }
 
@@ -321,7 +328,8 @@ public class Meteoro : MonoBehaviour
         if (g != null) Destroy(g.gameObject);
 
         EfectoVisual.Crear(clipExplosion, suelo + Vector2.up * 0.6f, 1.8f, Color.white);
-        PeligrosJefe.GolpearCaja(suelo + Vector2.up * 0.7f, new Vector2(2.4f, 1.6f), dano, this, out _);
+        PeligrosJefe.GolpearCaja(suelo + Vector2.up * 0.7f, new Vector2(2.4f, 1.6f), dano, this, out _,
+                                 PlayerControler.TipoDano.Magico, estado, acumulacion);
         Destroy(gameObject);
     }
 }
@@ -330,6 +338,8 @@ public class Meteoro : MonoBehaviour
 // con el barrido o, con parry, se le devuelve al jefe.
 public class MedialunaSangre : MonoBehaviour
 {
+    private EstadoPlayer estado = EstadoPlayer.Ninguno;
+    private float acumulacion;
     private int dir;
     private float velocidad;
     private int dano, danoDevuelto = 50;
@@ -338,12 +348,14 @@ public class MedialunaSangre : MonoBehaviour
     private EfectoVisual fx;
     private float vida = 4f;
 
-    public static void Lanzar(AnimadorHoja.Clip clip, Vector2 pos, int dir, float velocidad, int dano, Transform jefe, Color color)
+    public static void Lanzar(AnimadorHoja.Clip clip, Vector2 pos, int dir, float velocidad, int dano, Transform jefe, Color color,
+                              EstadoPlayer estado = EstadoPlayer.Ninguno, float acumulacion = 0f)
     {
         EfectoVisual fx = EfectoVisual.Crear(clip, pos, 1.3f, color, dir < 0, -1f, "VFX", 13);
         if (fx == null) return;
         MedialunaSangre m = fx.gameObject.AddComponent<MedialunaSangre>();
         m.fx = fx; m.dir = dir; m.velocidad = velocidad; m.dano = dano; m.jefe = jefe;
+        m.estado = estado; m.acumulacion = acumulacion;
         PeligrosJefe.Registrar(fx.gameObject);
     }
 
@@ -370,7 +382,8 @@ public class MedialunaSangre : MonoBehaviour
             return;
         }
 
-        var r = PeligrosJefe.GolpearCaja(transform.position, new Vector2(0.8f, 1.7f), dano, this, out _);
+        var r = PeligrosJefe.GolpearCaja(transform.position, new Vector2(0.8f, 1.7f), dano, this, out _,
+                                         PlayerControler.TipoDano.Magico, estado, acumulacion);
         if (!r.HasValue) return;
         if (r.Value == PlayerControler.ResultadoDano.Parry)
         {
@@ -440,8 +453,8 @@ public class VorticeSangre : MonoBehaviour
                 if (d < 1.4f && Time.time >= siguienteGolpe)
                 {
                     siguienteGolpe = Time.time + 0.8f;
-                    var r = PeligrosJefe.GolpearCaja(c, new Vector2(2.2f, 2.6f), dano, this, out PlayerControler pc);
-                    if (r == PlayerControler.ResultadoDano.Recibido) SangradoPlayer.Aplicar(pc, sangrado);
+                    PeligrosJefe.GolpearCaja(c, new Vector2(2.2f, 2.6f), dano, this, out _,
+                                             PlayerControler.TipoDano.Magico, EstadoPlayer.Sangrado, sangrado);
                 }
             }
             yield return null;

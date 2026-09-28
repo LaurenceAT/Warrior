@@ -132,7 +132,7 @@ MonoBehaviour:
     variacionTono: 0.06
   - clave: imbuir_4
     clips:
-    - {fileID: 8300000, guid: 7e8d2794dad0af2479bfea1988da5b61, type: 3}
+    - {fileID: 8300000, guid: 22e60036a75bb2349a3f85c2195a7ecc, type: 3}
     volumen: 0.7
     variacionTono: 0.06
   - clave: golpe_0
@@ -168,11 +168,9 @@ MonoBehaviour:
     variacionTono: 0.06
   - clave: golpe_4
     clips:
-    - {fileID: 8300000, guid: d5e9830c202fd7e42932e2a10c2e823b, type: 3}
-    - {fileID: 8300000, guid: ba9ebc9188db69e42a82088c4dcc7ded, type: 3}
-    - {fileID: 8300000, guid: aff5fe0407a18ae4892ecacd6f724a60, type: 3}
-    - {fileID: 8300000, guid: 4c9accfa44fe32d498d9e976ed392a4b, type: 3}
-    volumen: 0.5
+    - {fileID: 8300000, guid: cc0caab8469aaa649a02a4370f69cc06, type: 3}
+    - {fileID: 8300000, guid: 425a1f310e42e99449727c15952d5db3, type: 3}
+    volumen: 0.55
     variacionTono: 0.06
   - clave: tajo_0
     clips:
@@ -205,9 +203,8 @@ MonoBehaviour:
     variacionTono: 0.06
   - clave: tajo_4
     clips:
-    - {fileID: 8300000, guid: ecc1f38722590f2468218d8f06a8bff8, type: 3}
-    - {fileID: 8300000, guid: 7ac164ab2c0b4514fa6f212d97c0c0c9, type: 3}
-    - {fileID: 8300000, guid: d258b734927c4d441a9053f3985b3392, type: 3}
+    - {fileID: 8300000, guid: 25f183731f96ac844a4dbd808c3788a8, type: 3}
+    - {fileID: 8300000, guid: d62b6b1ca1059d247bd610c553b24d5e, type: 3}
     volumen: 0.4
     variacionTono: 0.06
   - clave: hielo_congelar
@@ -294,15 +291,13 @@ MonoBehaviour:
     variacionTono: 0.06
   - clave: menu_abrir
     clips:
-    - {fileID: 8300000, guid: 843d321638df48146b2ec90b49d6605a, type: 3}
-    volumen: 0.5
+    - {fileID: 8300000, guid: a823765ee536cf64ba7ef94f60cc52d9, type: 3}
+    volumen: 0.35
     variacionTono: 0.06
   - clave: menu_mover
     clips:
-    - {fileID: 8300000, guid: fc990cf1ee1ff5e47a6bec93fd8cee2d, type: 3}
-    - {fileID: 8300000, guid: 7e5f9cfa92e01f347bc0c8c60d56a321, type: 3}
-    - {fileID: 8300000, guid: 57382655a4bb27641a178f0271010dae, type: 3}
-    volumen: 0.3
+    - {fileID: 8300000, guid: a405bb5fac695684bba5b1623d634ea4, type: 3}
+    volumen: 0.2
     variacionTono: 0.06
   - clave: menu_cancelar
     clips:
@@ -528,6 +523,38 @@ MonoBehaviour:
     - {fileID: 8300000, guid: d857e16a98894a14494c9f6feda69d80, type: 3}
     volumen: 0.35
     variacionTono: 0.06
+  - clave: menu_confirmar
+    clips:
+    - {fileID: 8300000, guid: a823765ee536cf64ba7ef94f60cc52d9, type: 3}
+    volumen: 0.4
+    variacionTono: 0.06
+  - clave: jugador_sangrado
+    clips:
+    - {fileID: 8300000, guid: 4f365f862fc74794183c349747541d22, type: 3}
+    volumen: 0.8
+    variacionTono: 0.06
+  - clave: sangrado_enemigo
+    clips:
+    - {fileID: 8300000, guid: 7e8225d46cf8fac4897b21bb04e57d4a, type: 3}
+    volumen: 0.75
+    variacionTono: 0.06
+  - clave: cofre_abrir
+    clips:
+    - {fileID: 8300000, guid: bddeaa104428fe04a9d5142b318b9f0d, type: 3}
+    - {fileID: 8300000, guid: cad2e053e323ba44e9d2545202b6fc96, type: 3}
+    volumen: 0.8
+    variacionTono: 0.06
+  - clave: objeto_obtenido
+    clips:
+    - {fileID: 8300000, guid: e61f35b2adb6b6f46887d9b6cb19227a, type: 3}
+    volumen: 0.75
+    variacionTono: 0.06
+  - clave: mejorar_equipo
+    clips:
+    - {fileID: 8300000, guid: 9ed015e69362d3f4a93e7623164585e6, type: 3}
+    - {fileID: 8300000, guid: f82856d1e6b2971408bf15009bca9ac8, type: 3}
+    volumen: 0.8
+    variacionTono: 0.06
   iconos:
   - clave: elemento_0
     sprite: {fileID: 21300000, guid: 28a75b8a44d70764385db2d1e0838577, type: 3}
@@ -538,7 +565,7 @@ MonoBehaviour:
   - clave: elemento_3
     sprite: {fileID: 21300000, guid: 40100e93754465d49ba2799e46101f29, type: 3}
   - clave: elemento_4
-    sprite: {fileID: 21300000, guid: 968fb0828306b454c959a851e9035383, type: 3}
+    sprite: {fileID: 21300000, guid: 260f8a2c4dd1fec418f02ef95ec23b1d, type: 3}
   - clave: estado_quemado
     sprite: {fileID: 21300000, guid: f222915a8e86f2945843a7dd2453810a, type: 3}
   - clave: estado_lento
@@ -547,8 +574,6 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 4192a43ba3eb6bc4da7dfc6331da4a4d, type: 3}
   - clave: estado_aturdido
     sprite: {fileID: 21300000, guid: 6bd1ca7161b4de747a0568bda9fcddb4, type: 3}
-  - clave: estado_corroido
-    sprite: {fileID: 21300000, guid: 652f4dbc97e5be64ba94464536fe872f, type: 3}
   - clave: estado_drenado
     sprite: {fileID: 21300000, guid: 51d1c94baf3d4a449aa36fe23dffffc5, type: 3}
   - clave: stat_vida
@@ -607,6 +632,26 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 51d1c94baf3d4a449aa36fe23dffffc5, type: 3}
   - clave: ctrl_vida
     sprite: {fileID: 21300000, guid: 872bbc6eedcdd9a40820b55023d46138, type: 3}
+  - clave: jugador_sangrado
+    sprite: {fileID: 21300000, guid: 260f8a2c4dd1fec418f02ef95ec23b1d, type: 3}
+  - clave: jugador_congelacion
+    sprite: {fileID: 21300000, guid: 965f9119d42d2f548a10c58feff1f763, type: 3}
+  - clave: jugador_quemadura
+    sprite: {fileID: 21300000, guid: d82e21449a384834e9bdcb8fd920a444, type: 3}
+  - clave: estado_sangrado
+    sprite: {fileID: 21300000, guid: bbf17d9c5ddbd844f9bcfbff83e6348f, type: 3}
+  - clave: objeto_piedra
+    sprite: {fileID: 21300000, guid: 8dac833ac04a0ae45996d84fd74ebfba, type: 3}
+  - clave: objeto_lagrima
+    sprite: {fileID: 21300000, guid: d77c640b0159fb3408c6e5c2935190f2, type: 3}
+  - clave: ctrl_interactuar
+    sprite: {fileID: 21300000, guid: 518bbf33d268eaf4ab07bc14557b278d, type: 3}
+  - clave: cofre_especial
+    sprite: {fileID: 21300000, guid: 04b07fd7fca3bf1428ba27a114564b96, type: 3}
+  - clave: ctrl_estados
+    sprite: {fileID: 21300000, guid: 33d93eb458e207842b779942de33c528, type: 3}
+  - clave: estado_corroido
+    sprite: {fileID: 21300000, guid: 652f4dbc97e5be64ba94464536fe872f, type: 3}
   tajosElemento:
   - nombre: tajo_h_Fuego
     hoja: {fileID: 0}
@@ -936,7 +981,7 @@ MonoBehaviour:
       width: 0
       height: 0
     pivotes: []
-  - nombre: tajo_h_Acido
+  - nombre: tajo_h_Sangrado
     hoja: {fileID: 0}
     anchoCelda: 64
     altoCelda: 64
@@ -949,22 +994,22 @@ MonoBehaviour:
     pivote: {x: 0.5, y: 0.5}
     pixelesPorUnidad: 64
     fotogramas:
-    - {fileID: 2800000, guid: 8da89d0fd0ef0fd40adbccbd76a2b59f, type: 3}
-    - {fileID: 2800000, guid: e2ace6c9eae637f49a5b2da842eadda5, type: 3}
-    - {fileID: 2800000, guid: dc05f8434706a3d449d8b52c15b31c98, type: 3}
-    - {fileID: 2800000, guid: aba6ddfef1dd2a249980061671512d98, type: 3}
-    - {fileID: 2800000, guid: 94e779d8f61431e418729172694b9f13, type: 3}
-    - {fileID: 2800000, guid: a2bdf1bff1ae7714793ff5f2cb07d95e, type: 3}
-    - {fileID: 2800000, guid: 1b2d067539dacc041ace6ec2106f3871, type: 3}
-    - {fileID: 2800000, guid: d0cf12a1e75ebf342b53d2e03f6b0fff, type: 3}
-    - {fileID: 2800000, guid: 2b4d17f6e92fbd04a82a0bf3f96c25ee, type: 3}
+    - {fileID: 2800000, guid: 69d4904e8cc1f5d4c9d8b0354a0ead8f, type: 3}
+    - {fileID: 2800000, guid: 12520962e6902844b9b9a9c690235504, type: 3}
+    - {fileID: 2800000, guid: a3dd8d397a42f3144ad3ca7516e15786, type: 3}
+    - {fileID: 2800000, guid: 24e49b26e5866c24aae42d05eb45a923, type: 3}
+    - {fileID: 2800000, guid: 37a20c5f4a976b9479984c31d1499cab, type: 3}
+    - {fileID: 2800000, guid: 360864c72c0960e4e95a2008388ce857, type: 3}
+    - {fileID: 2800000, guid: f2d08db27da4dad4c977dece5d27d3b9, type: 3}
+    - {fileID: 2800000, guid: f8a1adaee1473434988b50b4053c26b0, type: 3}
+    - {fileID: 2800000, guid: f5e0a6ac0d841b14b92d29736988c6a9, type: 3}
     recorte:
       x: 0
       y: 0
       width: 0
       height: 0
     pivotes: []
-  - nombre: tajo_c_Acido
+  - nombre: tajo_c_Sangrado
     hoja: {fileID: 0}
     anchoCelda: 64
     altoCelda: 64
@@ -977,22 +1022,22 @@ MonoBehaviour:
     pivote: {x: 0.5, y: 0.5}
     pixelesPorUnidad: 64
     fotogramas:
-    - {fileID: 2800000, guid: 7e6eb474e5220214fb2fc7b1895d990b, type: 3}
-    - {fileID: 2800000, guid: 5ef8faa5e650095468eece2df2307106, type: 3}
-    - {fileID: 2800000, guid: 9a806c36e9906354ebb7cc9aac0dfcc5, type: 3}
-    - {fileID: 2800000, guid: 9791b208fbdea8046a780c1d9f9ca08a, type: 3}
-    - {fileID: 2800000, guid: c22a0bdb44ef51341a719090a6f1a7e8, type: 3}
-    - {fileID: 2800000, guid: aad9777c0d20e874ba7afec87b6b6659, type: 3}
-    - {fileID: 2800000, guid: bc4742472e7562f49800bcfd077966a4, type: 3}
-    - {fileID: 2800000, guid: df915f070adabb44f9b93882d940b061, type: 3}
-    - {fileID: 2800000, guid: bc22856a323317740afd9936d516bc46, type: 3}
+    - {fileID: 2800000, guid: bd40f8b9b134289478074ce92ba8a013, type: 3}
+    - {fileID: 2800000, guid: 7e303246daece22429748bf88a11ea99, type: 3}
+    - {fileID: 2800000, guid: ddabd3955582e074f8bcf662dfdce730, type: 3}
+    - {fileID: 2800000, guid: 0436abd0eeb28084f9366d6ca82bb6bf, type: 3}
+    - {fileID: 2800000, guid: 8494e71c0c4ade94494808c57c7fa49b, type: 3}
+    - {fileID: 2800000, guid: 70ffc8a0624d0de49a5b82549a383db6, type: 3}
+    - {fileID: 2800000, guid: 8858005857d41af49bc98a1b1fdd69dd, type: 3}
+    - {fileID: 2800000, guid: f47a58a4a8073984388bf7feb9fe6fba, type: 3}
+    - {fileID: 2800000, guid: 5de626c822e8089479bf0efe468ed805, type: 3}
     recorte:
       x: 0
       y: 0
       width: 0
       height: 0
     pivotes: []
-  - nombre: tajo_a_Acido
+  - nombre: tajo_a_Sangrado
     hoja: {fileID: 0}
     anchoCelda: 64
     altoCelda: 64
@@ -1005,13 +1050,13 @@ MonoBehaviour:
     pivote: {x: 0.5, y: 0.5}
     pixelesPorUnidad: 64
     fotogramas:
-    - {fileID: 2800000, guid: ddbe653d5be56ef4d9b54705170d7b9d, type: 3}
-    - {fileID: 2800000, guid: 577ac55c59e72cb4db2e3a8a38719b2d, type: 3}
-    - {fileID: 2800000, guid: 6751938ee0edfe844b3b83a17f064b8b, type: 3}
-    - {fileID: 2800000, guid: 06955cef4b3163140b9491fc63b5b48a, type: 3}
-    - {fileID: 2800000, guid: f67e25d588a74a64dae31fd3b727ff61, type: 3}
-    - {fileID: 2800000, guid: 7fad4fab8e59d294ca2a3fd9415b724b, type: 3}
-    - {fileID: 2800000, guid: c9aa8c494adc27c498b647b26b1e08f7, type: 3}
+    - {fileID: 2800000, guid: 9a92c1918939cd84cbbeb21106155e0c, type: 3}
+    - {fileID: 2800000, guid: aa7f3dbf6d0674245800508bcc8b75ca, type: 3}
+    - {fileID: 2800000, guid: 1b8b05c2604781a4a988fc127ae0a856, type: 3}
+    - {fileID: 2800000, guid: b5deba3d038c4b048adec69654205686, type: 3}
+    - {fileID: 2800000, guid: ef5f031b6bb3e6b4a9998841a329d070, type: 3}
+    - {fileID: 2800000, guid: d221815b54f005443964db0a7715643f, type: 3}
+    - {fileID: 2800000, guid: ed573021112de824c9dd13e828f64d0f, type: 3}
     recorte:
       x: 0
       y: 0

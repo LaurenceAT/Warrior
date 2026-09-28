@@ -186,15 +186,22 @@ public abstract class EnemigoBase : MonoBehaviour
     // ------------------------------------------------------------------ Ataque
 
     // Caja de golpe relativa a los pies, volteada con la mirada. Devuelve el
-    // resultado sobre el player, o null si no lo ha tocado.
+    // resultado sobre el player, o null si no lo ha tocado. Sin tipo, el golpe
+    // de un enemigo con cuerpo es fisico (salvo que se marcara SiguienteGolpeMagico).
     protected PlayerControler.ResultadoDano? Golpear(Vector2 offset, Vector2 tamano, int dano)
+        => Golpear(offset, tamano, dano, PlayerControler.SiguienteGolpeMagico ? PlayerControler.TipoDano.Magico : PlayerControler.TipoDano.Fisico);
+
+    // Con tipo (fisico o magico: cada resistencia reduce el suyo) y, si es un
+    // ataque especial, el estado que acumula (sangrado, congelacion...).
+    protected PlayerControler.ResultadoDano? Golpear(Vector2 offset, Vector2 tamano, int dano, PlayerControler.TipoDano tipo,
+                                                     EstadoPlayer estado = EstadoPlayer.Ninguno, float acumulacion = 0f)
     {
         Vector2 centro = (Vector2)transform.position + new Vector2(offset.x * mirada, offset.y);
         foreach (Collider2D c in Physics2D.OverlapBoxAll(centro, tamano, 0f))
         {
             if (!c.CompareTag("Player")) continue;
             PlayerControler p = c.GetComponent<PlayerControler>();
-            if (p != null) return p.TakeDamage(dano, this);
+            if (p != null) return p.TakeDamage(dano, this, tipo, estado, acumulacion);
         }
         return null;
     }
@@ -215,9 +222,7 @@ public abstract class EnemigoBase : MonoBehaviour
         yield return HastaFotograma(desde);
         do
         {
-            if (magico) PlayerControler.SiguienteGolpeMagico = true;
-            resultadoVentana = Golpear(offset, tamano, dano);
-            if (magico && !resultadoVentana.HasValue) PlayerControler.SiguienteGolpeMagico = false;
+            resultadoVentana = Golpear(offset, tamano, dano, magico ? PlayerControler.TipoDano.Magico : PlayerControler.TipoDano.Fisico);
             if (resultadoVentana.HasValue || anim.Terminado) yield break;
             yield return null;
         } while (anim.Fotograma <= hasta);

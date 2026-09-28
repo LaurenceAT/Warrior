@@ -28,6 +28,10 @@ public static class ActualizarProyecto
     // Tercera ronda: tiles automaticos al dia y colisiones y bordes rehechos.
     // Cuarta ronda: icono de la pocion de mana y paletas de decoracion.
     // Quinta ronda: iconos, sonidos editables, menu principal y orden de niveles.
+    // Sexta ronda: sonidos del menu, sangrado, iconos, cofres de mejora y
+    // recompensas de los jefes.
+    public static void Ronda6() => global::Ronda6.Todo();
+
     public static void Ronda5()
     {
         ConfigurarRecursosRPG.Configurar();

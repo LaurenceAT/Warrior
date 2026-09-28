@@ -96,23 +96,31 @@ MonoBehaviour:
     color: {r: 0.8, g: 0.86, b: 0.95, a: 1}
     desplazamientoY: 0
   musicaCombate: {fileID: 8300000, guid: de5b8e683ab69034ca2ecf2561df5f55, type: 3}
-  volumenCombate: 0.3
+  volumenCombate: 0.182
   ambiente: {fileID: 8300000, guid: 068a269db825447448d9ea8a539974b8, type: 3}
-  volumenAmbiente: 0.099
+  volumenAmbiente: 0.04
   jefeFase1:
     pista: {fileID: 8300000, guid: 88b084e6468367d49b141f1874a01396, type: 3}
-    volumen: 0.6
+    volumen: 1
     inicio: 0
     bucle: {x: 6, y: 102}
   jefeFase2:
-    pista: {fileID: 8300000, guid: 261d1bdb53302314a9a67d0cdbfb8458, type: 3}
-    volumen: 0.62
-    inicio: 60
-    bucle: {x: 60, y: 290}
+    pista: {fileID: 8300000, guid: a36f2d77bb8cec04ebe5931dd8666a50, type: 3}
+    volumen: 1
+    inicio: 0
+    bucle: {x: 0, y: 296}
   sonidos: []
   frasesMuerte:
-  - "El fr\xEDo no perdona a los que dudan."
-  - "La nieve cubrir\xE1 tus huellas... y tu cuerpo."
-  - "Lev\xE1ntate. La ventisca a\xFAn no ha terminado contigo."
-  - "Algo en la bruma se r\xEDe de tu ca\xEDda."
-  - "Hasta el hielo m\xE1s firme se quiebra. T\xFA tambi\xE9n."
+  - Pa eso?.
+  - Vuelve a intentarlo.
+  - "Lev\xE1ntate bro. Debo derrotarte otra vez."
+  - jajajaajajaja.
+  - No duraste nada.
+  - Ni siquiera viste mi segunda forma.
+  frasesJefe:
+  - Pa eso?.
+  - Vuelve a intentarlo.
+  - "Lev\xE1ntate bro. Debo derrotarte otra vez."
+  - jajajaajajaja.
+  - No duraste nada.
+  - Ni siquiera viste mi segunda forma.
