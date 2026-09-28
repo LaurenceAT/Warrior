@@ -44,6 +44,14 @@ public class ConfigNivel : ScriptableObject
         public Color color = Color.white;
         [Tooltip("Subir o bajar la capa (unidades).")]
         public float desplazamientoY;
+        [Tooltip("Movimiento propio de la capa (unidades por segundo): para que la neblina se desplace sola. 0 = quieta.")]
+        public float deriva;
+        [Tooltip("Tamano de la capa respecto a la densidad de pixeles del fondo (1 = pixeles iguales a los del personaje).")]
+        public float escala = 1f;
+        [Tooltip("Alarga hacia arriba la fila de pixeles de arriba (para el cielo: que nunca se vea el borde al alejar la camara).")]
+        public bool rellenarArriba;
+        [Tooltip("Alarga hacia abajo la fila de pixeles de abajo (montanas: que nunca se vea el borde de abajo).")]
+        public bool rellenarAbajo;
     }
 
     [Serializable]
@@ -71,8 +79,11 @@ public class ConfigNivel : ScriptableObject
     public Color colorPiezas = Color.white;
 
     [Header("Fondo parallax")]
-    [Tooltip("Alto de cada capa en unidades (mas alto = fondo mas grande).")]
+    [Tooltip("Alto de cada capa en unidades (mas alto = fondo mas grande). Solo se usa si Pixeles Por Unidad Fondo es 0.")]
     public float altoFondo = 19f;
+    [Tooltip("Pixeles de la imagen por unidad del juego. Con el mismo valor que el personaje (28) los pixeles del fondo " +
+             "se ven iguales que los suyos. 0 = usar Alto Fondo (se estira la imagen).")]
+    public float pixelesPorUnidadFondo;
     [Tooltip("Cuanto sigue el fondo a la camara en vertical.")]
     [Range(0f, 1f)] public float seguimientoVertical = 0.92f;
     [Tooltip("De la capa mas lejana a la mas cercana.")]

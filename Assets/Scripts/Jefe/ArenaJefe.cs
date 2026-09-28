@@ -23,6 +23,8 @@ public class ArenaJefe : MonoBehaviour
     public static event System.Action AlEmpezarCombate;
     // Hay un intento en curso (la pantalla de muerte saca burlas del jefe).
     public static bool EnCombate { get; private set; }
+    // El jefe ya esta en su fase 2 (el viento de la nieve sopla mas fuerte).
+    public static bool EnFase2 { get; private set; }
 
     private enum Estado { Esperando, Combate, Vencido }
 
@@ -152,6 +154,7 @@ public class ArenaJefe : MonoBehaviour
         ReservaPociones.AlBeber -= MarcarPocion;
         ControlVolumen.AlCambiar -= AjustarVolumen;
         EnCombate = false;
+        EnFase2 = false;
         PantallaMuerte.BurlasJefe = null;
     }
 
@@ -184,6 +187,7 @@ public class ArenaJefe : MonoBehaviour
     {
         estado = Estado.Combate;
         EnCombate = true;
+        EnFase2 = false;
         PonerNiebla(true);
         intentos++;
         pocionUsada = false;
@@ -227,6 +231,7 @@ public class ArenaJefe : MonoBehaviour
 
     private void Fase2()
     {
+        EnFase2 = true;
         if (!string.IsNullOrEmpty(textoFase2)) MensajePantalla.Narrativo(textoFase2, 3.5f);
         StartCoroutine(TenirLuz(luzFase2, intensidadOriginal * 0.9f, 2f));
         CrearParticulas();
@@ -245,6 +250,7 @@ public class ArenaJefe : MonoBehaviour
     {
         estado = Estado.Vencido;
         EnCombate = false;
+        EnFase2 = false;
         PantallaMuerte.BurlasJefe = null;
         Fundir(0f, 3f);
         Fundir2(0f, 3f);
@@ -302,6 +308,7 @@ public class ArenaJefe : MonoBehaviour
         if (estado != Estado.Combate) return;
         estado = Estado.Esperando;
         EnCombate = false;
+        EnFase2 = false;
         PeligrosJefe.LimpiarTodo();
         if (jefe != null) Destroy(jefe.gameObject);
         if (barra != null) Destroy(barra.gameObject);

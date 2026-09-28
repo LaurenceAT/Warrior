@@ -126,7 +126,12 @@ public class ConfigNivelEditor : Editor
             }
     }
 
-    // Rehace las capas del parallax (tres copias en fila por capa).
+    // Ancho de pantalla (unidades) que las copias tienen que cubrir a cada lado,
+    // contando con que la camara del jefe se aleja (tamano 7.2) y pantallas anchas.
+    private const float MedioAnchoACubrir = 16f;
+
+    // Rehace las capas del parallax (copias en fila por capa, las que hagan
+    // falta para cubrir la pantalla).
     public static void ConstruirFondo(ParallaxCueva parallax, ConfigNivel c)
     {
         for (int i = parallax.transform.childCount - 1; i >= 0; i--)
@@ -139,9 +144,14 @@ public class ConfigNivelEditor : Editor
             Transform raiz = new GameObject("Capa_" + (string.IsNullOrEmpty(cf.nombre) ? cf.imagen.name : cf.nombre)).transform;
             Undo.RegisterCreatedObjectUndo(raiz.gameObject, "Fondo");
             raiz.SetParent(parallax.transform, false);
-            float escala = c.altoFondo / cf.imagen.bounds.size.y;
+            // Con pixeles por unidad, la imagen se dibuja con sus pixeles del mismo
+            // tamano que los del personaje (nitida); si no, se estira al alto fijo.
+            float escala = c.pixelesPorUnidadFondo > 0f
+                ? cf.imagen.pixelsPerUnit / c.pixelesPorUnidadFondo * (cf.escala > 0f ? cf.escala : 1f)
+                : c.altoFondo / cf.imagen.bounds.size.y;
             float ancho = cf.imagen.bounds.size.x * escala;
-            for (int k = -1; k <= 1; k++)
+            int n = Mathf.Max(1, Mathf.CeilToInt(MedioAnchoACubrir / ancho));
+            for (int k = -n; k <= n; k++)
             {
                 SpriteRenderer sr = new GameObject("Copia").AddComponent<SpriteRenderer>();
                 sr.transform.SetParent(raiz, false);
@@ -150,9 +160,15 @@ public class ConfigNivelEditor : Editor
                 sr.sprite = cf.imagen;
                 sr.color = cf.color;
                 sr.sortingLayerName = "Background";
-                sr.sortingOrder = i;
+                // De dos en dos: deja hueco para meter cosas entre capas (la aurora).
+                // Por debajo de 20, que es donde van los pinos de decoracion del fondo.
+                sr.sortingOrder = i * 2;
             }
-            capas.Add(new ParallaxCueva.Capa { raiz = raiz, ancho = ancho, seguimiento = cf.seguimiento });
+            capas.Add(new ParallaxCueva.Capa
+            {
+                raiz = raiz, ancho = ancho, seguimiento = cf.seguimiento, deriva = cf.deriva,
+                rellenarArriba = cf.rellenarArriba, rellenarAbajo = cf.rellenarAbajo,
+            });
         }
         Undo.RecordObject(parallax, "Fondo");
         parallax.capas = capas.ToArray();

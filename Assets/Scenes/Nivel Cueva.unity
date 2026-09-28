@@ -93166,25 +93166,47 @@ MonoBehaviour:
   - raiz: {fileID: 773994291}
     seguimiento: 0.97
     ancho: 31.999998
+    deriva: 0
+    rellenarArriba: 0
+    rellenarAbajo: 0
   - raiz: {fileID: 559907977}
     seguimiento: 0.90000004
     ancho: 31.999998
+    deriva: 0
+    rellenarArriba: 0
+    rellenarAbajo: 0
   - raiz: {fileID: 896547211}
     seguimiento: 0.83000004
     ancho: 31.999998
+    deriva: 0
+    rellenarArriba: 0
+    rellenarAbajo: 0
   - raiz: {fileID: 173849216}
     seguimiento: 0.76
     ancho: 31.999998
+    deriva: 0
+    rellenarArriba: 0
+    rellenarAbajo: 0
   - raiz: {fileID: 39442357}
     seguimiento: 0.69
     ancho: 31.999998
+    deriva: 0
+    rellenarArriba: 0
+    rellenarAbajo: 0
   - raiz: {fileID: 404113143}
     seguimiento: 0.62
     ancho: 56.285713
+    deriva: 0
+    rellenarArriba: 0
+    rellenarAbajo: 0
   - raiz: {fileID: 1944233178}
     seguimiento: 0.55
     ancho: 144
+    deriva: 0
+    rellenarArriba: 0
+    rellenarAbajo: 0
   seguimientoVertical: 0.97
+  largoRelleno: 30
 --- !u!1 &2087589322
 GameObject:
   m_ObjectHideFlags: 0

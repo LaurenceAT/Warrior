@@ -1,8 +1,8 @@
 using UnityEngine;
 
-// Mana del player. Solo lo gasta imbuir la espada. Durante la partida solo se
-// recupera bebiendo el frasco de mana (R): no vuelve al golpear ni al descansar
-// (la hoguera rellena el frasco). Al reaparecer tras morir sale lleno, como la
+// Mana del player. Solo lo gasta imbuir la espada. Se recupera bebiendo el
+// frasco de mana (R) y al descansar en la hoguera (se llena, como la vida y la
+// estamina); no vuelve al golpear. Al reaparecer tras morir sale lleno, como la
 // vida (el player es nuevo y empieza con el maximo).
 public class PlayerMana : MonoBehaviour
 {
@@ -21,8 +21,8 @@ public class PlayerMana : MonoBehaviour
         actual = maximo;
     }
 
-    private void OnEnable() { Progreso.AlSubirNivel += Recalcular; }
-    private void OnDisable() { Progreso.AlSubirNivel -= Recalcular; }
+    private void OnEnable() { Progreso.AlSubirNivel += Recalcular; Hoguera.AlDescansar += Llenar; }
+    private void OnDisable() { Progreso.AlSubirNivel -= Recalcular; Hoguera.AlDescansar -= Llenar; }
 
     public bool Tiene(float cantidad) => actual + 0.001f >= cantidad;
 
@@ -44,8 +44,10 @@ public class PlayerMana : MonoBehaviour
         return actual - antes;
     }
 
+    // Relee el maximo por si acaba de cambiar (subir de nivel en el mismo menu).
     public void Llenar()
     {
+        maximo = Progreso.ManaMax;
         actual = maximo;
         AlCambiar?.Invoke();
     }

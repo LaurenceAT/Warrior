@@ -175,6 +175,15 @@ public static class PruebaNieve
                 Llamar(menu, "Subir", e);
             yield return new WaitForSecondsRealtime(0.4f);
             Debug.Log($"[Sistemas] nivel={Progreso.NivelTotal} almas={Progreso.Almas} vida {vidaAntes}->{p.VidaMaxima} mana max={mana.Maximo} resGolpes={Progreso.ResGolpes}");
+            // Descansar tras gastar mana y subir de nivel: todo al maximo nuevo.
+            mana.Gastar(mana.Actual * 0.8f);
+            PlayerStamina est = p.GetComponent<PlayerStamina>();
+            float manaGastado = mana.Actual;
+            Llamar(menu, "Descansar");
+            yield return new WaitForSecondsRealtime(0.3f);
+            Debug.Log($"[Sistemas] descanso: mana {manaGastado:0}->{mana.Actual:0}/{mana.Maximo:0} (ManaMax={Progreso.ManaMax:0}) " +
+                      $"vida {Vida()}/{p.VidaMaxima} estamina {(est != null ? est.Fraction.ToString("0.00") : "-")} " +
+                      $"frascos {ReservaPociones.Get().Cargas}/{ReservaPociones.Get().Maximo} mana {ReservaPociones.Get().CargasMana}/{ReservaPociones.Get().MaximoMana}");
             yield return Captura("s06_hoguera", true);
             Llamar(menu, "Cerrar");
             yield return new WaitForSecondsRealtime(0.5f);

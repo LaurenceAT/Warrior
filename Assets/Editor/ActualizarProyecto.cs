@@ -31,6 +31,8 @@ public static class ActualizarProyecto
     // Sexta ronda: sonidos del menu, sangrado, iconos, cofres de mejora y
     // recompensas de los jefes.
     public static void Ronda6() => global::Ronda6.Todo();
+    // Septima ronda: fondo de la nieve con profundidad y ambiente.
+    public static void Ronda7() => global::Ronda7.Todo();
 
     public static void Ronda5()
     {
