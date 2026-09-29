@@ -555,6 +555,11 @@ MonoBehaviour:
     - {fileID: 8300000, guid: f82856d1e6b2971408bf15009bca9ac8, type: 3}
     volumen: 0.8
     variacionTono: 0.06
+  - clave: secreto_inquietante
+    clips:
+    - {fileID: 8300000, guid: ed1684341b60ba844ad3f3f92313ef2f, type: 3}
+    volumen: 0.7
+    variacionTono: 0
   iconos:
   - clave: elemento_0
     sprite: {fileID: 21300000, guid: 28a75b8a44d70764385db2d1e0838577, type: 3}

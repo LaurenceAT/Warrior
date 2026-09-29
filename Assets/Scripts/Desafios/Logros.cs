@@ -42,9 +42,9 @@ public static class Logros
     }
 
     public static int Desbloqueados(FichaLogro.Seccion? s = null) =>
-        FichaLogro.Todos().Count(l => (s == null || l.seccion == s) && Globales.TieneLogro(l.id));
+        FichaLogro.Visibles().Count(l => (s == null || l.seccion == s) && Globales.TieneLogro(l.id));
 
-    public static int Total(FichaLogro.Seccion? s = null) => FichaLogro.Todos().Count(l => s == null || l.seccion == s);
+    public static int Total(FichaLogro.Seccion? s = null) => FichaLogro.Visibles().Count(l => s == null || l.seccion == s);
 }
 
 // El aviso de "Logro desbloqueado": arriba a la derecha, entra, se queda un

@@ -15,7 +15,8 @@ using UnityEngine.SceneManagement;
 public class ModoDesafio : MonoBehaviour
 {
     private Hoguera hoguera;
-    private ArenaJefe arena;
+    // La ArenaJefe de siempre o la de la Cazadora (su propia arena).
+    private Component arena;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Iniciar()
@@ -30,6 +31,7 @@ public class ModoDesafio : MonoBehaviour
     private void Awake()
     {
         arena = FindFirstObjectByType<ArenaJefe>();
+        if (arena == null) arena = FindFirstObjectByType<ArenaCazadora>();
         if (arena == null) { Debug.LogWarning("[Desafio] La escena no tiene ArenaJefe"); return; }
         Bounds zona = LimitesArena();
 

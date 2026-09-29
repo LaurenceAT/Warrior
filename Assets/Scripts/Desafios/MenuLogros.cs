@@ -61,7 +61,7 @@ public class MenuLogros : MonoBehaviour
     {
         seccion = s;
         for (int i = lista.childCount - 1; i >= 0; i--) { GameObject h = lista.GetChild(i).gameObject; h.transform.SetParent(null); Destroy(h); }
-        foreach (FichaLogro l in FichaLogro.Todos().Where(x => x.seccion == s)) Tarjeta(l);
+        foreach (FichaLogro l in FichaLogro.Visibles().Where(x => x.seccion == s)) Tarjeta(l);
         PintarPestanas();
     }
 

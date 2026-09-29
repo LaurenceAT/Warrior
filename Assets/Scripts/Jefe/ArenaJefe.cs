@@ -26,6 +26,22 @@ public class ArenaJefe : MonoBehaviour
     // El jefe ya esta en su fase 2 (el viento de la nieve sopla mas fuerte).
     public static bool EnFase2 { get; private set; }
 
+    // Otra arena (la de la Cazadora) avisa de su combate y de su victoria por
+    // aqui: la musica del nivel, la pantalla de muerte y los desafios lo miran.
+    public static void CombateExterno(bool enCombate, bool fase2 = false)
+    {
+        EnCombate = enCombate;
+        EnFase2 = enCombate && fase2;
+        if (enCombate) AlEmpezarCombate?.Invoke();
+    }
+
+    public static void VictoriaExterna()
+    {
+        EnCombate = false;
+        EnFase2 = false;
+        AlVencer?.Invoke();
+    }
+
     private enum Estado { Esperando, Combate, Vencido }
 
     [Header("Jefe")]

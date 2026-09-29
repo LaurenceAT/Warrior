@@ -1,0 +1,322 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a14ea39a43c60c4ba7bc8a0f9e92313, type: 3}
+  m_Name: Ajustes Cazadora
+  m_EditorClassIdentifier: 
+  fases:
+  - nombre: La Cazadora
+    vida: 2400
+    velocidadAtaque: 1
+    velocidadMovimiento: 1
+    dano: 1
+    pausa: {x: 0.45, y: 0.8}
+    colorBarra: {r: 0.4, g: 0.52, b: 0.3, a: 1}
+    musica:
+      pista: {fileID: 8300000, guid: bb88fc8ccdd779d4c907a440cdfc23ff, type: 3}
+      volumen: 0.6
+      inicio: 0
+      bucle: {x: 0, y: 0}
+    luz: {r: 0.78, g: 0.86, b: 0.8, a: 1}
+    intensidadLuz: 0.9
+    niebla: 0.3
+    cieloOscuro: 0
+  - nombre: La Presa Marcada
+    vida: 2400
+    velocidadAtaque: 1.15
+    velocidadMovimiento: 1.12
+    dano: 1.05
+    pausa: {x: 0.3, y: 0.6}
+    colorBarra: {r: 0.62, g: 0.62, b: 0.3, a: 1}
+    musica:
+      pista: {fileID: 8300000, guid: 6cf7dbb19a7004e4ca552946b610634a, type: 3}
+      volumen: 0.62
+      inicio: 0
+      bucle: {x: 0, y: 0}
+    luz: {r: 0.62, g: 0.72, b: 0.66, a: 1}
+    intensidadLuz: 0.75
+    niebla: 0.65
+    cieloOscuro: 0.45
+  - nombre: Ciega de Verdad
+    vida: 2400
+    velocidadAtaque: 1.3
+    velocidadMovimiento: 1.25
+    dano: 1.1
+    pausa: {x: 0.2, y: 0.45}
+    colorBarra: {r: 0.75, g: 0.2, b: 0.2, a: 1}
+    musica:
+      pista: {fileID: 8300000, guid: e04619a52fba2ff4eac913ddb5277feb, type: 3}
+      volumen: 0.62
+      inicio: 18
+      bucle: {x: 0, y: 0}
+    luz: {r: 0.45, g: 0.5, b: 0.5, a: 1}
+    intensidadLuz: 0.6
+    niebla: 0.8
+    cieloOscuro: 0.85
+  avisoMinimoLigero: 0.25
+  avisoMinimoPesado: 0.5
+  castigoMinimo: 0.6
+  barrido:
+    aviso: 0.3
+    golpe: 0.1
+    recuperacion: 0.12
+    dano: 0.18
+  luna:
+    aviso: 0.22
+    golpe: 0.14
+    recuperacion: 0.12
+    dano: 0.18
+  estocadaCombo:
+    aviso: 0.22
+    golpe: 0.16
+    recuperacion: 0.75
+    dano: 0.24
+  enlaceCombo: 0.08
+  cruce:
+    aviso: 0.55
+    golpe: 0.28
+    recuperacion: 0.1
+    dano: 0.3
+  tajoAtras:
+    aviso: 0.2
+    golpe: 0.12
+    recuperacion: 0.65
+    dano: 0.2
+  cruceDetras: 3
+  ola:
+    aviso: 0.45
+    golpe: 0.1
+    recuperacion: 0.5
+    dano: 0.16
+  velocidadOla: 11
+  alcanceOla: 26
+  tajoAscendente:
+    aviso: 0.26
+    golpe: 0.14
+    recuperacion: 0.45
+    dano: 0.22
+  distanciaAntiSalto: 2.6
+  saltoDescendente:
+    aviso: 0.5
+    golpe: 0.15
+    recuperacion: 0.65
+    dano: 0.38
+  alturaSalto: 4.5
+  golpesParaParry: 4
+  ventanaGolpes: 2.6
+  duracionPose: 1.1
+  enfriamientoParry: 12
+  hitStopParry: 0.08
+  aturdimientoJugador: 1.4
+  retrocesoParry: 1.2
+  esperaEstocada: 0.35
+  alcanceEstocada: 1.3
+  velocidadDashParry: 18
+  danoEstocadaParry: 0.5
+  pausaDramatica: 0.5
+  empujonDistancia: 6
+  empujonAltura: 6
+  invulnerableAlCaer: 1
+  recuperacionTrasEstocada: 0.8
+  umbralEscudo: 0.25
+  empujeRugido: 14
+  empujeMaximoRugido: 3.5
+  distanciaEscudo: 7.5
+  zoomEscudo: 7.8
+  lentaRotura: 0.3
+  lentaRoturaTiempo: 0.45
+  zoomRotura: 5.4
+  escudos:
+  - golpes: 10
+    golpesOscuridad: 5
+    tiempo: 7
+    cura: 0.3
+    aturdida: 3
+    bonusDano: 1.3
+    cadaOla: 1.2
+    olasDosLados: 0
+    ilusionesCaen: 0
+    inicioCaidas: 0.7
+    cadaCaida: 1.3
+    ilusionesPorCaida: 1
+  - golpes: 10
+    golpesOscuridad: 5
+    tiempo: 7
+    cura: 0.3
+    aturdida: 3
+    bonusDano: 1.3
+    cadaOla: 1.6
+    olasDosLados: 0
+    ilusionesCaen: 1
+    inicioCaidas: 0.3
+    cadaCaida: 0.9
+    ilusionesPorCaida: 2
+  - golpes: 10
+    golpesOscuridad: 5
+    tiempo: 5.5
+    cura: 0.3
+    aturdida: 3
+    bonusDano: 1.3
+    cadaOla: 1.3
+    olasDosLados: 1
+    ilusionesCaen: 1
+    inicioCaidas: 0.3
+    cadaCaida: 1
+    ilusionesPorCaida: 2
+  duracionLlamas: 2.5
+  acumulacionEstado: 35
+  roboSangre: 0.03
+  topeRoboSangre: 0.1
+  sagradoRapidez: 1.25
+  sagradoAncho: 1.3
+  resistenciaCopiada: 0.35
+  duracionResistencia: 6
+  enfriamientoResistencia: 14
+  flanqueo:
+    aviso: 0.5
+    golpe: 0.14
+    recuperacion: 0.7
+    dano: 0.4
+  danoIlusion: 0.34
+  ilusionCae:
+    aviso: 0.6
+    golpe: 0.12
+    recuperacion: 0.3
+    dano: 0.26
+  danoExplosionEspejismo: 0.22
+  vidaEspejismo: 7
+  cuchilladaFantasma:
+    aviso: 0.6
+    golpe: 0.12
+    recuperacion: 0.2
+    dano: 0.24
+  retrasoFantasma: 1
+  trampaSonido:
+    aviso: 0.25
+    golpe: 0.12
+    recuperacion: 0.5
+    dano: 0.2
+  trampasPorVez: 3
+  vidaTrampas: 9
+  lluvia:
+    aviso: 0.6
+    golpe: 0.15
+    recuperacion: 0.7
+    dano: 0.3
+  cruceDoble:
+    aviso: 0.55
+    golpe: 0.28
+    recuperacion: 0.6
+    dano: 0.3
+  colorIlusion: {r: 0.6, g: 0.78, b: 1, a: 0.55}
+  danzaGolpe:
+    aviso: 0.22
+    golpe: 0.09
+    recuperacion: 0.05
+    dano: 0.07
+  danzaFinal:
+    aviso: 0.6
+    golpe: 0.16
+    recuperacion: 1.6
+    dano: 0.3
+  golpesDanza: {x: 8, y: 12}
+  ilusionesEspejos: 3
+  roboVidaFase3: 0.04
+  topeRoboFase3: 0.12
+  radioLuz: 4.2
+  opacidadOscuridad: 0.92
+  umbralInstakill: 0.65
+  avisoEjecucion: 1.35
+  velocidadEjecucion: 40
+  seguimientoSentencia: 1.5
+  fijoSentencia: 0.6
+  anchoSentencia: 2.4
+  duracionSilencio: 4
+  expuestaTrasInstakill: 2.2
+  esperaTrasReaparecer: 5
+  rangoCercano: 4.5
+  alcanceOido: 20
+  olvido: 4
+  confusion: 0.5
+  ruidoAtacar: 1
+  ruidoRodar: 0.8
+  ruidoAterrizar: 0.6
+  ruidoFrasco: 1
+  ruidoImbuir: 0.9
+  ruidoCorrer: 0.45
+  ruidoSaltar: 0.35
+  anilloRuido: 1
+  velocidadCorrer: 6.5
+  aceleracion: 38
+  frenada: 46
+  distanciaCerca: 2.2
+  distanciaLejos: 6.5
+  cadaEstela: 0.025
+  vidaEstela: 0.28
+  aperturaMaxima: 8.4
+  distanciaApertura: 9
+  pesoEncuadre: 0.4
+  apartamientoMaximo: 9
+  zoomInstakill: 4.6
+  zoomTransicion: 4.2
+  zoomParry: 4.4
+  temblorLigero: 0.25
+  temblorPesado: 0.7
+  temblorRugido: 1.3
+  temblorAterrizaje: 0.9
+  temblorMaximo: 1.5
+  congeladoPesado: 0.07
+  lentaTransicion: 0.35
+  lentaTransicionTiempo: 1.1
+  lentaParry: 0.4
+  lentaParryTiempo: 0.35
+  subidaIlusiones: 1.6
+  crossfade: 2.2
+  musicaEnAviso: 0.3
+  musicaEnSilencio: 0.04
+  ambiente: {fileID: 8300000, guid: f18d44dbabbeb514982be692d3979b51, type: 3}
+  volumenAmbiente: 0.35
+  viento: {fileID: 8300000, guid: 068a269db825447448d9ea8a539974b8, type: 3}
+  volumenViento: 0.5
+  nombreDialogo: La Cazadora Ciega
+  frasesEntrada:
+  - "Ah. Otro paso en mi bosque. Lo o\xED desde lejos."
+  - "No necesito ojos para saber lo que eres: una respiraci\xF3n nerviosa, un metal
+    que tiembla."
+  - "Hazme un favor, cazador. Da la vuelta. Los \xE1rboles ya tienen suficientes
+    huesos."
+  opcionRetirarse: Retirarme
+  opcionDesafiar: Voy a derrotarte
+  respuestaRetirarse:
+  - "Qu\xE9 dulce. \xBFDe verdad cre\xEDste que te dejar\xEDa salir?"
+  - "La presa nunca decide cu\xE1ndo termina la cacer\xEDa."
+  respuestaDesafiar:
+  - "...Ja. Qu\xE9 valiente suena el miedo."
+  - "Veamos si tus o\xEDdos son tan r\xE1pidos como tu lengua."
+  trasParryDialogo: ...Interesante.
+  sonidoEscritura: {fileID: 8300000, guid: b4a3603068902fa478170c13c57af01e, type: 3}
+  volumenEscritura: 0.35
+  letrasPorSegundo: 34
+  mantenerParaSaltar: 1
+  avisoTajoDialogo: 0.32
+  danoTajoDialogo: 0.3
+  ventanaParryDialogo: 0.14
+  finBarra1: "\xBFEso fue todo el ruido que sabes hacer?"
+  finBarra2: "Ya casi puedo o\xEDr tu final."
+  muerteFinal: ...Por fin... silencio.
+  colorNormal: {r: 0.93, g: 0.97, b: 1, a: 1}
+  colorFuego: {r: 1, g: 0.55, b: 0.16, a: 1}
+  colorHielo: {r: 0.55, g: 0.86, b: 1, a: 1}
+  colorSagrado: {r: 1, g: 0.93, b: 0.55, a: 1}
+  colorSangre: {r: 0.92, g: 0.12, b: 0.16, a: 1}
+  colorInstakill: {r: 1, g: 0.08, b: 0.1, a: 1}
+  contorno: 0.35
+  contornoOscuridad: 0.8

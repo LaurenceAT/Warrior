@@ -24,6 +24,8 @@ public static class Globales
     {
         public List<string> logros = new List<string>();
         public List<Registro> desafios = new List<Registro>();
+        // Marcas sueltas de todo el juego (jefe secreto ya revelado, dialogo visto...).
+        public List<string> marcas = new List<string>();
     }
 
     private static Datos datos;
@@ -43,6 +45,7 @@ public static class Globales
             if (datos == null) datos = new Datos();
             datos.logros ??= new List<string>();
             datos.desafios ??= new List<Registro>();
+            datos.marcas ??= new List<string>();
             return datos;
         }
     }
@@ -71,6 +74,18 @@ public static class Globales
         D.logros.Add(id);
         Guardar();
         return true;
+    }
+
+    // ------------------------------------------------------------------ Marcas
+
+    public static bool Marca(string id) => D.marcas.Contains(id);
+
+    public static void PonerMarca(string id, bool valor)
+    {
+        if (string.IsNullOrEmpty(id) || Marca(id) == valor) return;
+        if (valor) D.marcas.Add(id);
+        else D.marcas.Remove(id);
+        Guardar();
     }
 
     // ------------------------------------------------------------------ Desafios

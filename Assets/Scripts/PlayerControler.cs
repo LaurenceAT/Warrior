@@ -242,6 +242,99 @@ public class PlayerControler : MonoBehaviour
                                        && !isImbuing && !isLaunched && !isBlocking && !isShooting && !isDrinking && currentHealth > 0;
     public bool Interrumpido => isKnocked || isAgarrado || currentHealth <= 0;
 
+    // Lo que esta haciendo ahora mismo (lo lee la Cazadora, que caza por el oido).
+    public bool EnSuelo => isGrounded;
+    public bool Atacando => isAttacking || isPlunging;
+    public bool Esquivando => isDodging;
+    public bool Corriendo => isSprinting;
+    public Vector2 Velocidad => m_rigitbody2D != null ? m_rigitbody2D.linearVelocity : Vector2.zero;
+    // Nada le hace dano mientras sea true (las transiciones de fase de un jefe).
+    public bool InvulnerableExterno { get; set; }
+    // Un jefe acorta la ventana de parry de un golpe concreto (<= 0: la normal).
+    public static float TopeVentanaParry = -1f;
+    // El siguiente golpe deja al menos 1 de vida (lo pone quien pega, y lo quita).
+    public static bool SiguienteNoLetal;
+
+    // Aturdido un momento (un jefe le para el golpe): sin control, en la pose de
+    // retroceso. Lo que se pulse mientras dura no se guarda, y no se desliza por
+    // inercia: solo el retroceso corto que pida quien aturde.
+    private float aturdidoHasta;
+    public bool Aturdido => Time.time < aturdidoHasta;
+    private bool aturdidoExterno;
+    private float velRetroceso, tRetroceso, durRetroceso;
+
+    public void Aturdir(float segundos, float retroceso = 0f, int lado = 0)
+    {
+        if (currentHealth <= 0 || segundos <= 0f) return;
+        if (isDodging) TerminarEsquiva();
+        if (isShooting) TerminarDisparo();
+        if (isBlocking) TerminarBloqueo(false);
+        if (isAttacking) CancelarAtaque();
+        CortarBebida();
+        CortarImbuir();
+        LimpiarEntradas();
+        aturdidoHasta = Time.time + segundos;
+        // Retroceso suave: sale con velocidad y frena hasta parar (recorre "retroceso").
+        durRetroceso = 0.25f;
+        tRetroceso = 0f;
+        velRetroceso = retroceso > 0f && lado != 0 ? lado * 2f * retroceso / durRetroceso : 0f;
+        StartCoroutine(RutinaAturdido());
+    }
+
+    private IEnumerator RutinaAturdido()
+    {
+        aturdidoExterno = true;
+        isKnocked = true;
+        m_animator.SetBool("isKnockback", true);
+        m_rigitbody2D.linearVelocity = new Vector2(0f, m_rigitbody2D.linearVelocityY);
+        TextoFlotante.Mostrar("Aturdido", (Vector2)m_transform.position + Vector2.up * 1.5f, new Color(1f, 0.85f, 0.6f), 0.9f);
+        while (Time.time < aturdidoHasta && currentHealth > 0 && !derribado) yield return null;
+        aturdidoExterno = false;
+        if (derribado) yield break;
+        isKnocked = false;
+        m_animator.SetBool("isKnockback", false);
+    }
+
+    // Lo sacan despedido (un jefe): vuela, cae con la animacion de derribo y se
+    // levanta. Sin control todo el rato y, si se pide, invulnerable hasta estar de pie.
+    private bool derribado, invulnerableDerribado;
+    public bool Derribado => derribado;
+
+    public void Derribar(Vector2 velocidad, bool invulnerable)
+    {
+        if (currentHealth <= 0) return;
+        if (isDodging) TerminarEsquiva();
+        if (isAttacking) CancelarAtaque();
+        if (isBlocking) TerminarBloqueo(false);
+        CortarBebida();
+        CortarImbuir();
+        LimpiarEntradas();
+        aturdidoHasta = 0f;
+        velRetroceso = 0f;
+        StartCoroutine(RutinaDerribo(velocidad, invulnerable));
+    }
+
+    private IEnumerator RutinaDerribo(Vector2 velocidad, bool invulnerable)
+    {
+        derribado = true;
+        invulnerableDerribado = invulnerable;
+        isKnocked = true;
+        isKnockedDown = true;
+        m_animator.SetBool(idKnockDown, true);
+        m_rigitbody2D.linearVelocity = velocidad;
+        yield return new WaitForSeconds(knockDownMinAirTime);
+        for (float t = 0f; t < 2.5f && !isGrounded; t += Time.deltaTime) yield return null;
+        m_rigitbody2D.linearVelocity = new Vector2(0f, m_rigitbody2D.linearVelocityY);
+        m_animator.SetBool(idKnockDown, false);
+        m_animator.SetTrigger(IdGetUp);
+        yield return new WaitForSeconds(getUpDuration);
+        isKnockedDown = false;
+        isKnocked = false;
+        m_animator.SetBool("isKnockback", false);
+        derribado = false;
+        invulnerableDerribado = false;
+    }
+
     // Sonido de pasos.
     private float siguientePaso;
 
@@ -859,10 +952,24 @@ public class PlayerControler : MonoBehaviour
         // Con la rueda de imbuir o el menu de la hoguera abiertos, el player no
         // hace nada (y lo que se pulse ahi no cuenta como ataque o salto).
         if (RuedaImbuir.Abierta || RuedaPociones.Abierta || MenuHoguera.Abierto || CuadroPista.Abierto || TiendaTotem.Abierta
-            || PantallaDesafio.Abierta || isAgarrado || levantandoObjeto)
+            || PantallaDesafio.Abierta || Cinematica.Activa || isAgarrado || levantandoObjeto)
         {
             LimpiarEntradas();
             if (!isAgarrado && isGrounded) m_rigitbody2D.linearVelocity = new Vector2(0f, m_rigitbody2D.linearVelocityY);
+            return;
+        }
+
+        // Aturdido o despedido por un jefe: nada de lo pulsado cuenta ni se guarda.
+        // Aturdido, solo el retroceso corto (sin inercia); despedido, vuela solo.
+        if (aturdidoExterno || derribado)
+        {
+            LimpiarEntradas();
+            if (aturdidoExterno && !derribado)
+            {
+                tRetroceso += Time.fixedDeltaTime;
+                float u = durRetroceso > 0f ? Mathf.Clamp01(tRetroceso / durRetroceso) : 1f;
+                m_rigitbody2D.linearVelocity = new Vector2(velRetroceso * (1f - u), m_rigitbody2D.linearVelocityY);
+            }
             return;
         }
 
@@ -3888,10 +3995,12 @@ public class PlayerControler : MonoBehaviour
         // Desafio en modo Dificil: el jefe pega mas (1 fuera de el).
         damage = Mathf.RoundToInt(damage * Desafio.MultDano);
         damage = ConResistencia(damage, tipo == TipoDano.Magico);
+        if (InvulnerableExterno || invulnerableDerribado) return ResultadoDano.Ignorado;
 
         if (atacante != null && isBlocking && !isInvincible && GolpeDeFrente(atacante.transform))
         {
-            if (tBloqueo <= ventanaParryActual) { Parry(atacante); return ResultadoDano.Parry; }
+            float ventana = TopeVentanaParry > 0f ? Mathf.Min(ventanaParryActual, TopeVentanaParry) : ventanaParryActual;
+            if (tBloqueo <= ventana) { Parry(atacante); return ResultadoDano.Parry; }
             if (estamina.CanSpend())
             {
                 // Bloqueo normal: gasta estamina y entra una parte del dano.
@@ -3924,7 +4033,7 @@ public class PlayerControler : MonoBehaviour
     // retroceso ni invulnerabilidad, y no lo reducen las resistencias. Si mata, mata.
     public void DanoEstado(int dano)
     {
-        if (currentHealth <= 0 || dano <= 0) return;
+        if (currentHealth <= 0 || dano <= 0 || InvulnerableExterno) return;
         currentHealth -= dano;
         PlayerHud.Get().Damage(currentHealth, maxHealth);
         Destello(new Color(1f, 0.45f, 0.45f), 0.1f);
@@ -3939,7 +4048,8 @@ public class PlayerControler : MonoBehaviour
     // se pueda seguir bloqueando. Si mata, mata.
     private void DanoReducido(int dano)
     {
-        if (isInvincible || hasIFrames || isPlunging || dano <= 0) return;
+        if (isInvincible || hasIFrames || isPlunging || dano <= 0 || InvulnerableExterno || invulnerableDerribado) return;
+        if (SiguienteNoLetal && currentHealth > 1) dano = Mathf.Min(dano, currentHealth - 1);
         currentHealth -= dano;
         PlayerHud.Get().Damage(currentHealth, maxHealth);
         if (currentHealth > 0) return;
@@ -3969,6 +4079,8 @@ public class PlayerControler : MonoBehaviour
         // perdia; ademas el rebote tiene que salir limpio.
         if (isPlunging) return false;
         if (isAgarrado) return false;
+        if (InvulnerableExterno || invulnerableDerribado) return false;
+        if (SiguienteNoLetal && currentHealth > 1) damage = Mathf.Min(damage, currentHealth - 1);
 
         currentHealth -= damage;
 

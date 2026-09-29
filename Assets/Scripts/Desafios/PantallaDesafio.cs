@@ -12,17 +12,17 @@ public class PantallaDesafio : MonoBehaviour
     public static bool Abierta => instancia != null && instancia.abierta;
 
     private CanvasGroup grupo;
-    private TextMeshProUGUI subtitulo, datos;
+    private TextMeshProUGUI subtitulo, datos, susurro;
     private Button volver;
     private bool abierta;
 
-    public static void Mostrar(FichaJefe f, bool dificil, float segundos, int muertes, bool record)
+    public static void Mostrar(FichaJefe f, bool dificil, float segundos, int muertes, bool record, string lineaExtra = null)
     {
         if (instancia == null) instancia = Crear();
-        instancia.StartCoroutine(instancia.Entrar(f, dificil, segundos, muertes, record));
+        instancia.StartCoroutine(instancia.Entrar(f, dificil, segundos, muertes, record, lineaExtra));
     }
 
-    private IEnumerator Entrar(FichaJefe f, bool dificil, float segundos, int muertes, bool record)
+    private IEnumerator Entrar(FichaJefe f, bool dificil, float segundos, int muertes, bool record, string lineaExtra)
     {
         // Primero la muerte del jefe.
         yield return new WaitForSecondsRealtime(3.5f);
@@ -39,6 +39,18 @@ public class PantallaDesafio : MonoBehaviour
         }
         grupo.alpha = 1f;
         if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(volver.gameObject);
+
+        // Un jefe secreto acaba de despertar: una linea discreta que aparece sola,
+        // con un sonido inquietante.
+        susurro.text = lineaExtra ?? "";
+        if (string.IsNullOrEmpty(lineaExtra)) yield break;
+        yield return new WaitForSecondsRealtime(1.2f);
+        Sonido.Reproducir("secreto_inquietante", 0.8f);
+        for (float t = 0f; t < 2f; t += Time.unscaledDeltaTime)
+        {
+            susurro.alpha = Mathf.Clamp01(t / 2f) * 0.85f;
+            yield return null;
+        }
     }
 
     private void Update()
@@ -59,6 +71,11 @@ public class PantallaDesafio : MonoBehaviour
         p.datos.lineSpacing = 16f;
         p.datos.rectTransform.anchoredPosition = new Vector2(0f, 10f);
         p.datos.rectTransform.sizeDelta = new Vector2(800f, 140f);
+        p.susurro = EstiloMenu.Texto("", panel, 24, new Color(0.7f, 0.85f, 0.72f));
+        p.susurro.fontStyle = FontStyles.Italic;
+        p.susurro.alpha = 0f;
+        p.susurro.rectTransform.anchoredPosition = new Vector2(0f, -90f);
+        p.susurro.rectTransform.sizeDelta = new Vector2(800f, 40f);
         VerticalLayoutGroup col = EstiloMenu.Columna(panel, 180f, 180f, 380f, 40f, 0f);
         p.volver = EstiloMenu.Opcion(col.transform, "Volver a Desafíos", Desafio.Salir, 64f, 30f);
         // Activo pero invisible (alfa 0): asi puede arrancar su entrada.

@@ -319,6 +319,15 @@ public class EnemyHealth : MonoBehaviour
         AlCambiarVida?.Invoke(currentHealth, maxHealth);
     }
 
+    // Recupera vida sin pasar del maximo (la Cazadora al curarse o robar vida).
+    public void Curar(int cantidad)
+    {
+        if (muerto || agotado || cantidad <= 0) return;
+        currentHealth = Mathf.Min(maxHealth, currentHealth + cantidad);
+        if (barra != null) barra.Mostrar(currentHealth, maxHealth);
+        AlCambiarVida?.Invoke(currentHealth, maxHealth);
+    }
+
     public bool Agotado => agotado;
     public Vector2 OffsetBarra => healthBarOffset;
     public bool TieneBarra => showHealthBar || BarraExterna;

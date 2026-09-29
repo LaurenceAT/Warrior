@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0501a0a9ad8cb4196a4b884040fa45, type: 3}
+  m_Name: Desafios_2_prueba_bosque
+  m_EditorClassIdentifier: 
+  id: prueba_bosque
+  seccion: 1
+  orden: 2
+  nombre: Prueba del bosque
+  descripcion: "Completa el desaf\xEDo de The Blind Huntress."
+  icono: {fileID: -3238948570901231252, guid: 8f02c43034ecd6449aba4a6ecddf9527, type: 3}
+  condicion: 3
+  parametro: blind_huntress
+  jefeSecreto: blind_huntress

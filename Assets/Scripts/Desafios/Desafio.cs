@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 // El desafio en curso (desde el menu de Desafios). Mientras dura:
@@ -52,9 +53,12 @@ public static class Desafio
     {
         if (!Activo || Completado) return;
         Completado = true;
+        string[] antes = FichaJefe.Bloqueados();
         bool record = Globales.Completar(Ficha.id, Dificil, Segundos, Muertes);
         Logros.Comprobar(Dificil ? FichaLogro.Condicion.CompletarDesafioDificil : FichaLogro.Condicion.CompletarDesafio, Ficha.id);
-        PantallaDesafio.Mostrar(Ficha, Dificil, Segundos, Muertes, record);
+        // Este desafio ha despertado a un jefe secreto: una linea discreta.
+        bool despierta = antes.Except(FichaJefe.Bloqueados()).Any();
+        PantallaDesafio.Mostrar(Ficha, Dificil, Segundos, Muertes, record, despierta ? "Algo despertó en el bosque..." : null);
     }
 
     // Salir del desafio (completado o abandonado) al menu de Desafios.

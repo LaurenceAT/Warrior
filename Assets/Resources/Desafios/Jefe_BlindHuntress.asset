@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f71912a9dcdf940876bbc943f6992b, type: 3}
+  m_Name: Jefe_BlindHuntress
+  m_EditorClassIdentifier: 
+  id: blind_huntress
+  nombre: The Blind Huntress
+  escena: Bosque Cazadora
+  orden: 2
+  imagen: {fileID: 21300000, guid: 56520512a1c02674fa4cb2cd4d3aa15a, type: 3}
+  afinidades: []
+  notaAfinidades: 'No tiene debilidades fijas. Se adapta: resiste temporalmente el
+    elemento que llevas imbuido.'
+  informacion: "Es ciega: de lejos ataca a donde oy\xF3 tu \xFAltimo ruido (atacar,
+    rodar, aterrizar, beber, imbuir, correr). Si fallas donde golpea, queda confundida.
+    De cerca te siente siempre.\n<b>Fase 1</b>: Tres Lunas, Cruce, Ola de luz y tajos
+    contra los saltos. Si atacas sin parar, se pone en guardia y te castiga.\n<b>Fase
+    2</b>: fuego, hielo, luz y sangre; ilusiones, cuchillada fantasma y trampas de
+    sonido.\n<b>Fase 3</b>: oscuridad, Danza de la Cacer\xEDa y Cacer\xEDa de Espejos.\nTres
+    barras. Con poca vida se cura en un escudo de luz: r\xF3mpelo. Un ataque mortal
+    por fase, siempre avisado: Ejecuci\xF3n, Sentencia y El Silencio."
+  historia: "Nadie recuerda cu\xE1ndo se qued\xF3 ciega ni qui\xE9n la dej\xF3 as\xED.
+    Lo que se sabe es que el bosque muri\xF3 primero: las hojas cayeron una noche
+    y no volvieron a brotar. Ella se qued\xF3. Aprendi\xF3 a cazar con los o\xEDdos,
+    a leer el miedo en un latido, a distinguir el paso de un ladr\xF3n del de un
+    hijo que vuelve a casa. Muchos vinieron a matar a la cazadora ciega. Ninguno
+    la sorprendi\xF3. En el bosque sin hojas todo se oye, y ella escucha desde hace
+    tanto que ya no recuerda otra cosa que el sonido de quien viene a morir."
+  almasCofre: 2500
+  objetosCofre: 000000000200000004000000
+  multVida: 1.5
+  multDano: 1.3
+  multVelocidad: 1.35
+  secreto: 1
+  requisitos:
+  - crimson_wraith
+  - shadowed_wetlands

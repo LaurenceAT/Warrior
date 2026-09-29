@@ -1,0 +1,626 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b10a1c7c4526724bb56a80c957739a5, type: 3}
+  m_Name: Sprites Cazadora
+  m_EditorClassIdentifier: 
+  clips:
+  - nombre: quieto
+    cuerpo:
+    - {fileID: 3980494485845335114, guid: 7ce4999e5005b7341b4985718b7508cd, type: 3}
+    - {fileID: 4084895267788454158, guid: 7ce4999e5005b7341b4985718b7508cd, type: 3}
+    - {fileID: -4135173922944086199, guid: 7ce4999e5005b7341b4985718b7508cd, type: 3}
+    - {fileID: 1982858274868697025, guid: 7ce4999e5005b7341b4985718b7508cd, type: 3}
+    - {fileID: -5941501097282817964, guid: 7ce4999e5005b7341b4985718b7508cd, type: 3}
+    - {fileID: -1441295265280137493, guid: 7ce4999e5005b7341b4985718b7508cd, type: 3}
+    - {fileID: 9082999552886011644, guid: 7ce4999e5005b7341b4985718b7508cd, type: 3}
+    - {fileID: -6847285986268669868, guid: 7ce4999e5005b7341b4985718b7508cd, type: 3}
+    - {fileID: -4600421590328273034, guid: 7ce4999e5005b7341b4985718b7508cd, type: 3}
+    - {fileID: 6801292574643901810, guid: 7ce4999e5005b7341b4985718b7508cd, type: 3}
+    - {fileID: -8998947142928744535, guid: 7ce4999e5005b7341b4985718b7508cd, type: 3}
+    - {fileID: 2568455366428821190, guid: 7ce4999e5005b7341b4985718b7508cd, type: 3}
+    efecto:
+    - {fileID: 6611366519141349802, guid: 77d4da9469ba43e498f86d9547290b28, type: 3}
+    - {fileID: 1799639928863568171, guid: 77d4da9469ba43e498f86d9547290b28, type: 3}
+    - {fileID: 8694374432943985352, guid: 77d4da9469ba43e498f86d9547290b28, type: 3}
+    - {fileID: -183190791205603347, guid: 77d4da9469ba43e498f86d9547290b28, type: 3}
+    - {fileID: -4894809077566555144, guid: 77d4da9469ba43e498f86d9547290b28, type: 3}
+    - {fileID: -8724454357416052192, guid: 77d4da9469ba43e498f86d9547290b28, type: 3}
+    - {fileID: 4494671994496057488, guid: 77d4da9469ba43e498f86d9547290b28, type: 3}
+    - {fileID: -8925848915477254775, guid: 77d4da9469ba43e498f86d9547290b28, type: 3}
+    - {fileID: 4608314240984546718, guid: 77d4da9469ba43e498f86d9547290b28, type: 3}
+    - {fileID: -4664786697296715625, guid: 77d4da9469ba43e498f86d9547290b28, type: 3}
+    - {fileID: -3764820637390577615, guid: 77d4da9469ba43e498f86d9547290b28, type: 3}
+    - {fileID: 8065104963763293215, guid: 77d4da9469ba43e498f86d9547290b28, type: 3}
+    fps: 10
+    bucle: 1
+    cajas:
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    activos: 000000000000000000000000
+  - nombre: correr
+    cuerpo:
+    - {fileID: -5424878771291537768, guid: 6708d1b4a16cdc346ad48e544283d163, type: 3}
+    - {fileID: 2988673884716610786, guid: 6708d1b4a16cdc346ad48e544283d163, type: 3}
+    - {fileID: -8814518226100594972, guid: 6708d1b4a16cdc346ad48e544283d163, type: 3}
+    - {fileID: -4187351600287797910, guid: 6708d1b4a16cdc346ad48e544283d163, type: 3}
+    - {fileID: 7177364483682975363, guid: 6708d1b4a16cdc346ad48e544283d163, type: 3}
+    - {fileID: 2528653622256928406, guid: 6708d1b4a16cdc346ad48e544283d163, type: 3}
+    - {fileID: -3619984123114983357, guid: 6708d1b4a16cdc346ad48e544283d163, type: 3}
+    - {fileID: -3542563405802970503, guid: 6708d1b4a16cdc346ad48e544283d163, type: 3}
+    efecto:
+    - {fileID: -717433976542937698, guid: 04e27bbd99200c94bb2f64492cd6cbd2, type: 3}
+    - {fileID: 4568911925916731969, guid: 04e27bbd99200c94bb2f64492cd6cbd2, type: 3}
+    - {fileID: -3982742291855723671, guid: 04e27bbd99200c94bb2f64492cd6cbd2, type: 3}
+    - {fileID: -3475215164464429036, guid: 04e27bbd99200c94bb2f64492cd6cbd2, type: 3}
+    - {fileID: 3137174307087219696, guid: 04e27bbd99200c94bb2f64492cd6cbd2, type: 3}
+    - {fileID: 7889227519935262188, guid: 04e27bbd99200c94bb2f64492cd6cbd2, type: 3}
+    - {fileID: -2670916183985795856, guid: 04e27bbd99200c94bb2f64492cd6cbd2, type: 3}
+    - {fileID: 4196040232065126640, guid: 04e27bbd99200c94bb2f64492cd6cbd2, type: 3}
+    fps: 12
+    bucle: 1
+    cajas:
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    activos: 0000000000000000
+  - nombre: salto
+    cuerpo:
+    - {fileID: -642685501604873385, guid: 7e491a1ea7df23e4fa3939dcb6d97895, type: 3}
+    - {fileID: 4429350074286804874, guid: 7e491a1ea7df23e4fa3939dcb6d97895, type: 3}
+    - {fileID: -6652638742099068027, guid: 7e491a1ea7df23e4fa3939dcb6d97895, type: 3}
+    - {fileID: -3775920230287034845, guid: 7e491a1ea7df23e4fa3939dcb6d97895, type: 3}
+    efecto:
+    - {fileID: -3075127201764438726, guid: 7ce1a8836511d114aaa7f2df9f0ffeeb, type: 3}
+    - {fileID: -982670718763869539, guid: 7ce1a8836511d114aaa7f2df9f0ffeeb, type: 3}
+    - {fileID: 6170741509216679257, guid: 7ce1a8836511d114aaa7f2df9f0ffeeb, type: 3}
+    - {fileID: -1015782668647033157, guid: 7ce1a8836511d114aaa7f2df9f0ffeeb, type: 3}
+    fps: 12
+    bucle: 0
+    cajas:
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    activos: 00000000
+  - nombre: aire
+    cuerpo:
+    - {fileID: 3295930353878420989, guid: 30a0895b109d20049ba3e789a46417e2, type: 3}
+    efecto:
+    - {fileID: -4415959931701946792, guid: 3221d56af9904f24abbfede5021ec821, type: 3}
+    fps: 1
+    bucle: 1
+    cajas:
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    activos: 00
+  - nombre: caer
+    cuerpo:
+    - {fileID: -4396008423799417398, guid: 01bfcb9880ea7294791d1170e2a93d43, type: 3}
+    - {fileID: 7986622057253348713, guid: 01bfcb9880ea7294791d1170e2a93d43, type: 3}
+    - {fileID: -5539466210754858228, guid: 01bfcb9880ea7294791d1170e2a93d43, type: 3}
+    - {fileID: -6012216173757975455, guid: 01bfcb9880ea7294791d1170e2a93d43, type: 3}
+    efecto:
+    - {fileID: 4405061858159594810, guid: f73fff1118ea9b84fb451008264156b2, type: 3}
+    - {fileID: 3346634271549791541, guid: f73fff1118ea9b84fb451008264156b2, type: 3}
+    - {fileID: 6657386301780152613, guid: f73fff1118ea9b84fb451008264156b2, type: 3}
+    - {fileID: 4206751362751734320, guid: f73fff1118ea9b84fb451008264156b2, type: 3}
+    fps: 10
+    bucle: 0
+    cajas:
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    activos: 00000000
+  - nombre: dash
+    cuerpo:
+    - {fileID: 8010726197243845763, guid: 00cdd8c94a3c39844a8710095ecf1695, type: 3}
+    - {fileID: 1389476833372346635, guid: 00cdd8c94a3c39844a8710095ecf1695, type: 3}
+    - {fileID: -4676812984136152329, guid: 00cdd8c94a3c39844a8710095ecf1695, type: 3}
+    - {fileID: -3166713645191668575, guid: 00cdd8c94a3c39844a8710095ecf1695, type: 3}
+    efecto:
+    - {fileID: -5445567133157380750, guid: e706a9a83cd093f4e9d0520419967e09, type: 3}
+    - {fileID: -1723047642675668319, guid: e706a9a83cd093f4e9d0520419967e09, type: 3}
+    - {fileID: 7949496396623956585, guid: e706a9a83cd093f4e9d0520419967e09, type: 3}
+    - {fileID: 6339968935256115101, guid: e706a9a83cd093f4e9d0520419967e09, type: 3}
+    fps: 14
+    bucle: 1
+    cajas:
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    activos: 00000000
+  - nombre: tajoArribaAire
+    cuerpo:
+    - {fileID: -2959382662719810596, guid: 3a17fb1086eff7447a7a896ae87b098d, type: 3}
+    - {fileID: 847762867570691744, guid: 3a17fb1086eff7447a7a896ae87b098d, type: 3}
+    - {fileID: 2514479320824220424, guid: 3a17fb1086eff7447a7a896ae87b098d, type: 3}
+    - {fileID: 2457083578074606326, guid: 3a17fb1086eff7447a7a896ae87b098d, type: 3}
+    efecto:
+    - {fileID: -1217455376718690614, guid: 6d64c5906b096644dbd9cbcc5fdf8ef9, type: 3}
+    - {fileID: 7797262146275146545, guid: 6d64c5906b096644dbd9cbcc5fdf8ef9, type: 3}
+    - {fileID: -102859854328271884, guid: 6d64c5906b096644dbd9cbcc5fdf8ef9, type: 3}
+    - {fileID: 8848612859502665703, guid: 6d64c5906b096644dbd9cbcc5fdf8ef9, type: 3}
+    fps: 14
+    bucle: 0
+    cajas:
+    - serializedVersion: 2
+      x: -0.32142857
+      y: 0
+      width: 0.17857143
+      height: 0.5
+    - serializedVersion: 2
+      x: -0.25
+      y: -0.035714287
+      width: 0.8214286
+      height: 2.5714285
+    - serializedVersion: 2
+      x: -0.25
+      y: 0.035714287
+      width: 0.85714287
+      height: 2.5357144
+    - serializedVersion: 2
+      x: -0.17857143
+      y: 0.071428575
+      width: 0.78571427
+      height: 2.5357144
+    activos: 00010000
+  - nombre: tajoAbajo
+    cuerpo:
+    - {fileID: 8707958997053949157, guid: 9d8727fba3e2a7f498d21a24d561bff1, type: 3}
+    - {fileID: -864852349608144136, guid: 9d8727fba3e2a7f498d21a24d561bff1, type: 3}
+    - {fileID: -7775627859005369617, guid: 9d8727fba3e2a7f498d21a24d561bff1, type: 3}
+    - {fileID: 5599985097296645294, guid: 9d8727fba3e2a7f498d21a24d561bff1, type: 3}
+    efecto:
+    - {fileID: -1426503044947601602, guid: d3f8697c32741ed42824a274a435d163, type: 3}
+    - {fileID: 8232093309541957984, guid: d3f8697c32741ed42824a274a435d163, type: 3}
+    - {fileID: 8099561599703016460, guid: d3f8697c32741ed42824a274a435d163, type: 3}
+    - {fileID: 8378208578924306094, guid: d3f8697c32741ed42824a274a435d163, type: 3}
+    fps: 14
+    bucle: 0
+    cajas:
+    - serializedVersion: 2
+      x: -0.35714287
+      y: 0.85714287
+      width: 0.17857143
+      height: 0.5
+    - serializedVersion: 2
+      x: -0.25
+      y: -1.1071428
+      width: 0.8214286
+      height: 2.5714285
+    - serializedVersion: 2
+      x: -0.25
+      y: -1.1428572
+      width: 0.85714287
+      height: 2.5357144
+    - serializedVersion: 2
+      x: -0.17857143
+      y: -1.1785715
+      width: 0.78571427
+      height: 2.4642856
+    activos: 00010000
+  - nombre: tajoArriba
+    cuerpo:
+    - {fileID: -37898319069726763, guid: 79fe85a60fe5b054694db5beffc06cb4, type: 3}
+    - {fileID: 3930144302022342830, guid: 79fe85a60fe5b054694db5beffc06cb4, type: 3}
+    - {fileID: 4162905277605780791, guid: 79fe85a60fe5b054694db5beffc06cb4, type: 3}
+    - {fileID: 4403462548485881267, guid: 79fe85a60fe5b054694db5beffc06cb4, type: 3}
+    efecto:
+    - {fileID: -4655732588771203511, guid: 91e988a4b532b9847958a3af577bd6b9, type: 3}
+    - {fileID: -8649803149220335285, guid: 91e988a4b532b9847958a3af577bd6b9, type: 3}
+    - {fileID: 5270093729434395423, guid: 91e988a4b532b9847958a3af577bd6b9, type: 3}
+    - {fileID: -948383338600179569, guid: 91e988a4b532b9847958a3af577bd6b9, type: 3}
+    fps: 14
+    bucle: 0
+    cajas:
+    - serializedVersion: 2
+      x: -0.35714287
+      y: -0.035714287
+      width: 0.17857143
+      height: 0.5
+    - serializedVersion: 2
+      x: -0.2857143
+      y: -0.071428575
+      width: 0.8214286
+      height: 2.5714285
+    - serializedVersion: 2
+      x: -0.2857143
+      y: 0
+      width: 0.85714287
+      height: 2.5357144
+    - serializedVersion: 2
+      x: -0.21428572
+      y: 0.071428575
+      width: 0.78571427
+      height: 2.5357144
+    activos: 00010000
+  - nombre: barrido
+    cuerpo:
+    - {fileID: -2516965230606068500, guid: ba089eaae67ce6f498c45757c203cdc0, type: 3}
+    - {fileID: 3863142035090644879, guid: ba089eaae67ce6f498c45757c203cdc0, type: 3}
+    - {fileID: 1250447424974436118, guid: ba089eaae67ce6f498c45757c203cdc0, type: 3}
+    efecto:
+    - {fileID: 7654581835215509328, guid: 4e453aa63884ac04d9e8b97f9d99df42, type: 3}
+    - {fileID: -3987204824339120107, guid: 4e453aa63884ac04d9e8b97f9d99df42, type: 3}
+    - {fileID: -9048993715675587045, guid: 4e453aa63884ac04d9e8b97f9d99df42, type: 3}
+    fps: 14
+    bucle: 0
+    cajas:
+    - serializedVersion: 2
+      x: -0.64285713
+      y: -0.071428575
+      width: 3.607143
+      height: 0.8214286
+    - serializedVersion: 2
+      x: -0.6785714
+      y: 0.14285715
+      width: 3.6785715
+      height: 0.64285713
+    - serializedVersion: 2
+      x: 2.25
+      y: 0.21428572
+      width: 0.78571427
+      height: 0.53571427
+    activos: 010000
+  - nombre: luna
+    cuerpo:
+    - {fileID: 4227913115622461366, guid: 7ac7a7cf0ecac7f48ac85ee926c5cd3e, type: 3}
+    - {fileID: -4802070703949337567, guid: 7ac7a7cf0ecac7f48ac85ee926c5cd3e, type: 3}
+    - {fileID: 5124600052750447845, guid: 7ac7a7cf0ecac7f48ac85ee926c5cd3e, type: 3}
+    - {fileID: -6176645856945103538, guid: 7ac7a7cf0ecac7f48ac85ee926c5cd3e, type: 3}
+    - {fileID: 3924562556668466346, guid: 7ac7a7cf0ecac7f48ac85ee926c5cd3e, type: 3}
+    efecto:
+    - {fileID: -3933183700027440687, guid: edd38fdced45e9b4997b1b09eb0c98ce, type: 3}
+    - {fileID: 353586824097928328, guid: edd38fdced45e9b4997b1b09eb0c98ce, type: 3}
+    - {fileID: 3075523539956778493, guid: edd38fdced45e9b4997b1b09eb0c98ce, type: 3}
+    - {fileID: -7722188178960898107, guid: edd38fdced45e9b4997b1b09eb0c98ce, type: 3}
+    - {fileID: 7151508120031384357, guid: edd38fdced45e9b4997b1b09eb0c98ce, type: 3}
+    fps: 14
+    bucle: 0
+    cajas:
+    - serializedVersion: 2
+      x: -0.96428573
+      y: 0.42857143
+      width: 0.64285713
+      height: 0.2857143
+    - serializedVersion: 2
+      x: -1
+      y: -0.071428575
+      width: 2.642857
+      height: 1.6428572
+    - serializedVersion: 2
+      x: -0.64285713
+      y: -0.071428575
+      width: 2.25
+      height: 1.6785715
+    - serializedVersion: 2
+      x: -0.64285713
+      y: -0.035714287
+      width: 2.25
+      height: 1.6785715
+    - serializedVersion: 2
+      x: 0.39285713
+      y: 0.035714287
+      width: 0.53571427
+      height: 0.35714287
+    activos: 0001000000
+  - nombre: estocada
+    cuerpo:
+    - {fileID: -7808880686844570303, guid: 672f40d0bfaa62240bfbe7d1aadc0ba5, type: 3}
+    - {fileID: 7485292751309651490, guid: 672f40d0bfaa62240bfbe7d1aadc0ba5, type: 3}
+    - {fileID: -1046217811088972433, guid: 672f40d0bfaa62240bfbe7d1aadc0ba5, type: 3}
+    efecto:
+    - {fileID: -8511149218128606417, guid: e664ad7eb2cba86468fb68c89c20ca7a, type: 3}
+    - {fileID: 2292558665858127108, guid: e664ad7eb2cba86468fb68c89c20ca7a, type: 3}
+    - {fileID: -1501622546035571522, guid: e664ad7eb2cba86468fb68c89c20ca7a, type: 3}
+    fps: 14
+    bucle: 0
+    cajas:
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: -3.107143
+      y: 0
+      width: 3.0357144
+      height: 0.60714287
+    - serializedVersion: 2
+      x: -2.357143
+      y: 0
+      width: 2.25
+      height: 0.60714287
+    activos: 000100
+  - nombre: cruce
+    cuerpo:
+    - {fileID: 1221367675744704003, guid: 5e9694ee94ba79d43844ab23e2d7e6fa, type: 3}
+    - {fileID: 4329884632263739329, guid: 5e9694ee94ba79d43844ab23e2d7e6fa, type: 3}
+    - {fileID: 5489800775203499050, guid: 5e9694ee94ba79d43844ab23e2d7e6fa, type: 3}
+    - {fileID: 4483405368255796977, guid: 5e9694ee94ba79d43844ab23e2d7e6fa, type: 3}
+    - {fileID: 3266978677604553591, guid: 5e9694ee94ba79d43844ab23e2d7e6fa, type: 3}
+    efecto:
+    - {fileID: 8248428306749912677, guid: 1bc5cd5390297fd41929c7808fc0a5de, type: 3}
+    - {fileID: -5872443505953722504, guid: 1bc5cd5390297fd41929c7808fc0a5de, type: 3}
+    - {fileID: -3016179697865018484, guid: 1bc5cd5390297fd41929c7808fc0a5de, type: 3}
+    - {fileID: 8079105868475057184, guid: 1bc5cd5390297fd41929c7808fc0a5de, type: 3}
+    - {fileID: 4365528441287919112, guid: 1bc5cd5390297fd41929c7808fc0a5de, type: 3}
+    fps: 14
+    bucle: 0
+    cajas:
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: -0.21428572
+      y: -0.071428575
+      width: 3.392857
+      height: 1.3571428
+    - serializedVersion: 2
+      x: -2.4642856
+      y: -0.071428575
+      width: 2.8214285
+      height: 1.3571428
+    - serializedVersion: 2
+      x: -2.357143
+      y: 0
+      width: 2.5
+      height: 1.2857143
+    - serializedVersion: 2
+      x: -2.3214285
+      y: -0.071428575
+      width: 2.0357144
+      height: 0.42857143
+    activos: 0001000000
+  - nombre: golpe
+    cuerpo:
+    - {fileID: -8466838035857919800, guid: d523008620cf1c548a0b48b977f48382, type: 3}
+    efecto:
+    - {fileID: -8050766701424926455, guid: 7ff631ac3ca851c4ab0860b9d442c015, type: 3}
+    fps: 1
+    bucle: 0
+    cajas:
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    activos: 00
+  - nombre: muerte
+    cuerpo:
+    - {fileID: -7510554756437757748, guid: abc5d2eb882ed09479716580df5e3881, type: 3}
+    - {fileID: 3907663817253448512, guid: abc5d2eb882ed09479716580df5e3881, type: 3}
+    - {fileID: -4375966976945741348, guid: abc5d2eb882ed09479716580df5e3881, type: 3}
+    - {fileID: 7878696066040620380, guid: abc5d2eb882ed09479716580df5e3881, type: 3}
+    - {fileID: 7343916087441731459, guid: abc5d2eb882ed09479716580df5e3881, type: 3}
+    - {fileID: -2580476935520012091, guid: abc5d2eb882ed09479716580df5e3881, type: 3}
+    - {fileID: 1223093085814464003, guid: abc5d2eb882ed09479716580df5e3881, type: 3}
+    - {fileID: 7186218077116591884, guid: abc5d2eb882ed09479716580df5e3881, type: 3}
+    - {fileID: 6891107971758354366, guid: abc5d2eb882ed09479716580df5e3881, type: 3}
+    - {fileID: 5114233665923948594, guid: abc5d2eb882ed09479716580df5e3881, type: 3}
+    efecto:
+    - {fileID: 8900476392451996821, guid: f857711cb5517ff4b95da7be74532d61, type: 3}
+    - {fileID: -9164597289014494781, guid: f857711cb5517ff4b95da7be74532d61, type: 3}
+    - {fileID: -4853745777158938673, guid: f857711cb5517ff4b95da7be74532d61, type: 3}
+    - {fileID: 7267848272465845026, guid: f857711cb5517ff4b95da7be74532d61, type: 3}
+    - {fileID: -3757603398229787923, guid: f857711cb5517ff4b95da7be74532d61, type: 3}
+    - {fileID: 3255748898561016191, guid: f857711cb5517ff4b95da7be74532d61, type: 3}
+    - {fileID: 4219909821567964054, guid: f857711cb5517ff4b95da7be74532d61, type: 3}
+    - {fileID: 4309303014165832899, guid: f857711cb5517ff4b95da7be74532d61, type: 3}
+    - {fileID: 4139371467939223838, guid: f857711cb5517ff4b95da7be74532d61, type: 3}
+    - {fileID: -6142050201296949380, guid: f857711cb5517ff4b95da7be74532d61, type: 3}
+    fps: 12
+    bucle: 0
+    cajas:
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    - serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    activos: 00000000000000000000
+  golpe: {fileID: -8466838035857919800, guid: d523008620cf1c548a0b48b977f48382, type: 3}
+  pixelesPorUnidad: 28

@@ -50,6 +50,34 @@ public class FichaJefe : ScriptableObject
     [Tooltip("Rapidez entre ataques: las pausas se dividen por esto (1.35 = pausas un 26 % mas cortas).")]
     public float multVelocidad = 1.35f;
 
+    [Header("Jefe secreto")]
+    [Tooltip("No aparece en Desafios (ni su nombre, ni una silueta, ni sus logros) hasta completar en Normal los desafios de 'requisitos'.")]
+    public bool secreto;
+    [Tooltip("Ids de los jefes cuyo desafio Normal hay que completar para desbloquearlo.")]
+    public string[] requisitos = new string[0];
+
+    // Se calcula con los desafios completados (globales.json): si ya estaban
+    // completados antes de esta version, tambien cuenta. Las herramientas de
+    // prueba pueden forzarlo en un sentido u otro.
+    public bool Desbloqueado
+    {
+        get
+        {
+            if (!secreto) return true;
+            if (Globales.Marca("bloqueo_" + id)) return false;
+            if (Globales.Marca("forzar_" + id)) return true;
+            return requisitos != null && requisitos.All(r => Globales.Completado(r, false));
+        }
+    }
+
+    // Desbloquear o volver a bloquear un jefe secreto (solo pruebas).
+    public static void ForzarSecreto(string id, bool desbloqueado)
+    {
+        Globales.PonerMarca("forzar_" + id, desbloqueado);
+        Globales.PonerMarca("bloqueo_" + id, !desbloqueado);
+        if (!desbloqueado) Globales.PonerMarca("revelado_" + id, false);
+    }
+
     private static FichaJefe[] todas;
 
     public static FichaJefe[] Todas()
@@ -57,6 +85,12 @@ public class FichaJefe : ScriptableObject
         if (todas == null) todas = Resources.LoadAll<FichaJefe>("Desafios").OrderBy(f => f.orden).ThenBy(f => f.nombre).ToArray();
         return todas;
     }
+
+    // Los que salen en el menu (los secretos, solo una vez desbloqueados).
+    public static FichaJefe[] Visibles() => Todas().Where(f => f.Desbloqueado).ToArray();
+
+    // Secretos que aun no estan desbloqueados (para saber si uno se acaba de abrir).
+    public static string[] Bloqueados() => Todas().Where(f => !f.Desbloqueado).Select(f => f.id).ToArray();
 
     public static FichaJefe DeEscena(string escena) => Todas().FirstOrDefault(f => f.escena == escena);
 }

@@ -58,6 +58,7 @@ public class CamaraDinamica : MonoBehaviour
     private Vector2 puntoEncuadre;
     private float pesoEncuadre;
     private float encuadreHasta = -1f;
+    private float maximoEncuadre = 6f;
     private CinemachineImpulseSource sacudidor;
 
     private void Awake()
@@ -117,9 +118,11 @@ public class CamaraDinamica : MonoBehaviour
 
     // Durante "segundos" la camara se desplaza hacia "punto" (peso 0 = nada, 1 =
     // centrado en el). Para mostrar al jefe en un momento importante.
-    public static void Encuadrar(Vector2 punto, float peso, float segundos)
+    // "maximo": cuanto puede apartarse del player en horizontal (6 por defecto).
+    public static void Encuadrar(Vector2 punto, float peso, float segundos, float maximo = 6f)
     {
         if (instancia == null) return;
+        instancia.maximoEncuadre = maximo;
         instancia.puntoEncuadre = punto;
         instancia.pesoEncuadre = Mathf.Clamp01(peso);
         instancia.encuadreHasta = Time.time + segundos;
@@ -222,7 +225,7 @@ public class CamaraDinamica : MonoBehaviour
         if (Time.time < encuadreHasta)
         {
             Vector2 hacia = (puntoEncuadre - (Vector2)objetivo.position) * pesoEncuadre;
-            x = Mathf.Clamp(hacia.x, -6f, 6f);
+            x = Mathf.Clamp(hacia.x, -maximoEncuadre, maximoEncuadre);
             y = Mathf.Clamp(hacia.y + alturaMirada * (1f - pesoEncuadre), -3f, 4f);
         }
 

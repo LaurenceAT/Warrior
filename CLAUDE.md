@@ -3,6 +3,7 @@
 ## De qué trata
 Juego de acción y plataformas 2D en pixel art, con combate y progresión al estilo souls (hogueras, almas, frascos, jefes con dos fases).
 Orden: Menú principal → Nivel Nieve (jefe: Sombra de los Humedales) → Nivel Cueva (jefe: Crimson Wraith).
+Jefe secreto (solo en Desafíos): The Blind Huntress, en la escena `Bosque Cazadora`.
 
 ## Herramientas
 - Unity 6000.0.71f1, C#, URP 2D, Cinemachine 3, Input System (nuevo), Tilemap + Tilemap Extras (RuleTile), TextMesh Pro.
@@ -17,6 +18,7 @@ Orden: Menú principal → Nivel Nieve (jefe: Sombra de los Humedales) → Nivel
 - `RPG/`: `Progreso` (niveles y almas), `AjustesProgreso` (números editables), `Equipo` (mejoras de espada y frascos), `EstadosPlayer`, `EstadosEnemigo`, `ArmaImbuida`, `MenuHoguera`, `RecursosRPG` (sonidos e iconos por clave).
 - `Jefe/`: `JefeSombra`, `JefeWraith`, `ArenaJefe` (combate, música, recompensa), `PeligrosJefe` (ataques en el escenario).
 - `Desafios/`: `Desafio` (estado), `ModoDesafio` (monta la arena en el nivel real), `TiendaTotem`/`TotemTienda`, `MenuDesafios`, `MenuLogros`, `Logros`, `Globales` (logros y tiempos en `globales.json`, aparte de las partidas). Fichas editables en `Resources/Desafios` (jefes y tienda) y `Resources/Logros`.
+- `Cazadora/`: el jefe secreto. `JefeCazadora` (cerebro, en 3 archivos: nucleo, Ataques, Especiales), `CuerpoCazadora` (movimiento con aceleracion), `AnimCazadora` (cuerpo + efecto tenible), `OidoCazadora` (ruidos del player), `ArenaCazadora` (dialogo, musica por fase, reinicio), `IlusionCazadora`, `EfectosCazadora` (olas, marcas, estelas... con reserva), `UICazadora`, `DialogoCazadora`, `OscuridadCazadora`, `AmbienteBosque`, `ParallaxBosque`, `CamaraCazadora`, `DepuracionCazadora` (F10, solo Editor). Numeros en `Assets/Data/Jefes/Ajustes Cazadora`; sonidos en `Assets/Data/Sonidos/Sonidos Jefe Cazadora`. `Ronda10` genera sprites, fondo pixelado, prefab y escena.
 - `Menu/`: `MenuPrincipal`, `Partida` (partidas guardadas en JSON).
 - `UI/`: `EstiloMenu` (estilo común y sonidos de menús), `MenuPausa`, `PantallaCarga`, `PantallaMuerte`, `AvisoObjeto`.
 - `NivelNieve/`, `NivelCueva/`: piezas de cada nivel (hoguera, cofres, pared falsa, zonas ocultas, hielo...).
@@ -45,6 +47,9 @@ Orden: Menú principal → Nivel Nieve (jefe: Sombra de los Humedales) → Nivel
 - Sangrado: cuesta vida (25 con la vida inicial, sube con la vida máxima), te acumula sangrado a ti y en jefes tiene tope de activaciones. Números en AjustesProgreso.
 - Sagrado: aturde con el mismo aturdimiento del parry, pero más corto; los jefes lo hacen al acabar su ataque.
 - Tus manchas de sangre al morir se guardan en la partida; la de los enemigos se desvanece. Quién sangra: EnemyHealth → Sangre.
+- Jefe secreto: se desbloquea con los desafios Normal de Wraith y Wetlands (se calcula con `globales.json`). Hasta entonces no sale en Desafios ni cuentan sus 2 logros. Marcas globales: `revelado_*`, `dialogo_cazadora`, `forzar_*`/`bloqueo_*` (pruebas).
+- La Cazadora: todo su dano va en fraccion de tu vida maxima; los golpes normales nunca matan con la vida llena (solo instakills, su estocada tras parry o tener poca vida).
+- Parry de la Cazadora: al contacto te aturde de verdad (sin control ni teclas guardadas) y ella reapunta a tu posicion real justo antes de la estocada; si sobrevives, sales despedido (`PlayerControler.Derribar`, invulnerable al caer). El escudo se rompe por golpes (10, o 5 con la espada imbuida de oscuridad), no por dano.
 - Se conservan en el código el arco, el combate sin arma y la rueda de pociones, aunque estén apagados.
 
 ## Hecho y funcionando
@@ -56,6 +61,7 @@ Orden: Menú principal → Nivel Nieve (jefe: Sombra de los Humedales) → Nivel
 - Mejoras: Piedras de forja (espada) y Lágrimas sagradas (frascos), en cofres ocultos y como recompensa de jefes.
 - Estatuas con pistas, libro de pistas, decoración extra en los dos niveles (objeto `DecoracionExtra`).
 - Menú de Desafíos (2 jefes, Normal/Difícil, tótem-tienda, cofre) y de Logros (9, ocultos). Prueba: `PruebaNieve.DesafioPrueba` y `DesafioDificilPrueba`.
+- The Blind Huntress (jefe secreto, 3 barras, instakills, oscuridad, ilusiones). Prueba: `PruebaNieve.CazadoraPrueba`.
 - Tajos sincronizados con el ataque; colores propios; efectos en el arma; muerte en el aire; sangre.
 - Pruebas automáticas en batchmode pasando (sistemas, pociones, jefe, cueva, menú, ronda6, nivel, ronda8).
 
@@ -67,6 +73,7 @@ Orden: Menú principal → Nivel Nieve (jefe: Sombra de los Humedales) → Nivel
 - Faltan sprites de cristales y huesos para la cueva, y un sonido propio de máquina de escribir (se usa el "tic" de los menús).
 - Faltan sonidos propios de compra y de logro (se usan `mejorar_equipo` y `objeto_obtenido`) y un icono de candado (dibujado por código).
 - Optimización para itch.io: diagnóstico hecho, fase 2 aplazada (ver memoria).
+- Cazadora: faltan sonidos propios de rugido y voz (van sustitutos); latido, cristal y escritura ya son los de `Sonidos_nuevos` (Ronda11) y probarla a mano para ajustar numeros.
 
 ## Problemas conocidos
 - La consola muestra avisos de `AnimadorHoja` (unos 33): por confirmar la causa.

@@ -27,6 +27,19 @@ public class FichaLogro : ScriptableObject
     public Condicion condicion;
     public string parametro;
 
+    [Tooltip("Id de un jefe secreto: mientras no este desbloqueado, este logro no sale ni cuenta (vacio = siempre).")]
+    public string jefeSecreto;
+
+    public bool Visible
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(jefeSecreto)) return true;
+            FichaJefe f = FichaJefe.Todas().FirstOrDefault(j => j.id == jefeSecreto);
+            return f == null || f.Desbloqueado;
+        }
+    }
+
     private static FichaLogro[] todos;
 
     public static FichaLogro[] Todos()
@@ -34,4 +47,7 @@ public class FichaLogro : ScriptableObject
         if (todos == null) todos = Resources.LoadAll<FichaLogro>("Logros").OrderBy(l => l.seccion).ThenBy(l => l.orden).ToArray();
         return todos;
     }
+
+    // Los que se ven y cuentan ahora (sin los de un jefe secreto aun oculto).
+    public static FichaLogro[] Visibles() => Todos().Where(l => l.Visible).ToArray();
 }

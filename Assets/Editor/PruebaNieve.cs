@@ -35,6 +35,8 @@ public static class PruebaNieve
     public static void Ronda6Prueba() => Lanzar("ronda6", Escena);
     public static void DesafioPrueba() => Lanzar("desafio", "Assets/Scenes/Menu Principal.unity");
     public static void DesafioDificilPrueba() => Lanzar("desafio2", "Assets/Scenes/Menu Principal.unity");
+    public static void CazadoraPrueba() => Lanzar("cazadora", "Assets/Scenes/Menu Principal.unity");
+    public static void Cazadora2Prueba() => Lanzar("cazadora2", "Assets/Scenes/Menu Principal.unity");
     public static void Ronda8Prueba() => Lanzar("ronda8", System.Environment.GetEnvironmentVariable("VISTAS_ESCENA") ?? Escena);
     public static void MenuPrueba() => Lanzar("menu", "Assets/Scenes/Menu Principal.unity");
     public static void PintarPrueba() => Lanzar("pintar", Escena);
@@ -77,10 +79,10 @@ public static class PruebaNieve
             Directory.CreateDirectory(carpeta);
             Progreso.Reiniciar();
             PlayerPrefs.DeleteKey("cofre_Nivel Nieve_cofre");
-            if (modo == "menu" || modo == "desafio" || modo == "desafio2")
+            if (modo == "menu" || modo == "desafio" || modo == "desafio2" || modo == "cazadora" || modo == "cazadora2")
             {
                 Object.DontDestroyOnLoad(gameObject);
-                IEnumerator rm = modo == "desafio" ? PruebaDesafio() : modo == "desafio2" ? PruebaDesafioDificil() : Menu();
+                IEnumerator rm = modo == "desafio" ? PruebaDesafio() : modo == "desafio2" ? PruebaDesafioDificil() : modo == "cazadora" ? PruebaCazadora() : modo == "cazadora2" ? PruebaCazadora2() : Menu();
                 while (rm.MoveNext()) yield return rm.Current;
                 Debug.Log("[Prueba] fin");
                 EditorApplication.ExitPlaymode();
@@ -982,6 +984,294 @@ public static class PruebaNieve
         }
 
         // Crimson Wraith en Dificil (se da por hecho el normal): vida, brillo y logro.
+        // ------------------------------------------------------------------ Cazadora
+
+        private bool curando;
+        private int vidaMinima;
+        private int errores;
+
+        // Mantiene al player vivo (sin tapar los golpes: cura solo si baja mucho) y
+        // apunta la vida mas baja que ha tenido.
+        private IEnumerator MantenerVivo()
+        {
+            while (true)
+            {
+                if (curando && p != null)
+                {
+                    int v = Vida();
+                    if (v < vidaMinima) vidaMinima = v;
+                    if (v < p.VidaMaxima * 0.35f) Curar();
+                }
+                yield return null;
+            }
+        }
+
+        private IEnumerator Forzar(JefeCazadora j, string ataque, float segundos, string captura = null, float cuando = 0.8f)
+        {
+            Curar();
+            vidaMinima = p.VidaMaxima;
+            j.ForzarAtaque(ataque);
+            float t0 = Time.time;
+            bool capturada = captura == null;
+            while (Time.time - t0 < segundos)
+            {
+                if (!capturada && Time.time - t0 >= cuando) { capturada = true; yield return Captura(captura, true); }
+                yield return null;
+            }
+            Debug.Log($"[Cazadora] ataque {ataque}: vida minima {vidaMinima}/{p.VidaMaxima} fase={j.Fase + 1} efectos activos={PoolCazadora.Activos}");
+        }
+
+        private IEnumerator PruebaCazadora()
+        {
+            Application.logMessageReceived += (c, st, t) => { if (t == LogType.Exception || t == LogType.Error) errores++; };
+            Partida.CarpetaPruebas = Path.Combine(carpeta, "Partidas");
+            if (Directory.Exists(Partida.CarpetaPruebas)) Directory.Delete(Partida.CarpetaPruebas, true);
+            Directory.CreateDirectory(Partida.CarpetaPruebas);
+            Globales.Recargar();
+            yield return new WaitForSeconds(2f);
+
+            // 1. Oculta: ni en la lista ni en los logros.
+            FichaJefe caz = FichaJefe.Todas().First(x => x.id == "blind_huntress");
+            Debug.Log($"[Cazadora] al empezar: jefes visibles={FichaJefe.Visibles().Length}/{FichaJefe.Todas().Length} desbloqueada={caz.Desbloqueado} logros={Logros.Desbloqueados()}/{Logros.Total()}");
+            MenuPrincipal m = Object.FindFirstObjectByType<MenuPrincipal>();
+            Llamar(m, "Mostrar", GetCampo(m, "panelDesafios"));
+            yield return new WaitForSecondsRealtime(0.6f);
+            yield return Captura("c00_desafios_oculta", true);
+
+            // 2. Completar solo uno no basta; el segundo la despierta.
+            Globales.Completar("crimson_wraith", false, 300f, 1);
+            Globales.Completar("crimson_wraith", true, 500f, 3);
+            Debug.Log($"[Cazadora] tras Wraith (normal y dificil): desbloqueada={caz.Desbloqueado}");
+            string[] antes = FichaJefe.Bloqueados();
+            Globales.Completar("shadowed_wetlands", false, 400f, 2);
+            bool desperto = antes.Except(FichaJefe.Bloqueados()).Any();
+            Debug.Log($"[Cazadora] tras Wetlands: desbloqueada={caz.Desbloqueado} desperto={desperto} logros={Logros.Desbloqueados()}/{Logros.Total()}");
+            PantallaDesafio.Mostrar(FichaJefe.Todas().First(x => x.id == "shadowed_wetlands"), false, 400f, 2, true, desperto ? "Algo despertó en el bosque..." : null);
+            yield return new WaitForSecondsRealtime(7f);
+            yield return Captura("c01_algo_desperto", true);
+
+            // 3. Al volver al menu aparece, con su destello.
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Menu Principal");
+            yield return EsperarEscena("Menu Principal");
+            yield return new WaitForSeconds(1.5f);
+            m = Object.FindFirstObjectByType<MenuPrincipal>();
+            Llamar(m, "Mostrar", GetCampo(m, "panelDesafios"));
+            yield return new WaitForSecondsRealtime(0.7f);
+            yield return Captura("c02_aparece", true);
+            yield return new WaitForSecondsRealtime(1.5f);
+            MenuDesafios md = Object.FindFirstObjectByType<MenuDesafios>();
+            foreach (UnityEngine.UI.Button b in md.GetComponentsInChildren<UnityEngine.UI.Button>())
+                if (b.GetComponentInChildren<TMPro.TextMeshProUGUI>()?.text.Contains("Blind") == true) UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(b.gameObject);
+            yield return new WaitForSecondsRealtime(0.3f);
+            yield return Captura("c03_ficha", true);
+            Debug.Log($"[Cazadora] revelado={Globales.Marca("revelado_blind_huntress")} dificil bloqueado={!Desafio.DificilDesbloqueado(caz)}");
+
+            // 4. El desafio.
+            Desafio.Empezar(caz, false);
+            yield return EsperarEscena(caz.escena);
+            yield return new WaitForSeconds(2.5f);
+            p = Object.FindFirstObjectByType<PlayerControler>();
+            CofreMejora cofre = Object.FindObjectsByType<CofreMejora>(FindObjectsSortMode.None).FirstOrDefault(c => c.name == "CofreDesafio");
+            Debug.Log($"[Cazadora] escena={UnityEngine.SceneManagement.SceneManager.GetActiveScene().name} hogueras={Object.FindObjectsByType<Hoguera>(FindObjectsSortMode.None).Length} " +
+                      $"cofre={(cofre != null)} totem={(Object.FindFirstObjectByType<TotemTienda>() != null)} player={p.transform.position}");
+            yield return Captura("c04_linde", true);
+            StartCoroutine(MantenerVivo());
+
+            // Entra en la arena: la primera vez, el dialogo.
+            Teletransportar(new Vector3(4f, 0.8f, 0f));
+            yield return new WaitForSeconds(4.5f);
+            yield return Captura("c05_dialogo", true);
+            DialogoCazadora dlg = Object.FindFirstObjectByType<DialogoCazadora>();
+            Debug.Log($"[Cazadora] dialogo abierto={(dlg != null)} cinematica={Cinematica.Activa}");
+            // Mantener F: se salta (se simula).
+            if (dlg != null) SetCampo(dlg, "<Saltado>k__BackingField", true);
+            yield return new WaitForSeconds(2f);
+            JefeCazadora j = JefeCazadora.Actual;
+            if (j == null) { Debug.LogError("[Cazadora] no aparecio la jefa"); yield break; }
+            EnemyHealth salud = j.GetComponent<EnemyHealth>();
+            Debug.Log($"[Cazadora] combate: activa={j.Activa} cinematica={Cinematica.Activa} vida jefa={salud.CurrentHealth}/{salud.MaxHealth} dialogo visto={Globales.Marca("dialogo_cazadora")}");
+            yield return Captura("c06_empieza", true);
+            curando = true;
+            Teletransportar(new Vector3(20f, 0.8f, 0f));
+            DepuracionCazadora.VerCajas = true;
+
+            // 5. Fase 1.
+            yield return Forzar(j, "tresLunas", 5f, "c07_tres_lunas", 1.1f);
+            yield return Forzar(j, "cruce", 4f, "c08_cruce", 0.7f);
+            yield return Forzar(j, "ola", 3.5f, "c09_ola", 0.75f);
+            yield return Forzar(j, "salto", 3.5f, "c10_salto", 0.75f);
+            yield return Forzar(j, "guardia", 3f, "c11_guardia", 0.3f);
+            yield return Forzar(j, "escudo", 10f, "c12_escudo", 2.2f);
+            p.InvulnerableExterno = true;
+            yield return Forzar(j, "ejecucion", 6f, "c13_ejecucion", 1.2f);
+            p.InvulnerableExterno = false;
+
+            // Sin rastro: lejos y quieto, va a buscar.
+            Teletransportar(new Vector3(42f, 0.8f, 0f));
+            yield return new WaitForSeconds(3f);
+
+            // 6. Muerte falsa y fase 2.
+            salud.DanoEstado(salud.CurrentHealth);
+            yield return new WaitForSecondsRealtime(1.2f);
+            yield return Captura("c14_muerte_falsa", true);
+            yield return new WaitForSecondsRealtime(5f);
+            Debug.Log($"[Cazadora] tras la barra 1: fase={j.Fase + 1} vida={salud.CurrentHealth}/{salud.MaxHealth} player invulnerable={p.InvulnerableExterno}");
+            yield return Captura("c15_fase2", true);
+            Teletransportar(new Vector3(20f, 0.8f, 0f));
+            Imbuir(Elemento.Fuego);
+            yield return Forzar(j, "contra", 2f, "c16_contra", 0.9f);
+            Debug.Log($"[Cazadora] resistencia copiada={j.Resistencia}");
+            yield return Forzar(j, "flanqueo", 3.5f, "c17_flanqueo", 0.5f);
+            yield return Forzar(j, "caen", 3.5f, "c18_caen", 0.6f);
+            yield return Forzar(j, "espejismo", 3.5f);
+            yield return Forzar(j, "fantasma", 3f, "c19_fantasma", 0.4f);
+            yield return Forzar(j, "trampas", 2f, "c20_trampas", 1f);
+            yield return Forzar(j, "lluvia", 4f, "c21_lluvia", 0.6f);
+            yield return Forzar(j, "cruceDoble", 4f, "c22_cruce_doble", 0.9f);
+            p.InvulnerableExterno = true;
+            yield return Forzar(j, "sentencia", 5.5f, "c23_sentencia", 1.3f);
+            p.InvulnerableExterno = false;
+
+            // 7. Fase 3: oscuridad.
+            salud.DanoEstado(salud.CurrentHealth);
+            yield return new WaitForSecondsRealtime(6.5f);
+            Debug.Log($"[Cazadora] tras la barra 2: fase={j.Fase + 1} oscuridad={ArenaCazadora.Actual.Oscuridad.Encendida}");
+            yield return Captura("c24_fase3", true);
+            yield return Forzar(j, "danza", 7f, "c25_danza", 1.5f);
+            yield return Forzar(j, "espejos", 5f, "c26_espejos", 0.6f);
+            // El Silencio quieto: pierde el rastro.
+            yield return Forzar(j, "silencio", 8f, "c27_silencio", 1.5f);
+            // El Silencio atacando: te delata (invulnerable para no morir aqui).
+            p.InvulnerableExterno = true;
+            j.ForzarAtaque("silencio");
+            yield return new WaitForSeconds(1.5f);
+            Entrada().IsAttacking = true;
+            yield return new WaitForSeconds(2.5f);
+            yield return Captura("c28_silencio_delatado", true);
+            p.InvulnerableExterno = false;
+            yield return new WaitForSeconds(2f);
+
+            // 8. Muerte final y desafio completado.
+            curando = false;
+            salud.DanoEstado(salud.CurrentHealth);
+            yield return new WaitForSecondsRealtime(1f);
+            yield return Captura("c29_muerte_final", true);
+            yield return new WaitForSecondsRealtime(7f);
+            yield return Captura("c30_completado", true);
+            Globales.Recargar();
+            Debug.Log($"[Cazadora] completado={Globales.Completado("blind_huntress", false)} logro={Globales.TieneLogro("prueba_bosque")} " +
+                      $"dificil desbloqueado={Desafio.DificilDesbloqueado(caz)} logros={Logros.Desbloqueados()}/{Logros.Total()} errores={errores}");
+            DepuracionCazadora.VerCajas = false;
+            Partida.CarpetaPruebas = null;
+        }
+
+        // Parry de la Cazadora y escudo a golpes (con y sin oscuridad).
+        private IEnumerator PruebaCazadora2()
+        {
+            Application.logMessageReceived += (c, st, t) => { if (t == LogType.Exception || t == LogType.Error) errores++; };
+            Partida.CarpetaPruebas = Path.Combine(carpeta, "Partidas");
+            if (Directory.Exists(Partida.CarpetaPruebas)) Directory.Delete(Partida.CarpetaPruebas, true);
+            Directory.CreateDirectory(Partida.CarpetaPruebas);
+            Globales.Recargar();
+            FichaJefe.ForzarSecreto("blind_huntress", true);
+            Globales.PonerMarca("dialogo_cazadora", true);
+            yield return new WaitForSeconds(1.5f);
+            FichaJefe caz = FichaJefe.Todas().First(x => x.id == "blind_huntress");
+            Desafio.Empezar(caz, false);
+            yield return EsperarEscena(caz.escena);
+            yield return new WaitForSeconds(2.5f);
+            p = Object.FindFirstObjectByType<PlayerControler>();
+            Teletransportar(new Vector3(4f, 0.8f, 0f));
+            yield return new WaitForSeconds(4f);
+            JefeCazadora j = JefeCazadora.Actual;
+            if (j == null || !j.Activa) { Debug.LogError("[Cazadora2] la jefa no empezo"); yield break; }
+            DepuracionCazadora.VerCajas = true;
+
+            // 1. Parry: guardia, le pegas, intentas moverte.
+            for (int intento = 0; intento < 2; intento++)
+            {
+                Curar();
+                j.ForzarAtaque("guardia");
+                float t0 = Time.time;
+                while (!(bool)GetCampo(j, "enGuardia") && Time.time - t0 < 8f) yield return null;
+                float xj = j.transform.position.x;
+                int lado = intento == 0 ? -1 : 1;
+                Teletransportar(new Vector3(j.Cuerpo.Limitar(xj + lado * 0.9f), 0.8f, 0f));
+                int vida0 = Vida();
+                p.GetComponent<PlayerStamina>().Llenar();
+                Mirar(-lado);
+                Entrada().IsAttacking = true;
+                yield return new WaitForSeconds(0.2f);
+                bool aturdido = p.Aturdido;
+                float x0 = p.transform.position.x;
+                // Intenta ir hacia ella y rodar: no debe hacer caso.
+                for (float t = 0f; t < 0.5f; t += Time.deltaTime) { PonerEje(-lado); Entrada().IsDodging = true; yield return null; }
+                PonerEje(0f);
+                float x1 = p.transform.position.x;
+                yield return Captura($"p{intento}_parry_contacto", true);
+                float vidaMin = Vida();
+                bool derribado = false, invulnerable = false;
+                int miradaJefa = 0; float dxJefa = 0f;
+                for (float t = 0f; t < 2.5f; t += Time.deltaTime)
+                {
+                    vidaMin = Mathf.Min(vidaMin, Vida());
+                    if (p.Derribado && !derribado)
+                    {
+                        derribado = true;
+                        invulnerable = (bool)GetCampo(p, "invulnerableDerribado");
+                        miradaJefa = (int)GetCampo(j, "mirada");
+                        dxJefa = p.transform.position.x - j.transform.position.x;
+                    }
+                    yield return null;
+                }
+                yield return Captura($"p{intento}_parry_despues", true);
+                Debug.Log($"[Cazadora2] parry {intento}: aturdido={aturdido} movimiento con control={(x1 - x0) * -lado:0.00} (debe ser <= 0) vida {vida0}->{vidaMin} de {p.VidaMaxima} " +
+                          $"derribado={derribado} invulnerable al caer={invulnerable} ella mira hacia ti={(miradaJefa == 0 ? "?" : (Mathf.Sign(dxJefa) == miradaJefa).ToString())} jugador en x={p.transform.position.x:0.0}");
+                yield return new WaitForSeconds(1.5f);
+            }
+
+            // 2. Escudo a golpes: sin oscuridad (10) y con oscuridad (5).
+            p.InvulnerableExterno = true;
+            for (int prueba = 0; prueba < 2; prueba++)
+            {
+                if (prueba == 1) { j.SaltarAFase(1); yield return new WaitForSeconds(1f); Imbuir(Elemento.Oscuro); }
+                Teletransportar(new Vector3(20f, 0.8f, 0f));
+                yield return new WaitForSeconds(0.5f);
+                j.ForzarAtaque("escudo");
+                float t0 = Time.time;
+                while (j.EscudoFraccion < 0f && Time.time - t0 < 10f) yield return null;
+                yield return new WaitForSeconds(0.3f);
+                float distancia = Mathf.Abs(j.transform.position.x - p.transform.position.x);
+                yield return Captura($"e{prueba}_escudo", true);
+                float tam = Camera.main.orthographicSize;
+                int golpes = 0;
+                float escalaMin = 1f;
+                while (j.EscudoFraccion >= 0f && golpes < 14)
+                {
+                    float xj = j.transform.position.x;
+                    Teletransportar(new Vector3(xj - 1f, 0.8f, 0f));
+                    p.GetComponent<PlayerStamina>().Llenar();
+                    Mirar(1);
+                    int antes = Mathf.RoundToInt((1f - j.EscudoFraccion) * 100f);
+                    Entrada().IsAttacking = true;
+                    for (float t = 0f; t < 0.5f; t += Time.unscaledDeltaTime) { escalaMin = Mathf.Min(escalaMin, Time.timeScale); yield return null; }
+                    if (j.EscudoFraccion < 0f || Mathf.RoundToInt((1f - j.EscudoFraccion) * 100f) != antes) golpes++;
+                    if (golpes == 4) yield return Captura($"e{prueba}_grietas", true);
+                }
+                for (float t = 0f; t < 0.3f; t += Time.unscaledDeltaTime) { escalaMin = Mathf.Min(escalaMin, Time.timeScale); yield return null; }
+                yield return Captura($"e{prueba}_roto", true);
+                float t1 = Time.realtimeSinceStartup;
+                yield return new WaitForSeconds(0.2f);
+                Debug.Log($"[Cazadora2] escudo {(prueba == 0 ? "normal" : "oscuridad")}: se alejo {distancia:0.0} u, camara {tam:0.0}, golpes hasta romperlo={golpes}, " +
+                          $"camara lenta min={escalaMin:0.00}, fase={j.Fase + 1}");
+                yield return new WaitForSeconds(4f);
+            }
+            p.InvulnerableExterno = false;
+            DepuracionCazadora.VerCajas = false;
+            Debug.Log($"[Cazadora2] fin errores={errores}");
+            Partida.CarpetaPruebas = null;
+        }
+
         private IEnumerator PruebaDesafioDificil()
         {
             Partida.CarpetaPruebas = Path.Combine(carpeta, "Partidas");

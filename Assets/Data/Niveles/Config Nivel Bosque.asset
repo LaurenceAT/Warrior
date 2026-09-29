@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1a9dcba84fde274db80f321cf4b4b26, type: 3}
+  m_Name: Config Nivel Bosque
+  m_EditorClassIdentifier: 
+  tipoTerreno: 0
+  conjuntosTiles: []
+  losas: []
+  pilares: []
+  relleno: {fileID: 0}
+  colorPiezas: {r: 1, g: 1, b: 1, a: 1}
+  altoFondo: 19
+  pixelesPorUnidadFondo: 0
+  seguimientoVertical: 0.92
+  capasFondo: []
+  musicaCombate: {fileID: 0}
+  volumenCombate: 0.35
+  ambiente: {fileID: 0}
+  volumenAmbiente: 0.4
+  jefeFase1:
+    pista: {fileID: 0}
+    volumen: 0.6
+    inicio: 0
+    bucle: {x: 0, y: 0}
+  jefeFase2:
+    pista: {fileID: 0}
+    volumen: 0.6
+    inicio: 0
+    bucle: {x: 0, y: 0}
+  sonidos: []
+  frasesMuerte:
+  - En el bosque sin hojas, todo se oye.
+  - "Respira m\xE1s despacio."
+  - "Ella no te vio. Te oy\xF3."
+  - "Las hojas cayeron hace mucho. T\xFA, ahora."
+  frasesJefe: []

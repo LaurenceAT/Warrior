@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -50,6 +51,35 @@ public class MenuDesafios : MonoBehaviour
         confirmacion.SetActive(false);
         foreach (Fila f in filas) PintarFila(f);
         Elegir(elegido != null ? elegido : filas.FirstOrDefault()?.ficha);
+        // Un jefe secreto recien desbloqueado aparece con un destello (solo la
+        // primera vez; despues ya se queda en la lista).
+        foreach (Fila f in filas)
+            if (f.ficha.secreto && !Globales.Marca("revelado_" + f.ficha.id))
+            {
+                Globales.PonerMarca("revelado_" + f.ficha.id, true);
+                StartCoroutine(Revelar(f));
+            }
+    }
+
+    private IEnumerator Revelar(Fila f)
+    {
+        Sonido.Reproducir("secreto_descubierto", 0.9f);
+        CanvasGroup g = f.boton.gameObject.AddComponent<CanvasGroup>();
+        g.alpha = 0f;
+        Image brillo = EstiloMenu.Caja("Revelado", f.boton.transform, new Color(0.75f, 1f, 0.8f, 0f));
+        brillo.sprite = EstiloMenu.Resplandor();
+        brillo.raycastTarget = false;
+        EstiloMenu.Estirar(brillo.rectTransform, -14f);
+        const float dura = 1.8f;
+        for (float t = 0f; t < dura; t += Time.unscaledDeltaTime)
+        {
+            g.alpha = Mathf.Clamp01(t / 0.9f);
+            brillo.color = new Color(0.75f, 1f, 0.8f, 0.85f * Mathf.Sin(Mathf.PI * t / dura));
+            yield return null;
+        }
+        g.alpha = 1f;
+        Destroy(brillo.gameObject);
+        Destroy(g);
     }
 
     public GameObject Primero() => filas.FirstOrDefault(f => f.ficha == elegido)?.boton.gameObject ?? botonVolver.gameObject;
@@ -189,7 +219,7 @@ public class MenuDesafios : MonoBehaviour
         EstiloMenu.Arriba(cab.rectTransform, 0f, 30f);
         VerticalLayoutGroup col = EstiloMenu.Columna(izq, 0f, 0f, 46f, 0f, 8f);
         RecursosRPG r = RecursosRPG.Get();
-        foreach (FichaJefe f in FichaJefe.Todas())
+        foreach (FichaJefe f in FichaJefe.Visibles())
         {
             FichaJefe ficha = f;
             Button b = EstiloMenu.Opcion(col.transform, f.nombre, () => { Elegir(ficha); SonidoMenu.Silenciar(); EventSystem.current?.SetSelectedGameObject(botonDesafiar.gameObject); },

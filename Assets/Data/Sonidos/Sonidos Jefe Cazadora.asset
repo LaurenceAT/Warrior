@@ -1,0 +1,269 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f38fa1c897005d4c8272add763682b5, type: 3}
+  m_Name: Sonidos Jefe Cazadora
+  m_EditorClassIdentifier: 
+  volumenGeneral: 1
+  acciones:
+  - accion: Tajo de espada
+    clave: tajo
+    clips:
+    - {fileID: 8300000, guid: 746ac9c784b2f7f48b6a02be7e4820ba, type: 3}
+    - {fileID: 8300000, guid: db203c02013fcd24a939a2336fe14d23, type: 3}
+    - {fileID: 8300000, guid: 5e0a91ba18f917c419cca09a1198885e, type: 3}
+    - {fileID: 8300000, guid: 52725f00c0f80e148920db2855db5df5, type: 3}
+    volumen: 0.8
+    variacionTono: 0.05
+  - accion: Tajo con elemento
+    clave: tajo_elemento
+    clips:
+    - {fileID: 8300000, guid: bfa787990e355d4489c06bc8fefc1d28, type: 3}
+    - {fileID: 8300000, guid: 39031ad5889579f4ab1e45c8c394bd8b, type: 3}
+    volumen: 0.7
+    variacionTono: 0.05
+  - accion: Aviso de ataque ligero (brillo)
+    clave: aviso_ligero
+    clips:
+    - {fileID: 8300000, guid: 76f932805282a174aa056fb55400ed24, type: 3}
+    volumen: 0.45
+    variacionTono: 0.05
+  - accion: Aviso de ataque pesado
+    clave: aviso_pesado
+    clips:
+    - {fileID: 8300000, guid: 5359708ce6830e54bbcff9e329209b8d, type: 3}
+    - {fileID: 8300000, guid: ca23e636692074d45b4bdd0cb3bf4d99, type: 3}
+    volumen: 0.6
+    variacionTono: 0.05
+  - accion: Dash
+    clave: dash
+    clips:
+    - {fileID: 8300000, guid: a8eda9d1035d21d4586f0ca6cbe7e6ac, type: 3}
+    - {fileID: 8300000, guid: e031d2569e15e8c4b83641acde5f7d53, type: 3}
+    - {fileID: 8300000, guid: 4f7ab164f62540c40af29cc64fa6ae5f, type: 3}
+    volumen: 0.7
+    variacionTono: 0.05
+  - accion: Cruce de la Ejecucion
+    clave: cruce_letal
+    clips:
+    - {fileID: 8300000, guid: ad57b03bad4b6d74c82c6b2c1f057596, type: 3}
+    volumen: 0.95
+    variacionTono: 0.05
+  - accion: Ola de luz
+    clave: ola
+    clips:
+    - {fileID: 8300000, guid: ac2e7461d64137a449f0d0c65436d0a8, type: 3}
+    - {fileID: 8300000, guid: 782ce72224b545f44b93111570064609, type: 3}
+    - {fileID: 8300000, guid: 90fc24bd2700099449054a1ec646d684, type: 3}
+    volumen: 0.55
+    variacionTono: 0.05
+  - accion: Salto
+    clave: salto
+    clips:
+    - {fileID: 8300000, guid: 6a768a2875db2cc45b5f57038c31a3b1, type: 3}
+    - {fileID: 8300000, guid: 366b65e1e04107047a8e2874f953928e, type: 3}
+    volumen: 0.5
+    variacionTono: 0.05
+  - accion: Aterrizaje del tajo descendente
+    clave: aterrizaje
+    clips:
+    - {fileID: 8300000, guid: 08838acf190993e4d93330f5941d091d, type: 3}
+    - {fileID: 8300000, guid: 129ef85b50797f14681fd7764b7936c2, type: 3}
+    volumen: 0.8
+    variacionTono: 0.05
+  - accion: Parry (el tuyo o el suyo)
+    clave: parry
+    clips:
+    - {fileID: 8300000, guid: 023cb935d511956458a10d0891fee52b, type: 3}
+    - {fileID: 8300000, guid: fc974c102c59d334294ea6ce86e0c868, type: 3}
+    - {fileID: 8300000, guid: 5f08791f4544f0b4483cc088d7c1be92, type: 3}
+    volumen: 0.9
+    variacionTono: 0.05
+  - accion: Guardia (su pose de parry)
+    clave: guardia
+    clips:
+    - {fileID: 8300000, guid: ca23e636692074d45b4bdd0cb3bf4d99, type: 3}
+    - {fileID: 8300000, guid: df4f4f0cc004df249a3c4d4afbbd35ae, type: 3}
+    volumen: 0.7
+    variacionTono: 0.05
+  - accion: 'Rugido (SUSTITUTO: no hay rugido en la libreria)'
+    clave: rugido
+    clips:
+    - {fileID: 8300000, guid: de77542fe3090a84aba4f6e96d95951e, type: 3}
+    volumen: 0.6
+    variacionTono: 0.05
+  - accion: Escudo de luz
+    clave: escudo
+    clips:
+    - {fileID: 8300000, guid: 73531fdf37d264c47a7963b0a0dfe7db, type: 3}
+    - {fileID: 8300000, guid: f5afa23d5742dd6478646717bbdbd6b5, type: 3}
+    volumen: 0.8
+    variacionTono: 0.05
+  - accion: Golpe contra el escudo
+    clave: escudo_golpe
+    clips:
+    - {fileID: 8300000, guid: 377b8b7031eea35488abf740df320d48, type: 3}
+    volumen: 0.6
+    variacionTono: 0.05
+  - accion: Escudo roto
+    clave: escudo_roto
+    clips:
+    - {fileID: 8300000, guid: 731f538797c09684489f85fff2d090ac, type: 3}
+    volumen: 0.9
+    variacionTono: 0.05
+  - accion: Se cura
+    clave: curar
+    clips:
+    - {fileID: 8300000, guid: 750eefccaee400c4d8ac23e580c1c564, type: 3}
+    volumen: 0.8
+    variacionTono: 0.05
+  - accion: Aparece una ilusion
+    clave: ilusion_aparece
+    clips:
+    - {fileID: 8300000, guid: 4fe73f76117837340a262046347c0ab6, type: 3}
+    - {fileID: 8300000, guid: 34b7af9b00f009a46bdb905065a84c99, type: 3}
+    volumen: 0.55
+    variacionTono: 0.05
+  - accion: Una ilusion se deshace
+    clave: ilusion_deshace
+    clips:
+    - {fileID: 8300000, guid: 2592febe15a360e47a0a15358bba8a3a, type: 3}
+    - {fileID: 8300000, guid: fc990cf1ee1ff5e47a6bec93fd8cee2d, type: 3}
+    volumen: 0.5
+    variacionTono: 0.05
+  - accion: Polvo que se reconstruye
+    clave: reconstruir
+    clips:
+    - {fileID: 8300000, guid: 3d4316c6c2ba4714a904483a3a37a97c, type: 3}
+    volumen: 0.9
+    variacionTono: 0.05
+  - accion: Muerte falsa (se deshace)
+    clave: muerte_falsa
+    clips:
+    - {fileID: 8300000, guid: 22e60036a75bb2349a3f85c2195a7ecc, type: 3}
+    volumen: 0.9
+    variacionTono: 0.05
+  - accion: Muerte final
+    clave: muerte_real
+    clips:
+    - {fileID: 8300000, guid: ff8205f37b5f32c4c8bb4a6e95d051a8, type: 3}
+    volumen: 1
+    variacionTono: 0.05
+  - accion: 'Aviso: Ejecucion'
+    clave: aviso_ejecucion
+    clips:
+    - {fileID: 8300000, guid: a1ebe5b7a15337a4b8b43438aacb5d03, type: 3}
+    volumen: 1
+    variacionTono: 0.05
+  - accion: 'Aviso: Sentencia'
+    clave: aviso_sentencia
+    clips:
+    - {fileID: 8300000, guid: d60f85b64d4389d4b883a0f0644773bb, type: 3}
+    volumen: 1
+    variacionTono: 0.05
+  - accion: La marca de la Sentencia se fija
+    clave: sentencia_fija
+    clips:
+    - {fileID: 8300000, guid: 41df6acd221132f4699b5e07a10e4d35, type: 3}
+    volumen: 1
+    variacionTono: 0.05
+  - accion: Tajo gigante de la Sentencia
+    clave: tajo_gigante
+    clips:
+    - {fileID: 8300000, guid: 25f183731f96ac844a4dbd808c3788a8, type: 3}
+    volumen: 1
+    variacionTono: 0.05
+  - accion: 'Aviso: El Silencio'
+    clave: aviso_silencio
+    clips:
+    - {fileID: 8300000, guid: cc1ca57b531a0f94c8df0d16097ebb17, type: 3}
+    volumen: 0.9
+    variacionTono: 0.05
+  - accion: Te delatas en El Silencio
+    clave: silencio_delatado
+    clips:
+    - {fileID: 8300000, guid: 59f7f468c61b6ea46949298f2d99417d, type: 3}
+    volumen: 1
+    variacionTono: 0.05
+  - accion: Latido
+    clave: latido
+    clips:
+    - {fileID: 8300000, guid: 77720c310b79a8544a0759cfbae40663, type: 3}
+    volumen: 0.8
+    variacionTono: 0.05
+  - accion: Aturdida
+    clave: aturdida
+    clips:
+    - {fileID: 8300000, guid: 746ac9c784b2f7f48b6a02be7e4820ba, type: 3}
+    volumen: 0.7
+    variacionTono: 0.05
+  - accion: Copia tu imbuicion
+    clave: contra_elemento
+    clips:
+    - {fileID: 8300000, guid: 9175435fe56bc484c9eae24c75c7a4d6, type: 3}
+    - {fileID: 8300000, guid: fff91c7870f5c8c44b92cff683c64733, type: 3}
+    volumen: 0.8
+    variacionTono: 0.05
+  - accion: Invoca ilusiones
+    clave: invocar
+    clips:
+    - {fileID: 8300000, guid: b01dc8811d6f14841a97d03d71809da9, type: 3}
+    volumen: 0.6
+    variacionTono: 0.05
+  - accion: Marca en el suelo
+    clave: marca
+    clips:
+    - {fileID: 8300000, guid: 76f932805282a174aa056fb55400ed24, type: 3}
+    volumen: 0.35
+    variacionTono: 0.05
+  - accion: Cuchillada fantasma
+    clave: fantasma_aviso
+    clips:
+    - {fileID: 8300000, guid: 6e692211f11739945870b20ea0c8d669, type: 3}
+    volumen: 0.6
+    variacionTono: 0.05
+  - accion: Trampas de sonido
+    clave: trampas
+    clips:
+    - {fileID: 8300000, guid: 50119274dea4b9a41966cd9bdea9b46b, type: 3}
+    volumen: 0.5
+    variacionTono: 0.05
+  - accion: Espejismo
+    clave: espejismo
+    clips:
+    - {fileID: 8300000, guid: 2aa40ce762458be4399deeb40fd60fd1, type: 3}
+    volumen: 0.6
+    variacionTono: 0.05
+  - accion: El espejismo va a explotar
+    clave: espejismo_carga
+    clips:
+    - {fileID: 8300000, guid: ff78724c5e2d6664984c7cfe37a60326, type: 3}
+    volumen: 0.6
+    variacionTono: 0.05
+  - accion: Explota el espejismo
+    clave: explosion
+    clips:
+    - {fileID: 8300000, guid: 3c1c24ed60f5b2845a75ee5ce34f7783, type: 3}
+    - {fileID: 8300000, guid: 2f9e82b8bbd10b843a6be661dae889c7, type: 3}
+    volumen: 0.9
+    variacionTono: 0.05
+  - accion: Danza de la Caceria
+    clave: danza
+    clips:
+    - {fileID: 8300000, guid: bf65cdf6d0cfc6c48a98b8d2f0b4f94c, type: 3}
+    volumen: 0.7
+    variacionTono: 0.05
+  - accion: Golpe con oscuridad contra el escudo (el cristal, mas grave)
+    clave: escudo_golpe_oscuro
+    clips:
+    - {fileID: 8300000, guid: 377b8b7031eea35488abf740df320d48, type: 3}
+    volumen: 0.75
+    variacionTono: 0.05

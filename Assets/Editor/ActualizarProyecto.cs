@@ -37,6 +37,10 @@ public static class ActualizarProyecto
     public static void Ronda8() => global::Ronda8.Todo();
     // Novena ronda: mejoras de frasco separadas, Desafios, totem-tienda y Logros.
     public static void Ronda9() => global::Ronda9.Todo();
+    // Decima ronda: The Blind Huntress (jefe secreto de los Desafios) y su arena.
+    public static void Ronda10() => global::Ronda10.Todo();
+    // Undecima ronda: parry de la Cazadora, escudo a golpes y sonidos nuevos.
+    public static void Ronda11() => global::Ronda11.Todo();
 
     public static void Ronda5()
     {

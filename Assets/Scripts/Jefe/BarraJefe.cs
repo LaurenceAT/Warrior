@@ -90,6 +90,9 @@ public class BarraJefe : MonoBehaviour
 
     public void Mostrar(bool mostrar) => alfaObjetivo = mostrar ? 1f : 0f;
 
+    // Para anadir cosas bajo la barra (segmentos de fase, escudo...).
+    public RectTransform Marco => marco;
+
     // Segunda fase con barra propia: se rellena entera con otro color y el nombre
     // cambia. Mientras se rellena no hace caso de la vida.
     public void NuevaFase(Color color, string nombre)
