@@ -199,6 +199,8 @@ public class ArenaJefe : MonoBehaviour
         barra = BarraJefe.Crear(nombre, barraPorFase ? 0f : marcaFase);
         jefe = Instantiate(prefabJefe, new Vector3(zona.center.x, zona.yMax, 0f), Quaternion.identity);
         jefe.Configurar(zona, suelo);
+        // Desafio en Dificil: un leve contorno rojizo para distinguirlo.
+        if (Desafio.Activo && Desafio.Dificil) jefe.gameObject.AddComponent<BrilloDificil>();
         EnemyHealth salud = jefe.GetComponent<EnemyHealth>();
         salud.AlCambiarVida += barra.Actualizar;
         barra.PonerEstados(salud);

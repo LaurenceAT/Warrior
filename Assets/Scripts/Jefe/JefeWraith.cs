@@ -99,6 +99,8 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
     {
         arena = zona;
         suelo = alturaSuelo;
+        // Modo Dificil de los desafios: mas vida (fuera de ellos no cambia nada).
+        if (Desafio.MultVida != 1f) salud.Revivir(VidaDesafio(salud.MaxHealth));
     }
 
     protected override void Awake()
@@ -694,6 +696,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
 
     private IEnumerator Pausa(float segundos)
     {
+        segundos = PausaDesafio(segundos);
         anim.Reproducir(fase2 ? "grande_guardia" : "guardia");
         float t = 0f;
         while (t < segundos)

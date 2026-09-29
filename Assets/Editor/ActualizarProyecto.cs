@@ -35,6 +35,8 @@ public static class ActualizarProyecto
     public static void Ronda7() => global::Ronda7.Todo();
     // Octava ronda: estatuas con pistas, decoracion, imbuiciones, muerte en el aire y sangre.
     public static void Ronda8() => global::Ronda8.Todo();
+    // Novena ronda: mejoras de frasco separadas, Desafios, totem-tienda y Logros.
+    public static void Ronda9() => global::Ronda9.Todo();
 
     public static void Ronda5()
     {

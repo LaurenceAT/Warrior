@@ -652,6 +652,20 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 33d93eb458e207842b779942de33c528, type: 3}
   - clave: estado_corroido
     sprite: {fileID: 21300000, guid: 652f4dbc97e5be64ba94464536fe872f, type: 3}
+  - clave: objeto_lagrima_curacion
+    sprite: {fileID: -2267271922981028345, guid: 29680fa37bcb2cd4cb44f224576cf015, type: 3}
+  - clave: objeto_lagrima_mana
+    sprite: {fileID: -3344190670405398769, guid: dbb55b02021e5dd48b1064563c124282, type: 3}
+  - clave: objeto_frasco_sangre
+    sprite: {fileID: -6240440480978129834, guid: 6e3257e2ed27937419fcb193f02291ff, type: 3}
+  - clave: objeto_frasco_mana
+    sprite: {fileID: -5644966865477618822, guid: 000a3f381da1803419b6545c550ca6eb, type: 3}
+  - clave: estrella
+    sprite: {fileID: -9065347158251605998, guid: 100aac3818ac5ea45b13c9eec62910d0, type: 3}
+  - clave: marca_desafio
+    sprite: {fileID: 1174838128060318702, guid: 52422dab61184ab4e91cdec0423c057d, type: 3}
+  - clave: marca_dificil
+    sprite: {fileID: -3344190670405398769, guid: 3c8e7339213cff94dabaebe44f27e6fe, type: 3}
   tajosElemento:
   - nombre: tajo_h_Fuego
     hoja: {fileID: 0}

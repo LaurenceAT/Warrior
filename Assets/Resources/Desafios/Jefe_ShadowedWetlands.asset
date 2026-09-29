@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f71912a9dcdf940876bbc943f6992b, type: 3}
+  m_Name: Jefe_ShadowedWetlands
+  m_EditorClassIdentifier: 
+  id: shadowed_wetlands
+  nombre: Shadowed Wetlands
+  escena: Nivel Nieve
+  orden: 0
+  imagen: {fileID: 21300000, guid: 5b33d5e9b882dc744a698b5487a08141, type: 3}
+  afinidades:
+  - elemento: 3
+    multiplicador: 1.4
+    cuando: Fase 1
+  - elemento: 2
+    multiplicador: 0.5
+    cuando: Fase 1
+  - elemento: 0
+    multiplicador: 1.6
+    cuando: Fase 2
+  - elemento: 4
+    multiplicador: 1.1
+    cuando: Fase 2
+  - elemento: 1
+    multiplicador: 0.2
+    cuando: Fase 2
+  - elemento: 2
+    multiplicador: 0.8
+    cuando: Fase 2
+  notaAfinidades: Con x0.5 o menos, ese elemento no le aplica su estado (ni quemadura,
+    ni escarcha...).
+  informacion: "<b>Fase 1</b> (sombra): barrido a ras de suelo con mucho alcance;
+    barrido seguido de un tajo alzado (dos ventanas de parry); rev\xE9s si est\xE1s
+    a su espalda; paso sombr\xEDo (cruza al otro lado como una esfera y sale con
+    un tajo circular); medialunas de sombra y ca\xEDda desde lo alto.\n<b>Agarre</b>:
+    pose de carga muy visible. Si te atrapa, te lanza y te corta hasta matarte; al
+    aparecer hay un instante a c\xE1mara lenta para esquivarlo.\n<b>Fase 2</b>: al
+    vaciar su vida revive imbuido en hielo, m\xE1s r\xE1pido. Deja escarcha que te
+    ralentiza y suma lanzas y estacas de hielo, ventisca y medialunas heladas. Parar
+    todos los golpes de un combo le rompe la postura."
+  historia: "Antes de la nevada eterna, estos humedales alimentaban a un pueblo entero.
+    Luego lleg\xF3 el fr\xEDo, y con \xE9l la sombra: algo que no caza por hambre,
+    sino por costumbre. Los que cruzaron la ci\xE9naga helada dicen que el silencio
+    llega antes que el agarre. Quien lo ve venir a\xFAn puede huir. Quien duda, no
+    vuelve. Lo que queda es una presencia paciente, hecha de agua negra y hielo roto,
+    que espera a quien todav\xEDa cree que el camino sigue."
+  almasCofre: 2500
+  objetosCofre: 000000000200000004000000
+  multVida: 1.5
+  multDano: 1.3
+  multVelocidad: 1.35

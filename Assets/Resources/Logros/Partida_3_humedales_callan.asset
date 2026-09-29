@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0501a0a9ad8cb4196a4b884040fa45, type: 3}
+  m_Name: Partida_3_humedales_callan
+  m_EditorClassIdentifier: 
+  id: humedales_callan
+  seccion: 0
+  orden: 3
+  nombre: Los humedales callan
+  descripcion: Derrota a Shadowed Wetlands.
+  icono: {fileID: -7848443895318311861, guid: 9ef0d82d7dab0cd409ec95a50e4fd58b, type: 3}
+  condicion: 1
+  parametro: Nivel Nieve

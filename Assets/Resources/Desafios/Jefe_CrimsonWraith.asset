@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f71912a9dcdf940876bbc943f6992b, type: 3}
+  m_Name: Jefe_CrimsonWraith
+  m_EditorClassIdentifier: 
+  id: crimson_wraith
+  nombre: Crimson Wraith
+  escena: Nivel Cueva
+  orden: 1
+  imagen: {fileID: 21300000, guid: e44b3befa9dc6704da7b24bcfd5cad5a, type: 3}
+  afinidades:
+  - elemento: 3
+    multiplicador: 1.8
+    cuando: Fase 2
+  - elemento: 2
+    multiplicador: 0.4
+    cuando: Fase 2
+  notaAfinidades: "En la fase 1 todo le hace el da\xF1o normal. En la fase 2 su coraza
+    resiste la espada sin imbuir (x0.6): hay que imbuirla."
+  informacion: "Cae del techo al empezar: un parry justo al aterrizar lo deja aturdido.\n<b>Fase
+    1</b>: alza la garra y encadena dos zarpazos; embiste cruzando la arena; lanza
+    ondas de sangre por el suelo (s\xE1ltalas); hace brotar pilares de sangre bajo
+    tus pies y suelta orbes que te persiguen (un parry los devuelve). Pilares y orbes
+    causan sangrado.\n<b>Fase 2</b> (a mitad de vida): toma su forma grande y la
+    arena se ti\xF1e de rojo. Zarpazo gigante con ondas, lluvia de fuego, teletransporte
+    a tu espalda y pilares en cadena, con menos pausa entre ataques."
+  historia: "Nadie recuerda su rostro, porque no tiene uno que la mente acepte. Crimson
+    Wraith fue algo m\xE1s antiguo que la cueva, y la monta\xF1a se cerr\xF3 a su
+    alrededor como una herida que cicatriza sobre una astilla. Se alimenta de la
+    sangre que baja hasta \xE9l: la de los mineros, la de los que vinieron a matarlo,
+    la tuya. Sus garras arrancan lo que tocan. Sus tent\xE1culos buscan en la oscuridad
+    lo que las garras no alcanzan. Y sus hechizos no piden permiso: la sangre simplemente
+    obedece. Quienes lo vieron no saben describirlo. Solo dicen que sigue creciendo."
+  almasCofre: 2500
+  objetosCofre: 000000000200000004000000
+  multVida: 1.5
+  multDano: 1.3
+  multVelocidad: 1.35

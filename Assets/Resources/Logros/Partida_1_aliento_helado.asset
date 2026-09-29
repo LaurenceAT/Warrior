@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0501a0a9ad8cb4196a4b884040fa45, type: 3}
+  m_Name: Partida_1_aliento_helado
+  m_EditorClassIdentifier: 
+  id: aliento_helado
+  seccion: 0
+  orden: 1
+  nombre: Aliento helado
+  descripcion: Llega a la zona nevada.
+  icono: {fileID: -9174533605859601842, guid: bd45e9cf28e9653498157005d3a5249a, type: 3}
+  condicion: 0
+  parametro: Nivel Nieve

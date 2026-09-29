@@ -49,7 +49,9 @@ public class MenuPrincipal : MonoBehaviour
     private TextMeshProUGUI textoTitulo;
     private Image resplandor, brilloSuelo;
     private CanvasGroup grupo;
-    private GameObject panelPrincipal, panelCargar, panelOpciones, panelControles;
+    private GameObject panelPrincipal, panelCargar, panelOpciones, panelControles, panelDesafios, panelLogros;
+    private MenuDesafios menuDesafios;
+    private MenuLogros menuLogros;
     private RectTransform listaPartidas;
     private GameObject primeroPrincipal;
     private AudioSource fuenteAmbiente;
@@ -82,7 +84,9 @@ public class MenuPrincipal : MonoBehaviour
             es.AddComponent<InputSystemUIInputModule>();
         }
         Construir();
-        Mostrar(panelPrincipal);
+        // Al volver de un desafio se abre directamente la pantalla de Desafios.
+        if (Desafio.AbrirMenuDesafios) { Desafio.AbrirMenuDesafios = false; Mostrar(panelDesafios); }
+        else Mostrar(panelPrincipal);
 
         if (ambiente != null)
         {
@@ -110,7 +114,12 @@ public class MenuPrincipal : MonoBehaviour
         Gamepad g = Gamepad.current;
         bool atras = (k != null && k.escapeKey.wasPressedThisFrame) || (m != null && m.rightButton.wasPressedThisFrame)
                      || (g != null && g.buttonEast.wasPressedThisFrame);
-        if (atras && !panelPrincipal.activeSelf && !saliendo) { SonidoMenu.Cancelar(); Mostrar(panelPrincipal); }
+        // (En Desafios, Esc primero cierra la confirmacion si esta abierta.)
+        if (atras && !panelPrincipal.activeSelf && !saliendo && !(panelDesafios.activeSelf && menuDesafios.Atras()))
+        {
+            SonidoMenu.Cancelar();
+            Mostrar(panelPrincipal);
+        }
 
         // Las listas largas (controles) bajan con las flechas, W/S o el stick.
         if (!panelPrincipal.activeSelf)
@@ -234,7 +243,11 @@ public class MenuPrincipal : MonoBehaviour
         panelCargar.SetActive(panel == panelCargar);
         panelOpciones.SetActive(panel == panelOpciones);
         panelControles.SetActive(panel == panelControles);
+        panelDesafios.SetActive(panel == panelDesafios);
+        panelLogros.SetActive(panel == panelLogros);
         if (panel == panelCargar) RellenarPartidas();
+        if (panel == panelDesafios) menuDesafios.Abrir();
+        if (panel == panelLogros) menuLogros.Abrir();
         SonidoMenu.Silenciar();
         SeleccionarPrimero();
     }
@@ -242,7 +255,10 @@ public class MenuPrincipal : MonoBehaviour
     private void SeleccionarPrimero()
     {
         if (EventSystem.current == null) return;
-        GameObject g = panelPrincipal.activeSelf ? primeroPrincipal : PrimerBoton(panelCargar.activeSelf ? panelCargar : panelOpciones.activeSelf ? panelOpciones : panelControles);
+        GameObject g = panelPrincipal.activeSelf ? primeroPrincipal
+                     : panelDesafios.activeSelf ? menuDesafios.Primero()
+                     : panelLogros.activeSelf ? menuLogros.Primero()
+                     : PrimerBoton(panelCargar.activeSelf ? panelCargar : panelOpciones.activeSelf ? panelOpciones : panelControles);
         EventSystem.current.SetSelectedGameObject(g);
     }
 
@@ -307,9 +323,11 @@ public class MenuPrincipal : MonoBehaviour
         }
 
         panelPrincipal = Panel("Principal");
-        VerticalLayoutGroup vl = Columna(panelPrincipal.transform, new Vector2(0f, -120f), 460f, 8f);
+        VerticalLayoutGroup vl = Columna(panelPrincipal.transform, new Vector2(0f, -70f), 460f, 6f);
         primeroPrincipal = Opcion("Nueva Partida", vl.transform, NuevaPartida);
         Opcion("Cargar Partida", vl.transform, () => Mostrar(panelCargar));
+        Opcion("Desafíos", vl.transform, () => Mostrar(panelDesafios));
+        Opcion("Logros", vl.transform, () => Mostrar(panelLogros));
         Opcion("Opciones", vl.transform, () => Mostrar(panelOpciones));
         Opcion("Controles", vl.transform, () => Mostrar(panelControles));
         Opcion("Salir", vl.transform, Salir);
@@ -321,6 +339,10 @@ public class MenuPrincipal : MonoBehaviour
         ConstruirCargar();
         ConstruirOpciones();
         ConstruirControles();
+        menuDesafios = MenuDesafios.Construir(lienzo, () => Mostrar(panelPrincipal));
+        panelDesafios = menuDesafios.gameObject;
+        menuLogros = MenuLogros.Construir(lienzo, () => Mostrar(panelPrincipal));
+        panelLogros = menuLogros.gameObject;
     }
 
     private GameObject Panel(string nombre)

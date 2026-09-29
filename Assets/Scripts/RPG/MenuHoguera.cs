@@ -44,8 +44,8 @@ public class MenuHoguera : MonoBehaviour
     private readonly Fila[] filas = new Fila[Progreso.NumEstadisticas];
 
     // Equipo
-    private TextMeshProUGUI textoEspada, textoFrascos, textoInventario, avisoEquipo;
-    private Button botonEspada, botonFrascos;
+    private TextMeshProUGUI textoEspada, textoFrascos, textoMana, textoInventario, avisoEquipo;
+    private Button botonEspada, botonFrascos, botonMana;
 
     private class Fila
     {
@@ -170,14 +170,24 @@ public class MenuHoguera : MonoBehaviour
         StartCoroutine(Pulso((RectTransform)botonEspada.transform));
     }
 
-    private void MejorarFrascos()
+    private void MejorarCuracion()
     {
-        if (Equipo.NivelFrascos >= Equipo.NivelMaximoFrascos) { avisoEquipo.text = "Los frascos ya están al máximo"; SonidoMenu.Error(); return; }
-        if (!Equipo.MejorarFrascos()) { avisoEquipo.text = "Te faltan Lágrimas sagradas"; SonidoMenu.Error(); return; }
-        avisoEquipo.text = $"Frascos mejorados a +{Equipo.NivelFrascos}";
+        if (Equipo.NivelCuracion >= Equipo.NivelMaximoCuracion) { avisoEquipo.text = "El frasco de sangre ya está al máximo"; SonidoMenu.Error(); return; }
+        if (!Equipo.MejorarCuracion()) { avisoEquipo.text = "Te faltan Lágrimas carmesí"; SonidoMenu.Error(); return; }
+        avisoEquipo.text = $"Frasco de sangre mejorado a +{Equipo.NivelCuracion}";
         Sonido.Reproducir("mejorar_equipo");
         Refrescar();
         StartCoroutine(Pulso((RectTransform)botonFrascos.transform));
+    }
+
+    private void MejorarMana()
+    {
+        if (Equipo.NivelMana >= Equipo.NivelMaximoMana) { avisoEquipo.text = "El frasco de maná ya está al máximo"; SonidoMenu.Error(); return; }
+        if (!Equipo.MejorarMana()) { avisoEquipo.text = "Te faltan Lágrimas celestes"; SonidoMenu.Error(); return; }
+        avisoEquipo.text = $"Frasco de maná mejorado a +{Equipo.NivelMana}";
+        Sonido.Reproducir("mejorar_equipo");
+        Refrescar();
+        StartCoroutine(Pulso((RectTransform)botonMana.transform));
     }
 
     private IEnumerator Pulso(RectTransform r)
@@ -215,21 +225,26 @@ public class MenuHoguera : MonoBehaviour
         textoFicha.text = Ficha();
 
         // Equipo
-        int ne = Equipo.NivelEspada, nf = Equipo.NivelFrascos;
-        int piedras = Equipo.Cantidad(Equipo.Objeto.PiedraForja), lagrimas = Equipo.Cantidad(Equipo.Objeto.LagrimaSagrada);
-        bool espadaMax = ne >= Equipo.NivelMaximoEspada, frascosMax = nf >= Equipo.NivelMaximoFrascos;
+        int ne = Equipo.NivelEspada, nf = Equipo.NivelCuracion, nm = Equipo.NivelMana;
+        int piedras = Equipo.Cantidad(Equipo.Objeto.PiedraForja), lagrimas = Equipo.Cantidad(Equipo.Objeto.LagrimaCarmesi);
+        int celestes = Equipo.Cantidad(Equipo.Objeto.LagrimaCeleste);
+        bool espadaMax = ne >= Equipo.NivelMaximoEspada, frascosMax = nf >= Equipo.NivelMaximoCuracion, manaMax = nm >= Equipo.NivelMaximoMana;
         textoEspada.text = $"<size=120%><b>Espada +{ne}</b></size>  <color={Gris}>/ +{Equipo.NivelMaximoEspada}</color>\n" +
             (espadaMax ? $"Daño  <color={Oro}>x{Equipo.MultiplicadorEspadaEn(ne):0.00}</color>   <color={Gris}>(al máximo)</color>"
                        : $"Daño  x{Equipo.MultiplicadorEspadaEn(ne):0.00}  <color={Gris}>→</color>  <color={Verde}>x{Equipo.MultiplicadorEspadaEn(ne + 1):0.00}</color>\n" +
                          $"Cuesta {Equipo.CosteEspada} Piedra de forja  <color={(piedras >= Equipo.CosteEspada ? Verde : Rojo)}>(tienes {piedras})</color>");
-        textoFrascos.text = $"<size=120%><b>Frascos +{nf}</b></size>  <color={Gris}>/ +{Equipo.NivelMaximoFrascos}</color>\n" +
-            (frascosMax ? $"Sangre cura {Pct(Equipo.CuraFrascoEn(nf))}  ·  Maná devuelve {Pct(Equipo.ManaFrascoEn(nf))}   <color={Gris}>(al máximo)</color>"
-                        : $"Sangre cura {Pct(Equipo.CuraFrascoEn(nf))} <color={Gris}>→</color> <color={Verde}>{Pct(Equipo.CuraFrascoEn(nf + 1))}</color>   ·   " +
-                          $"Maná devuelve {Pct(Equipo.ManaFrascoEn(nf))} <color={Gris}>→</color> <color={Verde}>{Pct(Equipo.ManaFrascoEn(nf + 1))}</color>\n" +
-                          $"Cuesta {Equipo.CosteFrascos} Lágrima sagrada  <color={(lagrimas >= Equipo.CosteFrascos ? Verde : Rojo)}>(tienes {lagrimas})</color>");
+        textoFrascos.text = $"<size=120%><b>Frasco de sangre +{nf}</b></size>  <color={Gris}>/ +{Equipo.NivelMaximoCuracion}</color>\n" +
+            (frascosMax ? $"Cura {Pct(Equipo.CuraFrascoEn(nf))} de la vida   <color={Gris}>(al máximo)</color>"
+                        : $"Cura {Pct(Equipo.CuraFrascoEn(nf))} <color={Gris}>→</color> <color={Verde}>{Pct(Equipo.CuraFrascoEn(nf + 1))}</color> de la vida\n" +
+                          $"Cuesta {Equipo.CosteFrascos} Lágrima carmesí  <color={(lagrimas >= Equipo.CosteFrascos ? Verde : Rojo)}>(tienes {lagrimas})</color>");
+        textoMana.text = $"<size=120%><b>Frasco de maná +{nm}</b></size>  <color={Gris}>/ +{Equipo.NivelMaximoMana}</color>\n" +
+            (manaMax ? $"Devuelve {Pct(Equipo.ManaFrascoEn(nm))} del maná   <color={Gris}>(al máximo)</color>"
+                     : $"Devuelve {Pct(Equipo.ManaFrascoEn(nm))} <color={Gris}>→</color> <color={Verde}>{Pct(Equipo.ManaFrascoEn(nm + 1))}</color> del maná\n" +
+                       $"Cuesta {Equipo.CosteFrascos} Lágrima celeste  <color={(celestes >= Equipo.CosteFrascos ? Verde : Rojo)}>(tienes {celestes})</color>");
         botonEspada.GetComponent<OpcionEstilo>().PonerActiva(!espadaMax && piedras >= Equipo.CosteEspada);
         botonFrascos.GetComponent<OpcionEstilo>().PonerActiva(!frascosMax && lagrimas >= Equipo.CosteFrascos);
-        textoInventario.text = $"Piedras de forja: <b>{piedras}</b>      Lágrimas sagradas: <b>{lagrimas}</b>";
+        botonMana.GetComponent<OpcionEstilo>().PonerActiva(!manaMax && celestes >= Equipo.CosteFrascos);
+        textoInventario.text = $"Piedras de forja: <b>{piedras}</b>      Lágrimas carmesí: <b>{lagrimas}</b>      Lágrimas celestes: <b>{celestes}</b>";
     }
 
     private static string Pct(float f) => Mathf.RoundToInt(f * 100f) + " %";
@@ -387,16 +402,17 @@ public class MenuHoguera : MonoBehaviour
 
     private void ConstruirEquipo(Transform raiz)
     {
-        RectTransform panel = EstiloMenu.Panel(raiz, "MEJORAR EQUIPAMIENTO", new Vector2(1100f, 760f));
+        RectTransform panel = EstiloMenu.Panel(raiz, "MEJORAR EQUIPAMIENTO", new Vector2(1100f, 930f));
         paginaEquipo = (RectTransform)panel.parent;
 
         textoInventario = EstiloMenu.Texto("", panel, 24, new Color(0.85f, 0.8f, 0.72f));
         EstiloMenu.Arriba(textoInventario.rectTransform, -112f, 34f);
 
         RecursosRPG r = RecursosRPG.Get();
-        VerticalLayoutGroup col = EstiloMenu.Columna(panel, 60f, 60f, 170f, 110f, 18f);
+        VerticalLayoutGroup col = EstiloMenu.Columna(panel, 60f, 60f, 165f, 100f, 14f);
         botonEspada = Seccion(col.transform, "Mejorar espada", r.Icono("objeto_piedra"), MejorarEspada, out textoEspada);
-        botonFrascos = Seccion(col.transform, "Mejorar frascos (sangre y maná)", r.Icono("objeto_lagrima"), MejorarFrascos, out textoFrascos);
+        botonFrascos = Seccion(col.transform, "Mejorar frasco de sangre", r.Icono("objeto_lagrima_curacion"), MejorarCuracion, out textoFrascos);
+        botonMana = Seccion(col.transform, "Mejorar frasco de maná", r.Icono("objeto_lagrima_mana"), MejorarMana, out textoMana);
         EstiloMenu.Opcion(col.transform, "Volver", () => Mostrar(Pagina.Principal), 56f, 26f);
         avisoEquipo = Aviso(panel, 55f);
     }

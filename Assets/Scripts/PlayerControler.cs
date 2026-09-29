@@ -700,6 +700,9 @@ public class PlayerControler : MonoBehaviour
     [Tooltip("Animacion de derribo para morir en el aire: el ultimo fotograma es el cuerpo tumbado en el suelo.")]
     [SerializeField] private Sprite[] fotogramasCaidaMuerte;
 
+    // Cada vez que muere el player (logros, contador de muertes de los desafios).
+    public static event System.Action AlMorir;
+
     [Header("Tinte de los estados negativos")]
     [Tooltip("Cuanto se tine el personaje con un estado (sangrado rojo, congelacion azul, quemadura naranja). 0 = nada.")]
     [Range(0f, 1f)] [SerializeField] private float tinteEstados = 0.7f;
@@ -855,7 +858,8 @@ public class PlayerControler : MonoBehaviour
 
         // Con la rueda de imbuir o el menu de la hoguera abiertos, el player no
         // hace nada (y lo que se pulse ahi no cuenta como ataque o salto).
-        if (RuedaImbuir.Abierta || RuedaPociones.Abierta || MenuHoguera.Abierto || CuadroPista.Abierto || isAgarrado || levantandoObjeto)
+        if (RuedaImbuir.Abierta || RuedaPociones.Abierta || MenuHoguera.Abierto || CuadroPista.Abierto || TiendaTotem.Abierta
+            || PantallaDesafio.Abierta || isAgarrado || levantandoObjeto)
         {
             LimpiarEntradas();
             if (!isAgarrado && isGrounded) m_rigitbody2D.linearVelocity = new Vector2(0f, m_rigitbody2D.linearVelocityY);
@@ -2592,7 +2596,8 @@ public class PlayerControler : MonoBehaviour
         if (!m_gatherInput.IsInteracting) return;
         m_gatherInput.IsInteracting = false;
         // La F que cierra un menu no debe volver a abrirlo.
-        if (Time.unscaledTime - MenuHoguera.UltimoCierre < 0.3f || Time.unscaledTime - CuadroPista.UltimoCierre < 0.3f) return;
+        if (Time.unscaledTime - MenuHoguera.UltimoCierre < 0.3f || Time.unscaledTime - CuadroPista.UltimoCierre < 0.3f
+            || Time.unscaledTime - TiendaTotem.UltimoCierre < 0.3f) return;
         if (cerca == null || !isGrounded) return;
         if (isAttacking || isDodging || isShooting || isDrinking || isImbuing || isBlocking || isTogglingWeapon) return;
         cerca.Interactuar(this);
@@ -3880,6 +3885,8 @@ public class PlayerControler : MonoBehaviour
     {
         SiguienteGolpeMagico = false;
         SiguienteGolpeFisico = false;
+        // Desafio en modo Dificil: el jefe pega mas (1 fuera de el).
+        damage = Mathf.RoundToInt(damage * Desafio.MultDano);
         damage = ConResistencia(damage, tipo == TipoDano.Magico);
 
         if (atacante != null && isBlocking && !isInvincible && GolpeDeFrente(atacante.transform))
@@ -4347,6 +4354,7 @@ public class PlayerControler : MonoBehaviour
     // muerte sale al tocar el suelo (CaidaMuerte).
     public void Die()
     {
+        AlMorir?.Invoke();
         Progreso.Morir(ultimoSueloSeguro, SceneManager.GetActiveScene().name);
         Sonido.Reproducir("muerte_player");
         bool agarrado = isAgarrado;

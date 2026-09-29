@@ -97,6 +97,17 @@ public static class Progreso
         AlCambiarAlmas?.Invoke();
     }
 
+    // Paga almas (la tienda del totem). False si no llegan.
+    public static bool Gastar(int cantidad)
+    {
+        Cargar();
+        if (cantidad < 0 || almas < cantidad) return false;
+        almas -= cantidad;
+        Guardar();
+        AlCambiarAlmas?.Invoke();
+        return true;
+    }
+
     public static bool PuedeSubir(Estadistica e) => Almas >= CosteSiguiente && Nivel(e) < NivelMaximo;
 
     public static bool Subir(Estadistica e)
@@ -133,9 +144,13 @@ public static class Progreso
 
     // ------------------------------------------------------------------ Guardado
 
+    // En un desafio el personaje es otro: no se lee ni se escribe nada en
+    // PlayerPrefs (asi no se mezcla con la partida normal).
+    public static bool Aislado { get; set; }
+
     private static void Cargar()
     {
-        if (cargado) return;
+        if (cargado || Aislado) return;
         cargado = true;
         almas = PlayerPrefs.GetInt("rpg_almas", 0);
         for (int i = 0; i < NumEstadisticas; i++) niveles[i] = PlayerPrefs.GetInt("rpg_nivel_" + i, 0);
@@ -146,6 +161,7 @@ public static class Progreso
 
     private static void Guardar()
     {
+        if (Aislado) return;
         PlayerPrefs.SetInt("rpg_almas", almas);
         for (int i = 0; i < NumEstadisticas; i++) PlayerPrefs.SetInt("rpg_nivel_" + i, niveles[i]);
         PlayerPrefs.SetInt("rpg_mancha", AlmasPerdidas);

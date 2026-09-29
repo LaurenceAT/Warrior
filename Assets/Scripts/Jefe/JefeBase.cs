@@ -25,6 +25,11 @@ public abstract class JefeBase : EnemigoBase
         else Sonido.Reproducir(clave, volumen, tono);
     }
 
+    // Modo Dificil de los desafios (fuera de ellos todo vale 1): mas vida y
+    // menos pausa entre ataques. El dano extra lo pone el player al recibirlo.
+    protected static int VidaDesafio(int vida) => Mathf.Max(1, Mathf.RoundToInt(vida * Desafio.MultVida));
+    protected static float PausaDesafio(float segundos) => segundos / Desafio.MultVelocidad;
+
     protected void AvisarAterrizaje() => AlAterrizar?.Invoke();
     protected void AvisarCambioFase() => AlCambiarFase?.Invoke();
     protected void AvisarDerrota() => AlDerrotado?.Invoke();

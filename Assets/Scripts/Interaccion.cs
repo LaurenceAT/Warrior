@@ -79,6 +79,9 @@ public class AvisoInteraccion : MonoBehaviour
 
     private void LateUpdate()
     {
+        // Un cartel copiado junto con su objeto (Instantiate) no sabe de quien es:
+        // el objeto nuevo ya crea el suyo.
+        if (duenio == null || (duenio is Object o && o == null)) { Destroy(gameObject); return; }
         bool activo = Interacciones.Actual == duenio && duenio.PuedeInteractuar;
         bool forzando = Time.time < finForzado;
         alfa = Mathf.MoveTowards(alfa, activo || forzando ? 1f : 0f, Time.unscaledDeltaTime * 5f);

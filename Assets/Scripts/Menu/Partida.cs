@@ -33,7 +33,13 @@ public static class Partida
         public string fecha;
         public List<string> banderas = new List<string>();
         // Equipo (ver Equipo): objetos de mejora y nivel de la espada y los frascos.
+        // "lagrimas" y "nivelFrascos" son de antes (una mejora para los dos
+        // frascos): al cargar se pasan a las de sangre y de mana (version 2).
         public int piedrasForja, lagrimas, nivelEspada, nivelFrascos;
+        public int version;
+        public int lagrimasCuracion, lagrimasMana, nivelCuracion, nivelMana;
+        // Cargas extra de cada frasco.
+        public int frascosSangre, frascosMana;
         // Pistas de las estatuas ya leidas (el libro de pistas del menu de pausa).
         public List<PistaLeida> pistas = new List<PistaLeida>();
         // Manchas de sangre que deja el player al morir, por nivel.
@@ -85,13 +91,42 @@ public static class Partida
         int ranura = Listar().Select(d => d.ranura).DefaultIfEmpty(0).Max() + 1;
         Progreso.Reiniciar();
         Equipo.Reiniciar();
-        Actual = new Datos { ranura = ranura, escena = primeraEscena, lugar = "Inicio", fecha = DateTime.Now.ToString("dd/MM/yyyy HH:mm") };
+        Actual = new Datos { ranura = ranura, escena = primeraEscena, lugar = "Inicio", fecha = DateTime.Now.ToString("dd/MM/yyyy HH:mm"), version = VersionActual };
         AparicionPendiente = false;
         Guardar();
     }
 
+    private const int VersionActual = 2;
+
+    // Partidas de antes de separar las mejoras de los frascos: la mejora comun
+    // pasa a las dos (el mismo poder que tenian).
+    private static void Migrar(Datos d)
+    {
+        if (d == null || d.version >= VersionActual) return;
+        d.lagrimasCuracion += d.lagrimas;
+        d.lagrimasMana += d.lagrimas;
+        d.lagrimas = 0;
+        d.nivelCuracion = Mathf.Max(d.nivelCuracion, d.nivelFrascos);
+        d.nivelMana = Mathf.Max(d.nivelMana, d.nivelFrascos);
+        d.nivelFrascos = 0;
+        // El frasco extra de sangre de antes era una bandera.
+        if (d.banderas != null && d.banderas.Contains("frasco_extra")) d.frascosSangre = Mathf.Max(d.frascosSangre, 1);
+        d.version = VersionActual;
+    }
+
+    // Sin partida activa (los desafios): nada de lo que pase se guarda en ella.
+    public static void Descargar()
+    {
+        Actual = null;
+        AparicionPendiente = false;
+        banderasSesion.Clear();
+        pistasSesion.Clear();
+        manchasSesion.Clear();
+    }
+
     public static void Cargar(Datos d)
     {
+        Migrar(d);
         Actual = d;
         Progreso.Establecer(d.almas, d.niveles, d.manchaAlmas, new Vector2(d.manchaX, d.manchaY), d.manchaEscena);
         AparicionPendiente = d.enHoguera;

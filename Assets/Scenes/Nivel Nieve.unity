@@ -12632,8 +12632,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clave: mejora_1
-  objeto: 1
+  objeto: 2
   cantidad: 1
+  extra: 03000000
+  almas: 0
   visual: {fileID: 2015716164}
   reposo:
   - {fileID: -1149997312631328869, guid: d8deb79a9acfa854da0d085ebb60f1cc, type: 3}

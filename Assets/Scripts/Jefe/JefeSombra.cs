@@ -135,7 +135,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
 
     protected override void Start()
     {
-        salud.Revivir(vidaFase1);
+        salud.Revivir(VidaDesafio(vidaFase1));
         base.Start();
     }
 
@@ -911,7 +911,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
         ScreenFlash.Destello(new Color(0.75f, 0.95f, 1f, 0.55f), 0.5f);
         Sacudir(2.2f);
         CamaraDinamica.CamaraLenta(0.3f, 0.5f);
-        salud.Revivir(vidaFase2);
+        salud.Revivir(VidaDesafio(vidaFase2));
         AvisarCambioFase();
         MensajePantalla.Titulo("SEGUNDA FORMA", "Imbuido en escarcha");
 
@@ -1006,6 +1006,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
 
     private IEnumerator Pausa(float segundos)
     {
+        segundos = PausaDesafio(segundos);
         anim.Reproducir("quieto");
         for (float t = 0f; t < segundos; t += Time.deltaTime)
         {

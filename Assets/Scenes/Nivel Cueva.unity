@@ -10984,6 +10984,8 @@ MonoBehaviour:
   clave: mejora_1
   objeto: 0
   cantidad: 1
+  extra: 
+  almas: 0
   visual: {fileID: 397649306}
   reposo:
   - {fileID: 7300178513047545148, guid: 68e9f43ecdc7fa1469752e2207055eff, type: 3}
@@ -92768,7 +92770,7 @@ MonoBehaviour:
   barraPorFase: 0
   colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
   nombreFase2: 
-  recompensa: 0000000001000000
+  recompensa: 000000000200000003000000
   muroNiebla: {fileID: 1669088722}
   visualNiebla:
   - {fileID: 1619945685}

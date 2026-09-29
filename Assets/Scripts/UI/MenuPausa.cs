@@ -50,7 +50,7 @@ public class MenuPausa : MonoBehaviour
         StopAllCoroutines();
         confirmarSalir = false;
         if (libroAbierto) CerrarLibro(false);
-        if (textoSalir != null) textoSalir.text = "Salir al menú";
+        if (textoSalir != null) textoSalir.text = Desafio.Activo ? "Abandonar desafío" : "Salir al menú";
         if (textoLugar != null)
             textoLugar.text = $"{Partida.NombreNivel(SceneManager.GetActiveScene().name)}   ·   Nivel {Progreso.NivelTotal}   ·   Almas {Progreso.Almas:N0}";
         gameObject.SetActive(true);
@@ -205,9 +205,11 @@ public class MenuPausa : MonoBehaviour
         if (!confirmarSalir)
         {
             confirmarSalir = true;
-            textoSalir.text = "¿Seguro? Pulsa otra vez";
+            textoSalir.text = Desafio.Activo ? "¿Abandonar? Pulsa otra vez" : "¿Seguro? Pulsa otra vez";
             return;
         }
+        // En un desafio: se abandona y se vuelve al menu de Desafios (sin guardar nada).
+        if (Desafio.Activo) { Desafio.Salir(); return; }
         Time.timeScale = 1f;
         Partida.Guardar();
         if (GameManager.Instance != null) GameManager.Instance.ResumeGame();

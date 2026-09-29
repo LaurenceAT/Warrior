@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72f84d620cf6f644b8505fbacdd7cf6b, type: 3}
+  m_Name: Tienda
+  m_EditorClassIdentifier: 
+  articulos:
+  - id: arma
+    nombre: Mejora de arma
+    objeto: 0
+    precio: 1100
+    requiere: 
+  - id: curacion
+    nombre: "Mejora de curaci\xF3n"
+    objeto: 2
+    precio: 650
+    requiere: 
+  - id: mana
+    nombre: "Mejora de recuperaci\xF3n"
+    objeto: 3
+    precio: 550
+    requiere: 
+  - id: sangre_1
+    nombre: Frasco de sangre I
+    objeto: 4
+    precio: 450
+    requiere: 
+  - id: sangre_2
+    nombre: Frasco de sangre II
+    objeto: 4
+    precio: 750
+    requiere: sangre_1
+  - id: sangre_3
+    nombre: Frasco de sangre III
+    objeto: 4
+    precio: 1100
+    requiere: sangre_2
+  - id: mana_1
+    nombre: "Frasco de man\xE1 I"
+    objeto: 5
+    precio: 400
+    requiere: 
+  - id: mana_2
+    nombre: "Frasco de man\xE1 II"
+    objeto: 5
+    precio: 650
+    requiere: mana_1
+  frases:
+  - "Las almas no pesan. Lo que compras con ellas, s\xED."
+  - Todo tiene un precio. Hasta el descanso.
+  - "Elige. Lo que dejes aqu\xED, no volver\xE1."
+  - "Otros vinieron con las manos llenas. Aqu\xED quedaron sus huesos."
+  - Gasta con cuidado, o no gastes.
+  - "El t\xF3tem escucha. El t\xF3tem no perdona."
+  - No alcanza para todo. Nunca alcanza.
+  - Las almas que cargas no te pertenecen. Solo las guardas un rato.
+  velocidadFrase: 40
+  spriteTotem: {fileID: 4907332249421691957, guid: 99e06841d0b6bf44fa8d8f53077f3cae, type: 3}
+  sombraTotem: {fileID: 2119509879661765413, guid: 99e06841d0b6bf44fa8d8f53077f3cae, type: 3}
+  altoTotem: 2.6
+  alturaVuelo: 0.35
+  vaivenTotem: 0.08
+  ritmoVaiven: 1.3
+  brilloRunas: {r: 0.3, g: 0.95, b: 1, a: 1}

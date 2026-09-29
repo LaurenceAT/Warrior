@@ -36,16 +36,16 @@ public class ReservaPociones : MonoBehaviour
     private static ReservaPociones instancia;
 
     public int Cargas => cargas;
-    public int Maximo => maximo;
+    public int Maximo => maximo + Equipo.FrascosSangreExtra;
     public int Curacion => curacion;
     public float FraccionCuracion => Equipo.CuraFrasco;
     public bool RecompensaCogida => recompensaCogida;
     public int CargasMana => cargasMana;
-    public int MaximoMana => maximoMana;
+    public int MaximoMana => maximoMana + Equipo.FrascosManaExtra;
     public float FraccionMana => Equipo.ManaFrasco;
     public Tipo Elegida => elegida;
     public int CargasDe(Tipo t) => t == Tipo.Vida ? cargas : cargasMana;
-    public int MaximoDe(Tipo t) => t == Tipo.Vida ? maximo : maximoMana;
+    public int MaximoDe(Tipo t) => t == Tipo.Vida ? Maximo : MaximoMana;
 
     public static ReservaPociones Get()
     {
@@ -59,16 +59,34 @@ public class ReservaPociones : MonoBehaviour
     {
         if (instancia != null && instancia != this) { Destroy(gameObject); return; }
         instancia = this;
-        // El frasco extra del camino secreto (si esta partida ya lo cogio).
-        if (Partida.Bandera("frasco_extra")) { maximo++; recompensaCogida = true; }
-        cargas = maximo;
-        cargasMana = maximoMana;
+        // El frasco extra del camino secreto ya cogido (las cargas extra de cada
+        // frasco estan en Equipo).
+        recompensaCogida = Partida.Bandera("frasco_extra");
+        cargas = Maximo;
+        cargasMana = MaximoMana;
+        maximoAntes = Maximo;
+        maximoManaAntes = MaximoMana;
         ContadorPociones.Crear(this);
     }
 
     // Se rellenan al descansar en la hoguera y al reaparecer tras morir.
-    private void OnEnable() { Hoguera.AlDescansar += Rellenar; GameManager.AlReaparecerPlayer += Rellenar; }
-    private void OnDisable() { Hoguera.AlDescansar -= Rellenar; GameManager.AlReaparecerPlayer -= Rellenar; }
+    private void OnEnable() { Hoguera.AlDescansar += Rellenar; GameManager.AlReaparecerPlayer += Rellenar; Equipo.AlCambiar += CambioEquipo; }
+    private void OnDisable() { Hoguera.AlDescansar -= Rellenar; GameManager.AlReaparecerPlayer -= Rellenar; Equipo.AlCambiar -= CambioEquipo; }
+
+    private int maximoAntes = -1, maximoManaAntes = -1;
+
+    // Un frasco nuevo (recogido o comprado) llega lleno: suma una carga al momento.
+    private void CambioEquipo()
+    {
+        if (maximoAntes >= 0 && Maximo > maximoAntes) cargas += Maximo - maximoAntes;
+        if (maximoManaAntes >= 0 && MaximoMana > maximoManaAntes) cargasMana += MaximoMana - maximoManaAntes;
+        cargas = Mathf.Min(cargas, Maximo);
+        cargasMana = Mathf.Min(cargasMana, MaximoMana);
+        maximoAntes = Maximo;
+        maximoManaAntes = MaximoMana;
+        AlCambiar?.Invoke(cargas, Maximo);
+        AlCambiarAlgo?.Invoke();
+    }
     private void OnDestroy() { if (instancia == this) instancia = null; }
 
     public bool Gastar() => Gastar(Tipo.Vida);
@@ -77,7 +95,7 @@ public class ReservaPociones : MonoBehaviour
     {
         if (CargasDe(t) <= 0) return false;
         if (t == Tipo.Vida) cargas--; else cargasMana--;
-        AlCambiar?.Invoke(cargas, maximo);
+        AlCambiar?.Invoke(cargas, Maximo);
         AlCambiarAlgo?.Invoke();
         AlBeber?.Invoke();
         return true;
@@ -86,9 +104,9 @@ public class ReservaPociones : MonoBehaviour
     // Un trago cortado antes de hacer efecto no gasta la carga.
     public void Devolver(Tipo t)
     {
-        if (t == Tipo.Vida) cargas = Mathf.Min(maximo, cargas + 1);
-        else cargasMana = Mathf.Min(maximoMana, cargasMana + 1);
-        AlCambiar?.Invoke(cargas, maximo);
+        if (t == Tipo.Vida) cargas = Mathf.Min(Maximo, cargas + 1);
+        else cargasMana = Mathf.Min(MaximoMana, cargasMana + 1);
+        AlCambiar?.Invoke(cargas, Maximo);
         AlCambiarAlgo?.Invoke();
     }
 
@@ -100,21 +118,19 @@ public class ReservaPociones : MonoBehaviour
 
     public void Rellenar()
     {
-        cargas = maximo;
-        cargasMana = maximoMana;
-        AlCambiar?.Invoke(cargas, maximo);
+        cargas = Maximo;
+        cargasMana = MaximoMana;
+        AlCambiar?.Invoke(cargas, Maximo);
         AlCambiarAlgo?.Invoke();
     }
 
     // La recompensa del camino secreto: una carga mas para siempre (y llena).
+    // Solo una por partida (la marca "frasco_extra").
     public void AumentarMaximo()
     {
-        maximo++;
-        cargas++;
         recompensaCogida = true;
         Partida.PonerBandera("frasco_extra");
-        AlCambiar?.Invoke(cargas, maximo);
-        AlCambiarAlgo?.Invoke();
+        Equipo.Sumar(Equipo.Objeto.FrascoSangre);
     }
 
     // Frasco de pixel art dibujado a mano en codigo (16x20): cristal, liquido rojo
@@ -181,7 +197,7 @@ public class ContadorPociones : MonoBehaviour
         RecursosRPG rec = RecursosRPG.Get();
         Sprite vida = rec.Icono("pocion");
         cp.huecos[0] = cp.NuevoHueco(go.transform, "Vida", vida != null ? vida : ReservaPociones.Frasco(), new Vector2(44f, 60f));
-        cp.huecos[1] = cp.NuevoHueco(go.transform, "Mana", rec.Icono("pocion_mana"), new Vector2(214f, 60f));
+        cp.huecos[1] = cp.NuevoHueco(go.transform, "Mana", rec.Icono("pocion_mana"), new Vector2(250f, 60f));
 
         ReservaPociones.AlCambiarAlgo += cp.Actualizar;
         ReservaPociones.AlBeber += cp.Pulso;
@@ -198,7 +214,7 @@ public class ContadorPociones : MonoBehaviour
         h.caja.anchorMin = h.caja.anchorMax = new Vector2(0f, 0f);
         h.caja.pivot = new Vector2(0f, 0f);
         h.caja.anchoredPosition = pos;
-        h.caja.sizeDelta = new Vector2(170f, 70f);
+        h.caja.sizeDelta = new Vector2(200f, 70f);
 
         h.icono = new GameObject("Frasco").AddComponent<Image>();
         h.icono.transform.SetParent(h.caja, false);
@@ -221,7 +237,7 @@ public class ContadorPociones : MonoBehaviour
         rt.anchorMin = rt.anchorMax = new Vector2(0f, 0.5f);
         rt.pivot = new Vector2(0f, 0.5f);
         rt.anchoredPosition = new Vector2(56f, 0f);
-        rt.sizeDelta = new Vector2(120f, 50f);
+        rt.sizeDelta = new Vector2(150f, 50f);
         return h;
     }
 

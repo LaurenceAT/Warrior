@@ -33,6 +33,8 @@ public static class PruebaNieve
     public static void DecoracionPrueba() => Lanzar("decoracion", System.Environment.GetEnvironmentVariable("VISTAS_ESCENA") ?? Escena);
     public static void PocionesPrueba() => Lanzar("pociones", Escena);
     public static void Ronda6Prueba() => Lanzar("ronda6", Escena);
+    public static void DesafioPrueba() => Lanzar("desafio", "Assets/Scenes/Menu Principal.unity");
+    public static void DesafioDificilPrueba() => Lanzar("desafio2", "Assets/Scenes/Menu Principal.unity");
     public static void Ronda8Prueba() => Lanzar("ronda8", System.Environment.GetEnvironmentVariable("VISTAS_ESCENA") ?? Escena);
     public static void MenuPrueba() => Lanzar("menu", "Assets/Scenes/Menu Principal.unity");
     public static void PintarPrueba() => Lanzar("pintar", Escena);
@@ -75,10 +77,10 @@ public static class PruebaNieve
             Directory.CreateDirectory(carpeta);
             Progreso.Reiniciar();
             PlayerPrefs.DeleteKey("cofre_Nivel Nieve_cofre");
-            if (modo == "menu")
+            if (modo == "menu" || modo == "desafio" || modo == "desafio2")
             {
                 Object.DontDestroyOnLoad(gameObject);
-                IEnumerator rm = Menu();
+                IEnumerator rm = modo == "desafio" ? PruebaDesafio() : modo == "desafio2" ? PruebaDesafioDificil() : Menu();
                 while (rm.MoveNext()) yield return rm.Current;
                 Debug.Log("[Prueba] fin");
                 EditorApplication.ExitPlaymode();
@@ -773,10 +775,10 @@ public static class PruebaNieve
             yield return new WaitForSecondsRealtime(0.3f);
             yield return Captura("r6_08_hoguera_equipo_antes", true);
             Llamar(menu, "MejorarEspada");
-            Llamar(menu, "MejorarFrascos");
+            Llamar(menu, "MejorarCuracion");
             yield return new WaitForSecondsRealtime(0.3f);
             yield return Captura("r6_09_hoguera_equipo_despues", true);
-            Debug.Log($"[R6] espada +{Equipo.NivelEspada} x{Equipo.MultiplicadorEspada:0.00} frascos +{Equipo.NivelFrascos} cura={Equipo.CuraFrasco:0.00} mana={Equipo.ManaFrasco:0.00}");
+            Debug.Log($"[R6] espada +{Equipo.NivelEspada} x{Equipo.MultiplicadorEspada:0.00} frascos sangre +{Equipo.NivelCuracion} mana +{Equipo.NivelMana} cura={Equipo.CuraFrasco:0.00} mana={Equipo.ManaFrasco:0.00}");
             float anchoAntes = Ancho("Vida");
             Llamar(menu, "Cerrar");
             yield return new WaitForSeconds(0.45f);
@@ -790,13 +792,13 @@ public static class PruebaNieve
             CofreMejora cofre = Object.FindFirstObjectByType<CofreMejora>();
             if (cofre != null)
             {
-                int l0 = Equipo.Cantidad(Equipo.Objeto.LagrimaSagrada), p0 = Equipo.Cantidad(Equipo.Objeto.PiedraForja);
+                int l0 = Equipo.Cantidad(Equipo.Objeto.LagrimaCarmesi), p0 = Equipo.Cantidad(Equipo.Objeto.PiedraForja);
                 Teletransportar(cofre.transform.position + Vector3.left * 0.6f + Vector3.up * 0.4f);
                 yield return new WaitForSeconds(1f);
                 yield return Captura("r6_12_cofre_brillo", false);
                 Entrada().IsInteracting = true;
                 yield return new WaitForSeconds(1.1f);
-                Debug.Log($"[R6] cofre abierto={cofre.Abierto} levantando={p.LevantandoObjeto} lagrimas {l0}->{Equipo.Cantidad(Equipo.Objeto.LagrimaSagrada)} piedras {p0}->{Equipo.Cantidad(Equipo.Objeto.PiedraForja)}");
+                Debug.Log($"[R6] cofre abierto={cofre.Abierto} levantando={p.LevantandoObjeto} lagrimas {l0}->{Equipo.Cantidad(Equipo.Objeto.LagrimaCarmesi)} piedras {p0}->{Equipo.Cantidad(Equipo.Objeto.PiedraForja)}");
                 yield return Captura("r6_13_objeto_levantado", true);
                 yield return new WaitForSeconds(2.5f);
                 Debug.Log($"[R6] tras levantar: levantando={p.LevantandoObjeto}");
@@ -847,6 +849,180 @@ public static class PruebaNieve
         }
 
         // ------------------------------------------------------------------ Menu principal
+
+        // ------------------------------------------------------------------ Desafios (Ronda 9)
+
+        private IEnumerator PruebaDesafio()
+        {
+            Partida.CarpetaPruebas = Path.Combine(carpeta, "Partidas");
+            if (Directory.Exists(Partida.CarpetaPruebas)) Directory.Delete(Partida.CarpetaPruebas, true);
+            Directory.CreateDirectory(Partida.CarpetaPruebas);
+            Globales.Recargar();
+
+            // Una partida vieja (antes de separar los frascos): se migra al cargar.
+            string vieja = Path.Combine(Partida.CarpetaPruebas, "partida_1.json");
+            File.WriteAllText(vieja, "{\"ranura\":1,\"escena\":\"Nivel Nieve\",\"lugar\":\"Inicio\",\"almas\":77,\"niveles\":[1,0,0,0,0]," +
+                                     "\"lagrimas\":2,\"nivelFrascos\":1,\"piedrasForja\":1,\"banderas\":[\"frasco_extra\"],\"fecha\":\"01/01/2026 10:00\"}");
+            string antes = File.ReadAllText(vieja);
+            Partida.Datos dv = Partida.Listar().First();
+            Partida.Cargar(dv);
+            Debug.Log($"[Desafio] migracion: lagrimas curacion={Equipo.Cantidad(Equipo.Objeto.LagrimaCarmesi)} mana={Equipo.Cantidad(Equipo.Objeto.LagrimaCeleste)} " +
+                      $"nivel curacion={Equipo.NivelCuracion} mana={Equipo.NivelMana} frascos sangre extra={Equipo.FrascosSangreExtra} version={dv.version}");
+            Partida.Descargar();
+
+            yield return new WaitForSeconds(2.5f);
+            MenuPrincipal m = Object.FindFirstObjectByType<MenuPrincipal>();
+            yield return Captura("d0_menu", true);
+            Llamar(m, "Mostrar", GetCampo(m, "panelDesafios"));
+            yield return new WaitForSecondsRealtime(0.5f);
+            yield return Captura("d1_desafios", true);
+            Llamar(m, "Mostrar", GetCampo(m, "panelLogros"));
+            yield return new WaitForSecondsRealtime(0.5f);
+            Debug.Log($"[Desafio] logros al empezar: {Logros.Desbloqueados()}/{Logros.Total()}");
+            yield return Captura("d2_logros_ocultos", true);
+
+            // Desafio de la Sombra (normal).
+            FichaJefe f = FichaJefe.Todas().First(x => x.id == "shadowed_wetlands");
+            Debug.Log($"[Desafio] fichas={FichaJefe.Todas().Length} dificil bloqueado={!Desafio.DificilDesbloqueado(f)}");
+            Desafio.Empezar(f, false);
+            yield return EsperarEscena(f.escena);
+            yield return new WaitForSeconds(2.5f);
+            p = Object.FindFirstObjectByType<PlayerControler>();
+            int comunes = Object.FindObjectsByType<EnemigoBase>(FindObjectsSortMode.None).Count(e => !(e is JefeBase));
+            Hoguera h = Object.FindFirstObjectByType<Hoguera>();
+            CofreMejora cofre = Object.FindObjectsByType<CofreMejora>(FindObjectsSortMode.None).FirstOrDefault(c => c.name == "CofreDesafio");
+            TotemTienda totem = Object.FindFirstObjectByType<TotemTienda>();
+            Debug.Log($"[Desafio] escena={UnityEngine.SceneManagement.SceneManager.GetActiveScene().name} partida={(Partida.Actual != null)} nivel={Progreso.NivelTotal} almas={Progreso.Almas} " +
+                      $"hogueras={Object.FindObjectsByType<Hoguera>(FindObjectsSortMode.None).Length} enemigos comunes={comunes} cofre={(cofre != null)} totem={(totem != null)} " +
+                      $"player={p.transform.position} hoguera={h?.transform.position}");
+            yield return Captura("d3_arena", true);
+
+            // El cofre: 2500 almas, piedra, lagrima carmesi y un frasco de sangre.
+            Invulnerable();
+            Teletransportar(cofre.transform.position + Vector3.right * 0.6f + Vector3.up * 0.5f);
+            yield return new WaitForSeconds(0.6f);
+            cofre.Interactuar(p);
+            yield return new WaitForSeconds(4f);
+            ReservaPociones rp = ReservaPociones.Get();
+            Debug.Log($"[Desafio] cofre: almas={Progreso.Almas} piedras={Equipo.Cantidad(Equipo.Objeto.PiedraForja)} carmesi={Equipo.Cantidad(Equipo.Objeto.LagrimaCarmesi)} " +
+                      $"frascos sangre={rp.Cargas}/{rp.Maximo} mana={rp.CargasMana}/{rp.MaximoMana}");
+
+            // La tienda: marcar un deseo, comprar dos cosas y fallar una tercera.
+            Teletransportar(totem.transform.position + Vector3.left * 0.8f + Vector3.up * 0.5f);
+            yield return new WaitForSeconds(0.6f);
+            TiendaTotem.Abrir(p);
+            yield return new WaitForSecondsRealtime(0.5f);
+            TiendaTotem t = Object.FindFirstObjectByType<TiendaTotem>();
+            object Celda(string id) => ((System.Collections.IList)GetCampo(t, "celdas")).Cast<object>().First(c => ((FichaTienda.Articulo)c.GetType().GetField("art").GetValue(c)).id == id);
+            void Elegir(string id) => Llamar(t, "Seleccionar", Celda(id));
+            Elegir("sangre_3");
+            Llamar(t, "Marcar");
+            yield return new WaitForSecondsRealtime(0.3f);
+            yield return Captura("d4_tienda", true);
+            Elegir("arma"); Llamar(t, "Comprar");
+            Elegir("sangre_1"); Llamar(t, "Comprar");
+            int almasAntes = Progreso.Almas;
+            Elegir("sangre_3"); Llamar(t, "Comprar"); // bloqueado (falta el II)
+            Elegir("mana_2"); Llamar(t, "Comprar");   // bloqueado (falta el I)
+            yield return new WaitForSecondsRealtime(0.3f);
+            Debug.Log($"[Desafio] compras: almas={Progreso.Almas} (antes de las bloqueadas {almasAntes}) espada +{Equipo.NivelEspada} frascos sangre={rp.Cargas}/{rp.Maximo} " +
+                      $"comprados=[{string.Join(",", Desafio.Comprados)}] deseado={Desafio.Deseado}");
+            yield return Captura("d5_tienda_comprado", true);
+            TiendaTotem.Cerrar();
+            yield return new WaitForSecondsRealtime(0.3f);
+            yield return Captura("d6_hud", true);
+
+            // Morir: lo comprado y el cofre se quedan.
+            SetCampo(p, "isInvincible", false);
+            p.TakeDamage(99999);
+            float tr = Time.realtimeSinceStartup;
+            yield return new WaitForSeconds(1f);
+            while (Object.FindFirstObjectByType<PlayerControler>() == null && Time.realtimeSinceStartup - tr < 10f) yield return null;
+            yield return new WaitForSeconds(1.5f);
+            p = Object.FindFirstObjectByType<PlayerControler>();
+            Debug.Log($"[Desafio] tras morir: muertes={Desafio.Muertes} player={p.transform.position} espada +{Equipo.NivelEspada} comprados={Desafio.Comprados.Count} " +
+                      $"cofre abierto={cofre.Abierto} frascos={ReservaPociones.Get().Cargas}/{ReservaPociones.Get().Maximo}");
+
+            // Al jefe: entra a la arena y se le vacia la vida (sus dos fases).
+            ArenaJefe arena = Object.FindFirstObjectByType<ArenaJefe>();
+            Invulnerable();
+            Teletransportar(arena.transform.position + Vector3.up * 1f);
+            float tj = Time.time;
+            JefeBase jefe = null;
+            while (jefe == null && Time.time - tj < 12f) { jefe = Object.FindFirstObjectByType<JefeBase>(); yield return null; }
+            yield return new WaitForSeconds(3f);
+            for (int i = 0; i < 2 && jefe != null; i++)
+            {
+                EnemyHealth sj = jefe.GetComponent<EnemyHealth>();
+                Debug.Log($"[Desafio] jefe vida {sj.CurrentHealth}/{sj.MaxHealth}");
+                sj.DanoEstado(99999);
+                yield return new WaitForSeconds(9f);
+            }
+            float tf = Time.realtimeSinceStartup;
+            while (!PantallaDesafio.Abierta && Time.realtimeSinceStartup - tf < 15f) yield return null;
+            yield return new WaitForSecondsRealtime(1f);
+            Globales.Registro reg = Globales.Desafio(f.id, false);
+            Debug.Log($"[Desafio] completado: pantalla={PantallaDesafio.Abierta} registro={(reg != null && reg.completado)} tiempo={reg?.mejorTiempo:0} muertes={reg?.muertesMejor} " +
+                      $"logros={Logros.Desbloqueados()}/{Logros.Total()} dificil desbloqueado={Desafio.DificilDesbloqueado(f)}");
+            yield return Captura("d7_completado", true);
+
+            // Volver: al menu de Desafios. La partida guardada no ha cambiado.
+            Desafio.Salir();
+            yield return EsperarEscena("Menu Principal");
+            yield return new WaitForSeconds(2.5f);
+            m = Object.FindFirstObjectByType<MenuPrincipal>();
+            Debug.Log($"[Desafio] de vuelta: desafios abierto={((GameObject)GetCampo(m, "panelDesafios")).activeSelf} partida intacta={File.ReadAllText(vieja) == antes} " +
+                      $"archivos={string.Join(",", Directory.GetFiles(Partida.CarpetaPruebas).Select(Path.GetFileName))}");
+            yield return Captura("d8_desafios_tras", true);
+            Llamar(m, "Mostrar", GetCampo(m, "panelLogros"));
+            yield return new WaitForSecondsRealtime(0.5f);
+            Llamar(GetCampo(m, "menuLogros"), "Mostrar", FichaLogro.Seccion.Desafios);
+            yield return new WaitForSecondsRealtime(0.3f);
+            yield return Captura("d9_logros", true);
+        }
+
+        // Crimson Wraith en Dificil (se da por hecho el normal): vida, brillo y logro.
+        private IEnumerator PruebaDesafioDificil()
+        {
+            Partida.CarpetaPruebas = Path.Combine(carpeta, "Partidas");
+            if (Directory.Exists(Partida.CarpetaPruebas)) Directory.Delete(Partida.CarpetaPruebas, true);
+            Directory.CreateDirectory(Partida.CarpetaPruebas);
+            Globales.Recargar();
+            yield return new WaitForSeconds(2f);
+            FichaJefe f = FichaJefe.Todas().First(x => x.id == "crimson_wraith");
+            Globales.Completar(f.id, false, 300f, 2);
+            Desafio.Empezar(f, true);
+            yield return EsperarEscena(f.escena);
+            yield return new WaitForSeconds(2.5f);
+            p = Object.FindFirstObjectByType<PlayerControler>();
+            Debug.Log($"[Dificil] activo={Desafio.Activo} dificil={Desafio.Dificil} vida x{Desafio.MultVida} dano x{Desafio.MultDano} ritmo x{Desafio.MultVelocidad} " +
+                      $"hogueras={Object.FindObjectsByType<Hoguera>(FindObjectsSortMode.None).Length} totem={(Object.FindFirstObjectByType<TotemTienda>() != null)} " +
+                      $"cofre={Object.FindObjectsByType<CofreMejora>(FindObjectsSortMode.None).Any(c => c.name == "CofreDesafio")} player={p.transform.position}");
+            yield return Captura("e0_arena_cueva", true);
+
+            ArenaJefe arena = Object.FindFirstObjectByType<ArenaJefe>();
+            Invulnerable();
+            Teletransportar(arena.transform.position + Vector3.up * 1f);
+            float tj = Time.time;
+            JefeBase jefe = null;
+            while (jefe == null && Time.time - tj < 12f) { jefe = Object.FindFirstObjectByType<JefeBase>(); yield return null; }
+            yield return new WaitForSeconds(4f);
+            EnemyHealth sj = jefe.GetComponent<EnemyHealth>();
+            Debug.Log($"[Dificil] jefe={jefe.name} vida {sj.CurrentHealth}/{sj.MaxHealth} brillo={(jefe.GetComponent<BrilloDificil>() != null)}");
+            yield return Captura("e1_jefe_dificil", false);
+            // Dano recibido: un golpe de 40 del jefe.
+            SetCampo(p, "isInvincible", false);
+            int v0 = Vida();
+            p.TakeDamage(40, jefe, PlayerControler.TipoDano.Fisico);
+            Debug.Log($"[Dificil] golpe de 40: vida {v0}->{Vida()}");
+            Invulnerable();
+            sj.DanoEstado(99999);
+            float tf = Time.realtimeSinceStartup;
+            while (!PantallaDesafio.Abierta && Time.realtimeSinceStartup - tf < 20f) yield return null;
+            yield return new WaitForSecondsRealtime(1f);
+            Debug.Log($"[Dificil] completado={Globales.Completado(f.id, true)} logros=[{string.Join(",", FichaLogro.Todos().Where(l => Globales.TieneLogro(l.id)).Select(l => l.id))}]");
+            yield return Captura("e2_completado", true);
+        }
 
         private IEnumerator Menu()
         {

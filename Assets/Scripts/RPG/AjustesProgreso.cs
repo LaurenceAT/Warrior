@@ -43,15 +43,20 @@ public class AjustesProgreso : ScriptableObject
     [Tooltip("Piedras que cuesta cada mejora de la espada.")]
     public int espadaCoste = 1;
 
-    [Header("Mejora de los frascos (Lagrimas sagradas)")]
+    [Header("Mejora de los frascos (Lagrimas carmesi y celestes)")]
+    [Tooltip("Nivel maximo del frasco de sangre (Lagrimas carmesi).")]
     public int frascosNivelMaximo = 5;
+    [Tooltip("Nivel maximo del frasco de mana (Lagrimas celestes).")]
+    public int manaNivelMaximo = 5;
+    [Tooltip("Cargas extra que como mucho puede tener cada frasco (Frasco de sangre / de mana).")]
+    public int frascosExtraMaximo = 6;
     [Tooltip("Lo que cura el frasco de sangre sin mejorar (parte de la vida maxima).")]
     [Range(0f, 1f)] public float frascoVidaBase = 0.6f;
     public float frascoVidaPorNivel = 0.06f;
     [Tooltip("Lo que devuelve el frasco de mana sin mejorar (parte del mana maximo).")]
     [Range(0f, 1f)] public float frascoManaBase = 0.5f;
     public float frascoManaPorNivel = 0.1f;
-    [Tooltip("Lagrimas que cuesta cada mejora de los frascos.")]
+    [Tooltip("Lagrimas que cuesta cada mejora de un frasco.")]
     public int frascosCoste = 1;
 
     [Header("Imbuir: Sangrado (cuesta vida)")]

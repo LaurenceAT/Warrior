@@ -17,6 +17,10 @@ public class CofreMejora : MonoBehaviour, IInteractuable
     [SerializeField] private string clave = "mejora";
     [SerializeField] private Equipo.Objeto objeto = Equipo.Objeto.PiedraForja;
     [SerializeField] private int cantidad = 1;
+    [Tooltip("Mas objetos (uno de cada), ademas del principal.")]
+    [SerializeField] private Equipo.Objeto[] extra = new Equipo.Objeto[0];
+    [Tooltip("Almas que suelta al abrirlo (0 = ninguna).")]
+    [SerializeField] private int almas;
 
     [Header("Aspecto")]
     [SerializeField] private SpriteRenderer visual;
@@ -95,11 +99,30 @@ public class CofreMejora : MonoBehaviour, IInteractuable
         if (halo != null) StartCoroutine(ApagarHalo());
         ParticulasFx.Rafaga((Vector2)transform.position + Vector2.up * 0.3f, 20, colorBrillo, Color.white, new Vector2(1f, 3f), -0.2f,
                             new Vector2(0.04f, 0.09f), new Vector2(0.4f, 0.8f), 60f, 90f);
+        if (almas > 0) OrbeAlma.Soltar((Vector2)transform.position + Vector2.up * 0.6f, almas);
         Equipo.Sumar(objeto, cantidad);
+        foreach (Equipo.Objeto o in extra) Equipo.Sumar(o);
         string nombre = Equipo.Nombre(objeto) + (cantidad > 1 ? " x" + cantidad : "");
         Sprite icono = RecursosRPG.Get().Icono(Equipo.ClaveIcono(objeto));
         if (p != null) p.LevantarObjeto(icono, nombre, Equipo.Descripcion(objeto));
         else AvisoObjeto.Mostrar(icono, nombre, Equipo.Descripcion(objeto));
+        // Los demas, uno detras de otro.
+        foreach (Equipo.Objeto o in extra)
+        {
+            yield return new WaitForSecondsRealtime(2.2f);
+            AvisoObjeto.Mostrar(RecursosRPG.Get().Icono(Equipo.ClaveIcono(o)), Equipo.Nombre(o), Equipo.Descripcion(o));
+        }
+    }
+
+    // Lo usa el modo desafio para montar su cofre a partir de uno del nivel.
+    public void Configurar(string nuevaClave, Equipo.Objeto principal, Equipo.Objeto[] otros, int nuevasAlmas)
+    {
+        clave = nuevaClave;
+        objeto = principal;
+        cantidad = 1;
+        extra = otros ?? new Equipo.Objeto[0];
+        almas = nuevasAlmas;
+        abierto = Partida.Bandera(Clave);
     }
 
     private IEnumerator Reposo()

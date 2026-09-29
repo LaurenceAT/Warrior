@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0501a0a9ad8cb4196a4b884040fa45, type: 3}
+  m_Name: Partida_2_sangre_montana
+  m_EditorClassIdentifier: 
+  id: sangre_montana
+  seccion: 0
+  orden: 2
+  nombre: "Sangre bajo la monta\xF1a"
+  descripcion: Derrota a Crimson Wraith.
+  icono: {fileID: -156723191410240399, guid: 9b467e3d687525e4786b329c0ef38c0f, type: 3}
+  condicion: 1
+  parametro: Nivel Cueva
