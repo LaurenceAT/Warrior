@@ -1189,8 +1189,8 @@ public static class PruebaNieve
                 // En el suelo hasta que llega la camara; luego un salto y muere arriba.
                 Teletransportar(zona);
                 yield return new WaitForSeconds(2f);
-                p.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0f, 9f);
-                yield return new WaitForSeconds(0.3f);
+                p.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0f, m == 0 ? 9f : 16f);
+                yield return new WaitForSeconds(m == 0 ? 0.3f : 0.6f);
                 SetCampo(p, "isInvincible", false);
                 Debug.Log($"[Ronda8] antes de morir: pos={p.transform.position} suelo={GetCampo(p, "isGrounded")} cam={Camera.main.transform.position}");
                 p.TakeDamage(99999);
@@ -1205,6 +1205,12 @@ public static class PruebaNieve
                     if (m == 0 && k % 2 == 0) yield return Captura(pre + $"muerte_aire_{k}", false);
                     yield return new WaitForSeconds(0.15f);
                 }
+                CaidaMuerte cuerpo = Object.FindFirstObjectByType<CaidaMuerte>();
+                if (cuerpo != null)
+                {
+                    var cine = Object.FindFirstObjectByType<Unity.Cinemachine.CinemachineCamera>();
+                    Debug.Log($"[Ronda8] camara sigue a={(cine != null && cine.Follow != null ? cine.Follow.name : "-")} distancia al cuerpo={Vector2.Distance(Camera.main.transform.position, cuerpo.transform.position):0.0}");
+                }
                 Debug.Log($"[Ronda8] muerte en el aire {m}: caida en curso={CaidaMuerte.EnCurso} pantalla={PantallaMuerte.Activa} (antes de tocar suelo={pantallaAntes}) a los {Time.time - tm:0.00}s");
                 float tr = Time.realtimeSinceStartup;
                 while (Object.FindFirstObjectByType<PlayerControler>() == null && Time.realtimeSinceStartup - tr < 8f) yield return null;
@@ -1215,6 +1221,28 @@ public static class PruebaNieve
             Teletransportar(zona);
             yield return new WaitForSeconds(0.6f);
             yield return Captura(pre + "manchas", false);
+
+            // Tintes: cada estado tine mientras dura y al acabar vuelve a blanco.
+            Invulnerable();
+            SpriteRenderer srCuerpo = p.GetComponent<SpriteRenderer>();
+            foreach (EstadoPlayer e in EstadosPlayer.Todos)
+            {
+                EstadosPlayer.Acumular(p, e, 1000f);
+                yield return new WaitForSeconds(0.3f);
+                Color durante = srCuerpo.color;
+                yield return Captura(pre + "tinte_" + e, false);
+                float tf = Time.time;
+                while (p.GetComponent<EstadosPlayer>().EnEfecto(e) && Time.time - tf < 12f) yield return null;
+                yield return new WaitForSeconds(0.2f);
+                Debug.Log($"[Ronda8] tinte {e}: durante={durante} despues={srCuerpo.color}");
+                Curar();
+            }
+            // El fallo del agarre: una curacion que empieza durante el destello rojo de un golpe.
+            Llamar(p, "Destello", new Color(1f, 0.4f, 0.4f), 0.08f);
+            SetCampo(p, "currentHealth", p.VidaMaxima - 20);
+            p.Heal(10);
+            yield return new WaitForSeconds(1.5f);
+            Debug.Log($"[Ronda8] tras golpe+curacion: color={srCuerpo.color}");
         }
 
         private GatherInput Entrada() => p.GetComponent<GatherInput>();

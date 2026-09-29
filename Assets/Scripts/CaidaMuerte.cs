@@ -44,6 +44,8 @@ public class CaidaMuerte : MonoBehaviour
         c.pies = pies;
         c.contraJefe = contraJefe;
         EnCurso = true;
+        // La camara sigue al cuerpo mientras cae (el player ya no existe).
+        if (GameManager.Instance != null) GameManager.Instance.SeguirConCamara(go.transform);
     }
 
     private void Update()

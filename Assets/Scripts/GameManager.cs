@@ -117,6 +117,13 @@ public class GameManager : MonoBehaviour
 
     #region Respawn del Player
 
+    // La camara pasa a seguir a otra cosa (el cuerpo que cae al morir en el aire).
+    // Al reaparecer vuelve sola al player nuevo.
+    public void SeguirConCamara(Transform objetivo)
+    {
+        if (cinemachineCamera != null && objetivo != null) cinemachineCamera.Follow = objetivo;
+    }
+
     // Inicia el proceso de reaparición del jugador, usando el checkpoint activo si existe.
     public void RespawnPlayer()
     {

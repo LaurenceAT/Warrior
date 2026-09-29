@@ -60,11 +60,11 @@ public static class SangreFx
         for (int i = 0; i < n; i++)
         {
             Vector2 p = new Vector2(pos.x + Random.Range(-0.9f, 0.9f), pos.y + 0.3f);
-            if (!Suelo(p, out float y)) continue;
+            if (!Suelo(p, out float y, out _)) continue;
             var m = new Partida.ManchaSangre
             {
-                escena = escena, x = p.x, y = y, angulo = 0f, escala = Random.Range(0.85f, 1.2f),
-                variante = Random.Range(0, Mathf.Max(1, A.manchas.Length)),
+                escena = escena, x = p.x, y = y, angulo = 0f, escala = 1f,
+                variante = Random.Range(0, VariantesCharco),
             };
             Partida.AnadirMancha(m, A.maximoManchasPorNivel);
             ManchasPermanentes.Poner(m);
@@ -92,41 +92,120 @@ public static class SangreFx
     // Mancha en el suelo que se desvanece a los "segundos" (0 = se queda).
     public static SpriteRenderer Mancha(Vector2 cerca, Color color, float escala, float segundos)
     {
-        if (A.manchas == null || A.manchas.Length == 0) return null;
-        if (!Suelo(cerca, out float y)) return null;
-        SpriteRenderer sr = CrearMancha(new Vector2(cerca.x, y), A.manchas[Random.Range(0, A.manchas.Length)], color, escala, Random.value < 0.5f);
+        if (!Suelo(cerca, out float y, out Renderer suelo)) return null;
+        SpriteRenderer sr = CrearMancha(new Vector2(cerca.x, y), Random.Range(0, VariantesCharco), color, Random.value < 0.5f, suelo);
         if (segundos > 0f) sr.gameObject.AddComponent<Desvanecer>().Iniciar(segundos, 1.5f);
         return sr;
     }
 
-    public static SpriteRenderer CrearMancha(Vector2 enSuelo, Sprite s, Color color, float escala, bool voltear)
+    // La sangre pintada en el suelo: un charco plano de pixeles sobre la capa de
+    // arriba del suelo (la nieve), dibujado justo encima del propio suelo. No
+    // sobresale: casi todo queda por debajo de la superficie, con algun
+    // chorreon hacia abajo.
+    public static SpriteRenderer CrearMancha(Vector2 enSuelo, int variante, Color color, bool voltear, Renderer suelo)
     {
         SpriteRenderer sr = new GameObject("ManchaSangre").AddComponent<SpriteRenderer>();
-        sr.sprite = s;
+        sr.sprite = Charco(variante);
         sr.color = color;
         sr.flipX = voltear;
-        // Aplastada contra el suelo, detras del player y de la decoracion.
-        sr.sortingLayerName = "Middleground";
-        sr.sortingOrder = -5;
         sr.sharedMaterial = EfectoVisual.MaterialSinLuz();
-        float e = A.tamanoMancha * escala;
-        sr.transform.localScale = new Vector3(e, e * 0.5f, 1f);
-        float base0 = s.bounds.min.y * e * 0.5f;
-        sr.transform.position = new Vector3(enSuelo.x, enSuelo.y - base0 - 0.02f, 0f);
+        if (suelo != null)
+        {
+            sr.sortingLayerID = suelo.sortingLayerID;
+            sr.sortingOrder = suelo.sortingOrder + 1;
+        }
+        else sr.sortingLayerName = "Ground";
+        float e = Mathf.Max(0.1f, A.tamanoMancha);
+        sr.transform.localScale = new Vector3(e, e, 1f);
+        // El borde de arriba del charco, un pixel por encima de la superficie.
+        sr.transform.position = new Vector3(enSuelo.x, enSuelo.y + e / PixelesCharco, 0f);
         return sr;
     }
 
-    // Suelo justo debajo (hasta 3 unidades).
-    public static bool Suelo(Vector2 desde, out float y)
+    // Suelo justo debajo (hasta 3 unidades) y lo que lo dibuja.
+    public static bool Suelo(Vector2 desde, out float y, out Renderer dibujo)
     {
         y = desde.y;
+        dibujo = null;
         bool antes = Physics2D.queriesStartInColliders;
         Physics2D.queriesStartInColliders = false;
         RaycastHit2D h = Physics2D.Raycast(desde + Vector2.up * 0.3f, Vector2.down, 3f, LayerMask.GetMask("Ground"));
         Physics2D.queriesStartInColliders = antes;
         if (h.collider == null || h.collider.isTrigger) return false;
         y = h.point.y;
+        // Lo que se VE en ese punto (el suelo que choca y el que se dibuja pueden
+        // ser tilemaps distintos): el que quede mas por delante.
+        dibujo = DibujoEn(new Vector2(h.point.x, h.point.y - 0.08f));
+        if (dibujo == null) dibujo = h.collider.GetComponent<Renderer>();
+        if (dibujo == null) dibujo = h.collider.GetComponentInParent<Renderer>();
         return true;
+    }
+
+    private static UnityEngine.Tilemaps.Tilemap[] tilemaps;
+    private static int escenaTilemaps = -1;
+
+    private static Renderer DibujoEn(Vector2 p)
+    {
+        Scene s = SceneManager.GetActiveScene();
+        if (tilemaps == null || escenaTilemaps != s.handle)
+        {
+            tilemaps = Object.FindObjectsByType<UnityEngine.Tilemaps.Tilemap>(FindObjectsSortMode.None);
+            escenaTilemaps = s.handle;
+        }
+        Renderer mejor = null;
+        long mejorValor = long.MinValue;
+        foreach (UnityEngine.Tilemaps.Tilemap t in tilemaps)
+        {
+            if (t == null || !t.gameObject.activeInHierarchy || !t.HasTile(t.WorldToCell(p))) continue;
+            Renderer r = t.GetComponent<Renderer>();
+            if (r == null || !r.enabled) continue;
+            long valor = (long)SortingLayer.GetLayerValueFromID(r.sortingLayerID) * 100000 + r.sortingOrder;
+            if (valor > mejorValor) { mejorValor = valor; mejor = r; }
+        }
+        return mejor;
+    }
+
+    // ------------------------------------------------------------------ Charcos
+
+    public const int VariantesCharco = 8;
+    private const float PixelesCharco = 28f;   // como los pixeles del personaje
+    private static Sprite[] charcos;
+
+    // Charcos hechos por codigo (en blanco: se tinen). Anchos distintos, borde
+    // irregular, mas grueso en el centro y algun chorreon.
+    private static Sprite Charco(int v)
+    {
+        if (charcos == null) charcos = new Sprite[VariantesCharco];
+        v = Mathf.Clamp(v, 0, VariantesCharco - 1);
+        if (charcos[v] != null) return charcos[v];
+
+        System.Random r = new System.Random(1234 + v * 97);
+        int ancho = 14 + r.Next(0, 16), alto = 8;
+        Texture2D t = new Texture2D(ancho, alto, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp };
+        Color32[] px = new Color32[ancho * alto];
+        for (int x = 0; x < ancho; x++)
+        {
+            // Grosor: mas en el centro, casi nada en los extremos, con ruido.
+            float u = (x + 0.5f) / ancho * 2f - 1f;
+            int grosor = Mathf.RoundToInt(Mathf.Sqrt(Mathf.Max(0f, 1f - u * u)) * 4.5f + (float)r.NextDouble() * 1.4f - 0.2f);
+            if (r.NextDouble() < 0.12) grosor += r.Next(1, 3); // chorreon
+            // Extremos sueltos: gotas separadas.
+            if (Mathf.Abs(u) > 0.8f && r.NextDouble() < 0.45) grosor = 0;
+            grosor = Mathf.Clamp(grosor, 0, alto);
+            for (int k = 0; k < grosor; k++)
+            {
+                int y = alto - 1 - k; // de arriba hacia abajo
+                // Arriba mas claro (brillo), abajo mas oscuro.
+                byte c = (byte)(k == 0 ? 255 : k == grosor - 1 ? 150 : 205);
+                px[y * ancho + x] = new Color32(c, c, c, 255);
+            }
+        }
+        t.SetPixels32(px);
+        t.Apply();
+        // Pivote arriba en el centro: el borde de arriba se apoya en el suelo.
+        charcos[v] = Sprite.Create(t, new Rect(0, 0, ancho, alto), new Vector2(0.5f, 1f), PixelesCharco);
+        charcos[v].name = "Charco_" + v;
+        return charcos[v];
     }
 
     private static Bounds Limites(EnemyHealth e)
@@ -187,9 +266,9 @@ public static class ManchasPermanentes
     public static void Poner(Partida.ManchaSangre m)
     {
         AjustesSangre a = AjustesSangre.Get();
-        if (a.manchas == null || a.manchas.Length == 0) return;
-        Sprite s = a.manchas[Mathf.Clamp(m.variante, 0, a.manchas.Length - 1)];
-        SpriteRenderer sr = SangreFx.CrearMancha(new Vector2(m.x, m.y), s, a.colorPlayer, m.escala, (m.variante & 1) == 1);
+        // Lo que dibuja el suelo en ese punto, para pintar encima.
+        SangreFx.Suelo(new Vector2(m.x, m.y + 0.2f), out _, out Renderer suelo);
+        SpriteRenderer sr = SangreFx.CrearMancha(new Vector2(m.x, m.y), m.variante, a.colorPlayer, (m.variante & 1) == 1, suelo);
         puestas.Add((m, sr));
     }
 

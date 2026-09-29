@@ -8,7 +8,7 @@ public class AjustesSangre : ScriptableObject
     [Header("Dibujos (los pone la Ronda 8)")]
     [Tooltip("Animaciones de salpicadura (en blanco: se tinen del color de cada uno).")]
     public AnimadorHoja.Clip[] salpicaduras;
-    [Tooltip("Manchas del suelo (en blanco).")]
+    [Tooltip("Ya no se usan: la sangre del suelo se pinta por codigo sobre la nieve o la roca (SangreFx).")]
     public Sprite[] manchas;
 
     [Header("Tu muerte")]
@@ -39,7 +39,7 @@ public class AjustesSangre : ScriptableObject
     public float segundosManchaEnemigo = 10f;
 
     [Header("Manchas")]
-    [Tooltip("Tamano de las manchas del suelo.")]
+    [Tooltip("Tamano de las manchas pintadas en el suelo (1 = pixeles como los del personaje).")]
     public float tamanoMancha = 1f;
 
     private static AjustesSangre instancia;

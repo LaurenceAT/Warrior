@@ -114,6 +114,21 @@ public class EstadosPlayer : MonoBehaviour
 
     public bool EnEfecto(EstadoPlayer e) => e != EstadoPlayer.Ninguno && Time.time < barras[(int)e].finEfecto;
 
+    // Tinte del personaje mientras dura un estado (el que mas le quede):
+    // "fuerza" va de 1 al empezar a 0 al disiparse.
+    public bool Tinte(out Color color, out float fuerza)
+    {
+        color = Color.white;
+        fuerza = 0f;
+        foreach (EstadoPlayer e in Todos)
+        {
+            if (!EnEfecto(e)) continue;
+            float f = Fraccion(e);
+            if (f > fuerza) { fuerza = f; color = ColorDe(e); }
+        }
+        return fuerza > 0f;
+    }
+
     // Lo que muestra la barra del HUD (0..1). Durante el efecto se vacia con el tiempo.
     public float Fraccion(EstadoPlayer e)
     {

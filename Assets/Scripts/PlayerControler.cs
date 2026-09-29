@@ -700,6 +700,13 @@ public class PlayerControler : MonoBehaviour
     [Tooltip("Animacion de derribo para morir en el aire: el ultimo fotograma es el cuerpo tumbado en el suelo.")]
     [SerializeField] private Sprite[] fotogramasCaidaMuerte;
 
+    [Header("Tinte de los estados negativos")]
+    [Tooltip("Cuanto se tine el personaje con un estado (sangrado rojo, congelacion azul, quemadura naranja). 0 = nada.")]
+    [Range(0f, 1f)] [SerializeField] private float tinteEstados = 0.7f;
+    private EstadosPlayer estadosPlayer;
+    // Hasta cuando dura el destello de un golpe (luego vuelve al color base).
+    private float finDestello;
+
     //VARIABLES PARA EL SISTEMA DE ATAQUE
     [Header("Opciones de Ataque")]
     // Punto de referencia desde el que se mide el area de cada golpe.
@@ -3033,7 +3040,7 @@ public class PlayerControler : MonoBehaviour
         {
             brillandoContra = false;
             if (brilloHoja != null) brilloHoja.enabled = false;
-            PintarRGB(Color.white);
+            PintarRGB(ColorBase());
         }
     }
 
@@ -3046,6 +3053,9 @@ public class PlayerControler : MonoBehaviour
         if (efectosGolpe != null && efectosGolpe.TajoActivo &&
             ((!isAttacking && !isPlunging) || isDodging || isKnocked || currentHealth <= 0))
             efectosGolpe.CancelarTajo();
+
+        // Sin destellos en marcha, el cuerpo lleva su color base (blanco o el tinte del estado).
+        if (m_spriteRenderer != null && !TinteTemporal) PintarRGB(ColorBase());
 
         if (brilloHoja == null || !brilloHoja.enabled) return;
         brilloHoja.sprite = m_spriteRenderer.sprite;
@@ -3910,8 +3920,7 @@ public class PlayerControler : MonoBehaviour
         if (currentHealth <= 0 || dano <= 0) return;
         currentHealth -= dano;
         PlayerHud.Get().Damage(currentHealth, maxHealth);
-        PintarRGB(new Color(1f, 0.45f, 0.45f));
-        StartCoroutine(QuitarTinte(0.1f));
+        Destello(new Color(1f, 0.45f, 0.45f), 0.1f);
         if (currentHealth > 0) return;
         if (isBlocking) TerminarBloqueo(false);
         if (isAgarrado) isAgarrado = false;
@@ -4127,18 +4136,18 @@ public class PlayerControler : MonoBehaviour
         currentHealth -= ConResistencia(Mathf.Max(1, dano), false);
         PlayerHud.Get().Damage(currentHealth, maxHealth);
         Sonido.Reproducir("dano_player", 0.9f);
-        PintarRGB(new Color(1f, 0.4f, 0.4f));
-        StartCoroutine(QuitarTinte(0.08f));
+        Destello(new Color(1f, 0.4f, 0.4f), 0.08f);
         if (currentHealth > 0) return;
         isAgarrado = false;
         Die();
         GameManager.Instance.RespawnPlayer();
     }
 
-    private IEnumerator QuitarTinte(float t)
+    // Tine el cuerpo un instante; al acabar, LateUpdate vuelve al color base.
+    private void Destello(Color color, float segundos)
     {
-        yield return new WaitForSecondsRealtime(t);
-        if (!brillandoContra) PintarRGB(Color.white);
+        PintarRGB(color);
+        finDestello = Mathf.Max(finDestello, Time.unscaledTime + segundos);
     }
 
     // Lo suelta. Si "caer", cae derribado y se levanta como tras un golpe en el aire.
@@ -4271,7 +4280,8 @@ public class PlayerControler : MonoBehaviour
     {
         if (m_spriteRenderer == null) yield break;
 
-        Color original = m_spriteRenderer.color;
+        // Entre destellos vuelve al color base del momento (no a uno guardado:
+        // si empezaba justo durante el rojo de un golpe, ese rojo se quedaba).
         int veces = Mathf.Max(1, healFlashCount);
         float paso = healFlashDuration / (veces * 2f);
 
@@ -4279,13 +4289,30 @@ public class PlayerControler : MonoBehaviour
         {
             PintarRGB(healFlashColor);
             yield return new WaitForSecondsRealtime(paso);
-            PintarRGB(original);
+            PintarRGB(ColorBase());
             yield return new WaitForSecondsRealtime(paso);
         }
 
-        PintarRGB(original);
+        PintarRGB(ColorBase());
         healFlashRoutine = null;
     }
+
+    // Color "normal" del personaje ahora mismo: blanco, o tenido del estado
+    // negativo que tenga (sangrado rojo, congelacion azul, quemadura naranja),
+    // que se apaga a medida que el estado se disipa. Los destellos (golpe,
+    // curacion) vuelven siempre a este color, nunca a uno guardado de antes:
+    // asi un tinte rojo no se puede quedar pegado.
+    private Color ColorBase()
+    {
+        if (estadosPlayer == null) estadosPlayer = GetComponent<EstadosPlayer>();
+        if (estadosPlayer == null || !estadosPlayer.Tinte(out Color c, out float f)) return Color.white;
+        float pulso = 0.85f + 0.15f * Mathf.Sin(Time.time * 5f);
+        return Color.Lerp(Color.white, c, tinteEstados * (0.4f + 0.6f * f) * pulso);
+    }
+
+    // Hay algo pintando el cuerpo ahora (destello, curacion, carga del contraataque...).
+    private bool TinteTemporal => Time.unscaledTime < finDestello || healFlashRoutine != null || cargandoArco
+                                  || (ventanaContra > 0f && !counterGlowBladeOnly);
 
     private void PintarRGB(Color rgb)
     {
