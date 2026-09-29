@@ -34,8 +34,26 @@ public static class Partida
         public List<string> banderas = new List<string>();
         // Equipo (ver Equipo): objetos de mejora y nivel de la espada y los frascos.
         public int piedrasForja, lagrimas, nivelEspada, nivelFrascos;
+        // Pistas de las estatuas ya leidas (el libro de pistas del menu de pausa).
+        public List<PistaLeida> pistas = new List<PistaLeida>();
+        // Manchas de sangre que deja el player al morir, por nivel.
+        public List<ManchaSangre> manchas = new List<ManchaSangre>();
 
         public int NivelPersonaje => 1 + (niveles?.Sum() ?? 0);
+    }
+
+    [Serializable]
+    public class PistaLeida
+    {
+        public string escena, id, titulo, texto;
+    }
+
+    [Serializable]
+    public class ManchaSangre
+    {
+        public string escena;
+        public float x, y, angulo, escala;
+        public int variante;
     }
 
     public static Datos Actual { get; private set; }
@@ -171,6 +189,37 @@ public static class Partida
             return;
         }
         banderasSesion.Add(clave);
+    }
+
+    // ------------------------------------------------------------------ Pistas y manchas
+
+    // Igual que las banderas: sin partida solo duran mientras se juega.
+    private static readonly List<PistaLeida> pistasSesion = new List<PistaLeida>();
+    private static readonly List<ManchaSangre> manchasSesion = new List<ManchaSangre>();
+
+    public static List<PistaLeida> Pistas => Actual != null ? (Actual.pistas ??= new List<PistaLeida>()) : pistasSesion;
+    public static List<ManchaSangre> Manchas => Actual != null ? (Actual.manchas ??= new List<ManchaSangre>()) : manchasSesion;
+
+    public static bool PistaLeidaYa(string escena, string id) => Pistas.Any(p => p.escena == escena && p.id == id);
+
+    // Apunta la pista (o la actualiza si se cambio su texto) y guarda.
+    public static void LeerPista(string escena, string id, string titulo, string texto)
+    {
+        PistaLeida p = Pistas.FirstOrDefault(x => x.escena == escena && x.id == id);
+        if (p == null) Pistas.Add(p = new PistaLeida { escena = escena, id = id });
+        p.titulo = titulo;
+        p.texto = texto;
+        Guardar();
+    }
+
+    // Las manchas se guardan junto con lo demas (al descansar, morir, etc.).
+    public static void AnadirMancha(ManchaSangre m, int maximoPorNivel)
+    {
+        List<ManchaSangre> l = Manchas;
+        l.Add(m);
+        // Por encima del limite se quitan las mas antiguas de ese nivel.
+        while (l.Count(x => x.escena == m.escena) > maximoPorNivel)
+            l.Remove(l.First(x => x.escena == m.escena));
     }
 
     // ------------------------------------------------------------------ Reloj y guardado automatico

@@ -136,6 +136,12 @@ public class EnemyHealth : MonoBehaviour
     // tiempo, y los golpes que lanzan solo los empujan (no hay combo aereo).
     [SerializeField] private bool volador;
 
+    [Header("Sangre")]
+    [Tooltip("Si sangra al recibir golpes y al morir (no: esqueletos, espectros, golems de hielo...).")]
+    public bool tieneSangre = true;
+    [Tooltip("Color de su sangre (rojo por defecto; verde el slime...).")]
+    public Color colorSangre = new Color(0.7f, 0.03f, 0.06f, 0.95f);
+
     [Header("Inamovible")]
     // Los golpes no lo mueven ni lo lanzan (el jefe). Siguen quitando vida.
     [SerializeField] private bool inamovible;
@@ -257,6 +263,7 @@ public class EnemyHealth : MonoBehaviour
         // El destello sale siempre, tanto si sobrevive como si muere: es la
         // confirmacion de que el golpe ha entrado.
         if (hitFlash != null) hitFlash.Flash();
+        if (damage > 0 && currentHealth > 0) SangreFx.GolpeEnemigo(this, damage);
         AlRecibirGolpe?.Invoke();
 
         if (currentHealth <= 0)
@@ -520,6 +527,7 @@ public class EnemyHealth : MonoBehaviour
         if (estados != null) estados.Limpiar();
         if (deathVFX != null)
             Instantiate(deathVFX, transform.position, Quaternion.identity);
+        SangreFx.MuerteEnemigo(this);
 
         if (enemyController != null) enemyController.enabled = false;
         if (rb != null) rb.simulated = false;

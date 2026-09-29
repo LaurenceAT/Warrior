@@ -20,8 +20,11 @@ Orden: Menú principal → Nivel Nieve (jefe: Sombra de los Humedales) → Nivel
 - `UI/`: `EstiloMenu` (estilo común y sonidos de menús), `MenuPausa`, `PantallaCarga`, `PantallaMuerte`, `AvisoObjeto`.
 - `NivelNieve/`, `NivelCueva/`: piezas de cada nivel (hoguera, cofres, pared falsa, zonas ocultas, hielo...).
 - `Niveles/ConfigNivel.cs` + `Assets/Data/Niveles/Config Nivel *.asset`: tiles, parallax, música, sonidos y frases de cada nivel.
-- `Assets/Resources/`: `AjustesProgreso.asset` y `RecursosRPG.asset`.
-- `Assets/Editor/`: generadores y ajustes (`ActualizarProyecto`, `Ronda6`, `ConfigurarRecursosRPG`...) y pruebas automáticas (`PruebaNieve`).
+- `Niveles/EstatuaPista.cs` (estatuas con pista, F para leer) y `UI/CuadroPista.cs` (cuadro de texto con máquina de escribir).
+- `RPG/SangreFx.cs` + `AjustesSangre` (sangre), `RPG/EfectoArma.cs` + `MapaHoja` (partículas del arma imbuida), `CaidaMuerte.cs` (muerte en el aire).
+- `Assets/Resources/`: `AjustesProgreso.asset`, `RecursosRPG.asset`, `AjustesSangre.asset`, `MapaHoja.asset`.
+- `Assets/Sprites/Tajos` (tajos recoloreados) y `Assets/Sprites/Sangre` (sangre en blanco): los genera `Ronda8`.
+- `Assets/Editor/`: generadores y ajustes (`ActualizarProyecto`, `Ronda6`, `Ronda7`, `Ronda8`, `ConfigurarRecursosRPG`...) y pruebas automáticas (`PruebaNieve`).
 - `Assets/SPRITES PARA NUEVOS NIVELES/`: assets nuevos del usuario (sprites, iconos, sonidos). No borrar.
 - `Assets/Sprites/PJ_Knight/`: sprites del personaje. No borrar.
 
@@ -34,6 +37,11 @@ Orden: Menú principal → Nivel Nieve (jefe: Sombra de los Humedales) → Nivel
 - Solo los ataques especiales de los jefes aplican estados; los básicos solo hacen daño.
 - El sangrado sustituyó al ácido (mismo número de elemento, 4, para no romper datos guardados).
 - La hoguera se usa con F y abre un menú; descansar ya no es automático.
+- La pausa solo se abre con Esc (no hay botón en pantalla).
+- Las pistas están en estatuas (F para leer); las leídas se guardan en la partida y salen en el "Libro de pistas" de la pausa.
+- Sangrado: cuesta vida (25 con la vida inicial, sube con la vida máxima), te acumula sangrado a ti y en jefes tiene tope de activaciones. Números en AjustesProgreso.
+- Sagrado: aturde con el mismo aturdimiento del parry, pero más corto; los jefes lo hacen al acabar su ataque.
+- Tus manchas de sangre al morir se guardan en la partida; la de los enemigos se desvanece. Quién sangra: EnemyHealth → Sangre.
 - Se conservan en el código el arco, el combate sin arma y la rueda de pociones, aunque estén apagados.
 
 ## Hecho y funcionando
@@ -43,13 +51,16 @@ Orden: Menú principal → Nivel Nieve (jefe: Sombra de los Humedales) → Nivel
 - Sistema RPG: almas, subir niveles en la hoguera, resistencias, imbuir la espada (5 elementos).
 - Estados en jugador y enemigos, barras que crecen al subir de nivel, anillo de imbuición.
 - Mejoras: Piedras de forja (espada) y Lágrimas sagradas (frascos), en cofres ocultos y como recompensa de jefes.
-- Pruebas automáticas en batchmode pasando (sistemas, pociones, jefe, cueva, menú, ronda6, nivel).
+- Estatuas con pistas, libro de pistas, decoración extra en los dos niveles (objeto `DecoracionExtra`).
+- Tajos sincronizados con el ataque; colores propios; efectos en el arma; muerte en el aire; sangre.
+- Pruebas automáticas en batchmode pasando (sistemas, pociones, jefe, cueva, menú, ronda6, nivel, ronda8).
 
 ## Pendiente
 - Pintar zonas ocultas en la cueva (hoy no hay ninguna pintada).
 - Solo hay 3 Piedras y 2 Lágrimas en el juego (el máximo de mejoras es +5 cada una); faltan más cofres.
 - El cofre de mejora de la cueva está junto al Mimic, en la cueva secreta: por confirmar si al usuario le gusta ese sitio.
 - Probar a mano en Unity lo de la última ronda (menú de hoguera, cofres, estados) y ajustar números si hace falta.
+- Faltan sprites de cristales y huesos para la cueva, y un sonido propio de máquina de escribir (se usa el "tic" de los menús).
 
 ## Problemas conocidos
 - La consola muestra avisos de `AnimadorHoja` (unos 33): por confirmar la causa.

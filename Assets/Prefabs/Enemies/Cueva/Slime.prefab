@@ -98,7 +98,10 @@ MonoBehaviour:
   healthBarOffset: {x: 0, y: 0.95}
   healthBarWidth: 0.7
   maxAirStunTime: 2.5
+  almas: -1
   volador: 0
+  tieneSangre: 1
+  colorSangre: {r: 0.35, g: 0.85, b: 0.25, a: 0.9}
   inamovible: 0
 --- !u!114 &6482208598399746315
 MonoBehaviour:
@@ -308,6 +311,7 @@ MonoBehaviour:
     cantidad: 14
     fps: 10
     bucle: 1
+    alReves: 0
     pivote: {x: 0.497, y: 0.442}
     pixelesPorUnidad: 28
     fotogramas: []
@@ -326,6 +330,7 @@ MonoBehaviour:
     cantidad: 6
     fps: 10
     bucle: 1
+    alReves: 0
     pivote: {x: 0.497, y: 0.442}
     pixelesPorUnidad: 28
     fotogramas: []
@@ -344,6 +349,7 @@ MonoBehaviour:
     cantidad: 19
     fps: 14
     bucle: 0
+    alReves: 0
     pivote: {x: 0.497, y: 0.442}
     pixelesPorUnidad: 28
     fotogramas: []
@@ -362,6 +368,7 @@ MonoBehaviour:
     cantidad: 3
     fps: 10
     bucle: 0
+    alReves: 0
     pivote: {x: 0.497, y: 0.442}
     pixelesPorUnidad: 28
     fotogramas: []
@@ -380,6 +387,7 @@ MonoBehaviour:
     cantidad: 11
     fps: 12
     bucle: 0
+    alReves: 0
     pivote: {x: 0.497, y: 0.442}
     pixelesPorUnidad: 28
     fotogramas: []

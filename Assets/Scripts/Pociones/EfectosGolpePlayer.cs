@@ -23,12 +23,22 @@ public class EfectosGolpePlayer : MonoBehaviour
     // 3-4 aereos, 7 lanzador).
     private static readonly int[] TipoTajo = { 0, 1, 0, 1, 2, 1, 1, 2 };
 
+    [Tooltip("Lo minimo que dura el tajo de color aunque al ataque le quede menos (segundos).")]
+    public float tajoMinimo = 0.08f;
+
+    private EfectoVisual tajoActual;
+
+    public bool TajoActivo => tajoActual != null;
+
     // Tajo de color del elemento, colocado sobre el area que dana de verdad
     // ("centro" y "tamano" salen del perfil del golpe) y un poco mas grande que
     // ella. Solo se ven los fotogramas centrales del tajo (el instante del corte),
-    // no la animacion entera.
-    public void Tajo(int perfil, int direccion, Elemento elemento, Vector2 centro, float tamano, float angulo)
+    // no la animacion entera. "restoAtaque": lo que le queda al movimiento; el
+    // tajo nunca dura mas (se acelera si hace falta). Va pegado al player: se
+    // mueve y se voltea con el.
+    public void Tajo(int perfil, int direccion, Elemento elemento, Vector2 centro, float tamano, float angulo, float restoAtaque = 1f)
     {
+        CancelarTajo();
         if (elemento == Elemento.Ninguno || perfil < 0 || perfil >= TipoTajo.Length) return;
         AnimadorHoja.Clip ce = Recortado(RecursosRPG.Get().Tajo(elemento, TipoTajo[perfil]));
         if (ce == null) return;
@@ -37,7 +47,17 @@ public class EfectosGolpePlayer : MonoBehaviour
         float escala = Mathf.Clamp(tamano * 1.35f / 2f, 0.5f, 2f);
         float rot = angulo + (TipoTajo[perfil] == 2 ? 20f * direccion : 0f);
         EfectoVisual ef = EfectoVisual.Crear(ce, centro, escala, Elementos.TinteTajo(elemento), direccion < 0, -1f, "VFX", 20, rot);
-        if (ef != null) ef.transform.SetParent(transform, true);
+        if (ef == null) return;
+        ef.transform.SetParent(transform, true);
+        ef.Durar(Mathf.Clamp(restoAtaque, tajoMinimo, ce.Duracion));
+        tajoActual = ef;
+    }
+
+    // Quita el tajo en curso al momento (ataque acabado o interrumpido).
+    public void CancelarTajo()
+    {
+        if (tajoActual != null) Destroy(tajoActual.gameObject);
+        tajoActual = null;
     }
 
     // Copia del clip solo con los fotogramas del corte, mas rapida.

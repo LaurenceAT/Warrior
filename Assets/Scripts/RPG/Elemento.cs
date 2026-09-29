@@ -33,8 +33,8 @@ public static class Elementos
             case Elemento.Fuego: return "Quemadura: daño con el tiempo";
             case Elemento.Hielo: return "Ralentiza; acumulado, congela";
             case Elemento.Oscuro: return "Drena vida al golpear";
-            case Elemento.Sagrado: return "Probabilidad de aturdir";
-            case Elemento.Sangrado: return "Acumula sangrado: al llenarse, le quita vida de golpe";
+            case Elemento.Sagrado: return "A veces aturde un instante (menos que un parry)";
+            case Elemento.Sangrado: return "Cuesta vida. Acumula sangrado en él... y un poco en ti";
             default: return "";
         }
     }
@@ -43,7 +43,7 @@ public static class Elementos
     {
         switch (e)
         {
-            case Elemento.Fuego: return new Color(1f, 0.32f, 0.12f, 1f);
+            case Elemento.Fuego: return new Color(1f, 0.48f, 0.1f, 1f);
             case Elemento.Hielo: return new Color(0.35f, 0.85f, 1f, 1f);
             case Elemento.Oscuro: return new Color(0.62f, 0.3f, 1f, 1f);
             case Elemento.Sagrado: return new Color(1f, 0.82f, 0.35f, 1f);
@@ -52,21 +52,21 @@ public static class Elementos
         }
     }
 
-    // Tinte que se pone al tajo de color (el sangrado usa el rojo del fuego, mas
-    // oscuro, para que no se confundan).
-    public static Color TinteTajo(Elemento e) =>
-        e == Elemento.Sangrado ? new Color(0.75f, 0.2f, 0.28f, 1f) : UnityEngine.Color.white;
+    // Tinte que se pone al tajo de color. Ya no se tine ninguno: tenir un tajo de
+    // otro color lo ensuciaba. El sagrado y el sangrado tienen sus propios dibujos
+    // recoloreados (Assets/Sprites/Tajos, los hace la Ronda 8).
+    public static Color TinteTajo(Elemento e) => UnityEngine.Color.white;
 
-    // Variante de color de Efecto_Tajos (color1..color5) que corresponde.
+    // Variante de color de Efecto_Tajos (color1..color5) de la que sale cada uno.
     public static int ColorTajo(Elemento e)
     {
         switch (e)
         {
-            case Elemento.Fuego: return 2;    // rojo
+            case Elemento.Fuego: return 4;    // naranja
             case Elemento.Hielo: return 5;    // cian
             case Elemento.Oscuro: return 3;   // violeta
-            case Elemento.Sagrado: return 4;  // dorado
-            case Elemento.Sangrado: return 2; // rojo (tenido mas oscuro)
+            case Elemento.Sagrado: return 4;  // naranja -> recoloreado a amarillo y blanco
+            case Elemento.Sangrado: return 2; // carmesi -> recoloreado a rojo
             default: return 0;
         }
     }

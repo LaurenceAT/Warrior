@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 6245690450504146653}
   - component: {fileID: 8778370368055672439}
   - component: {fileID: 4414078997526715646}
+  - component: {fileID: 793992033376048413}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -243,6 +244,10 @@ MonoBehaviour:
   _isShootHeld: 0
   _isDodging: 0
   _isHealing: 0
+  _isManaPotion: 0
+  _isPotionWheel: 0
+  _isInteracting: 0
+  arcoActivo: 0
 --- !u!114 &2360815886447925532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -480,6 +485,14 @@ MonoBehaviour:
   knockedPower: {x: 5, y: 0}
   knockedDuration: 0.6
   deathVFX: {fileID: 7090040657197777121, guid: ccc34343e106b324e91a2912a76cf01c, type: 3}
+  fotogramasCaidaMuerte:
+  - {fileID: 21300000, guid: 0b3da9619fbc58e4987e8f23136a3d98, type: 3}
+  - {fileID: 21300000, guid: a3720297d8aaf3340bfaf8538988680f, type: 3}
+  - {fileID: 21300000, guid: 13ecd7ea1fec87443a0edd33089eea77, type: 3}
+  - {fileID: 21300000, guid: d7d28088ae8fac14db22ac8b362ade64, type: 3}
+  - {fileID: 21300000, guid: 6f9e01500adfaec478b6997eb6fa710a, type: 3}
+  - {fileID: 21300000, guid: 4dec5e487fcb5d5448d04c4a0acdbc4e, type: 3}
+  - {fileID: 21300000, guid: 500612c5f235463489db2b32cb58b12a, type: 3}
   attackPoint: {fileID: 8153383818050028627}
   attackLayers:
     serializedVersion: 2
@@ -730,6 +743,9 @@ MonoBehaviour:
   wallAttackProfileIndex: 0
   comboIndex: 0
   attackBufferTime: 0.35
+  esperaBeber: 0.4
+  estadoLevantar: UsarObjeto
+  tiempoLevantado: 2.4
 --- !u!114 &8415853499437379215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -904,6 +920,7 @@ MonoBehaviour:
       height: 0
     pivotes: []
   colorImpacto: {r: 0.75, g: 0.92, b: 1, a: 1}
+  tajoMinimo: 0.08
 --- !u!114 &4414078997526715646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -941,6 +958,63 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ef1fb18abfe96b942a7e05bffbc36c7f, type: 3}
   sonidoAgarre: aterrizaje
   sonidoSubida: esfuerzo
+--- !u!114 &793992033376048413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 25321102597521225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 352f2430fdbed4f4bbce463778dd6375, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sangrado:
+    activo: 1
+    cantidad: 5
+    tamano: {x: 0.035, y: 0.055}
+    colorA: {r: 0.8, g: 0.04, b: 0.08, a: 1}
+    colorB: {r: 0.45, g: 0, b: 0.03, a: 1}
+    velocidad: {x: 0.15, y: -0.2}
+    gravedad: 0.7
+    vida: {x: 0.4, y: 0.7}
+  fuego:
+    activo: 1
+    cantidad: 8
+    tamano: {x: 0.03, y: 0.05}
+    colorA: {r: 1, g: 0.62, b: 0.15, a: 1}
+    colorB: {r: 1, g: 0.85, b: 0.35, a: 1}
+    velocidad: {x: 0.15, y: 0.55}
+    gravedad: -0.12
+    vida: {x: 0.3, y: 0.55}
+  hielo:
+    activo: 1
+    cantidad: 5
+    tamano: {x: 0.035, y: 0.055}
+    colorA: {r: 0.8, g: 0.95, b: 1, a: 1}
+    colorB: {r: 0.55, g: 0.85, b: 1, a: 1}
+    velocidad: {x: 0.3, y: 0.1}
+    gravedad: 0.15
+    vida: {x: 0.35, y: 0.6}
+  sagrado:
+    activo: 1
+    cantidad: 6
+    tamano: {x: 0.03, y: 0.06}
+    colorA: {r: 1, g: 0.92, b: 0.45, a: 1}
+    colorB: {r: 1, g: 1, b: 1, a: 1}
+    velocidad: {x: 0.25, y: 0.15}
+    gravedad: 0
+    vida: {x: 0.25, y: 0.45}
+  oscuro:
+    activo: 1
+    cantidad: 5
+    tamano: {x: 0.035, y: 0.055}
+    colorA: {r: 0.62, g: 0.3, b: 1, a: 1}
+    colorB: {r: 0.3, g: 0.1, b: 0.5, a: 1}
+    velocidad: {x: 0.1, y: 0.3}
+    gravedad: -0.05
+    vida: {x: 0.4, y: 0.7}
 --- !u!1 &306997544179117387
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,9 +6,12 @@ using UnityEngine;
 // hace el PlayerControler; aqui solo se aplica al terminar.
 //
 // Limites para que no se cambie sin pensar en mitad de una pelea:
-//   - Cuesta mana (costeMana).
-//   - El gesto tarda un poco y se interrumpe si te golpean (se pierde el mana).
+//   - Cuesta mana (costeMana). El sangrado cuesta vida en su lugar
+//     (AjustesProgreso: sube en proporcion a la vida maxima) y no se puede
+//     imbuir si con eso te quedarias sin vida.
+//   - El gesto tarda un poco y se interrumpe si te golpean (se pierde lo pagado).
 //   - Tras imbuir hay que esperar "recarga" para volver a cambiar.
+// Las particulas del arma mientras dura van aparte (EfectoArma).
 public class ArmaImbuida : MonoBehaviour
 {
     [SerializeField] private float costeMana = 25f;
@@ -23,7 +26,6 @@ public class ArmaImbuida : MonoBehaviour
     private SpriteRenderer origen;
     private SpriteRenderer aura;
     private Material materialAura;
-    private float siguienteChispa;
 
     public event System.Action AlCambiar;
 
@@ -34,15 +36,33 @@ public class ArmaImbuida : MonoBehaviour
     public float FraccionRestante => duracion > 0f ? Restante / duracion : 0f;
     public float RecargaRestante => Mathf.Max(0f, siguienteCambio - Time.time);
 
+    // Vida que cuesta el sangrado ahora (con la vida inicial, la de Ajustes; con
+    // el doble de vida maxima, el doble).
+    public static int CosteVidaSangrado
+    {
+        get
+        {
+            AjustesProgreso a = AjustesProgreso.Get();
+            return Mathf.Max(1, Mathf.RoundToInt(a.sangradoCosteVida * Progreso.VidaMax / Mathf.Max(1f, a.vidaBase)));
+        }
+    }
+
+    public static bool CuestaVida(Elemento e) => e == Elemento.Sangrado;
+
     private void Awake()
     {
         origen = GetComponent<SpriteRenderer>();
+        if (GetComponent<EfectoArma>() == null) gameObject.AddComponent<EfectoArma>();
     }
 
     // Motivo por el que no se puede imbuir ahora (null si se puede).
-    public string Impedimento(PlayerMana mana)
+    public string Impedimento(PlayerMana mana) => Impedimento(mana, Elemento.Ninguno, 0);
+
+    // Lo mismo para un elemento concreto: el sangrado mira la vida, no el mana.
+    public string Impedimento(PlayerMana mana, Elemento e, int vidaActual)
     {
         if (RecargaRestante > 0f) return "Espera " + Mathf.CeilToInt(RecargaRestante) + " s";
+        if (CuestaVida(e)) return vidaActual > CosteVidaSangrado ? null : "No tienes vida suficiente";
         if (mana == null || !mana.Tiene(costeMana)) return "Sin maná suficiente";
         return null;
     }
@@ -98,16 +118,7 @@ public class ArmaImbuida : MonoBehaviour
         if (activo == Elemento.Sangrado) cantidad *= 0.45f;
         materialAura.SetColor("_AuraColor", c);
         materialAura.SetFloat("_Amount", cantidad);
-
-        // Alguna chispa del elemento subiendo.
-        if (Time.time >= siguienteChispa)
-        {
-            siguienteChispa = Time.time + Random.Range(0.15f, 0.3f);
-            Vector2 p = (Vector2)transform.position + new Vector2(Random.Range(-0.3f, 0.3f), Random.Range(-0.4f, 0.3f));
-            float grav = activo == Elemento.Sangrado ? 0.6f : activo == Elemento.Hielo ? 0.1f : -0.4f;
-            ParticulasFx.Rafaga(p, 1, c, Color.Lerp(c, Color.white, 0.5f), new Vector2(0.3f, 0.8f), grav,
-                                new Vector2(0.04f, 0.07f), new Vector2(0.4f, 0.8f), 50f, 90f);
-        }
+        // Las chispas que salian del cuerpo ahora salen del arma (EfectoArma).
     }
 
     private bool CrearAura()

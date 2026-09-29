@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
     {
         // Con la pantalla de muerte, Escape es "cualquier boton" para continuar.
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame && !PantallaMuerte.Activa
-            && !RuedaImbuir.Abierta && !MenuHoguera.Abierto)
+            && !RuedaImbuir.Abierta && !MenuHoguera.Abierto && !CuadroPista.Abierto && !MenuPausa.LibroAbierto)
         {
             if (isPaused)
                 ResumeGame();
@@ -131,6 +131,8 @@ public class GameManager : MonoBehaviour
     IEnumerator RespawnPlayerCoroutine()
     {
         yield return new WaitForSeconds(respawnPlayerDelay);
+        // Si murio en el aire, primero termina de caer (y sale la pantalla de muerte).
+        while (CaidaMuerte.EnCurso) yield return null;
         // Tras morir, la pantalla de muerte espera a que el jugador pulse un boton.
         if (PantallaMuerte.Activa) yield return PantallaMuerte.EsperarContinuar();
 

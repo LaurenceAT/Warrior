@@ -54,6 +54,48 @@ public class AjustesProgreso : ScriptableObject
     [Tooltip("Lagrimas que cuesta cada mejora de los frascos.")]
     public int frascosCoste = 1;
 
+    [Header("Imbuir: Sangrado (cuesta vida)")]
+    [Tooltip("Vida que cuesta imbuir con la vida inicial. Sube en proporcion a la vida maxima (con el doble de vida, el doble de coste).")]
+    public float sangradoCosteVida = 25f;
+    [Tooltip("Lo que suma cada golpe al contador del enemigo (salta al llegar a 100).")]
+    public float sangradoPorGolpe = 25f;
+    [Tooltip("Segundos sin golpes antes de que el contador del enemigo empiece a bajar.")]
+    public float sangradoEspera = 2f;
+    [Tooltip("Lo que baja por segundo el contador del enemigo.")]
+    public float sangradoBajada = 20f;
+    [Tooltip("Enemigos normales: parte de su vida maxima que pierden al sangrar.")]
+    [Range(0f, 1f)] public float sangradoFraccion = 0.12f;
+    [Tooltip("Enemigos normales: dano fijo que se suma.")]
+    public int sangradoFijo = 8;
+    [Tooltip("Enemigos normales: tras cada sangrado les cuesta mas (el contador necesario se multiplica por esto).")]
+    public float sangradoResistencia = 1.2f;
+    [Tooltip("Jefes: parte de su vida maxima por cada sangrado.")]
+    [Range(0f, 0.2f)] public float sangradoFraccionJefe = 0.04f;
+    [Tooltip("Jefes: dano fijo que se suma.")]
+    public int sangradoFijoJefe = 10;
+    [Tooltip("Jefes: tras cada sangrado el contador necesario se multiplica por esto.")]
+    public float sangradoResistenciaJefe = 1.5f;
+    [Tooltip("Jefes: cuantas veces como mucho pueden sangrar en cada pelea.")]
+    public int sangradoMaximoJefe = 5;
+    [Tooltip("Sangrado que te acumulas TU con cada golpe que das (tu barra se llena en 100).")]
+    public float sangradoPropioPorGolpe = 8f;
+
+    [Header("Imbuir: Sagrado (aturdir)")]
+    [Tooltip("Probabilidad de aturdir con cada golpe (0.12 = 12 %).")]
+    [Range(0f, 1f)] public float sagradoProbabilidad = 0.12f;
+    [Tooltip("Segundos que dura (menos que el aturdimiento por parry).")]
+    public float sagradoDuracion = 0.6f;
+    [Tooltip("Segundos minimos entre dos aturdimientos al mismo enemigo.")]
+    public float sagradoEspera = 4f;
+
+    [Header("Imbuir: Escarcha (fragmentos al congelar)")]
+    [Tooltip("Fragmentos de hielo que saltan al congelar (solo visual).")]
+    public int hieloFragmentos = 7;
+    [Tooltip("Tamano de cada fragmento (min y max, en unidades).")]
+    public Vector2 hieloTamano = new Vector2(0.04f, 0.07f);
+    [Tooltip("Segundos que duran los fragmentos.")]
+    public float hieloDuracion = 0.6f;
+
     private static AjustesProgreso instancia;
 
     public static AjustesProgreso Get()

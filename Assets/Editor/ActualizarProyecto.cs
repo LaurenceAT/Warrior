@@ -33,6 +33,8 @@ public static class ActualizarProyecto
     public static void Ronda6() => global::Ronda6.Todo();
     // Septima ronda: fondo de la nieve con profundidad y ambiente.
     public static void Ronda7() => global::Ronda7.Todo();
+    // Octava ronda: estatuas con pistas, decoracion, imbuiciones, muerte en el aire y sangre.
+    public static void Ronda8() => global::Ronda8.Todo();
 
     public static void Ronda5()
     {

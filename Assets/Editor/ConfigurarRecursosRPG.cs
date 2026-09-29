@@ -309,19 +309,31 @@ public static class ConfigurarRecursosRPG
 
     // ------------------------------------------------------------------ Tajos
 
-    private static AnimadorHoja.Clip[] TajosPorElemento()
+    public static AnimadorHoja.Clip[] TajosPorElemento()
     {
         var l = new List<AnimadorHoja.Clip>();
         Vector2 c = new Vector2(0.5f, 0.5f);
         foreach (Elemento e in Elementos.Todos)
         {
-            int color = Elementos.ColorTajo(e);
-            l.Add(Clip("tajo_h_" + e, Tajos + "Slash 1/color" + color + "/Frames", 24f, false, 64f, c));
-            l.Add(Clip("tajo_c_" + e, Tajos + "Slash 3/color" + color + "/frames", 24f, false, 64f, c));
-            l.Add(Clip("tajo_a_" + e, Tajos + "Slash 2/color" + color + "/Frames", 22f, false, 64f, c));
+            l.Add(Clip("tajo_h_" + e, CarpetaTajo(e, "Slash 1"), 24f, false, 64f, c));
+            l.Add(Clip("tajo_c_" + e, CarpetaTajo(e, "Slash 3"), 24f, false, 64f, c));
+            l.Add(Clip("tajo_a_" + e, CarpetaTajo(e, "Slash 2"), 22f, false, 64f, c));
         }
         return l.ToArray();
     }
+
+    // Los tajos recoloreados (sagrado amarillo, sangrado rojo: Ronda 8) van en
+    // Assets/Sprites/Tajos; los demas son los del pack tal cual.
+    public const string TajosPropios = "Assets/Sprites/Tajos/";
+
+    public static string CarpetaTajo(Elemento e, string slash)
+    {
+        string propia = TajosPropios + e + "/" + slash + "/Frames";
+        if (Directory.Exists(propia)) return propia;
+        return Tajos + slash + "/color" + Elementos.ColorTajo(e) + (slash == "Slash 3" ? "/frames" : "/Frames");
+    }
+
+    public static string CarpetaTajoOriginal(int color, string slash) => Tajos + slash + "/color" + color + (slash == "Slash 3" ? "/frames" : "/Frames");
 
     // Efecto de fotogramas sueltos: todos los PNG "...frameN" de una carpeta, en orden.
     public static AnimadorHoja.Clip Clip(string nombre, string ruta, float fps, bool bucle, float ppu, Vector2 pivote,

@@ -414,6 +414,8 @@ MonoBehaviour:
   maxAirStunTime: 2.5
   almas: 4000
   volador: 0
+  tieneSangre: 0
+  colorSangre: {r: 0, g: 0, b: 0, a: 1}
   inamovible: 1
 --- !u!114 &1779228184044617875
 MonoBehaviour:

@@ -30,7 +30,7 @@ using UnityEngine;
 // Parry: cada golpe de un combo se puede parar. Parar todos los de un combo, o
 // acumular varios parrys seguidos, le rompe la postura: queda aturdido un buen
 // rato (ventana de contraataque).
-public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
+public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental, IAturdible
 {
     [Header("Vida por fase")]
     [SerializeField] private int vidaFase1 = 1500;
@@ -79,6 +79,27 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
     private Rect arena;
     private float suelo;
     private bool fase2, invulnerable, transformando;
+    // Aturdimiento del sagrado pendiente: se cumple al acabar el ataque en curso.
+    private float aturdimientoSagrado;
+
+    public bool PedirAturdimiento(float segundos)
+    {
+        if (invulnerable || transformando || salud.Muerto || aturdimientoSagrado > 0f) return false;
+        aturdimientoSagrado = segundos;
+        return true;
+    }
+
+    // Tras cada ataque: primero la postura rota o el parry; si no, el sagrado.
+    private IEnumerator TrasAtaque(float pausa)
+    {
+        bool rota = parrysSeguidos >= parrysParaRomper || (golpesCombo >= 2 && parrysCombo == golpesCombo);
+        float sagrado = aturdimientoSagrado;
+        aturdimientoSagrado = 0f;
+        if (rota) { parrysSeguidos = 0; yield return Aturdido(aturdidoPostura, true); }
+        else if (parado) yield return Aturdido(aturdidoParry, false);
+        else if (sagrado > 0f) yield return Aturdido(sagrado, false);
+        else yield return Pausa(pausa);
+    }
     private float tAgarre = -99f, tLanzas = -99f, tVentisca = -99f, tEstacas = -99f;
     private string ultimoAtaque = "";
     private int parrysSeguidos, parrysCombo, golpesCombo;
@@ -159,10 +180,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
             yield return Ejecutar(ataque);
 
             // Todos los golpes del combo parados (o muchos parrys seguidos): postura rota.
-            bool rota = parrysSeguidos >= parrysParaRomper || (golpesCombo >= 2 && parrysCombo == golpesCombo);
-            if (rota) { parrysSeguidos = 0; yield return Aturdido(aturdidoPostura, true); }
-            else if (parado) yield return Aturdido(aturdidoParry, false);
-            else yield return Pausa(fase2 ? Random.Range(0.25f, 0.5f) : Random.Range(0.5f, 0.9f));
+            yield return TrasAtaque(fase2 ? Random.Range(0.25f, 0.5f) : Random.Range(0.5f, 0.9f));
         }
     }
 
@@ -921,10 +939,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental
             parado = false;
             parrysCombo = golpesCombo = 0;
             yield return Ejecutar(ataque);
-            bool rota = parrysSeguidos >= parrysParaRomper || (golpesCombo >= 2 && parrysCombo == golpesCombo);
-            if (rota) { parrysSeguidos = 0; yield return Aturdido(aturdidoPostura, true); }
-            else if (parado) yield return Aturdido(aturdidoParry, false);
-            else yield return Pausa(Random.Range(0.25f, 0.5f));
+            yield return TrasAtaque(Random.Range(0.25f, 0.5f));
         }
     }
 

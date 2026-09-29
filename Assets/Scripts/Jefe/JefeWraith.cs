@@ -23,7 +23,7 @@ using UnityEngine;
 // sagrada (x1.8); la oscuridad apenas le hace nada. Hay que imbuir la espada.
 //
 // Los ataques grandes abren la camara (CamaraDinamica.Ampliar) para que se vean.
-public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
+public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturdible
 {
 
     [Header("Dano")]
@@ -79,6 +79,15 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
     private Rect arena;
     private float suelo;
     private bool fase2, transformando, parado, invisible;
+    // Tambaleo del sagrado pendiente: se cumple al acabar el ataque en curso.
+    private float aturdimientoSagrado;
+
+    public bool PedirAturdimiento(float segundos)
+    {
+        if (transformando || invisible || salud.Muerto || aturdimientoSagrado > 0f) return false;
+        aturdimientoSagrado = segundos;
+        return true;
+    }
     private float tLluvia = -99f, tVortice = -99f, tNova = -99f;
     private string ultimoAtaque = "";
     private BoxCollider2D cuerpo;
@@ -153,7 +162,10 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
             parado = false;
             yield return Ejecutar(ataque);
 
+            float sagrado = aturdimientoSagrado;
+            aturdimientoSagrado = 0f;
             if (parado) yield return Aturdido(aturdidoParry);
+            else if (sagrado > 0f) yield return Aturdido(sagrado);
             else yield return Pausa(fase2 ? Random.Range(0.25f, 0.5f) : Random.Range(0.55f, 0.95f));
         }
     }

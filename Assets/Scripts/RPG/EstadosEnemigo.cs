@@ -6,10 +6,15 @@ using UnityEngine;
 //   - Fuego: quemadura, dano cada medio segundo durante un rato.
 //   - Escarcha: ralentiza; cuatro golpes seguidos lo congelan un instante.
 //   - Oscuridad: el drenaje lo hace el player (se cura con parte del dano).
-//   - Sagrado: probabilidad de aturdirlo (con espera entre aturdimientos).
+//   - Sagrado: pequena probabilidad de aturdirlo (el mismo aturdimiento que un
+//     parry, pero mas corto), con espera entre aturdimientos. Los jefes lo
+//     guardan para despues de su ataque (IAturdible): nunca les corta un ataque.
 //   - Sangrado (como en Elden Ring): cada golpe llena un contador; al llenarse
-//     le quita de golpe una parte de su vida. Si se deja de golpear, el
-//     contador baja solo.
+//     le quita de golpe una parte de su vida, y la siguiente vez le cuesta mas.
+//     Los jefes pierden menos y solo sangran unas pocas veces por pelea. Si se
+//     deja de golpear, el contador baja solo.
+// Los numeros del sangrado, el sagrado y los fragmentos de hielo estan en
+// Resources/AjustesProgreso.
 // Los estados activos se ven como iconos pequenos bajo su barra de vida (la del
 // enemigo o la grande del jefe). Cuando a uno le queda poco, parpadea.
 public class EstadosEnemigo : MonoBehaviour
@@ -39,25 +44,9 @@ public class EstadosEnemigo : MonoBehaviour
     // Tras congelarse no se vuelve a congelar en un rato (se puede ralentizar).
     [SerializeField] private float inmuneCongelar = 5f;
 
-    [Header("Sagrado")]
-    [Range(0f, 1f)] [SerializeField] private float probAturdir = 0.22f;
-    [SerializeField] private float aturdidoDuracion = 0.8f;
-    [SerializeField] private float esperaAturdir = 2.5f;
-
-    [Header("Sangrado")]
-    [Tooltip("Lo que suma cada golpe al contador (se llena en 100).")]
-    [SerializeField] private float sangradoPorGolpe = 34f;
-    [SerializeField] private float sangradoMaximo = 100f;
-    [Tooltip("Segundos sin golpes antes de que el contador empiece a bajar.")]
-    [SerializeField] private float sangradoEspera = 2f;
-    [SerializeField] private float sangradoBajada = 20f;
-    [Tooltip("Al saltar: parte de su vida maxima que pierde (enemigos normales).")]
-    [Range(0f, 1f)] [SerializeField] private float sangradoFraccion = 0.18f;
-    [SerializeField] private int sangradoFijo = 10;
-    [Tooltip("Lo mismo para los jefes (menos, o los derretiria).")]
-    [Range(0f, 1f)] [SerializeField] private float sangradoFraccionJefe = 0.07f;
-    [Tooltip("Los jefes aguantan mas cada vez: el maximo se multiplica por esto tras cada sangrado.")]
-    [SerializeField] private float sangradoResistenciaJefe = 1.25f;
+    // El contador de sangrado se llena en 100 (luego sube con cada sangrado).
+    private const float SangradoMaximo = 100f;
+    private static AjustesProgreso A => AjustesProgreso.Get();
 
     [Header("Iconos")]
     [Tooltip("Segundos antes de acabar en los que el icono parpadea.")]
@@ -75,6 +64,7 @@ public class EstadosEnemigo : MonoBehaviour
     private int cargasEscarcha;
     private float ultimaEscarcha;
     private float sangrado, ultimoSangrado = -99f, finEstallido = -99f, maximoSangrado;
+    private int vecesSangrado;
     private float siguienteChispa;
 
     private Vector2 ultimaVelocidad;
@@ -115,8 +105,11 @@ public class EstadosEnemigo : MonoBehaviour
         anim = GetComponentInChildren<AnimadorHoja>();
         sr = anim != null ? anim.destino : GetComponentInChildren<SpriteRenderer>();
         if (sr != null) colorBase = sr.color;
-        maximoSangrado = sangradoMaximo;
+        maximoSangrado = SangradoMaximo;
     }
+
+    // Un jefe ya no puede sangrar mas en esta pelea.
+    private bool SangradoAgotado => salud.Inamovible && vecesSangrado >= Mathf.Max(0, A.sangradoMaximoJefe);
 
     private void Recibir(Elemento e, int dano)
     {
@@ -137,19 +130,24 @@ public class EstadosEnemigo : MonoBehaviour
                 break;
 
             case Elemento.Sagrado:
-                if (ahora >= siguienteAturdir && Random.value < probAturdir)
+                if (ahora >= siguienteAturdir && Random.value < A.sagradoProbabilidad)
                 {
-                    siguienteAturdir = ahora + esperaAturdir;
-                    finAturdido = ahora + aturdidoDuracion;
-                    salud.Stagger(aturdidoDuracion);
-                    TextoFlotante.Mostrar("Aturdido", Encima(0.5f), Elementos.Color(e), 0.85f);
-                    ParticulasFx.Rafaga(Encima(0f), 14, new Color(1f, 0.95f, 0.6f), Elementos.Color(e),
-                                        new Vector2(1.5f, 3f), 0f, new Vector2(0.05f, 0.1f), new Vector2(0.3f, 0.6f));
+                    float dur = A.sagradoDuracion;
+                    // Los jefes deciden cuando (despues de su ataque) y si pueden.
+                    IAturdible jefe = GetComponent<IAturdible>();
+                    if (jefe != null && !jefe.PedirAturdimiento(dur)) break;
+                    if (jefe == null) salud.Stagger(dur);
+                    siguienteAturdir = ahora + A.sagradoEspera + dur;
+                    finAturdido = ahora + dur;
+                    if (jefe == null) TextoFlotante.Mostrar("Aturdido", Encima(0.5f), Elementos.Color(e), 0.85f);
+                    ParticulasFx.Rafaga(Encima(0f), 10, new Color(1f, 0.97f, 0.75f), Elementos.Color(e),
+                                        new Vector2(1.2f, 2.5f), 0f, new Vector2(0.04f, 0.08f), new Vector2(0.3f, 0.5f));
                 }
                 break;
 
             case Elemento.Sangrado:
-                sangrado += sangradoPorGolpe;
+                if (SangradoAgotado) break;
+                sangrado += A.sangradoPorGolpe;
                 ultimoSangrado = ahora;
                 if (sangrado >= maximoSangrado) Desangrar();
                 break;
@@ -160,15 +158,17 @@ public class EstadosEnemigo : MonoBehaviour
         }
     }
 
-    // El contador de sangrado se ha llenado: pierde una parte de su vida de golpe.
+    // El contador de sangrado se ha llenado: pierde una parte de su vida de golpe
+    // y queda algo mas resistente para la proxima vez.
     private void Desangrar()
     {
         sangrado = 0f;
         finEstallido = Time.time + 0.6f;
+        vecesSangrado++;
         bool jefe = salud.Inamovible;
-        float fraccion = jefe ? sangradoFraccionJefe : sangradoFraccion;
-        int dano = Mathf.RoundToInt(salud.MaxHealth * fraccion) + sangradoFijo;
-        if (jefe) maximoSangrado *= Mathf.Max(1f, sangradoResistenciaJefe);
+        int dano = jefe ? Mathf.RoundToInt(salud.MaxHealth * A.sangradoFraccionJefe) + A.sangradoFijoJefe
+                        : Mathf.RoundToInt(salud.MaxHealth * A.sangradoFraccion) + A.sangradoFijo;
+        maximoSangrado *= Mathf.Max(1f, jefe ? A.sangradoResistenciaJefe : A.sangradoResistencia);
         Color c = Elementos.Color(Elemento.Sangrado);
         TextoFlotante.Mostrar("¡Sangrado!", Encima(0.5f), c, 1f);
         Sonido.Reproducir("sangrado_enemigo");
@@ -190,12 +190,18 @@ public class EstadosEnemigo : MonoBehaviour
         salud.Stagger(dur);
         Sonido.Reproducir("hielo_congelar");
         TextoFlotante.Mostrar("¡Congelado!", Encima(0.5f), Elementos.Color(Elemento.Hielo), 0.95f);
-        ParticulasFx.Rafaga(Encima(-0.2f), 22, new Color(0.8f, 0.95f, 1f), Elementos.Color(Elemento.Hielo),
-                            new Vector2(1f, 3.5f), 1f, new Vector2(0.05f, 0.12f), new Vector2(0.4f, 0.8f));
-        RecursosRPG r = RecursosRPG.Get();
-        if (r.fxCongelado != null && sr != null)
-            EfectoVisual.Crear(r.fxCongelado, new Vector2(sr.bounds.center.x, sr.bounds.min.y), Mathf.Clamp(sr.bounds.size.x * 0.9f, 0.8f, 2.5f),
-                               new Color(1f, 1f, 1f, 0.9f), false, -1f, "VFX", 4);
+        // Solo unos fragmentos pequenos alrededor de su silueta (antes era un
+        // bloque de hielo grande que tapaba al enemigo y sus ataques).
+        Bounds b = sr != null ? sr.bounds : new Bounds(transform.position, Vector3.one);
+        int n = Mathf.Max(0, A.hieloFragmentos);
+        for (int i = 0; i < n; i++)
+        {
+            float ang = (i + Random.value * 0.6f) / Mathf.Max(1, n) * Mathf.PI * 2f;
+            Vector2 borde = (Vector2)b.center + new Vector2(Mathf.Cos(ang) * b.extents.x, Mathf.Sin(ang) * b.extents.y) * 0.95f;
+            ParticulasFx.Rafaga(borde, 1, new Color(0.85f, 0.97f, 1f), Elementos.Color(Elemento.Hielo),
+                                new Vector2(0.4f, 1f), 0.6f, A.hieloTamano, new Vector2(A.hieloDuracion * 0.7f, A.hieloDuracion),
+                                40f, ang * Mathf.Rad2Deg);
+        }
     }
 
     public void Limpiar()
@@ -239,8 +245,8 @@ public class EstadosEnemigo : MonoBehaviour
         }
 
         // El sangrado baja solo si se deja de golpear.
-        if (sangrado > 0f && ahora - ultimoSangrado > sangradoEspera)
-            sangrado = Mathf.Max(0f, sangrado - sangradoBajada * Time.deltaTime);
+        if (sangrado > 0f && ahora - ultimoSangrado > A.sangradoEspera)
+            sangrado = Mathf.Max(0f, sangrado - A.sangradoBajada * Time.deltaTime);
 
         // Ritmo de la animacion y color de la escarcha.
         float ritmo = Ritmo;
@@ -292,7 +298,7 @@ public class EstadosEnemigo : MonoBehaviour
         if (sangrado > 0f || ahora < finEstallido)
         {
             // Acabando: bajando solo y casi vacio.
-            bool bajando = ahora - ultimoSangrado > sangradoEspera;
+            bool bajando = ahora - ultimoSangrado > A.sangradoEspera;
             activos.Add(new Icono
             {
                 clave = "estado_sangrado",

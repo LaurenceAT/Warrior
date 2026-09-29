@@ -697,6 +697,8 @@ public class PlayerControler : MonoBehaviour
 
     [Header("Death VFX")]
     [SerializeField] private GameObject deathVFX;
+    [Tooltip("Animacion de derribo para morir en el aire: el ultimo fotograma es el cuerpo tumbado en el suelo.")]
+    [SerializeField] private Sprite[] fotogramasCaidaMuerte;
 
     //VARIABLES PARA EL SISTEMA DE ATAQUE
     [Header("Opciones de Ataque")]
@@ -713,6 +715,8 @@ public class PlayerControler : MonoBehaviour
     // que mande la duracion del propio golpe, que es lo que dura su clip.
     [SerializeField] private float attackCooldown = 0.4f;
     private float attackAnimationTimer;
+    // Cuando empezo el ataque en curso y cuanto dura (para el tajo de color).
+    private float inicioAtaque, duracionAtaqueActual;
     [SerializeField] private bool isAttacking;
     private bool canAttack = true;
     // Se guarda para poder cortarla cuando un golpe encadena con el siguiente:
@@ -844,7 +848,7 @@ public class PlayerControler : MonoBehaviour
 
         // Con la rueda de imbuir o el menu de la hoguera abiertos, el player no
         // hace nada (y lo que se pulse ahi no cuenta como ataque o salto).
-        if (RuedaImbuir.Abierta || RuedaPociones.Abierta || MenuHoguera.Abierto || isAgarrado || levantandoObjeto)
+        if (RuedaImbuir.Abierta || RuedaPociones.Abierta || MenuHoguera.Abierto || CuadroPista.Abierto || isAgarrado || levantandoObjeto)
         {
             LimpiarEntradas();
             if (!isAgarrado && isGrounded) m_rigitbody2D.linearVelocity = new Vector2(0f, m_rigitbody2D.linearVelocityY);
@@ -1478,6 +1482,10 @@ public class PlayerControler : MonoBehaviour
 
             attackAnimationTimer = duracion;
             comboTimer = 0f;
+            // El tajo del golpe anterior no debe seguir en pantalla con este.
+            inicioAtaque = Time.time;
+            duracionAtaqueActual = duracion;
+            if (efectosGolpe != null) efectosGolpe.CancelarTajo();
 
             // Un pasito adelante al golpear. Solo en suelo: en el aire estropearia
             // la trayectoria del salto, y en la pared despegaria al personaje.
@@ -1812,8 +1820,10 @@ public class PlayerControler : MonoBehaviour
         Collider2D[] hits = BuscarObjetivos(perfil);
         Vector2 centro = CentroDelGolpe(perfil);
         // El tajo se ve en el instante del golpe, acierte o no, ajustado al area
-        // que dana de verdad (un poco mas grande).
-        if (efectosGolpe != null) efectosGolpe.Tajo(index, direction, ElementoActivo, CentroVisual(perfil, centro), TamanoGolpe(perfil), perfil.anguloCentro * direction);
+        // que dana de verdad (un poco mas grande). Dura como mucho lo que le queda
+        // al movimiento del ataque.
+        float restoAtaque = duracionAtaqueActual - (Time.time - inicioAtaque);
+        if (efectosGolpe != null) efectosGolpe.Tajo(index, direction, ElementoActivo, CentroVisual(perfil, centro), TamanoGolpe(perfil), perfil.anguloCentro * direction, restoAtaque);
         GolpearObjetos(hits, centro);
         bool contraEspada = ventanaContra > 0f;
         HashSet<EnemyHealth> alreadyHit = new HashSet<EnemyHealth>();
@@ -1897,6 +1907,9 @@ public class PlayerControler : MonoBehaviour
         int dano = enemigo.UltimoDano;
         if (!enemigo.Muerto) EstadosEnemigo.Aplicar(enemigo, e, dano);
         if (e == Elemento.Oscuro && dano > 0) CurarDrenaje(Mathf.Max(1, Mathf.RoundToInt(dano * drenajeOscuro)));
+        // El precio del sangrado: cada golpe que da tambien le llena a el su barra.
+        if (e == Elemento.Sangrado && dano > 0)
+            EstadosPlayer.Acumular(this, EstadoPlayer.Sangrado, AjustesProgreso.Get().sangradoPropioPorGolpe);
 
         Color c = Elementos.Color(e);
         RecursosRPG r = RecursosRPG.Get();
@@ -2572,7 +2585,7 @@ public class PlayerControler : MonoBehaviour
         if (!m_gatherInput.IsInteracting) return;
         m_gatherInput.IsInteracting = false;
         // La F que cierra un menu no debe volver a abrirlo.
-        if (Time.unscaledTime - MenuHoguera.UltimoCierre < 0.3f) return;
+        if (Time.unscaledTime - MenuHoguera.UltimoCierre < 0.3f || Time.unscaledTime - CuadroPista.UltimoCierre < 0.3f) return;
         if (cerca == null || !isGrounded) return;
         if (isAttacking || isDodging || isShooting || isDrinking || isImbuing || isBlocking || isTogglingWeapon) return;
         cerca.Interactuar(this);
@@ -2591,14 +2604,38 @@ public class PlayerControler : MonoBehaviour
         if (desdeCierre < 0.3f) return;
         if (isAttacking || isDodging || isShooting || isDrinking || isImbuing || isBlocking) return;
 
-        RuedaImbuir.Abrir(armaImbuida.Activo, () => armaImbuida.Impedimento(mana), EmpezarImbuir);
+        RuedaImbuir.Abrir(armaImbuida.Activo, e => armaImbuida.Impedimento(mana, e, currentHealth), EmpezarImbuir);
     }
 
     private void EmpezarImbuir(Elemento e)
     {
         if (isImbuing || !canMove || isKnocked) return;
-        if (!mana.Gastar(armaImbuida.CosteMana)) return;
+        if (ArmaImbuida.CuestaVida(e))
+        {
+            // El sangrado se paga con vida. Nunca te puede matar: con la vida
+            // justa no se deja (lo avisa la rueda).
+            int coste = ArmaImbuida.CosteVidaSangrado;
+            if (currentHealth <= coste)
+            {
+                TextoFlotante.Mostrar("No tienes vida suficiente", (Vector2)m_transform.position + Vector2.up * 1.3f, new Color(1f, 0.45f, 0.4f), 0.8f);
+                SonidoMenu.Error();
+                return;
+            }
+            PagarVida(coste);
+        }
+        else if (!mana.Gastar(armaImbuida.CosteMana)) return;
         rutinaImbuir = StartCoroutine(ImbuirRoutine(e));
+    }
+
+    // Vida que paga el propio player (imbuir con sangrado): sin retroceso ni
+    // invulnerabilidad, y nunca baja de 1.
+    private void PagarVida(int cantidad)
+    {
+        if (cantidad <= 0 || currentHealth <= 1) return;
+        currentHealth = Mathf.Max(1, currentHealth - cantidad);
+        PlayerHud.Get().Damage(currentHealth, maxHealth);
+        Sonido.Reproducir("jugador_sangrado", 0.6f);
+        SangreFx.GotasPlayer((Vector2)m_transform.position + Vector2.up * 0.6f, 0.6f);
     }
 
     // El gesto: quieto, la hoja se va encendiendo del color del elemento y, al
@@ -3004,6 +3041,12 @@ public class PlayerControler : MonoBehaviour
     // se copia en Update: el Animator cambia el sprite despues. Aqui ya esta puesto.
     private void LateUpdate()
     {
+        // El tajo de color se corta en cuanto el ataque acaba o se interrumpe
+        // (esquiva, golpe recibido, derribo, muerte).
+        if (efectosGolpe != null && efectosGolpe.TajoActivo &&
+            ((!isAttacking && !isPlunging) || isDodging || isKnocked || currentHealth <= 0))
+            efectosGolpe.CancelarTajo();
+
         if (brilloHoja == null || !brilloHoja.enabled) return;
         brilloHoja.sprite = m_spriteRenderer.sprite;
         brilloHoja.flipX = m_spriteRenderer.flipX;
@@ -3915,6 +3958,10 @@ public class PlayerControler : MonoBehaviour
 
         PlayerHud.Get().Damage(currentHealth, maxHealth);
         Sonido.Reproducir("dano_player", 0.8f);
+        // Unas gotas de sangre donde entra el golpe (mas si es fuerte). Al morir,
+        // la sangre la pone Die.
+        if (currentHealth > 0)
+            SangreFx.GotasPlayer((Vector2)m_transform.position + Vector2.up * 0.7f, damage / Mathf.Max(1f, maxHealth * 0.2f));
 
         // Si el golpe entra con el barrido aun en marcha (fuera de la ventana de
         // invulnerabilidad), se corta: el retroceso tiene que mandar.
@@ -4269,15 +4316,42 @@ public class PlayerControler : MonoBehaviour
     }
 
     // Actualiza la barra de vida a cero, instancia el VFX de muerte y destruye al player.
+    // Si muere en el aire (con suelo debajo), cae derribado y la pantalla de
+    // muerte sale al tocar el suelo (CaidaMuerte).
     public void Die()
     {
         Progreso.Morir(ultimoSueloSeguro, SceneManager.GetActiveScene().name);
         Sonido.Reproducir("muerte_player");
+        bool agarrado = isAgarrado;
         if (isAgarrado) isAgarrado = false;
-        PantallaMuerte.Mostrar(ArenaJefe.EnCombate);
         PlayerHud.Get().Damage(0, maxHealth);
-        GameObject deathVFXPrefab = Instantiate(deathVFX, m_transform.position, Quaternion.identity);
+        if (efectosGolpe != null) efectosGolpe.CancelarTajo();
+
+        float pies = m_collider != null ? m_transform.position.y - m_collider.bounds.min.y : 0f;
+        bool enAire = !isGrounded && !agarrado && fotogramasCaidaMuerte != null && fotogramasCaidaMuerte.Length >= 3
+                      && HaySueloDebajo(pies);
+        if (enAire)
+        {
+            float g = Mathf.Abs(Physics2D.gravity.y) * Mathf.Max(0.5f, m_rigitbody2D.gravityScale);
+            CaidaMuerte.Crear(m_spriteRenderer, fotogramasCaidaMuerte, m_rigitbody2D.linearVelocity, g, pies, ArenaJefe.EnCombate);
+        }
+        else
+        {
+            PantallaMuerte.Mostrar(ArenaJefe.EnCombate);
+            Instantiate(deathVFX, m_transform.position, Quaternion.identity);
+            if (isGrounded) SangreFx.MuertePlayer(new Vector2(m_transform.position.x, m_transform.position.y - pies));
+        }
         Destroy(gameObject);
+    }
+
+    // Hay suelo de verdad debajo (si no, es una caida al vacio: muerte normal).
+    private bool HaySueloDebajo(float pies)
+    {
+        bool antes = Physics2D.queriesStartInColliders;
+        Physics2D.queriesStartInColliders = false;
+        RaycastHit2D h = Physics2D.Raycast((Vector2)m_transform.position + Vector2.down * (pies - 0.05f), Vector2.down, 25f, LayerMask.GetMask("Ground"));
+        Physics2D.queriesStartInColliders = antes;
+        return h.collider != null && !h.collider.isTrigger;
     }
 
     #endregion

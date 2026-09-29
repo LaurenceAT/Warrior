@@ -53,6 +53,16 @@ public class EfectoVisual : MonoBehaviour
             if (e.vida <= 0f) Destroy(e.gameObject);
     }
 
+    // Hace que la animacion (sin bucle) quepa en "segundos" y se borre justo al
+    // acabar, sin quedarse en el ultimo fotograma.
+    public void Durar(float segundos)
+    {
+        if (anim == null || segundos <= 0f) return;
+        AnimadorHoja.Clip c = anim.clips != null && anim.clips.Count > 0 ? anim.clips[0] : null;
+        if (c != null && c.Duracion > 0f) anim.multiplicador = Mathf.Max(1f, c.Duracion / segundos);
+        vida = t + segundos;
+    }
+
     // Se apaga con un fundido y se borra.
     public void Desvanecer(float segundos)
     {

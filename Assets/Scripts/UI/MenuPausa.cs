@@ -12,6 +12,7 @@ using UnityEngine.UI;
 //     Salir al menu (pide confirmacion).
 //   - Ajustes: volumen general, de musica y de efectos, y brillo (se guardan
 //     entre partidas).
+//   - Libro de pistas: las inscripciones de las estatuas ya leidas, por nivel.
 // Arriba, donde estas: el nivel, el nivel del personaje y las almas.
 // Se maneja con raton, teclado o mando (flechas / stick y Enter / boton sur).
 public class MenuPausa : MonoBehaviour
@@ -20,8 +21,23 @@ public class MenuPausa : MonoBehaviour
 
     private CanvasGroup grupo;
     private Button primero;
-    private TextMeshProUGUI textoSalir, textoLugar;
+    private TextMeshProUGUI textoSalir, textoLugar, ayuda;
     private bool confirmarSalir;
+
+    // Libro de pistas: tapa el panel principal mientras esta abierto.
+    private GameObject principal, libro;
+    private Button botonLibro;
+    private RectTransform listaLibro;
+    private TextMeshProUGUI tituloLeido, textoLeido;
+    private readonly System.Collections.Generic.Dictionary<GameObject, Partida.PistaLeida> entradas =
+        new System.Collections.Generic.Dictionary<GameObject, Partida.PistaLeida>();
+    private bool libroAbierto;
+    private int libroCerradoEnFrame = -1;
+
+    // El Esc que cierra el libro no debe cerrar tambien la pausa (GameManager lo mira).
+    public static bool LibroAbierto => instancia != null && (instancia.libroAbierto || instancia.libroCerradoEnFrame == Time.frameCount);
+    private const string AyudaPrincipal = "Enter / clic: elegir      ← →: ajustar      Esc: volver al juego";
+    private const string AyudaLibro = "↑ ↓: elegir pista      Esc: volver";
 
     public static MenuPausa Get()
     {
@@ -33,6 +49,7 @@ public class MenuPausa : MonoBehaviour
     {
         StopAllCoroutines();
         confirmarSalir = false;
+        if (libroAbierto) CerrarLibro(false);
         if (textoSalir != null) textoSalir.text = "Salir al menú";
         if (textoLugar != null)
             textoLugar.text = $"{Partida.NombreNivel(SceneManager.GetActiveScene().name)}   ·   Nivel {Progreso.NivelTotal}   ·   Almas {Progreso.Almas:N0}";
@@ -62,8 +79,102 @@ public class MenuPausa : MonoBehaviour
     private void Update()
     {
         if (grupo == null || !grupo.interactable) return;
+        if (libroAbierto)
+        {
+            UnityEngine.InputSystem.Keyboard k = UnityEngine.InputSystem.Keyboard.current;
+            UnityEngine.InputSystem.Gamepad g = UnityEngine.InputSystem.Gamepad.current;
+            if ((k != null && k.escapeKey.wasPressedThisFrame) || (g != null && g.buttonEast.wasPressedThisFrame)) { CerrarLibro(true); return; }
+            // La pista elegida se lee a la derecha.
+            GameObject sel = EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
+            if (sel != null && entradas.TryGetValue(sel, out Partida.PistaLeida p))
+            {
+                tituloLeido.text = string.IsNullOrEmpty(p.titulo) ? "" : p.titulo.ToUpper();
+                textoLeido.text = p.texto;
+            }
+        }
         if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject == null && primero != null)
-            EventSystem.current.SetSelectedGameObject(primero.gameObject);
+            EventSystem.current.SetSelectedGameObject(libroAbierto ? PrimeraDelLibro() : primero.gameObject);
+    }
+
+    // ------------------------------------------------------------------ Libro de pistas
+
+    private void AbrirLibro()
+    {
+        libroAbierto = true;
+        principal.SetActive(false);
+        libro.SetActive(true);
+        ayuda.text = AyudaLibro;
+
+        // Se sueltan antes de borrarlos: si no, seguirian en la lista este fotograma.
+        for (int i = listaLibro.childCount - 1; i >= 0; i--) { GameObject h = listaLibro.GetChild(i).gameObject; h.transform.SetParent(null); Destroy(h); }
+        entradas.Clear();
+        tituloLeido.text = "";
+        textoLeido.text = "";
+
+        // Por nivel, en el orden del juego (el de Build Settings).
+        var porNivel = new System.Collections.Generic.List<string>();
+        for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+            porNivel.Add(System.IO.Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(i)));
+        foreach (Partida.PistaLeida p in Partida.Pistas)
+            if (!porNivel.Contains(p.escena)) porNivel.Add(p.escena);
+
+        foreach (string escena in porNivel)
+        {
+            bool cabecera = false;
+            foreach (Partida.PistaLeida p in Partida.Pistas)
+            {
+                if (p.escena != escena) continue;
+                if (!cabecera)
+                {
+                    cabecera = true;
+                    TextMeshProUGUI t = EstiloMenu.Texto(Partida.NombreNivel(escena).ToUpper(), listaLibro, 20, new Color(0.78f, 0.66f, 0.46f));
+                    t.characterSpacing = 6f;
+                    t.alignment = TextAlignmentOptions.BottomLeft;
+                    LayoutElement le = t.gameObject.AddComponent<LayoutElement>();
+                    le.preferredHeight = le.minHeight = 36f;
+                }
+                Button b = EstiloMenu.Opcion(listaLibro, string.IsNullOrEmpty(p.titulo) ? "Inscripción" : p.titulo, null, 46f, 24f, null, TextAlignmentOptions.Left);
+                entradas[b.gameObject] = p;
+            }
+        }
+        if (entradas.Count == 0)
+        {
+            TextMeshProUGUI t = EstiloMenu.Texto("Aún no has leído ninguna inscripción.", listaLibro, 24, EstiloMenu.TextoApagado);
+            t.fontStyle = FontStyles.Italic;
+            t.alignment = TextAlignmentOptions.Left;
+            LayoutElement le = t.gameObject.AddComponent<LayoutElement>();
+            le.preferredHeight = le.minHeight = 50f;
+        }
+        Button volver = EstiloMenu.Opcion(listaLibro, "Volver", () => CerrarLibro(true), 50f, 26f, null, TextAlignmentOptions.Left);
+        GameObject pVolver = volver.gameObject;
+
+        if (EventSystem.current != null)
+        {
+            SonidoMenu.Silenciar();
+            EventSystem.current.SetSelectedGameObject(entradas.Count > 0 ? PrimeraDelLibro() : pVolver);
+        }
+    }
+
+    private GameObject PrimeraDelLibro()
+    {
+        for (int i = 0; i < listaLibro.childCount; i++)
+            if (listaLibro.GetChild(i).GetComponent<Button>() != null) return listaLibro.GetChild(i).gameObject;
+        return primero.gameObject;
+    }
+
+    private void CerrarLibro(bool sonido)
+    {
+        libroAbierto = false;
+        libroCerradoEnFrame = Time.frameCount;
+        libro.SetActive(false);
+        principal.SetActive(true);
+        ayuda.text = AyudaPrincipal;
+        if (sonido) SonidoMenu.Cancelar();
+        if (EventSystem.current != null)
+        {
+            SonidoMenu.Silenciar();
+            EventSystem.current.SetSelectedGameObject(botonLibro.gameObject);
+        }
     }
 
     // ------------------------------------------------------------------ Acciones
@@ -123,6 +234,7 @@ public class MenuPausa : MonoBehaviour
         m.primero = EstiloMenu.Opcion(ci.transform, "Reanudar", m.Reanudar, 60f, 30f, null, TextAlignmentOptions.Left);
         EstiloMenu.Opcion(ci.transform, "Destrabar", m.Destrabar, 60f, 30f, null, TextAlignmentOptions.Left);
         EstiloMenu.Opcion(ci.transform, "Reiniciar desde el último punto de control", m.ReiniciarDesdeCheckpoint, 60f, 26f, null, TextAlignmentOptions.Left);
+        m.botonLibro = EstiloMenu.Opcion(ci.transform, "Libro de pistas", m.AbrirLibro, 60f, 30f, null, TextAlignmentOptions.Left);
         m.textoSalir = EstiloMenu.Opcion(ci.transform, "Salir al menú", m.Salir, 60f, 30f, null, TextAlignmentOptions.Left)
                                  .GetComponentInChildren<TextMeshProUGUI>();
 
@@ -143,12 +255,55 @@ public class MenuPausa : MonoBehaviour
         Deslizador("Efectos", cd.transform, ControlVolumen.Efectos, v => ControlVolumen.Efectos = v);
         Deslizador("Brillo", cd.transform, ControlBrillo.Brillo - 0.5f, v => ControlBrillo.Brillo = 0.5f + v);
 
-        TextMeshProUGUI ayuda = EstiloMenu.Texto("Enter / clic: elegir      ← →: ajustar      Esc: volver al juego", go.transform, 22, new Color(0.8f, 0.78f, 0.75f, 0.6f));
+        m.principal = panel.parent.gameObject;
+        m.CrearLibro(go.transform);
+
+        TextMeshProUGUI ayuda = EstiloMenu.Texto(AyudaPrincipal, go.transform, 22, new Color(0.8f, 0.78f, 0.75f, 0.6f));
         ayuda.rectTransform.anchorMin = ayuda.rectTransform.anchorMax = new Vector2(0.5f, 0.08f);
         ayuda.rectTransform.sizeDelta = new Vector2(1400f, 40f);
+        m.ayuda = ayuda;
 
         go.SetActive(false);
         return m;
+    }
+
+    // Mismo panel que la pausa: a la izquierda la lista (por nivel) y a la
+    // derecha la pista elegida.
+    private void CrearLibro(Transform padre)
+    {
+        RectTransform panel = EstiloMenu.Panel(padre, "LIBRO DE PISTAS", new Vector2(1240f, 700f));
+        libro = panel.parent.gameObject;
+
+        RectTransform izq = Zona(panel, 0f, 0.4f);
+        Cabecera(izq, "LEÍDAS");
+        VerticalLayoutGroup ci = EstiloMenu.Columna(izq, 0f, 0f, 50f, 0f, 2f);
+        listaLibro = (RectTransform)ci.transform;
+
+        Image divisor = EstiloMenu.Caja("Divisor", panel, EstiloMenu.FiloTenue);
+        divisor.rectTransform.anchorMin = new Vector2(0.43f, 0f);
+        divisor.rectTransform.anchorMax = new Vector2(0.43f, 1f);
+        divisor.rectTransform.sizeDelta = new Vector2(2f, 0f);
+        divisor.rectTransform.offsetMin = new Vector2(-1f, 70f);
+        divisor.rectTransform.offsetMax = new Vector2(1f, -130f);
+
+        RectTransform der = Zona(panel, 0.46f, 1f);
+        der.offsetMax = new Vector2(der.offsetMax.x, -130f);
+        tituloLeido = EstiloMenu.Texto("", der, 26, EstiloMenu.Titulo);
+        tituloLeido.fontStyle = FontStyles.Bold;
+        tituloLeido.characterSpacing = 8f;
+        tituloLeido.alignment = TextAlignmentOptions.Left;
+        EstiloMenu.Arriba(tituloLeido.rectTransform, 0f, 36f);
+        textoLeido = EstiloMenu.Texto("", der, 28, EstiloMenu.TextoElegido);
+        textoLeido.enableWordWrapping = true;
+        textoLeido.alignment = TextAlignmentOptions.TopLeft;
+        textoLeido.lineSpacing = 8f;
+        RectTransform rt = textoLeido.rectTransform;
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.one;
+        rt.offsetMin = Vector2.zero;
+        rt.offsetMax = new Vector2(0f, -56f);
+
+        libro.SetActive(false);
     }
 
     private static RectTransform Zona(RectTransform panel, float desde, float hasta)

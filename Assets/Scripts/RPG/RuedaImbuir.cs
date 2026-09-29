@@ -31,11 +31,13 @@ public class RuedaImbuir : MonoBehaviour
     private float escalaPrevia = 1f;
     private float abiertaDesde;
     private Action<Elemento> alElegir;
-    private Func<string> impedimento;
+    private Func<Elemento, string> impedimento;
     private Elemento actual;
 
+    private Elemento Seleccionado => elegido >= 0 ? Elementos.Todos[elegido] : Elemento.Ninguno;
+
     // Abre la rueda. "impedimento" dice por que no se puede imbuir ahora (o null).
-    public static void Abrir(Elemento actual, Func<string> impedimento, Action<Elemento> alElegir)
+    public static void Abrir(Elemento actual, Func<Elemento, string> impedimento, Action<Elemento> alElegir)
     {
         if (instancia == null) instancia = Crear();
         instancia.AbrirInterno(actual, impedimento, alElegir);
@@ -46,7 +48,7 @@ public class RuedaImbuir : MonoBehaviour
         if (instancia != null && instancia.abierta) instancia.CerrarInterno();
     }
 
-    private void AbrirInterno(Elemento actual, Func<string> impedimento, Action<Elemento> alElegir)
+    private void AbrirInterno(Elemento actual, Func<Elemento, string> impedimento, Action<Elemento> alElegir)
     {
         if (abierta) return;
         abierta = true;
@@ -100,7 +102,7 @@ public class RuedaImbuir : MonoBehaviour
         if (!confirmar) return;
 
         if (elegido < 0) { CerrarInterno(); return; }
-        string motivo = impedimento != null ? impedimento() : null;
+        string motivo = impedimento != null ? impedimento(Seleccionado) : null;
         if (motivo != null)
         {
             aviso.text = motivo;
@@ -191,11 +193,21 @@ public class RuedaImbuir : MonoBehaviour
             nombre.text = Elementos.Nombre(e);
             nombre.color = Color.Lerp(Elementos.Color(e), Color.white, 0.35f);
             efecto.text = Elementos.Efecto(e);
-            PlayerMana mana = FindFirstObjectByType<PlayerMana>();
-            float cuesta = FindFirstObjectByType<ArmaImbuida>() is ArmaImbuida a ? a.CosteMana : 25f;
-            coste.text = $"<color=#6fa8ff>{cuesta:0} maná</color>" + (mana != null ? $"  <size=80%><color=#999>({mana.Actual:0}/{mana.Maximo:0})</color></size>" : "");
+            if (ArmaImbuida.CuestaVida(e))
+            {
+                // El sangrado se paga con vida: en rojo, con la vida que tienes.
+                PlayerControler p = FindFirstObjectByType<PlayerControler>();
+                coste.text = $"<color=#ff4a4a>{ArmaImbuida.CosteVidaSangrado} vida</color>" +
+                             (p != null ? $"  <size=80%><color=#999>({p.VidaActual}/{p.VidaMaxima})</color></size>" : "");
+            }
+            else
+            {
+                PlayerMana mana = FindFirstObjectByType<PlayerMana>();
+                float cuesta = FindFirstObjectByType<ArmaImbuida>() is ArmaImbuida a ? a.CosteMana : 25f;
+                coste.text = $"<color=#6fa8ff>{cuesta:0} maná</color>" + (mana != null ? $"  <size=80%><color=#999>({mana.Actual:0}/{mana.Maximo:0})</color></size>" : "");
+            }
         }
-        string motivo = impedimento != null ? impedimento() : null;
+        string motivo = impedimento != null ? impedimento(Seleccionado) : null;
         aviso.text = motivo ?? "";
         aviso.color = new Color(1f, 0.75f, 0.45f);
     }

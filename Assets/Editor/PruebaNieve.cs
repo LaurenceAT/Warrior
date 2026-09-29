@@ -33,6 +33,7 @@ public static class PruebaNieve
     public static void DecoracionPrueba() => Lanzar("decoracion", System.Environment.GetEnvironmentVariable("VISTAS_ESCENA") ?? Escena);
     public static void PocionesPrueba() => Lanzar("pociones", Escena);
     public static void Ronda6Prueba() => Lanzar("ronda6", Escena);
+    public static void Ronda8Prueba() => Lanzar("ronda8", System.Environment.GetEnvironmentVariable("VISTAS_ESCENA") ?? Escena);
     public static void MenuPrueba() => Lanzar("menu", "Assets/Scenes/Menu Principal.unity");
     public static void PintarPrueba() => Lanzar("pintar", Escena);
     public static void CornisaPrueba() => Lanzar("cornisa", Escena);
@@ -102,7 +103,7 @@ public static class PruebaNieve
             if (p == null) { Debug.LogError("[Prueba] sin player"); EditorApplication.ExitPlaymode(); yield break; }
             Debug.Log($"[Prueba] modo={modo} player={(p != null)} vida={Vida()}/{p.VidaMaxima}");
             IEnumerator rutina = modo == "sistemas" ? Sistemas() : modo == "nivel" ? Nivel() : modo == "enemigos" ? Enemigos()
-                               : modo == "jefe" ? Jefe() : modo == "vistas" ? Vistas() : modo == "cornisa" ? Cornisa() : modo == "pintar" ? Pintar() : modo == "pintarcueva" ? PintarCueva() : modo == "decoracion" ? PintarDecoracion() : modo == "pociones" ? Pociones() : modo == "portal" ? Portal() : modo == "ronda6" ? Ronda6() : Cueva();
+                               : modo == "jefe" ? Jefe() : modo == "vistas" ? Vistas() : modo == "cornisa" ? Cornisa() : modo == "pintar" ? Pintar() : modo == "pintarcueva" ? PintarCueva() : modo == "decoracion" ? PintarDecoracion() : modo == "pociones" ? Pociones() : modo == "portal" ? Portal() : modo == "ronda6" ? Ronda6() : modo == "ronda8" ? Ronda8() : Cueva();
             float limite = Time.realtimeSinceStartup + 240f;
             while (rutina.MoveNext())
             {
@@ -1004,6 +1005,216 @@ public static class PruebaNieve
             ArenaJefe ar = Object.FindFirstObjectByType<ArenaJefe>();
             if (ar != null) foreach (AudioSource a in ar.GetComponents<AudioSource>()) s += $"jefe:{(a.clip != null ? a.clip.name : "-")}={a.volume:0.00} ";
             return s;
+        }
+
+        // ------------------------------------------------------------------ Ronda 8
+
+        private IEnumerator Ronda8()
+        {
+            string pre = "r8_" + UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Replace(" ", "") + "_";
+            Invulnerable();
+            SetCampo(p, "isInvincible", false);
+
+            // Estatuas: aviso, brillo, cuadro de texto, quieto mientras lee, se cierra con dano.
+            EstatuaPista[] estatuas = Object.FindObjectsByType<EstatuaPista>(FindObjectsSortMode.None).OrderBy(e => e.transform.position.x).ToArray();
+            var apartados = new List<GameObject>();
+            Debug.Log($"[Ronda8] estatuas={estatuas.Length} boton pausa={(GameObject.Find("BtnPause") != null)}");
+            for (int i = 0; i < Mathf.Min(3, estatuas.Length); i++)
+            {
+                EstatuaPista e = estatuas[i];
+                SpriteRenderer sr = e.GetComponent<SpriteRenderer>();
+                // Que ningun enemigo cercano interrumpa la lectura en la prueba.
+                foreach (EnemigoBase en in Object.FindObjectsByType<EnemigoBase>(FindObjectsSortMode.None))
+                    if (Vector2.Distance(en.transform.position, sr.bounds.center) < 8f) { en.gameObject.SetActive(false); apartados.Add(en.gameObject); }
+                Teletransportar(new Vector3(sr.bounds.center.x - 1.1f, sr.bounds.min.y + 0.9f, 0f));
+                Mirar(1);
+                yield return new WaitForSeconds(0.8f);
+                Debug.Log($"[Ronda8] {e.id} leida={e.Leida} a tiro={(Interacciones.Actual == (IInteractuable)e)}");
+                yield return Captura(pre + $"estatua{i}", true);
+                Entrada().IsInteracting = true;
+                yield return new WaitForSecondsRealtime(0.5f);
+                float x0 = p.transform.position.x;
+                PonerEje(1f);
+                yield return Captura(pre + $"texto{i}_escribiendo", true);
+                yield return new WaitForSecondsRealtime(3.5f);
+                PonerEje(0f);
+                Debug.Log($"[Ronda8] {e.id} abierto={CuadroPista.Abierto} leida={e.Leida} se movio={Mathf.Abs(p.transform.position.x - x0) > 0.05f}");
+                yield return Captura(pre + $"texto{i}_completo", true);
+                if (i == 0)
+                {
+                    p.TakeDamage(3);
+                    yield return new WaitForSecondsRealtime(0.2f);
+                    Debug.Log($"[Ronda8] tras dano: abierto={CuadroPista.Abierto}");
+                }
+                CuadroPista.Cerrar();
+                yield return new WaitForSecondsRealtime(0.5f);
+            }
+
+            // Pausa y libro de pistas.
+            GameManager.Instance.PauseGame();
+            yield return new WaitForSecondsRealtime(0.4f);
+            yield return Captura(pre + "pausa", true);
+            MenuPausa mp = Object.FindFirstObjectByType<MenuPausa>();
+            Llamar(mp, "AbrirLibro");
+            yield return new WaitForSecondsRealtime(0.4f);
+            Debug.Log($"[Ronda8] libro abierto={MenuPausa.LibroAbierto} pistas leidas={Partida.Pistas.Count}");
+            yield return Captura(pre + "libro", true);
+            Llamar(mp, "CerrarLibro", true);
+            GameManager.Instance.ResumeGame();
+            yield return new WaitForSecondsRealtime(0.3f);
+            if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "Nivel Nieve") yield break;
+            foreach (GameObject g in apartados) if (g != null) g.SetActive(true);
+
+            // ---- Imbuiciones: tajos (color y que acaben con el ataque) y particulas del arma.
+            EnemyHealth rata = Cercano<EnemigoRata>();
+            Vector3 zona = rata != null ? rata.transform.position + Vector3.left * 1.2f + Vector3.up * 0.3f : p.transform.position;
+            if (rata != null) rata.GetComponent<EnemigoBase>().enabled = false;
+            ArmaImbuida arma = p.GetComponent<ArmaImbuida>();
+            EfectosGolpePlayer efectos = p.GetComponent<EfectosGolpePlayer>();
+            Invulnerable();
+            foreach (Elemento e in new[] { Elemento.Fuego, Elemento.Sagrado, Elemento.Sangrado, Elemento.Hielo, Elemento.Oscuro })
+            {
+                Teletransportar(zona);
+                yield return new WaitForSeconds(0.4f);
+                Imbuir(e);
+                yield return new WaitForSeconds(0.5f);
+                ParticleSystem psArma = p.GetComponentsInChildren<ParticleSystem>().FirstOrDefault(x => x.name == "EfectoArma");
+                Debug.Log($"[Ronda8] arma {e}: particulas={(psArma != null ? psArma.particleCount : -1)} efecto={(p.GetComponent<EfectoArma>() != null)} activo={arma.Activo} sprite={p.GetComponent<SpriteRenderer>().sprite?.name} mapa={(MapaHoja.Get() != null && MapaHoja.Get().Punto(p.GetComponent<SpriteRenderer>().sprite, out _))}");
+                yield return Captura(pre + "arma_" + e, false);
+                p.GetComponent<PlayerStamina>().Llenar();
+                Mirar(1);
+                Entrada().IsAttacking = true;
+                // Hasta que sale el tajo, y la captura justo entonces.
+                float t0 = Time.time;
+                while (!efectos.TajoActivo && Time.time - t0 < 0.6f) yield return null;
+                yield return Captura(pre + "tajo_" + e, false);
+                float salio = Time.time;
+                while (efectos.TajoActivo && Time.time - salio < 1f) yield return null;
+                float tajoFin = Time.time;
+                while ((bool)GetCampo(p, "isAttacking") && Time.time - salio < 1f) yield return null;
+                Debug.Log($"[Ronda8] tajo {e}: salio a {salio - t0:0.00}s, duro {tajoFin - salio:0.00}s, ataque acabo {Time.time - tajoFin:0.00}s despues");
+                yield return new WaitForSeconds(0.4f);
+            }
+
+            // Un ataque cortado por un golpe recibido: el tajo se va enseguida.
+            Imbuir(Elemento.Fuego);
+            Teletransportar(zona + Vector3.left * 3f);
+            yield return new WaitForSeconds(0.3f);
+            Entrada().IsAttacking = true;
+            float tc = Time.time;
+            while (!efectos.TajoActivo && Time.time - tc < 0.6f) yield return null;
+            bool antesDelGolpe = efectos.TajoActivo;
+            SetCampo(p, "isInvincible", false);
+            p.TakeDamage(2);
+            yield return null;
+            yield return null;
+            Debug.Log($"[Ronda8] tajo antes del golpe={antesDelGolpe}, tras recibir un golpe={efectos.TajoActivo}");
+            yield return new WaitForSeconds(1.2f);
+            Curar();
+
+            // Sangrado: cuesta vida; sin vida suficiente no deja.
+            float tk = Time.time;
+            while ((bool)GetCampo(p, "isKnocked") && Time.time - tk < 3f) yield return null;
+            yield return new WaitForSeconds(0.3f);
+            arma.Apagar();
+            SetCampo(arma, "siguienteCambio", 0f);
+            Teletransportar(zona + Vector3.left * 5f);
+            yield return new WaitForSeconds(0.5f);
+            int v0 = Vida();
+            Debug.Log($"[Ronda8] antes de imbuir: imbuyendo={GetCampo(p, "isImbuing")} canMove={GetCampo(p, "canMove")} knocked={GetCampo(p, "isKnocked")} vida={Vida()}");
+            Llamar(p, "EmpezarImbuir", Elemento.Sangrado);
+            yield return new WaitForSeconds(1.2f);
+            Debug.Log($"[Ronda8] imbuir sangrado: vida {v0}->{Vida()} (coste {ArmaImbuida.CosteVidaSangrado}) activo={arma.Activo}");
+            SetCampo(arma, "siguienteCambio", 0f);
+            SetCampo(p, "currentHealth", ArmaImbuida.CosteVidaSangrado);
+            string motivo = arma.Impedimento(p.GetComponent<PlayerMana>(), Elemento.Sangrado, Vida());
+            Debug.Log($"[Ronda8] con {Vida()} de vida: impedimento='{motivo}'");
+            Curar();
+
+            // Sangrado en el enemigo y en ti.
+            if (rata != null)
+            {
+                SetCampo(arma, "siguienteCambio", 0f);
+                arma.Activar(Elemento.Sangrado);
+                EstadosPlayer ep = p.GetComponent<EstadosPlayer>();
+                Teletransportar(rata.transform.position + Vector3.left * 1f);
+                Invulnerable();
+                int golpes = 0;
+                float t1 = Time.time;
+                while (!rata.Muerto && Time.time - t1 < 5f)
+                {
+                    Mirar(rata.transform.position.x > p.transform.position.x ? 1 : -1);
+                    Entrada().IsAttacking = true;
+                    golpes++;
+                    yield return new WaitForSeconds(0.45f);
+                    if (golpes == 2) yield return Captura(pre + "sangre_golpe", false);
+                }
+                Debug.Log($"[Ronda8] rata muerta={rata.Muerto} tras {golpes} golpes; tu barra de sangrado={(ep != null ? ep.Fraccion(EstadoPlayer.Sangrado) : 0f):0.00}");
+                yield return new WaitForSeconds(0.3f);
+                yield return Captura(pre + "sangre_muerte_enemigo", false);
+                SetCampo(p, "isInvincible", false);
+            }
+
+            // Sagrado: probabilidad al maximo para la prueba.
+            AjustesProgreso aj = AjustesProgreso.Get();
+            float prob = aj.sagradoProbabilidad;
+            aj.sagradoProbabilidad = 1f;
+            EnemyHealth otro = Object.FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None)
+                .Where(x => !x.Muerto && !x.Inamovible && !x.Volador
+                            && (x.GetComponent<IAfinidadElemental>() == null || x.GetComponent<IAfinidadElemental>().Multiplicador(Elemento.Sagrado) > 0.5f))
+                .OrderBy(x => Vector2.Distance(x.transform.position, p.transform.position)).FirstOrDefault();
+            if (otro != null)
+            {
+                Imbuir(Elemento.Sagrado);
+                otro.GetComponent<EnemigoBase>().enabled = false;
+                Teletransportar(otro.transform.position + Vector3.left * 1f);
+                Invulnerable();
+                yield return new WaitForSeconds(0.3f);
+                // El golpe imbuido en sagrado, directamente sobre el enemigo.
+                EstadosEnemigo.Aplicar(otro, Elemento.Sagrado, 10);
+                yield return new WaitForSeconds(0.1f);
+                Debug.Log($"[Ronda8] sagrado contra {otro.name}: vida={otro.CurrentHealth}/{otro.MaxHealth}");
+                EstadosEnemigo est = otro.GetComponent<EstadosEnemigo>();
+                Debug.Log($"[Ronda8] sagrado: aturdido={(est != null && est.Activos().Any(i => i.clave == "estado_aturdido"))} aturdidoSalud={otro.Aturdido}");
+                SetCampo(p, "isInvincible", false);
+            }
+            aj.sagradoProbabilidad = prob;
+
+            // Muerte en el aire, dos veces en el mismo sitio: manchas que se acumulan.
+            arma.Apagar();
+            Vector3 alto = zona + Vector3.up * 4f;
+            for (int m = 0; m < 2; m++)
+            {
+                p = Object.FindFirstObjectByType<PlayerControler>();
+                // En el suelo hasta que llega la camara; luego un salto y muere arriba.
+                Teletransportar(zona);
+                yield return new WaitForSeconds(2f);
+                p.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(0f, 9f);
+                yield return new WaitForSeconds(0.3f);
+                SetCampo(p, "isInvincible", false);
+                Debug.Log($"[Ronda8] antes de morir: pos={p.transform.position} suelo={GetCampo(p, "isGrounded")} cam={Camera.main.transform.position}");
+                p.TakeDamage(99999);
+                CaidaMuerte cm = Object.FindFirstObjectByType<CaidaMuerte>();
+                Debug.Log($"[Ronda8] tras morir: caida={(cm != null ? cm.transform.position.ToString() : "no")} en curso={CaidaMuerte.EnCurso}");
+                float tm = Time.time;
+                bool pantallaAntes = false;
+                for (int k = 0; k < 12; k++)
+                {
+                    if (PantallaMuerte.Activa && !CaidaMuerte.EnCurso) break;
+                    pantallaAntes |= PantallaMuerte.Activa && CaidaMuerte.EnCurso;
+                    if (m == 0 && k % 2 == 0) yield return Captura(pre + $"muerte_aire_{k}", false);
+                    yield return new WaitForSeconds(0.15f);
+                }
+                Debug.Log($"[Ronda8] muerte en el aire {m}: caida en curso={CaidaMuerte.EnCurso} pantalla={PantallaMuerte.Activa} (antes de tocar suelo={pantallaAntes}) a los {Time.time - tm:0.00}s");
+                float tr = Time.realtimeSinceStartup;
+                while (Object.FindFirstObjectByType<PlayerControler>() == null && Time.realtimeSinceStartup - tr < 8f) yield return null;
+                yield return new WaitForSeconds(1.6f);
+            }
+            p = Object.FindFirstObjectByType<PlayerControler>();
+            Debug.Log($"[Ronda8] manchas en la escena={Object.FindObjectsByType<SpriteRenderer>(FindObjectsSortMode.None).Count(s => s.name == "ManchaSangre")} guardadas={Partida.Manchas.Count}");
+            Teletransportar(zona);
+            yield return new WaitForSeconds(0.6f);
+            yield return Captura(pre + "manchas", false);
         }
 
         private GatherInput Entrada() => p.GetComponent<GatherInput>();

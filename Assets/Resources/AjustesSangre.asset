@@ -1,0 +1,222 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cafaaa5db447b345a32cc94a6c9ba07, type: 3}
+  m_Name: AjustesSangre
+  m_EditorClassIdentifier: 
+  salpicaduras:
+  - nombre: sangre_1
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 18
+    fps: 30
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 45
+    fotogramas:
+    - {fileID: 2800000, guid: 6ecff32cc063a374ba6be478b2e733fc, type: 3}
+    - {fileID: 2800000, guid: 92e63870d63c65541b2d12c0ae088c90, type: 3}
+    - {fileID: 2800000, guid: 6753e582b8cced1448a49376cc50add9, type: 3}
+    - {fileID: 2800000, guid: 05d9c08a186f8ca48ab499d6a0d82768, type: 3}
+    - {fileID: 2800000, guid: afeca49b0310e3d4eb1917728a206ba8, type: 3}
+    - {fileID: 2800000, guid: 8e85bdccdd554664c9554aa93f26aaa8, type: 3}
+    - {fileID: 2800000, guid: 176d8abca78b4d44b82b9fdaf49be8e1, type: 3}
+    - {fileID: 2800000, guid: 3d12ec579a62ee046ab034022b6ca9e9, type: 3}
+    - {fileID: 2800000, guid: 507aa9cff93f57844a5d8543dc4cb62c, type: 3}
+    - {fileID: 2800000, guid: 5cc5e8356b82b9241b66ada2512d1648, type: 3}
+    - {fileID: 2800000, guid: b86b2d446a56dfc4fa38d4687c07cfc8, type: 3}
+    - {fileID: 2800000, guid: 7d375fadbb93f254aac2615d61dc7e2c, type: 3}
+    - {fileID: 2800000, guid: 343e67f68b1c0a744acb61fed7d4a916, type: 3}
+    - {fileID: 2800000, guid: 55bc09a4c9470284ca0969d4ae9eabf6, type: 3}
+    - {fileID: 2800000, guid: 1e1a283a1f3ae68428dac661557dfbd1, type: 3}
+    - {fileID: 2800000, guid: 294fab27276f11b47be2f8dd1574e897, type: 3}
+    - {fileID: 2800000, guid: 7dc6e248d70dd9246b35b227bf1cbe31, type: 3}
+    - {fileID: 2800000, guid: 7760ba32d4f370747b56439705410102, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: sangre_2
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 18
+    fps: 30
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 45
+    fotogramas:
+    - {fileID: 2800000, guid: c1175f033eb3c86468d7af444e4087db, type: 3}
+    - {fileID: 2800000, guid: f4471ac03f3872141830d600900ed64d, type: 3}
+    - {fileID: 2800000, guid: 770b0da155d521141ba776ad7124b9df, type: 3}
+    - {fileID: 2800000, guid: e9c01cf13f2baa34e812b699004203e9, type: 3}
+    - {fileID: 2800000, guid: 7a18bc0a209744a4a92f7252f848bbfc, type: 3}
+    - {fileID: 2800000, guid: 1f9d475e5a2aa6a49b368a6589cd3525, type: 3}
+    - {fileID: 2800000, guid: c356b29901c78414f8f150411c853dde, type: 3}
+    - {fileID: 2800000, guid: 1f5e341b4aa21284ca16907a7804a4ed, type: 3}
+    - {fileID: 2800000, guid: 45eaf3e2127445b4584f30a543f682b5, type: 3}
+    - {fileID: 2800000, guid: 9c55f0e20866ae945b58af1968d18e65, type: 3}
+    - {fileID: 2800000, guid: 55501298c46bb2a4dad531eabff262f3, type: 3}
+    - {fileID: 2800000, guid: dee94e3995f8bfa4ab4d22e93395f256, type: 3}
+    - {fileID: 2800000, guid: e9b37f112a8b09746891c22827efe0b5, type: 3}
+    - {fileID: 2800000, guid: f327d44d35936b146920812dc840c4e8, type: 3}
+    - {fileID: 2800000, guid: c822ec9f65eb4c644859d2b78986b25f, type: 3}
+    - {fileID: 2800000, guid: 85ab1d48fb289d84183f9eb70f91bad5, type: 3}
+    - {fileID: 2800000, guid: a38c0304e7b19db41bc9e148ecf0d3ae, type: 3}
+    - {fileID: 2800000, guid: afaa6fb9a0c769f478bcab1956744b32, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: sangre_3
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 18
+    fps: 30
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 45
+    fotogramas:
+    - {fileID: 2800000, guid: a40269c36a0e44748bacbb93000c2dac, type: 3}
+    - {fileID: 2800000, guid: 2c77b5de9ef253a43944c1434ba0eeeb, type: 3}
+    - {fileID: 2800000, guid: 4348dc9ab5032594da9978ace99d9ce3, type: 3}
+    - {fileID: 2800000, guid: a4534f1295d354644a199ffeaea3bc2b, type: 3}
+    - {fileID: 2800000, guid: 2eb54f08da1a7dd4897b27df2e08eb7f, type: 3}
+    - {fileID: 2800000, guid: 3264688d86f327f47a00777f27f0c8d6, type: 3}
+    - {fileID: 2800000, guid: a9e4767f217f180408eef5e8bd3fc27f, type: 3}
+    - {fileID: 2800000, guid: f020cfcefcc7fed4bb41af804a888a17, type: 3}
+    - {fileID: 2800000, guid: b5dc3c6f48f39024180f3d5053393c79, type: 3}
+    - {fileID: 2800000, guid: 6e31cc7b8d39a0f4e960808312abe543, type: 3}
+    - {fileID: 2800000, guid: a9022e093f753474488b2551fb3087be, type: 3}
+    - {fileID: 2800000, guid: 78deaf7550b71a84ea1a26d92ec4dea6, type: 3}
+    - {fileID: 2800000, guid: 48c7b22101657a14294f0c6a527dcbcd, type: 3}
+    - {fileID: 2800000, guid: ef336389395842747a45bda760fc2358, type: 3}
+    - {fileID: 2800000, guid: fd72d76c046308c4092c24375c4a8734, type: 3}
+    - {fileID: 2800000, guid: 0fb0c23b21e27fd4fade7e1a92ef0eca, type: 3}
+    - {fileID: 2800000, guid: ab2c09c78a268b546984166e5e11bc50, type: 3}
+    - {fileID: 2800000, guid: eee7df5abe30373468cd45664db5bbbf, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: sangre_4
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 18
+    fps: 30
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 45
+    fotogramas:
+    - {fileID: 2800000, guid: 22bdb68b2cfdbe04c9a48fe736326a7f, type: 3}
+    - {fileID: 2800000, guid: 0c777b4d8f1033147ac24d29cf22c435, type: 3}
+    - {fileID: 2800000, guid: b8f97bcb0b3752f419f9a2eceb9d6979, type: 3}
+    - {fileID: 2800000, guid: 23b99155fc0b8d84086928d0d63447a8, type: 3}
+    - {fileID: 2800000, guid: 29d6fd1618ca3334491ed193ab83d1a2, type: 3}
+    - {fileID: 2800000, guid: 979af4fdb2739ef429ac5e99656a8031, type: 3}
+    - {fileID: 2800000, guid: 375be8168f7a4ee40b57bd60b944c539, type: 3}
+    - {fileID: 2800000, guid: a0d9b0d6f376b6d4aa984f9c1dae20dd, type: 3}
+    - {fileID: 2800000, guid: 9b35b0b75e9bfba40b5ae6223ad4d300, type: 3}
+    - {fileID: 2800000, guid: 27c421253ac8eb642837fe1d15d94954, type: 3}
+    - {fileID: 2800000, guid: a308e779e69517f4da0f2d2676b0671b, type: 3}
+    - {fileID: 2800000, guid: be123c8796465ac42b60005786e65da8, type: 3}
+    - {fileID: 2800000, guid: f9a08a7d6dda112418ca02c9b9e77899, type: 3}
+    - {fileID: 2800000, guid: 9f24bdf5a400a4a499ed5cdc48e47b0a, type: 3}
+    - {fileID: 2800000, guid: 2cc13a2220ee13e43a4b061aace56c7a, type: 3}
+    - {fileID: 2800000, guid: b849ba27cb879f749a833d7fc64d55e3, type: 3}
+    - {fileID: 2800000, guid: 21b11c07c6aa6f04ab6eb6da19d95a3e, type: 3}
+    - {fileID: 2800000, guid: 85343aafe3a91f04688d421747e21826, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  - nombre: sangre_5
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 18
+    fps: 30
+    bucle: 0
+    alReves: 0
+    pivote: {x: 0.5, y: 0.5}
+    pixelesPorUnidad: 45
+    fotogramas:
+    - {fileID: 2800000, guid: adfa9947453cb3548afc6131cc717ff7, type: 3}
+    - {fileID: 2800000, guid: 0f126143dcc119349a170625526767c9, type: 3}
+    - {fileID: 2800000, guid: 7bdb27d10bf8a454b9f7818848818fe5, type: 3}
+    - {fileID: 2800000, guid: 605806dc66cdcc64199ee6da69d40041, type: 3}
+    - {fileID: 2800000, guid: 41b62261c0af88143a08a07d5cd6fc96, type: 3}
+    - {fileID: 2800000, guid: 29883556ead71e245a418ff1cc02e332, type: 3}
+    - {fileID: 2800000, guid: a4f57523820de95409ec7130b00e0e9a, type: 3}
+    - {fileID: 2800000, guid: 508e0a9f826367c4aaf7e353fa1b7c36, type: 3}
+    - {fileID: 2800000, guid: c59830d9cfa267d47b7208c97461cb1a, type: 3}
+    - {fileID: 2800000, guid: 36014d69d10647241830d7072aa209b8, type: 3}
+    - {fileID: 2800000, guid: d85aa2bc7b5cd20468e5d74bdb684a6a, type: 3}
+    - {fileID: 2800000, guid: e97b86ffba207d544a53dc26ddabcafe, type: 3}
+    - {fileID: 2800000, guid: 05bc3b622112b474c90c4ceb1a0d9f0e, type: 3}
+    - {fileID: 2800000, guid: 7336cce36d91e034da70864e9f019851, type: 3}
+    - {fileID: 2800000, guid: d32c9a9117fbb674faf5585f863a4bd6, type: 3}
+    - {fileID: 2800000, guid: 84dab72781dcb6c448854733c2756eeb, type: 3}
+    - {fileID: 2800000, guid: 08726f4254405364b83e1345df559fea, type: 3}
+    - {fileID: 2800000, guid: f315f1833bfac754ba83504929196c15, type: 3}
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
+  manchas:
+  - {fileID: 21300000, guid: 775c779e9ea74b842a5078fafc6722d6, type: 3}
+  - {fileID: 21300000, guid: 16fa88eedec2ec54e88bfbeb328d308d, type: 3}
+  - {fileID: 21300000, guid: 990ea10d5b8bfa04a8596dc4b5a6d092, type: 3}
+  - {fileID: 21300000, guid: 261ac34e361d7e045a0c9d302cf31f7a, type: 3}
+  - {fileID: 21300000, guid: d89d388c5854ab942a42c4b06d0f4c05, type: 3}
+  - {fileID: 21300000, guid: 64574fbfb9295ff4a8f7fd20f6587065, type: 3}
+  sangreMuerte: 1
+  colorPlayer: {r: 0.62, g: 0.02, b: 0.05, a: 0.95}
+  manchasMuertePlayer: 3
+  maximoManchasPorNivel: 45
+  tamanoMuertePlayer: 1.1
+  gotasPlayer: 1
+  gotasPlayerCantidad: 7
+  gotasPlayerIntensidad: 1
+  sangreEnemigos: 1
+  tamanoGolpe: 0.55
+  gotasGolpe: 4
+  tamanoMuerteEnemigo: 0.95
+  manchasMuerteEnemigo: 2
+  segundosManchaEnemigo: 10
+  tamanoMancha: 1
