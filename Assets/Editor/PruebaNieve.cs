@@ -39,6 +39,10 @@ public static class PruebaNieve
     public static void VariantesPrueba() => Lanzar("variantes", Escena);
     public static void TonosPrueba() => Lanzar("tonos", Escena);
     public static void JefesAturdirPrueba() => Lanzar("jefesaturdir", Escena);
+    public static void RecorridoCuevaPrueba() => Lanzar("recorridocueva", "Assets/Scenes/Nivel Cueva.unity");
+    public static void EnemigosCuevaPrueba() => Lanzar("enemigoscueva", "Assets/Scenes/Nivel Cueva.unity");
+    public static void CuevaNuevaPrueba() => Lanzar("cuevanueva", "Assets/Scenes/Nivel Cueva.unity");
+    public static void VistasCuevaPrueba() => Lanzar("vistascueva", System.Environment.GetEnvironmentVariable("VISTAS_ESCENA") ?? "Assets/Scenes/Nivel Cueva.unity");
     public static void JefesAturdirCuevaPrueba() => Lanzar("jefesaturdir", "Assets/Scenes/Nivel Cueva.unity");
     public static void FichasCuevaPrueba() => Lanzar("fichas", "Assets/Scenes/Nivel Cueva.unity");
     // Fotos del nivel en los puntos de la variable de entorno VISTAS ("x,y;x,y").
@@ -120,7 +124,7 @@ public static class PruebaNieve
             if (p == null) { Debug.LogError("[Prueba] sin player"); EditorApplication.ExitPlaymode(); yield break; }
             Debug.Log($"[Prueba] modo={modo} player={(p != null)} vida={Vida()}/{p.VidaMaxima}");
             IEnumerator rutina = modo == "sistemas" ? Sistemas() : modo == "nivel" ? Nivel() : modo == "enemigos" ? Enemigos()
-                               : modo == "jefe" ? Jefe() : modo == "vistas" ? Vistas() : modo == "cornisa" ? Cornisa() : modo == "pintar" ? Pintar() : modo == "pintarcueva" ? PintarCueva() : modo == "decoracion" ? PintarDecoracion() : modo == "pociones" ? Pociones() : modo == "portal" ? Portal() : modo == "ronda6" ? Ronda6() : modo == "ronda8" ? Ronda8() : modo == "wraith" ? Wraith() : modo == "fichas" ? Fichas() : modo == "ojos" ? Ojos() : modo == "saltos" ? Saltos() : modo == "saltos2" ? Saltos2() : modo == "golpes" ? Golpes() : modo == "movimiento" ? Movimiento() : modo == "murcielago" ? Murcielago() : modo == "variantes" ? Variantes() : modo == "tonos" ? Tonos() : modo == "jefesaturdir" ? JefesAturdir() : Cueva();
+                               : modo == "jefe" ? Jefe() : modo == "vistas" ? Vistas() : modo == "cornisa" ? Cornisa() : modo == "pintar" ? Pintar() : modo == "pintarcueva" ? PintarCueva() : modo == "decoracion" ? PintarDecoracion() : modo == "pociones" ? Pociones() : modo == "portal" ? Portal() : modo == "ronda6" ? Ronda6() : modo == "ronda8" ? Ronda8() : modo == "wraith" ? Wraith() : modo == "fichas" ? Fichas() : modo == "ojos" ? Ojos() : modo == "saltos" ? Saltos() : modo == "saltos2" ? Saltos2() : modo == "golpes" ? Golpes() : modo == "movimiento" ? Movimiento() : modo == "murcielago" ? Murcielago() : modo == "variantes" ? Variantes() : modo == "tonos" ? Tonos() : modo == "jefesaturdir" ? JefesAturdir() : modo == "vistascueva" ? VistasCueva() : modo == "cuevanueva" ? CuevaNueva() : modo == "recorridocueva" ? RecorridoCueva() : modo == "enemigoscueva" ? EnemigosCueva() : Cueva();
             float limite = Time.realtimeSinceStartup + (modo.StartsWith("saltos") ? 900f : 240f);
             while (rutina.MoveNext())
             {
@@ -1898,6 +1902,220 @@ public static class PruebaNieve
                     Debug.Log($"[Ojos] {inicio:0} t={t:0.0} pos={o.transform.position:0.0} v={o.GetComponent<Rigidbody2D>().linearVelocity:0.0} player={p.transform.position:0.0}");
                     yield return new WaitForSeconds(0.5f);
                 }
+            }
+        }
+
+        // Recorrido de la cueva nueva con los controles de verdad: cada salto
+        // clave (pozo, grietas, sima) desde donde se sale hasta la repisa de
+        // destino, con salto y doble salto. Dice si se llega.
+        private IEnumerator RecorridoCueva()
+        {
+            yield return new WaitForSeconds(1f);
+            foreach (EnemyHealth e in Object.FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None)) if (e.GetComponent<JefeBase>() == null) Destroy(e.gameObject);
+            const float s = 4f / 7f;
+            // (nombre, desde x, desde suelo, destino x0, x1, suelo, doble salto)
+            var saltos = new (string n, float dx, float dy, float x0, float x1, float top, bool doble)[]
+            {
+                ("mago (escalon)", 29.5f, 0f, 53 * s, 64 * s, 2 * s, false),
+                ("grieta 1", 20.4f, 0f, 41 * s, 50 * s, 0f, false),
+                ("pozo 1", 39.3f, 0f, 71 * s, 76 * s, 2 * s, false),
+                ("pozo 2", 42.5f, 2 * s, 83 * s, 91 * s, 7 * s, true),
+                ("pozo 3", 48.3f, 7 * s, 67 * s, 75 * s, 11 * s, true),
+                ("pozo 4", 42f, 11 * s, 83 * s, 91 * s, 15 * s, true),
+                ("pozo 5", 48.3f, 15 * s, 67 * s, 75 * s, 19 * s, true),
+                ("pozo 6", 42f, 19 * s, 83 * s, 91 * s, 23 * s, true),
+                ("pozo 7", 48.3f, 23 * s, 67 * s, 75 * s, 27 * s, true),
+                ("pozo 8", 42f, 27 * s, 83 * s, 91 * s, 31 * s, true),
+                ("pozo a la galeria", 50f, 31 * s, 92 * s, 100 * s, 20f, true),
+                ("grieta 2", 79.4f, 20f, 144 * s, 152 * s, 20f, false),
+                ("grieta 3 (sobre el suelo falso)", 97.6f, 20f, 176 * s, 184 * s, 20f, true),
+                ("a la sima (repisa alta)", 104.8f, 20f, 193 * s, 203 * s, 27 * s, false),
+                ("sima: suelo a repisa 1", 106.5f, 4f, 191 * s, 197 * s, 12 * s, true),
+                ("sima: repisa 1 a 2", 110f, 12 * s, 197 * s, 203 * s, 17 * s, true),
+                ("sima: repisa 2 a 3", 114f, 17 * s, 185 * s, 191 * s, 22 * s, true),
+                ("sima: repisa 3 a 4", 107f, 22 * s, 193 * s, 203 * s, 27 * s, true),
+            };
+            int bien = 0;
+            foreach (var sa in saltos)
+            {
+                p = Object.FindFirstObjectByType<PlayerControler>();
+                Invulnerable(); Curar();
+                PonerEje(0f);
+                Teletransportar(new Vector3(sa.dx, sa.dy + 0.7f, 0f));
+                yield return new WaitForSeconds(0.5f);
+                float centro = (sa.x0 + sa.x1) * 0.5f;
+                int dir = centro > sa.dx ? 1 : -1;
+                Mirar(dir);
+                PonerEje(dir);
+                Entrada().IsJumping = true;
+                bool dobleHecho = false;
+                Rigidbody2D rb = p.GetComponent<Rigidbody2D>();
+                for (float t = 0f; t < 3f; t += Time.deltaTime)
+                {
+                    if (sa.doble && !dobleHecho && t > 0.15f && rb.linearVelocity.y < 1f) { Entrada().IsJumping = true; dobleHecho = true; }
+                    float x = p.transform.position.x;
+                    if (dir > 0 ? x >= centro : x <= centro) PonerEje(0f);
+                    if (t > 0.4f && (bool)GetCampo(p, "isGrounded") && Mathf.Abs(rb.linearVelocity.y) < 0.1f) break;
+                    yield return null;
+                }
+                PonerEje(0f);
+                yield return new WaitForSeconds(0.3f);
+                Vector2 f = p.transform.position;
+                bool llego = f.x >= sa.x0 - 0.3f && f.x <= sa.x1 + 0.3f && Mathf.Abs(f.y - (sa.top + 0.63f)) < 0.35f;
+                if (llego) bien++;
+                Debug.Log($"[Recorrido] {sa.n}: {(llego ? "OK" : "NO LLEGA")} (acaba en {f.x:0.00},{f.y:0.00}; destino x {sa.x0:0.0}-{sa.x1:0.0} suelo {sa.top:0.00})");
+                if (!llego) yield return Captura("rec_" + sa.n.Replace(' ', '_').Replace(":", "").Replace("(", "").Replace(")", ""), false);
+            }
+            Debug.Log($"[Recorrido] {bien} de {saltos.Length} saltos llegan");
+        }
+
+        // Los enemigos de la cueva con el player cerca (8 s cada uno): si siguen
+        // vivos (no se caen a una grieta), cuanto se mueven y si salen de su zona.
+        private IEnumerator EnemigosCueva()
+        {
+            yield return new WaitForSeconds(1f);
+            var lista = Object.FindObjectsByType<EnemigoBase>(FindObjectsSortMode.None).Where(e => e.GetComponent<JefeBase>() == null).OrderBy(e => e.transform.position.x).ToList();
+            foreach (EnemigoBase e in lista)
+            {
+                if (e == null) continue;
+                Vector3 inicio = e.transform.position;
+                string nombre = e.name;
+                p = Object.FindFirstObjectByType<PlayerControler>();
+                Invulnerable(); Curar();
+                // En el suelo, a 3 unidades del lado donde haya suelo.
+                Vector3 junto = inicio + Vector3.left * 3f + Vector3.up * 0.7f;
+                RaycastHit2D s = Physics2D.Raycast(junto, Vector2.down, 8f, LayerMask.GetMask("Ground"));
+                if (s) junto = (Vector3)s.point + Vector3.up * 0.7f;
+                Teletransportar(junto);
+                float fuera = 0f, minY = inicio.y;
+                var estados = new HashSet<string>();
+                for (float t = 0f; t < 8f; t += Time.deltaTime)
+                {
+                    Invulnerable(); Curar();
+                    if (e == null) break;
+                    estados.Add(e.EstadoIA);
+                    fuera = Mathf.Max(fuera, Mathf.Abs(e.transform.position.x - e.OrigenZona.x) - e.RadioZona);
+                    minY = Mathf.Min(minY, e.transform.position.y);
+                    yield return null;
+                }
+                bool vivo = e != null && !e.GetComponent<EnemyHealth>().Muerto;
+                Debug.Log($"[EnemigosCueva] {nombre} en {inicio.x:0.0},{inicio.y:0.0}: vivo={vivo} estados={string.Join(",", estados)} " +
+                          $"bajo hasta y={minY:0.0} fueraDeZona={Mathf.Max(0f, fuera):0.0} acaba en {(e != null ? e.transform.position.ToString("0.0") : "-")}");
+                if (e != null) Destroy(e.gameObject);
+                yield return null;
+            }
+        }
+
+        // La cueva nueva: contenido, oscuridad, antorchas, suelos falsos, grietas,
+        // derrumbe del atajo, pared ilusoria y cofre de almas.
+        private IEnumerator CuevaNueva()
+        {
+            yield return new WaitForSeconds(1f);
+            int Contar<T>() where T : Object => Object.FindObjectsByType<T>(FindObjectsInactive.Exclude, FindObjectsSortMode.None).Length;
+            var enemigos = Object.FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None).Where(e => e.GetComponent<JefeBase>() == null)
+                .GroupBy(e => e.Definicion != null ? e.Definicion.name : e.name).Select(g => $"{g.Key}x{g.Count()}");
+            Debug.Log($"[CuevaNueva] enemigos: {string.Join(", ", enemigos)} | hogueras={Contar<Hoguera>()} cofresMejora={Contar<CofreMejora>()} cofresAlmas={Contar<CofreAlmas>()} " +
+                      $"estatuas={Contar<EstatuaPista>()} antorchas={Contar<AntorchaCueva>()} grietas={Contar<GrietaMortal>()} suelosFalsos={Contar<SueloFalso>()} " +
+                      $"zonasOscuras={Contar<ZonaOscura>()} trampasViejas={Contar<Estalactita>() + Contar<TrampaFuego>() + Contar<ZonaDano>()}");
+            foreach (EnemyHealth e in Object.FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None)) if (e.GetComponent<JefeBase>() == null) Destroy(e.gameObject);
+
+            // Oscuridad: dentro de la galeria inferior y fuera.
+            Invulnerable(); Teletransportar(new Vector3(70f, 4.7f, 0f));
+            yield return new WaitForSeconds(1.3f);
+            Debug.Log($"[CuevaNueva] oscuridad en la galeria inferior: {OscuridadCueva.Instancia?.Nivel:0.00}");
+            yield return Captura("cn_oscura", false);
+            AntorchaCueva ant = Object.FindObjectsByType<AntorchaCueva>(FindObjectsSortMode.None).OrderBy(a => Vector2.Distance(a.transform.position, new Vector2(66.5f, 4f))).First();
+            Teletransportar(ant.transform.position + new Vector3(0.6f, 0.7f, 0f));
+            yield return new WaitForSeconds(0.3f);
+            ant.Interactuar(p);
+            yield return new WaitForSeconds(0.6f);
+            Debug.Log($"[CuevaNueva] antorcha encendida={ant.GetComponent<FuenteLuz>().encendida}");
+            yield return Captura("cn_antorcha", false);
+            Teletransportar(new Vector3(40f, 0.7f, 0f));
+            yield return new WaitForSeconds(1.3f);
+            Debug.Log($"[CuevaNueva] oscuridad fuera: {OscuridadCueva.Instancia?.Nivel:0.00}");
+
+            // Suelo falso de enseñanza: cae a la galeria inferior y se sobrevive.
+            SueloFalso ens = Object.FindObjectsByType<SueloFalso>(FindObjectsSortMode.None).First(s => !s.conPista);
+            Bounds be = ens.GetComponent<Collider2D>().bounds;
+            Teletransportar(new Vector3(be.center.x, be.max.y + 0.6f, 0f));
+            SetCampo(p, "isInvincible", false);
+            yield return new WaitForSeconds(0.3f);
+            yield return Captura("cn_suelo_cede", false);
+            yield return new WaitForSeconds(2.5f);
+            p = Object.FindFirstObjectByType<PlayerControler>();
+            Debug.Log($"[CuevaNueva] suelo falso de enseñanza: caido={ens.Caido} player y={p.transform.position.y:0.0} vivo={Vida() > 0}");
+
+            // Suelo falso con pista: sobre una grieta mortal.
+            SueloFalso pista = Object.FindObjectsByType<SueloFalso>(FindObjectsSortMode.None).First(s => s.conPista);
+            Bounds bp = pista.GetComponent<Collider2D>().bounds;
+            PlayerControler antes = p;
+            Teletransportar(new Vector3(bp.center.x, bp.max.y + 0.6f, 0f));
+            SetCampo(p, "isInvincible", false);
+            yield return new WaitForSeconds(3.5f);
+            p = Object.FindFirstObjectByType<PlayerControler>();
+            Debug.Log($"[CuevaNueva] suelo falso con pista: caido={pista.Caido} murio={(antes == null || p != antes || p.transform.position.x < 60f)} player={(p != null ? p.transform.position.ToString("0.0") : "-")}");
+            yield return new WaitForSeconds(2f);
+
+            // Grieta de la entrada: caer mata.
+            p = Object.FindFirstObjectByType<PlayerControler>();
+            antes = p;
+            Curar();
+            SetCampo(p, "isInvincible", false);
+            Teletransportar(new Vector3(22.3f, 1.2f, 0f));
+            yield return new WaitForSeconds(3f);
+            p = Object.FindFirstObjectByType<PlayerControler>();
+            Debug.Log($"[CuevaNueva] grieta de la entrada: murio={(antes == null || p != antes || p.transform.position.y > -1f)} player={(p != null ? p.transform.position.ToString("0.0") : "-")}");
+            yield return new WaitForSeconds(2f);
+
+            // Derrumbe del atajo: desde el pozo no cede; desde la galeria si.
+            p = Object.FindFirstObjectByType<PlayerControler>();
+            Invulnerable();
+            DerrumbeAtajo der = Object.FindFirstObjectByType<DerrumbeAtajo>();
+            Teletransportar(der.transform.position + new Vector3(-1.5f, -1f, 0f));
+            yield return new WaitForSeconds(0.4f);
+            for (int i = 0; i < 4; i++) der.Golpear(Elemento.Ninguno, der.transform.position);
+            yield return new WaitForSeconds(0.5f);
+            bool cerradoDesdePozo = der.gameObject.activeSelf;
+            Teletransportar(der.transform.position + new Vector3(1.5f, -1f, 0f));
+            yield return new WaitForSeconds(0.4f);
+            for (int i = 0; i < 4; i++) der.Golpear(Elemento.Ninguno, der.transform.position);
+            yield return new WaitForSeconds(1.2f);
+            Debug.Log($"[CuevaNueva] derrumbe: sigue cerrado desde el pozo={cerradoDesdePozo} abierto desde la galeria={!der.gameObject.activeSelf}");
+
+            // Pared ilusoria del secreto 1: se atraviesa andando.
+            Teletransportar(new Vector3(0.6f, 0.7f, 0f));
+            yield return new WaitForSeconds(0.4f);
+            PonerEje(-1f);
+            yield return new WaitForSeconds(1.2f);
+            PonerEje(0f);
+            yield return new WaitForSeconds(0.8f);
+            Debug.Log($"[CuevaNueva] pared ilusoria: player x={p.transform.position.x:0.0} (dentro del secreto si < -2)");
+            yield return Captura("cn_secreto", false);
+            CofreAlmas cofre = Object.FindObjectsByType<CofreAlmas>(FindObjectsSortMode.None).OrderBy(c => c.transform.position.x).First();
+            int a0 = Progreso.Almas;
+            cofre.Interactuar(p);
+            yield return new WaitForSeconds(2.5f);
+            Debug.Log($"[CuevaNueva] cofre de almas: {a0}->{Progreso.Almas}");
+        }
+
+        // Capturas en juego por toda la cueva (enemigos quitados, player invulnerable).
+        // Los puntos se pueden cambiar con la variable VISTAS_PUNTOS ("x,y;x,y;...").
+        private IEnumerator VistasCueva()
+        {
+            yield return new WaitForSeconds(1f);
+            foreach (EnemyHealth e in Object.FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None)) Destroy(e.gameObject);
+            string lista = System.Environment.GetEnvironmentVariable("VISTAS_PUNTOS") ??
+                           "5,1;22,1;33,1;46,4;46,17;58,21;75,21;95,21;80,9;100,9;117,20;117,6;130,5;148,5;165,5";
+            int i = 0;
+            foreach (string par in lista.Split(';'))
+            {
+                string[] xy = par.Split(',');
+                Vector3 pos = new Vector3(float.Parse(xy[0], System.Globalization.CultureInfo.InvariantCulture), float.Parse(xy[1], System.Globalization.CultureInfo.InvariantCulture), 0f);
+                Invulnerable(); Curar();
+                Teletransportar(pos);
+                yield return new WaitForSeconds(1.2f);
+                yield return Captura($"c{i++:00}_{pos.x:0}_{pos.y:0}", false);
             }
         }
 

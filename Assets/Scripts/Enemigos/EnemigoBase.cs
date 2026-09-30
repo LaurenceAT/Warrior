@@ -48,7 +48,7 @@ public abstract class EnemigoBase : MonoBehaviour
     [Tooltip("Quieto al descubrir al player antes de actuar (segundos, minimo y maximo).")]
     [SerializeField] protected Vector2 reaccionAlerta = new Vector2(0.25f, 0.45f);
     [Tooltip("Distancia que guarda con otros enemigos (a escala 1).")]
-    [SerializeField] protected float separacion = 0.8f;
+    [SerializeField] protected float distanciaGrupo = 0.8f;
     [Tooltip("Respiracion en reposo (0 = nada).")]
     [SerializeField] protected float respiracion = 0.015f;
 
@@ -86,7 +86,7 @@ public abstract class EnemigoBase : MonoBehaviour
 
     // Los jefes (JefeBase) heredan de aqui pero tienen su propia IA: para ellos
     // todo lo de los enemigos normales esta apagado (dormir lejos, alerta "!",
-    // olvidar, giro con retraso, aceleracion, separacion, respiracion y que el
+    // olvidar, giro con retraso, aceleracion, separacion del grupo, respiracion y que el
     // parry les quite la armadura y los reinicie). Se comportan como antes.
     protected virtual bool EsJefe => false;
 
@@ -621,13 +621,13 @@ public abstract class EnemigoBase : MonoBehaviour
     private float EmpujeSeparacion()
     {
         float empuje = 0f;
-        float r = separacion * Escala;
+        float r = distanciaGrupo * Escala;
         for (int i = 0; i < Activos.Count; i++)
         {
             EnemigoBase o = Activos[i];
             if (o == this || o == null || o.muerto || o.rb == null || o.rb.gravityScale == 0f) continue;
             Vector2 d = (Vector2)(transform.position - o.transform.position);
-            float minimo = (r + o.separacion * o.Escala) * 0.5f;
+            float minimo = (r + o.distanciaGrupo * o.Escala) * 0.5f;
             if (Mathf.Abs(d.y) > 1f * Mathf.Max(Escala, o.Escala) || Mathf.Abs(d.x) >= minimo) continue;
             float lado = Mathf.Abs(d.x) > 0.01f ? Mathf.Sign(d.x) : (GetInstanceID() > o.GetInstanceID() ? 1f : -1f);
             empuje += lado * (minimo - Mathf.Abs(d.x)) / minimo * 3f;
@@ -639,7 +639,7 @@ public abstract class EnemigoBase : MonoBehaviour
     protected Vector2 Separacion2D()
     {
         Vector2 empuje = Vector2.zero;
-        float r = separacion * Escala * 1.4f;
+        float r = distanciaGrupo * Escala * 1.4f;
         for (int i = 0; i < Activos.Count; i++)
         {
             EnemigoBase o = Activos[i];

@@ -45,6 +45,8 @@ public static class ActualizarProyecto
     public static void Ronda12() => global::Ronda12.Todo();
     // Decimotercera ronda: enemigos normales por golpes (fichas, curva y tamanos).
     public static void Ronda13() => global::Ronda13.Todo();
+    // Decimocuarta ronda: la cueva renovada (la antigua queda en Cueva_Antigua).
+    public static void Ronda14() => CrearCuevaNueva.Generar();
 
     public static void Ronda5()
     {

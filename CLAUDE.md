@@ -23,6 +23,7 @@ Jefe secreto (solo en Desafíos): The Blind Huntress, en la escena `Bosque Cazad
 - `Menu/`: `MenuPrincipal`, `Partida` (partidas guardadas en JSON).
 - `UI/`: `EstiloMenu` (estilo común y sonidos de menús), `MenuPausa`, `PantallaCarga`, `PantallaMuerte`, `AvisoObjeto`.
 - `NivelNieve/`, `NivelCueva/`: piezas de cada nivel (hoguera, cofres, pared falsa, zonas ocultas, hielo...).
+- Cueva renovada (Ronda14, `Editor/CrearCuevaNueva.cs`): la roca en Tilemaps de 16 px del pack `Mapa_CuevaPixelFantasy` a 28 px por unidad, `OscuridadCueva` + `ZonaOscura` + `FuenteLuz` (luces), `AntorchaCueva` (F), `SueloFalso`, `GrietaMortal`, `DerrumbeAtajo`, `AmbienteCueva`, `GuiaBrasas`, `EmisorCueva` (particulas reutilizables), `DepuracionCueva` (F8, solo Editor). Plano en `SPRITES PARA NUEVOS NIVELES/DISENO_CUEVA.md`. La antigua se conserva en `Cueva_Antigua.unity`.
 - `Niveles/ConfigNivel.cs` + `Assets/Data/Niveles/Config Nivel *.asset`: tiles, parallax, música, sonidos y frases de cada nivel.
 - `Niveles/EstatuaPista.cs` (estatuas con pista, F para leer) y `UI/CuadroPista.cs` (cuadro de texto con máquina de escribir).
 - `RPG/SangreFx.cs` + `AjustesSangre` (sangre), `RPG/EfectoArma.cs` + `MapaHoja` (partículas del arma imbuida), `CaidaMuerte.cs` (muerte en el aire).
@@ -52,6 +53,7 @@ Jefe secreto (solo en Desafíos): The Blind Huntress, en la escena `Bosque Cazad
 - La Cazadora: todo su dano va en fraccion de tu vida maxima; los golpes normales nunca matan con la vida llena (solo instakills, su estocada tras parry o tener poca vida).
 - Parry de la Cazadora: al contacto te aturde de verdad (sin control ni teclas guardadas) y ella reapunta a tu posicion real justo antes de la estocada; si sobrevives, sales despedido (`PlayerControler.Derribar`, invulnerable al caer). El escudo se rompe por golpes (10, o 5 con la espada imbuida de oscuridad), no por dano.
 - Crimson Wraith (Ronda12): se mueve con aceleracion y frenada, avisos ligero/pesado, poderes nuevos (Guadana doble, Cosecha de sangre, Transfusion, Raices carmesi, Semillas del vacio, Zigzag, Frenesi) y "corazon expuesto" tras Nova, Lluvia y Frenesi (x1.5). Fase 1: fuego x1.3, hielo x1.2, oscuridad x0.7, sangrado x0.6. Fase 2: sagrado x1.8, fuego x1.5, hielo x0.8, oscuridad x0.3, sangrado x0.2 y lo cura. Prueba: `PruebaNieve.WraithPrueba`.
+- Cueva: la que se juega siempre se llama "Nivel Cueva" (logro "Descenso", portal, desafios y partidas dependen del nombre). Para cambiar: Warrior > Cueva > Usar la cueva antigua / nueva. Sin trampas: grietas mortales, suelos falsos, paredes ilusorias (solo almas), atajo, zonas oscuras. Los triggers que deben detectar al player van en la capa Items.
 - Enemigos normales por golpes (Ronda13): la vida y el dano salen de golpes para matar y % de tu vida esperada en su zona (zona 1 Nieve, 2 Cueva, 3 futura). Roles Debil/Comun/Pesado/Elite. Ajuste global en AjustesEnemigos. Los enemigos no chocan entre si (se separan solos). Los jefes heredan de EnemigoBase, pero con `EsJefe` (JefeBase) todo eso se apaga: el parry no les quita la armadura ni los reinicia. El tono de las variantes lo hace el shader `Sprites/Flash` (_Tono, _Saturacion, _Brillo).
 - Se conservan en el código el arco, el combate sin arma y la rueda de pociones, aunque estén apagados.
 
@@ -68,13 +70,14 @@ Jefe secreto (solo en Desafíos): The Blind Huntress, en la escena `Bosque Cazad
 - The Blind Huntress (jefe secreto, 3 barras, instakills, oscuridad, ilusiones). Prueba: `PruebaNieve.CazadoraPrueba`.
 - Tajos sincronizados con el ataque; colores propios; efectos en el arma; muerte en el aire; sangre.
 - Pruebas automáticas en batchmode pasando (sistemas, pociones, jefe, cueva, menú, ronda6, nivel, ronda8).
+- Cueva renovada: pruebas `PruebaNieve.CuevaNuevaPrueba`, `RecorridoCuevaPrueba` (saltos clave con los controles), `EnemigosCuevaPrueba` y `VistasCuevaPrueba` (capturas).
 
 ## Pendiente
-- Pintar zonas ocultas en la cueva (hoy no hay ninguna pintada).
 - Solo hay 3 Piedras y 2 Lágrimas en el juego (el máximo de mejoras es +5 cada una); faltan más cofres.
-- El cofre de mejora de la cueva está junto al Mimic, en la cueva secreta: por confirmar si al usuario le gusta ese sitio.
+- El cofre de mejora de la cueva sigue junto al Mimic (ahora en la galería inferior, oscura): por confirmar si al usuario le gusta ese sitio.
+- Cueva renovada: probarla a mano (recorrido, oscuridad, suelos falsos) y ajustar tintes, bruma y radios de luz.
 - Probar a mano en Unity lo de la última ronda (menú de hoguera, cofres, estados) y ajustar números si hace falta.
-- Faltan sprites de cristales y huesos para la cueva, y un sonido propio de máquina de escribir (se usa el "tic" de los menús).
+- Faltan sprites de cristales, huesos, agua o lava para la cueva y un sonido de goteo (la cueva nueva no los usa), y un sonido propio de máquina de escribir (se usa el "tic" de los menús).
 - Faltan sonidos propios de compra y de logro (se usan `mejorar_equipo` y `objeto_obtenido`) y un icono de candado (dibujado por código).
 - Colocar elites (1 en la Nieve, 2 en la Cueva) y variantes al rediseñar las zonas. Probar a mano la nueva dificultad (la Cueva es mas dura) y ajustar AjustesEnemigos.
 - Optimización para itch.io: diagnóstico hecho, fase 2 aplazada (ver memoria).

@@ -31,6 +31,7 @@ MonoBehaviour:
   relleno: {fileID: -4385779503170729266, guid: adffd5ea7817ed44ba767edf47314743, type: 3}
   colorPiezas: {r: 1, g: 1, b: 1, a: 1}
   altoFondo: 18
+  pixelesPorUnidadFondo: 0
   seguimientoVertical: 0.97
   capasFondo:
   - nombre: 7
@@ -38,40 +39,68 @@ MonoBehaviour:
     seguimiento: 0.97
     color: {r: 1, g: 1, b: 1, a: 1}
     desplazamientoY: 0
+    deriva: 0
+    escala: 1
+    rellenarArriba: 0
+    rellenarAbajo: 0
   - nombre: 6
     imagen: {fileID: 3465286685962602723, guid: fd16c5d67f6cf7541865d5e3d61c9af7, type: 3}
     seguimiento: 0.90000004
     color: {r: 1, g: 1, b: 1, a: 1}
     desplazamientoY: 0
+    deriva: 0
+    escala: 1
+    rellenarArriba: 0
+    rellenarAbajo: 0
   - nombre: 5
     imagen: {fileID: 4130640169021434097, guid: c9bb23cacbc53e54288160e4a8d8ed37, type: 3}
     seguimiento: 0.83000004
     color: {r: 1, g: 1, b: 1, a: 1}
     desplazamientoY: 0
+    deriva: 0
+    escala: 1
+    rellenarArriba: 0
+    rellenarAbajo: 0
   - nombre: 4
     imagen: {fileID: -4178046375966092550, guid: 9fe53363160f36c418ba436319f95632, type: 3}
     seguimiento: 0.76
     color: {r: 1, g: 1, b: 1, a: 1}
     desplazamientoY: 0
+    deriva: 0
+    escala: 1
+    rellenarArriba: 0
+    rellenarAbajo: 0
   - nombre: 3
     imagen: {fileID: -6470460504253458178, guid: bbf3653ac988ec24ea1ecb854de8733f, type: 3}
     seguimiento: 0.69
     color: {r: 1, g: 1, b: 1, a: 1}
     desplazamientoY: 0
+    deriva: 0
+    escala: 1
+    rellenarArriba: 0
+    rellenarAbajo: 0
   - nombre: 2
     imagen: {fileID: 3191122964850554743, guid: 2014c6cdb28921a41a0eab205ab5e734, type: 3}
     seguimiento: 0.62
     color: {r: 1, g: 1, b: 1, a: 1}
     desplazamientoY: 0
+    deriva: 0
+    escala: 1
+    rellenarArriba: 0
+    rellenarAbajo: 0
   - nombre: 1
     imagen: {fileID: 9180251791023625898, guid: 7a0d394d82baa03489676573fb8eaae6, type: 3}
     seguimiento: 0.55
     color: {r: 1, g: 1, b: 1, a: 1}
     desplazamientoY: 0
+    deriva: 0
+    escala: 1
+    rellenarArriba: 0
+    rellenarAbajo: 0
   musicaCombate: {fileID: 0}
   volumenCombate: 0.35
-  ambiente: {fileID: 0}
-  volumenAmbiente: 0.4
+  ambiente: {fileID: 8300000, guid: 9c7ddc6cf102efb43847ca58e25fa198, type: 3}
+  volumenAmbiente: 0.35
   jefeFase1:
     pista: {fileID: 8300000, guid: 30d52bd5df01da54b8aa072e4cef7312, type: 3}
     volumen: 0.6
@@ -84,3 +113,4 @@ MonoBehaviour:
     bucle: {x: 336, y: 410}
   sonidos: []
   frasesMuerte: []
+  frasesJefe: []

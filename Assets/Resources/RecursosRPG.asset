@@ -560,6 +560,25 @@ MonoBehaviour:
     - {fileID: 8300000, guid: ed1684341b60ba844ad3f3f92313ef2f, type: 3}
     volumen: 0.7
     variacionTono: 0
+  - clave: cueva_crujido
+    clips:
+    - {fileID: 8300000, guid: 9ed015e69362d3f4a93e7623164585e6, type: 3}
+    - {fileID: 8300000, guid: f82856d1e6b2971408bf15009bca9ac8, type: 3}
+    volumen: 0.55
+    variacionTono: 0.08
+  - clave: cueva_derrumbe
+    clips:
+    - {fileID: 8300000, guid: c1273ac486aca6a4d8f70a7e774aacb5, type: 3}
+    - {fileID: 8300000, guid: de40cd40f37294a41bc9b877752611f2, type: 3}
+    - {fileID: 8300000, guid: 12e2ad9f49d9d3f4fbbe3665d2c5ca7c, type: 3}
+    volumen: 0.7
+    variacionTono: 0.08
+  - clave: antorcha_encender
+    clips:
+    - {fileID: 8300000, guid: 8dcdf9ba1d8d7d0459285f177dcd72f4, type: 3}
+    - {fileID: 8300000, guid: 67ed1bf1bcddb2e42aabcd3913faafe6, type: 3}
+    volumen: 0.65
+    variacionTono: 0.08
   iconos:
   - clave: elemento_0
     sprite: {fileID: 21300000, guid: 28a75b8a44d70764385db2d1e0838577, type: 3}
