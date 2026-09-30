@@ -141,6 +141,37 @@ public class EnemyHealthBar : MonoBehaviour
         Dibujar();
     }
 
+    // Barra de elite: mas gruesa, con marco dorado y su nombre encima.
+    public void HacerElite(string nombre)
+    {
+        RectTransform raiz = (RectTransform)transform;
+        Vector2 t = raiz.sizeDelta;
+        raiz.sizeDelta = new Vector2(t.x, t.y * 1.7f);
+        RectTransform marco = Rect("Marco", raiz, new Color(0.85f, 0.66f, 0.3f, 0.95f));
+        marco.SetAsFirstSibling();
+        Estirar(marco);
+        marco.offsetMin = new Vector2(-1.5f, -1.5f);
+        marco.offsetMax = new Vector2(1.5f, 1.5f);
+
+        TMPro.TextMeshProUGUI texto = new GameObject("Nombre", typeof(RectTransform)).AddComponent<TMPro.TextMeshProUGUI>();
+        texto.transform.SetParent(raiz, false);
+        texto.text = nombre;
+        texto.fontSize = 16f;
+        texto.fontStyle = TMPro.FontStyles.Bold;
+        texto.color = new Color(0.96f, 0.84f, 0.6f);
+        texto.alignment = TMPro.TextAlignmentOptions.Bottom;
+        texto.enableWordWrapping = false;
+        texto.raycastTarget = false;
+        texto.outlineWidth = 0.25f;
+        texto.outlineColor = new Color32(0, 0, 0, 255);
+        RectTransform r = texto.rectTransform;
+        r.anchorMin = new Vector2(0.5f, 1f);
+        r.anchorMax = new Vector2(0.5f, 1f);
+        r.pivot = new Vector2(0.5f, 0f);
+        r.sizeDelta = new Vector2(400f, 20f);
+        r.anchoredPosition = new Vector2(0f, 2f);
+    }
+
     private static RectTransform Rect(string nombre, Transform padre, Color color)
     {
         GameObject go = new GameObject(nombre, typeof(RectTransform));

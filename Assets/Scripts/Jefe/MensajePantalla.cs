@@ -37,6 +37,16 @@ public class MensajePantalla : MonoBehaviour
                                    0.9f, 2f, 1.2f, 0f));
     }
 
+    // Nombre de un enemigo elite al verlo por primera vez: aparece y se funde en
+    // 1.5 s, sin pausar el juego.
+    public static void TituloElite(string nombre)
+    {
+        MensajePantalla m = Get();
+        TextMeshProUGUI t = m.Texto(nombre, 56, new Color(0.96f, 0.82f, 0.55f), new Vector2(0.5f, 0.74f), FontStyles.Bold | FontStyles.SmallCaps);
+        t.characterSpacing = 6f;
+        m.StartCoroutine(m.Mostrar(t, 0.35f, 0.8f, 0.35f, 4f));
+    }
+
     public static void Narrativo(string texto, float duracion = 6f)
     {
         MensajePantalla m = Get();

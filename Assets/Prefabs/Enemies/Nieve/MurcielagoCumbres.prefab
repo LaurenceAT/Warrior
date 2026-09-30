@@ -256,6 +256,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc7a0991f13a91a4dbb00423cf5a85af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  definicion: {fileID: 11400000, guid: 79ee099826b9fed4bac16ae6679b6453, type: 2}
   maxHealth: 35
   currentHealth: 0
   deathVFX: {fileID: 0}
@@ -376,8 +377,23 @@ MonoBehaviour:
     m_Bits: 0
   spriteMiraDerecha: 1
   colorAviso: {r: 1, g: 0.55, b: 0.15, a: 1}
+  aceleracion: 16
+  frenada: 24
+  retrasoGiro: {x: 0.08, y: 0.2}
+  reaccionAlerta: {x: 0.25, y: 0.45}
+  separacion: 0.8
+  respiracion: 0.015
+  distanciaDormir: 26
+  alturaSaltoMaxima: 2.5
+  distanciaSaltoMaxima: 9
+  preparacionSalto: 0.22
+  recuperacionSalto: 0.2
+  enfriamientoSalto: 1
+  radioZona: 14
   velocidad: 4.2
   altura: 2.6
-  danoPicado: 15
-  danoChillido: 10
+  pesoPicado: 1
+  pesoChillido: 0.67
   enfriamiento: {x: 1.8, y: 3}
+  probabilidadDoble: 0.35
+  velocidadPicadoMaxima: 16

@@ -63,6 +63,9 @@ public class AnimadorHoja : MonoBehaviour
     // Ritmo externo (la escarcha lo baja; congelado es 0). Se multiplica con la
     // velocidad que pida cada clip.
     [NonSerialized] public float multiplicador = 1f;
+    // Ritmo segun la velocidad real al andar (lo pone la IA: al arrancar y
+    // frenar las piernas van mas despacio).
+    [NonSerialized] public float ritmoMovimiento = 1f;
 
     public string Actual => actual != null ? actual.nombre : null;
     public int Fotograma => fotograma;
@@ -120,7 +123,7 @@ public class AnimadorHoja : MonoBehaviour
 
     private void Update()
     {
-        Avanzar(Time.deltaTime * velocidad * multiplicador);
+        Avanzar(Time.deltaTime * velocidad * multiplicador * ritmoMovimiento);
     }
 
     private void Avanzar(float dt)

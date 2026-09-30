@@ -111,9 +111,13 @@ public class EstadosEnemigo : MonoBehaviour
     // Un jefe ya no puede sangrar mas en esta pelea.
     private bool SangradoAgotado => salud.Inamovible && vecesSangrado >= Mathf.Max(0, A.sangradoMaximoJefe);
 
+    // En zonas avanzadas los estados se acumulan mas despacio (ficha del enemigo).
+    private float Acumulacion => salud != null && salud.Definicion != null ? Mathf.Clamp(salud.Definicion.Zona.acumulacionEstados, 0.1f, 1f) : 1f;
+
     private void Recibir(Elemento e, int dano)
     {
         float ahora = Time.time;
+        float acum = Acumulacion;
         switch (e)
         {
             case Elemento.Fuego:
@@ -126,11 +130,11 @@ public class EstadosEnemigo : MonoBehaviour
                 finLento = ahora + lentoDuracion;
                 if (ahora - ultimaEscarcha > 3f) cargasEscarcha = 0;
                 ultimaEscarcha = ahora;
-                if (ahora >= finInmuneCongelar && ++cargasEscarcha >= cargasParaCongelar) Congelar();
+                if (ahora >= finInmuneCongelar && ++cargasEscarcha >= Mathf.CeilToInt(cargasParaCongelar / acum - 0.001f)) Congelar();
                 break;
 
             case Elemento.Sagrado:
-                if (ahora >= siguienteAturdir && Random.value < A.sagradoProbabilidad)
+                if (ahora >= siguienteAturdir && Random.value < A.sagradoProbabilidad * acum)
                 {
                     float dur = A.sagradoDuracion;
                     // Los jefes deciden cuando (despues de su ataque) y si pueden.
@@ -147,7 +151,7 @@ public class EstadosEnemigo : MonoBehaviour
 
             case Elemento.Sangrado:
                 if (SangradoAgotado) break;
-                sangrado += A.sangradoPorGolpe;
+                sangrado += A.sangradoPorGolpe * acum;
                 ultimoSangrado = ahora;
                 if (sangrado >= maximoSangrado) Desangrar();
                 break;

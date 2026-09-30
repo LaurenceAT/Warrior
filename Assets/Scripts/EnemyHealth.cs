@@ -21,8 +21,19 @@ public interface IAfinidadElemental
     float Multiplicador(Elemento elemento);
 }
 
+// Antes que el resto del enemigo: la ficha cambia la escala, y el HitFlash
+// guarda la suya al despertar.
+[DefaultExecutionOrder(-20)]
 public class EnemyHealth : MonoBehaviour
 {
+    [Header("Ficha (enemigos normales)")]
+    [Tooltip("Su ficha de Assets/Data/Enemigos: vida, dano, almas, elementos y tamano salen de ahi. Vacia = los valores de abajo (jefes).")]
+    [SerializeField] private DefinicionEnemigo definicion;
+    public DefinicionEnemigo Definicion => definicion;
+    // Cuanto lo empujan los golpes (segun su rol).
+    private float retroceso = 1f;
+    private Vector2 offsetBarra;
+
     // Arma del golpe que esta a punto de entrar. Ver TipoArma.
     public static TipoArma ArmaDelGolpe = TipoArma.Ninguna;
     // Elemento del golpe que esta a punto de entrar (espada imbuida). Lo gasta
@@ -112,6 +123,8 @@ public class EnemyHealth : MonoBehaviour
     // Avisos para la IA de los enemigos que no usan Animator (los de la cueva).
     public event System.Action AlRecibirGolpe;
     public event System.Action AlMorir;
+    // Aturdimiento sin dano (parry, sagrado, congelado): segundos.
+    public event System.Action<float> AlAturdirse;
     // Vida actual y maxima, cada vez que cambia (la barra grande del jefe).
     public event System.Action<int, int> AlCambiarVida;
     private IModificadorDano modificador;
@@ -166,12 +179,43 @@ public class EnemyHealth : MonoBehaviour
                 if (p.nameHash == IdIsHurt) { tieneIsHurt = true; break; }
         hitFlash = GetComponent<HitFlash>();
         modificador = GetComponent<IModificadorDano>();
+        AplicarDefinicion();
         afinidad = GetComponent<IAfinidadElemental>();
         currentHealth = maxHealth;
 
         if (showHealthBar)
-            barra = EnemyHealthBar.Crear(transform, healthBarOffset, healthBarWidth, this);
+        {
+            // Los elites llevan una barra mas grande, con marco y su nombre.
+            bool elite = definicion != null && definicion.EsElite;
+            barra = EnemyHealthBar.Crear(transform, offsetBarra + (elite ? Vector2.up * 0.15f : Vector2.zero), healthBarWidth * (elite ? 1.9f : 1f), this);
+            if (elite) barra.HacerElite(definicion.NombreElite);
+        }
     }
+
+    // Vida, almas, elementos, empuje y tamano desde la ficha. Todo absoluto (no
+    // multiplica lo que ya hay): las copias del reinicio de enemigos vuelven a
+    // pasar por aqui.
+    private void AplicarDefinicion()
+    {
+        offsetBarra = healthBarOffset;
+        if (definicion == null) return;
+        maxHealth = definicion.Vida;
+        almas = definicion.Almas;
+        retroceso = Mathf.Max(0f, definicion.Rol.retroceso);
+
+        float s = Mathf.Max(0.05f, definicion.escala);
+        float signo = transform.localScale.x < 0f ? -1f : 1f;
+        transform.localScale = new Vector3(signo * s, s, 1f);
+        offsetBarra = healthBarOffset * s;
+
+        AfinidadElemental af = GetComponent<AfinidadElemental>();
+        if (af == null) af = gameObject.AddComponent<AfinidadElemental>();
+        af.Poner(definicion.Multiplicador(Elemento.Fuego), definicion.Multiplicador(Elemento.Hielo), definicion.Multiplicador(Elemento.Oscuro),
+                 definicion.Multiplicador(Elemento.Sagrado), definicion.Multiplicador(Elemento.Sangrado));
+    }
+
+    // Escala de la ficha (1 sin ficha): los enemigos la usan para sus golpes y rayos.
+    public float Escala => definicion != null ? Mathf.Max(0.05f, definicion.escala) : 1f;
 
     // ------------------------------------------------------------------ Recibir golpes
 
@@ -183,6 +227,9 @@ public class EnemyHealth : MonoBehaviour
     {
         if (!RecibirDano(damage)) return;
         if (inamovible) { Aturdir(knockbackDuration); return; }
+        // Los pesados apenas se mueven y no salen lanzados.
+        knockback *= retroceso;
+        if (retroceso < 0.5f) launches = false;
 
         float lado = transform.position.x < attackerPosition.x ? -1f : 1f;
 
@@ -204,7 +251,7 @@ public class EnemyHealth : MonoBehaviour
         if (inamovible) { Aturdir(knockbackDuration); return; }
 
         if (isAirborne) TerminarComboAereo();
-        if (rb != null) rb.linearVelocity = launchVelocity;
+        if (rb != null) rb.linearVelocity = launchVelocity * retroceso;
         Aturdir(knockbackDuration);
     }
 
@@ -216,7 +263,7 @@ public class EnemyHealth : MonoBehaviour
         if (inamovible) { Aturdir(knockbackDuration); return; }
 
         float lado = transform.position.x < attackerPosition.x ? -1f : 1f;
-        float k = Mathf.Max(0f, knockbackMultiplier);
+        float k = Mathf.Max(0f, knockbackMultiplier) * retroceso;
 
         // En el aire cuenta como un golpe mas del combo aereo.
         if (isAirborne) { GolpeEnElAire(lado, knockbackForce * k); return; }
@@ -291,7 +338,7 @@ public class EnemyHealth : MonoBehaviour
     {
         if (Time.time < siguienteAviso) return;
         siguienteAviso = Time.time + 0.8f;
-        Vector2 donde = (Vector2)transform.position + healthBarOffset + new Vector2(Random.Range(-0.3f, 0.3f), 0.45f);
+        Vector2 donde = (Vector2)transform.position + offsetBarra + new Vector2(Random.Range(-0.3f, 0.3f), 0.45f);
         if (m <= 0.01f) TextoFlotante.Mostrar("Inmune", donde, new Color(0.7f, 0.7f, 0.75f), 0.8f);
         else if (m > 1.01f) TextoFlotante.Mostrar("¡Débil!", donde, new Color(1f, 0.78f, 0.25f), 0.95f);
         else TextoFlotante.Mostrar("Resiste", donde, new Color(0.7f, 0.72f, 0.8f), 0.8f);
@@ -329,7 +376,7 @@ public class EnemyHealth : MonoBehaviour
     }
 
     public bool Agotado => agotado;
-    public Vector2 OffsetBarra => healthBarOffset;
+    public Vector2 OffsetBarra => offsetBarra;
     public bool TieneBarra => showHealthBar || BarraExterna;
     // La vida se ve en otra barra (la grande del jefe): ahi van tambien los iconos
     // de estado.
@@ -411,6 +458,8 @@ public class EnemyHealth : MonoBehaviour
         if (rb != null && !isAirborne) rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
         if (animator != null) animator.SetTrigger(IdHit);
         Aturdir(segundos);
+        // Primero el aviso de aturdimiento: interrumpe aunque tenga armadura.
+        AlAturdirse?.Invoke(segundos);
         AlRecibirGolpe?.Invoke();
     }
 
@@ -531,7 +580,7 @@ public class EnemyHealth : MonoBehaviour
         if (rutinaAturdido != null) StopCoroutine(rutinaAturdido);
         if (tieneIsHurt && animator != null) animator.SetBool(IdIsHurt, false);
         if (barra != null) barra.Ocultar();
-        OrbeAlma.Soltar((Vector2)transform.position + healthBarOffset * 0.5f, Almas);
+        OrbeAlma.Soltar((Vector2)transform.position + offsetBarra * 0.5f, Almas);
         EstadosEnemigo estados = GetComponent<EstadosEnemigo>();
         if (estados != null) estados.Limpiar();
         if (deathVFX != null)

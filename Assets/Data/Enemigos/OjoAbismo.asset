@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db573c2da465afd45b7fb16edd35a10c, type: 3}
+  m_Name: OjoAbismo
+  m_EditorClassIdentifier: 
+  nombre: Ojo del abismo
+  zona: 2
+  rol: 0
+  golpesParaMatar: 0
+  porcentajeDano: 0
+  fuego: 0
+  hielo: 0
+  oscuro: 2
+  sagrado: 1
+  sangrado: 0
+  almas: -1
+  escala: 1.143
+  vidaManual: 0
+  danoManual: 0
+  nombrePropio: 
+  tono: -90
+  saturacion: 1
+  brillo: 1

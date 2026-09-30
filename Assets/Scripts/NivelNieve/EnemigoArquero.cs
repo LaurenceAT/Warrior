@@ -13,10 +13,14 @@ public class EnemigoArquero : EnemigoBase, IModificadorDano
 {
     [SerializeField] private float distanciaIdeal = 6f;
     [SerializeField] private float velocidad = 2.4f;
-    [SerializeField] private int danoFlecha = 14;
-    [SerializeField] private int danoLluvia = 16;
+    [Tooltip("Pesos de cada ataque (1 = el golpe principal de su ficha).")]
+    [SerializeField] private float pesoFlecha = 1f;
+    [SerializeField] private float pesoLluvia = 1.15f;
     [SerializeField] private float velocidadFlecha = 13f;
     [SerializeField] private Vector2 enfriamiento = new Vector2(1.4f, 2.4f);
+    [Tooltip("Voltereta hacia atras: distancia y altura (unidades).")]
+    [SerializeField] private float distanciaVoltereta = 4.5f;
+    [SerializeField] private float alturaVoltereta = 0.8f;
     public Sprite spriteFlecha;
     public AnimadorHoja.Clip clipMarca;
 
@@ -35,11 +39,11 @@ public class EnemigoArquero : EnemigoBase, IModificadorDano
     {
         while (true)
         {
-            Vector2 ojos = (Vector2)transform.position + Vector2.up * 0.8f;
+            Vector2 ojos = Alto(0.8f);
             if (!VerPlayer(ojos))
             {
-                anim.Reproducir("quieto");
-                Frenar(10f);
+                if (VolverAZona(velocidad * 0.7f)) anim.Reproducir("correr", false, 0.8f);
+                else { anim.Reproducir("quieto"); Frenar(10f); }
                 yield return null;
                 continue;
             }
@@ -49,9 +53,8 @@ public class EnemigoArquero : EnemigoBase, IModificadorDano
             if (dx < 2.6f && Time.time >= siguienteVoltereta)
             {
                 // Sin sitio detras: destello lejos. Si no, voltereta.
-                Mirar(-mirada);
-                bool hayHueco = HaySueloDelante(1.5f) && !HayParedDelante(2f);
-                MirarAlPlayer();
+                MirarYa();
+                bool hayHueco = HaySueloHacia(-mirada, 1.5f) && !HayParedHacia(-mirada, 2f);
                 yield return hayHueco ? Voltereta() : Destello();
                 continue;
             }
@@ -67,10 +70,10 @@ public class EnemigoArquero : EnemigoBase, IModificadorDano
             float quiere = dx < distanciaIdeal - 1f ? -1f : dx > distanciaIdeal + 2f ? 1f : 0f;
             if (quiere != 0f)
             {
-                Mirar(quiere > 0f ? (DxPlayer > 0f ? 1 : -1) : (DxPlayer > 0f ? -1 : 1));
-                if (HaySueloDelante(0.6f) && !HayParedDelante(0.6f)) { anim.Reproducir("correr"); Andar(velocidad); }
+                // Se acerca o se aparta sin darle la espalda.
+                int dir = quiere > 0f ? (DxPlayer > 0f ? 1 : -1) : (DxPlayer > 0f ? -1 : 1);
+                if (HaySueloHacia(dir, 0.6f) && !HayParedHacia(dir, 0.6f)) { anim.Reproducir("correr"); AndarDir(dir, velocidad); }
                 else { anim.Reproducir("quieto"); Frenar(12f); }
-                MirarAlPlayerSinGirarVelocidad();
             }
             else
             {
@@ -81,24 +84,16 @@ public class EnemigoArquero : EnemigoBase, IModificadorDano
         }
     }
 
-    // Mira al player sin cambiar la velocidad que lleva (retrocede de espaldas).
-    private void MirarAlPlayerSinGirarVelocidad()
-    {
-        Vector2 v = rb.linearVelocity;
-        MirarAlPlayer();
-        rb.linearVelocity = v;
-    }
-
     private IEnumerator Disparo()
     {
-        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        FrenarAtaque();
         // Tensa el arco (fotogramas 0-3, el aviso) y suelta en el 4, cuando se ve.
         anim.Reproducir("disparar", true, 4f / 12f / 0.5f * Ritmo);
         LanzarAviso(0.5f, 0.5f);
         Sonido.Reproducir("arco_tensar", 0.6f);
         yield return HastaFotograma(4);
         anim.Reproducir("disparar", false, 1f);
-        MirarAlPlayer();
+        MirarYa();
         Vector2 boca = (Vector2)transform.position + new Vector2(mirada * 0.5f, 0.55f);
         Vector2 destino = PosPlayer;
         Vector2 dir = (destino - boca).normalized;
@@ -107,7 +102,7 @@ public class EnemigoArquero : EnemigoBase, IModificadorDano
         Sonido.Reproducir("arco_disparo", 0.8f);
         ProyectilNieve.Lanzar(new ProyectilNieve.Datos
         {
-            sprite = spriteFlecha, color = new Color(1f, 0.6f, 1f), escala = 1.2f, dano = danoFlecha, magico = false,
+            sprite = spriteFlecha, color = new Color(1f, 0.6f, 1f), escala = 1.2f, dano = Dano(pesoFlecha), magico = false,
             radio = 0.12f, sonidoImpacto = "flecha_impacto",
         }, boca, dir * velocidadFlecha, transform);
         yield return EsperarRitmo(0.35f);
@@ -117,7 +112,7 @@ public class EnemigoArquero : EnemigoBase, IModificadorDano
     private IEnumerator Lluvia()
     {
         siguienteLluvia = Time.time + 6f;
-        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        FrenarAtaque();
         anim.Reproducir("cielo", true, 3f / 10f / 0.55f * Ritmo);
         LanzarAviso(0.55f, 0.6f);
         yield return HastaFotograma(3);
@@ -141,7 +136,7 @@ public class EnemigoArquero : EnemigoBase, IModificadorDano
         {
             ProyectilNieve.Lanzar(new ProyectilNieve.Datos
             {
-                sprite = spriteFlecha, color = new Color(1f, 0.6f, 1f), escala = 1.2f, dano = danoLluvia, magico = false,
+                sprite = spriteFlecha, color = new Color(1f, 0.6f, 1f), escala = 1.2f, dano = Dano(pesoLluvia), magico = false,
                 radio = 0.15f, sonidoImpacto = "flecha_impacto",
             }, p + new Vector2(0.4f, 6f), new Vector2(-1f, -16f), transform);
             yield return new WaitForSeconds(0.07f);
@@ -157,12 +152,8 @@ public class EnemigoArquero : EnemigoBase, IModificadorDano
         Sonido.Reproducir("esquiva", 0.5f, 1.2f);
         invulnerable = true;
         armadura = true;
-        rb.linearVelocity = new Vector2(-mirada * 6.5f, 4f);
-        for (float t = 0f; t < 0.55f; t += Time.deltaTime)
-        {
-            if (!HaySueloDelante(-0.8f, 2f)) rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
-            yield return null;
-        }
+        // Hacia atras, con el salto comun (no cae por un borde ni pasa paredes).
+        if (Impulsar(-mirada * distanciaVoltereta, alturaVoltereta)) yield return EnElAire();
         invulnerable = false;
         armadura = false;
         Frenar(40f);
@@ -188,7 +179,7 @@ public class EnemigoArquero : EnemigoBase, IModificadorDano
             transform.position = suelo.point + Vector2.up * 0.05f;
             break;
         }
-        MirarAlPlayer();
+        MirarYa();
         yield return EsperarRitmo(0.3f);
     }
 

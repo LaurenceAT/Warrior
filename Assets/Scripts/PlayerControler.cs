@@ -2023,7 +2023,7 @@ public class PlayerControler : MonoBehaviour
         Elemento e = ElementoActivo;
         if (e == Elemento.Ninguno || enemigo == null) return;
         int dano = enemigo.UltimoDano;
-        if (!enemigo.Muerto) EstadosEnemigo.Aplicar(enemigo, e, dano);
+        if (!enemigo.Muerto && dano > 0) EstadosEnemigo.Aplicar(enemigo, e, dano);
         if (e == Elemento.Oscuro && dano > 0) CurarDrenaje(Mathf.Max(1, Mathf.RoundToInt(dano * drenajeOscuro)));
         // El precio del sangrado: cada golpe que da tambien le llena a el su barra.
         if (e == Elemento.Sangrado && dano > 0)

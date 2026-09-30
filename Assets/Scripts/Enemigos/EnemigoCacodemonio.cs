@@ -23,7 +23,8 @@ public class EnemigoCacodemonio : EnemigoBase
     [SerializeField] private float aviso = 0.7f;
     [SerializeField] private float velocidadPicado = 11f;
     [SerializeField] private float duracionMaxima = 1f;
-    [SerializeField] private int dano = 40;
+    [Tooltip("Peso del picado (1 = el golpe principal de su ficha).")]
+    [SerializeField] private float pesoPicado = 1f;
     [SerializeField] private Vector2 tamanoGolpe = new Vector2(1.1f, 1f);
     [SerializeField] private Vector2 enfriamiento = new Vector2(2.2f, 3.2f);
     [SerializeField] private float aturdidoAlChocar = 0.9f;
@@ -85,8 +86,9 @@ public class EnemigoCacodemonio : EnemigoBase
     private void Volar(Vector2 objetivo, float intensidad)
     {
         Vector2 p = transform.position;
+        objetivo = LimitarZona(objetivo);
         objetivo.y += Mathf.Sin((Time.time + fase) * 2.2f) * amplitudVaiven;
-        Vector2 deseada = Vector2.ClampMagnitude((objetivo - p) * respuesta, velocidad * intensidad);
+        Vector2 deseada = Vector2.ClampMagnitude((objetivo - p) * respuesta, velocidad * intensidad) + Separacion2D();
         rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, deseada, Time.deltaTime * 5f);
     }
 
@@ -135,7 +137,7 @@ public class EnemigoCacodemonio : EnemigoBase
 
             if (!pego)
             {
-                var r = Golpear(Vector2.zero, tamanoGolpe, dano);
+                var r = Golpear(Vector2.zero, tamanoGolpe, Dano(pesoPicado));
                 if (r.HasValue)
                 {
                     pego = true;

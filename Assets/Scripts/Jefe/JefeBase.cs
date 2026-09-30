@@ -15,6 +15,10 @@ public abstract class JefeBase : EnemigoBase
     [Tooltip("Los sonidos de este jefe, accion por accion (Assets/Data/Sonidos). Lo que no este aqui suena de la biblioteca general.")]
     [SerializeField] protected SonidosAcciones sonidos;
 
+    // Los jefes no usan lo de los enemigos normales (dormir lejos, alerta, giro
+    // con retraso, aceleracion, parry que interrumpe...): ver EnemigoBase.EsJefe.
+    protected override bool EsJefe => true;
+
     public abstract void Configurar(Rect zona, float alturaSuelo);
 
     // Un sonido del jefe: el de su archivo si lo tiene, si no el de la biblioteca.

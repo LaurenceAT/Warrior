@@ -20,16 +20,23 @@ public class EnemigoMimic : EnemigoBase
     [Header("Combate")]
     [SerializeField] private float velocidad = 2.2f;
     [SerializeField] private float enfriamiento = 0.9f;
+    [Tooltip("Probabilidad de echarse atras tras atacar.")]
+    [Range(0f, 1f)] [SerializeField] private float probabilidadRetroceso = 0.3f;
 
     [Header("Mordisco (clip mordisco)")]
-    [SerializeField] private int danoMordisco = 40;
+    [Tooltip("Peso (1 = el golpe principal de su ficha).")]
+    [SerializeField] private float pesoMordisco = 1f;
     [SerializeField] private float rangoMordisco = 1.6f;
     [SerializeField] private int fotogramaSaltoMordisco = 12;
+    [Tooltip("Hasta donde llega el saltito del mordisco y cuanto sube (unidades).")]
+    [SerializeField] private float distanciaSalto = 2.7f;
+    [SerializeField] private float alturaSalto = 0.45f;
     [SerializeField] private Vector2 cajaMordisco = new Vector2(0.85f, 0.5f);
     [SerializeField] private Vector2 tamanoMordisco = new Vector2(1.2f, 0.9f);
 
     [Header("Latigazo (clip lengua)")]
-    [SerializeField] private int danoLatigazo = 40;
+    [Tooltip("Peso (1 = el golpe principal de su ficha).")]
+    [SerializeField] private float pesoLatigazo = 0.9f;
     [SerializeField] private float rangoLatigazo = 2.6f;
     [SerializeField] private int fotogramaGolpeLatigazo = 8;
     [SerializeField] private int fotogramaFinLatigazo = 10;
@@ -53,17 +60,17 @@ public class EnemigoMimic : EnemigoBase
 
         while (true)
         {
-            if (!VerPlayer((Vector2)transform.position + Vector2.up * 0.5f))
+            if (!VerPlayer(Alto(0.5f)))
             {
-                anim.Reproducir("quieto");
-                Frenar(10f);
+                if (VolverAZona(velocidad)) anim.Reproducir("andar");
+                else { anim.Reproducir("quieto"); Frenar(10f); }
                 yield return null;
                 continue;
             }
 
             MirarAlPlayer();
-            float dx = Mathf.Abs(DxPlayer);
-            bool alturaOk = Mathf.Abs(player.position.y - transform.position.y) < 1.8f;
+            float dx = Mathf.Abs(DxPlayer) / Escala;
+            bool alturaOk = Mathf.Abs(player.position.y - transform.position.y) < 1.8f * Escala;
 
             if (Time.time >= listoPara && alturaOk && dx <= rangoLatigazo)
             {
@@ -71,6 +78,8 @@ public class EnemigoMimic : EnemigoBase
                 // para que no sea del todo predecible.
                 bool morder = dx <= rangoMordisco ? Random.value < 0.7f : false;
                 yield return morder ? Mordisco() : Latigazo();
+                // A veces se echa atras tras atacar y vuelve a acechar.
+                if (Random.value < probabilidadRetroceso) { anim.Reproducir("andar", false, 1.2f); yield return Reposicionar(1.2f, velocidad); }
                 continue;
             }
 
@@ -99,7 +108,7 @@ public class EnemigoMimic : EnemigoBase
         }
 
         despierto = true;
-        MirarAlPlayer();
+        MirarYa();
 
         // Se abre y se transforma temblando: tiempo para que el player reaccione.
         anim.Reproducir("abrir", true);
@@ -114,11 +123,13 @@ public class EnemigoMimic : EnemigoBase
         visual.localPosition = base0;
         listoPara = Time.time + 0.4f;
         armadura = false;
+        // Ya sabe donde esta el player: sin la reaccion de "descubrirlo".
+        alerta = true;
     }
 
     private IEnumerator Mordisco()
     {
-        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        FrenarAtaque();
         anim.Reproducir("mordisco", true);
         LanzarAviso(fotogramaSaltoMordisco / anim.Fps("mordisco"), 0.6f);
 
@@ -128,9 +139,9 @@ public class EnemigoMimic : EnemigoBase
             if (!salto && anim.Fotograma >= fotogramaSaltoMordisco)
             {
                 salto = true;
-                rb.linearVelocity = new Vector2(4.5f * mirada, 3f);
+                Impulsar(distanciaSalto * mirada, alturaSalto);
             }
-            if (salto && !pego) pego = Golpear(cajaMordisco, tamanoMordisco, danoMordisco).HasValue;
+            if (salto && !pego) pego = Golpear(cajaMordisco, tamanoMordisco, Dano(pesoMordisco)).HasValue;
             yield return null;
         }
 
@@ -140,7 +151,7 @@ public class EnemigoMimic : EnemigoBase
 
     private IEnumerator Latigazo()
     {
-        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        FrenarAtaque();
         anim.Reproducir("lengua", true);
         LanzarAviso(fotogramaGolpeLatigazo / anim.Fps("lengua"), 0.5f);
 
@@ -149,7 +160,7 @@ public class EnemigoMimic : EnemigoBase
         {
             int f = anim.Fotograma;
             if (!pego && f >= fotogramaGolpeLatigazo && f <= fotogramaFinLatigazo)
-                pego = Golpear(cajaLatigazo, tamanoLatigazo, danoLatigazo).HasValue;
+                pego = Golpear(cajaLatigazo, tamanoLatigazo, Dano(pesoLatigazo)).HasValue;
             yield return null;
         }
 

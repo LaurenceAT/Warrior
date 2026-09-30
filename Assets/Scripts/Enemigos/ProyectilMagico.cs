@@ -39,6 +39,13 @@ public class ProyectilMagico : MonoBehaviour
         if (capaSuelo.value == 0) capaSuelo = LayerMask.GetMask("Ground");
     }
 
+    // Dano al player (lo pone quien la lanza, segun su ficha; -1 = el del prefab).
+    public void Lanzar(Vector2 dir, Transform quien, int danoAlPlayer)
+    {
+        if (danoAlPlayer > 0) dano = danoAlPlayer;
+        Lanzar(dir, quien);
+    }
+
     public void Lanzar(Vector2 dir, Transform quien)
     {
         direccion = dir.sqrMagnitude > 0.0001f ? dir.normalized : Vector2.right;

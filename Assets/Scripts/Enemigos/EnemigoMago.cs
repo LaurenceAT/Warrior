@@ -24,7 +24,9 @@ public class EnemigoMago : EnemigoBase
     [SerializeField] private Vector2 enfriamiento = new Vector2(1.9f, 2.7f);
 
     [Header("Estallido (arrinconado)")]
-    [SerializeField] private int danoEstallido = 40;
+    [Tooltip("Pesos (1 = el golpe principal de su ficha: la bola).")]
+    [SerializeField] private float pesoBola = 1f;
+    [SerializeField] private float pesoEstallido = 1.5f;
     [SerializeField] private float radioEstallido = 1.9f;
     [SerializeField] private float avisoEstallido = 0.7f;
     [SerializeField] private float enfriamientoEstallido = 3f;
@@ -48,10 +50,10 @@ public class EnemigoMago : EnemigoBase
     {
         while (true)
         {
-            if (!VerPlayer((Vector2)transform.position + Vector2.up * 1.3f))
+            if (!VerPlayer(Alto(1.3f)))
             {
-                anim.Reproducir("quieto");
-                Frenar(10f);
+                if (VolverAZona(velocidad)) anim.Reproducir("andar");
+                else { anim.Reproducir("quieto"); Frenar(10f); }
                 tHuyendo = 0f;
                 yield return null;
                 continue;
@@ -62,19 +64,20 @@ public class EnemigoMago : EnemigoBase
 
             if (dx < distanciaMinima)
             {
-                // Retrocede mirando al player: comprueba el suelo y la pared de
-                // detras (mirada contraria).
-                bool puedeHuir = tHuyendo < huidaMaxima && HaySueloDetras() && !HayParedDetras();
+                // Retrocede mirando al player: comprueba el suelo y la pared del
+                // lado contrario al player.
+                int huida = DxPlayer > 0f ? -1 : 1;
+                bool puedeHuir = tHuyendo < huidaMaxima && HaySueloHacia(huida, 0.7f) && !HayParedHacia(huida, 0.7f, 0.5f);
                 if (puedeHuir)
                 {
                     tHuyendo += Time.deltaTime;
                     anim.Reproducir("andar", false, 1.3f);
-                    rb.linearVelocity = new Vector2(-mirada * velocidadHuida, rb.linearVelocity.y);
+                    AndarDir(huida, velocidadHuida);
                     yield return null;
                     continue;
                 }
 
-                if (Time.time >= listoEstallido && dx < radioEstallido + 0.6f)
+                if (Time.time >= listoEstallido && dx < (radioEstallido + 0.6f) * Escala)
                 {
                     yield return Estallido();
                     continue;
@@ -107,7 +110,7 @@ public class EnemigoMago : EnemigoBase
 
     private IEnumerator Disparar()
     {
-        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        FrenarAtaque();
         anim.Reproducir("ataque", true);
         // El baculo se carga (aviso morado) hasta que suelta la bola.
         LanzarAviso(fotogramaDisparo / anim.Fps("ataque"), 0.45f);
@@ -120,13 +123,13 @@ public class EnemigoMago : EnemigoBase
                 disparado = true;
                 // Apunta en el momento de soltarla, no al empezar: moverse durante
                 // la carga no basta, hay que moverse cuando la suelta.
-                MirarAlPlayer();
+                MirarYa();
                 if (proyectil != null)
                 {
-                    Vector2 boca = (Vector2)transform.position + new Vector2(puntaBaculo.x * mirada, puntaBaculo.y);
+                    Vector2 boca = (Vector2)transform.position + new Vector2(puntaBaculo.x * mirada, puntaBaculo.y) * Escala;
                     Vector2 objetivo = PosPlayer + Vector2.up * 0.1f;
                     ProyectilMagico p = Instantiate(proyectil, boca, Quaternion.identity);
-                    p.Lanzar(objetivo - boca, transform);
+                    p.Lanzar(objetivo - boca, transform, Dano(pesoBola));
                 }
             }
             yield return null;
@@ -137,7 +140,7 @@ public class EnemigoMago : EnemigoBase
 
     private IEnumerator Estallido()
     {
-        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        FrenarAtaque();
         anim.Reproducir("ataque", true, 0.8f);
 
         // Circulo de aviso en el suelo que crece y parpadea.
@@ -161,17 +164,19 @@ public class EnemigoMago : EnemigoBase
         MostrarCirculo(false);
 
         // Estallido: la explosion de la bola, grande, y el dano en el circulo.
-        Vector2 centro = (Vector2)transform.position + Vector2.up * 0.7f;
+        Vector2 centro = Alto(0.7f);
+        float radio = radioEstallido * Escala;
         if (proyectil != null)
         {
             ProyectilMagico boom = Instantiate(proyectil, centro, Quaternion.identity);
-            boom.Explotar(radioEstallido * 1.6f);
+            boom.Explotar(radio * 1.6f);
         }
-        foreach (Collider2D c in Physics2D.OverlapCircleAll(centro, radioEstallido))
+        foreach (Collider2D c in Physics2D.OverlapCircleAll(centro, radio))
         {
             if (!c.CompareTag("Player")) continue;
             PlayerControler p = c.GetComponent<PlayerControler>();
-            if (p != null) p.TakeDamage(danoEstallido, this);
+            // Es magia: la reduce la resistencia a hechizos.
+            if (p != null) p.TakeDamage(Dano(pesoEstallido), this, PlayerControler.TipoDano.Magico);
             break;
         }
 
@@ -201,17 +206,6 @@ public class EnemigoMago : EnemigoBase
         MostrarCirculo(false);
     }
 
-    private bool HaySueloDetras()
-    {
-        Vector2 o = (Vector2)transform.position + new Vector2(-mirada * 0.7f, 0.2f);
-        return Physics2D.Raycast(o, Vector2.down, 0.8f, capaSuelo);
-    }
-
-    private bool HayParedDetras()
-    {
-        Vector2 o = (Vector2)transform.position + new Vector2(0f, 0.5f);
-        return Physics2D.Raycast(o, Vector2.right * -mirada, 0.7f, capaSuelo);
-    }
 
     // Circulo de aviso generado por codigo (un anillo suave), sin asset.
     private static Sprite circulo;

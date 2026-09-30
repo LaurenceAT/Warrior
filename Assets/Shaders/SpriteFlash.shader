@@ -14,6 +14,11 @@ Shader "Sprites/Flash"
         _Color ("Tint", Color) = (1,1,1,1)
         _FlashColor ("Flash Color", Color) = (1,1,1,1)
         _FlashAmount ("Flash Amount", Range(0,1)) = 0
+        // Variantes de color de los enemigos (ficha): giro de tono en grados,
+        // saturacion y brillo. Por defecto no cambian nada.
+        _Tono ("Tono", Range(-180,180)) = 0
+        _Saturacion ("Saturacion", Range(0,2)) = 1
+        _Brillo ("Brillo", Range(0,2)) = 1
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
     }
 
@@ -58,6 +63,18 @@ Shader "Sprites/Flash"
             fixed4 _Color;
             fixed4 _FlashColor;
             float  _FlashAmount;
+            float  _Tono;
+            float  _Saturacion;
+            float  _Brillo;
+
+            // Gira el tono alrededor del eje gris (conserva la luminosidad).
+            float3 GirarTono(float3 c, float grados)
+            {
+                float a = radians(grados);
+                const float3 k = float3(0.57735, 0.57735, 0.57735);
+                float ca = cos(a);
+                return c * ca + cross(k, c) * sin(a) + k * dot(k, c) * (1.0 - ca);
+            }
 
             v2f vert(appdata_t IN)
             {
@@ -76,6 +93,11 @@ Shader "Sprites/Flash"
             fixed4 frag(v2f IN) : SV_Target
             {
                 fixed4 c = tex2D(_MainTex, IN.texcoord) * IN.color;
+
+                // Variante de color (sin efecto con los valores por defecto).
+                c.rgb = GirarTono(c.rgb, _Tono);
+                float gris = dot(c.rgb, float3(0.299, 0.587, 0.114));
+                c.rgb = saturate(lerp(gris.xxx, c.rgb, _Saturacion) * _Brillo);
 
                 // El destello sustituye el color pero respeta la transparencia,
                 // asi solo se pinta la silueta del sprite y no un cuadrado.

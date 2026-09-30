@@ -11,8 +11,9 @@ public class EnemigoOjo : EnemigoBase
     [SerializeField] private float velocidad = 3f;
     [SerializeField] private float distancia = 5f;
     [SerializeField] private float altura = 3f;
-    [SerializeField] private int danoEscupitajo = 14;
-    [SerializeField] private int danoEmbestida = 16;
+    [Tooltip("Pesos de cada ataque (1 = el golpe principal de su ficha).")]
+    [SerializeField] private float pesoEscupitajo = 1f;
+    [SerializeField] private float pesoEmbestida = 1.15f;
     [SerializeField] private float velocidadEscupitajo = 7.5f;
     [SerializeField] private Vector2 enfriamiento = new Vector2(1.6f, 2.6f);
     public AnimadorHoja.Clip clipEscupitajo;
@@ -84,21 +85,23 @@ public class EnemigoOjo : EnemigoBase
 
     private void Volar(Vector2 objetivo, float factor)
     {
-        Vector2 hacia = objetivo - (Vector2)transform.position;
-        Vector2 deseada = Vector2.ClampMagnitude(hacia * 1.8f, velocidad * factor);
+        Vector2 hacia = LimitarZona(objetivo) - (Vector2)transform.position;
+        Vector2 deseada = Vector2.ClampMagnitude(hacia * 1.8f, velocidad * factor) + Separacion2D();
         rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, deseada, Time.deltaTime * 3f);
     }
 
     private IEnumerator Escupir(int cuantos)
     {
-        rb.linearVelocity = Vector2.zero;
+        // Mientras carga se aparta un poco hacia arriba y atras (no se queda clavado).
+        rb.linearVelocity = new Vector2(-mirada * 0.6f, 0.5f);
         // Carga (fotogramas 0-2) y escupe en el 3.
         anim.Reproducir("escupir", true, 3f / 12f / 0.5f * Ritmo);
         LanzarAviso(0.5f, 0.55f);
         yield return HastaFotograma(3);
         anim.Reproducir("escupir", false, 1f);
-        MirarAlPlayer();
-        Vector2 boca = (Vector2)transform.position + new Vector2(mirada * 0.4f, -0.1f);
+        MirarYa();
+        rb.linearVelocity = Vector2.zero;
+        Vector2 boca = (Vector2)transform.position + new Vector2(mirada * 0.4f, -0.1f) * Escala;
         Vector2 dir = (PosPlayer - boca).normalized;
         Sonido.Reproducir("ojo_escupir", 0.7f);
         for (int i = 0; i < cuantos; i++)
@@ -108,7 +111,7 @@ public class EnemigoOjo : EnemigoBase
             ProyectilNieve.Lanzar(new ProyectilNieve.Datos
             {
                 clip = clipEscupitajo, impacto = clipImpacto, color = Color.white, colorImpacto = new Color(0.7f, 1f, 0.4f),
-                escala = 0.7f, escalaImpacto = 0.6f, dano = danoEscupitajo, magico = true, radio = 0.22f, rotar = true,
+                escala = 0.7f, escalaImpacto = 0.6f, dano = Dano(pesoEscupitajo), magico = true, radio = 0.22f, rotar = true,
                 sonidoImpacto = "ojo_impacto",
             }, boca, d * velocidadEscupitajo, transform);
         }
@@ -130,7 +133,7 @@ public class EnemigoOjo : EnemigoBase
             rb.linearVelocity = dir * 10f;
             if (!pego)
             {
-                var r = Golpear(Vector2.zero, new Vector2(0.9f, 0.9f), danoEmbestida);
+                var r = Golpear(Vector2.zero, new Vector2(0.9f, 0.9f), Dano(pesoEmbestida));
                 if (r.HasValue) { pego = true; if (r.Value == PlayerControler.ResultadoDano.Parry) break; }
             }
             if (Physics2D.OverlapCircle(transform.position, 0.3f, capaSuelo)) break;

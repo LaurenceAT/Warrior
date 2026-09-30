@@ -29,6 +29,18 @@ public static class PruebaNieve
     public static void Jefe() => Lanzar("jefe", Escena);
     public static void Cueva() => Lanzar("cueva", "Assets/Scenes/Nivel Cueva.unity");
     public static void WraithPrueba() => Lanzar("wraith", "Assets/Scenes/Nivel Cueva.unity");
+    public static void FichasPrueba() => Lanzar("fichas", Escena);
+    public static void OjosPrueba() => Lanzar("ojos", Escena);
+    public static void SaltosPrueba() => Lanzar("saltos", Escena);
+    public static void Saltos2Prueba() => Lanzar("saltos2", Escena);
+    public static void GolpesPrueba() => Lanzar("golpes", Escena);
+    public static void MovimientoPrueba() => Lanzar("movimiento", Escena);
+    public static void MurcielagoPrueba() => Lanzar("murcielago", Escena);
+    public static void VariantesPrueba() => Lanzar("variantes", Escena);
+    public static void TonosPrueba() => Lanzar("tonos", Escena);
+    public static void JefesAturdirPrueba() => Lanzar("jefesaturdir", Escena);
+    public static void JefesAturdirCuevaPrueba() => Lanzar("jefesaturdir", "Assets/Scenes/Nivel Cueva.unity");
+    public static void FichasCuevaPrueba() => Lanzar("fichas", "Assets/Scenes/Nivel Cueva.unity");
     // Fotos del nivel en los puntos de la variable de entorno VISTAS ("x,y;x,y").
     public static void PintarCuevaPrueba() => Lanzar("pintarcueva", "Assets/Scenes/Nivel Cueva.unity");
     public static void DecoracionPrueba() => Lanzar("decoracion", System.Environment.GetEnvironmentVariable("VISTAS_ESCENA") ?? Escena);
@@ -108,8 +120,8 @@ public static class PruebaNieve
             if (p == null) { Debug.LogError("[Prueba] sin player"); EditorApplication.ExitPlaymode(); yield break; }
             Debug.Log($"[Prueba] modo={modo} player={(p != null)} vida={Vida()}/{p.VidaMaxima}");
             IEnumerator rutina = modo == "sistemas" ? Sistemas() : modo == "nivel" ? Nivel() : modo == "enemigos" ? Enemigos()
-                               : modo == "jefe" ? Jefe() : modo == "vistas" ? Vistas() : modo == "cornisa" ? Cornisa() : modo == "pintar" ? Pintar() : modo == "pintarcueva" ? PintarCueva() : modo == "decoracion" ? PintarDecoracion() : modo == "pociones" ? Pociones() : modo == "portal" ? Portal() : modo == "ronda6" ? Ronda6() : modo == "ronda8" ? Ronda8() : modo == "wraith" ? Wraith() : Cueva();
-            float limite = Time.realtimeSinceStartup + 240f;
+                               : modo == "jefe" ? Jefe() : modo == "vistas" ? Vistas() : modo == "cornisa" ? Cornisa() : modo == "pintar" ? Pintar() : modo == "pintarcueva" ? PintarCueva() : modo == "decoracion" ? PintarDecoracion() : modo == "pociones" ? Pociones() : modo == "portal" ? Portal() : modo == "ronda6" ? Ronda6() : modo == "ronda8" ? Ronda8() : modo == "wraith" ? Wraith() : modo == "fichas" ? Fichas() : modo == "ojos" ? Ojos() : modo == "saltos" ? Saltos() : modo == "saltos2" ? Saltos2() : modo == "golpes" ? Golpes() : modo == "movimiento" ? Movimiento() : modo == "murcielago" ? Murcielago() : modo == "variantes" ? Variantes() : modo == "tonos" ? Tonos() : modo == "jefesaturdir" ? JefesAturdir() : Cueva();
+            float limite = Time.realtimeSinceStartup + (modo.StartsWith("saltos") ? 900f : 240f);
             while (rutina.MoveNext())
             {
                 if (Time.realtimeSinceStartup > limite) { Debug.LogError("[Prueba] tiempo agotado"); break; }
@@ -312,17 +324,39 @@ public static class PruebaNieve
             System.Type[] tipos = { typeof(EnemigoRata), typeof(EnemigoMurcielago), typeof(EnemigoOjo), typeof(EnemigoArquero), typeof(EnemigoHechicero) };
             foreach (System.Type t in tipos)
             {
-                MonoBehaviour e = (MonoBehaviour)Object.FindFirstObjectByType(t);
+                // Uno que no este dentro de una ventisca (el viento tira al player a un hueco).
+                MonoBehaviour e = null;
+                var ventiscas = Object.FindObjectsByType<ZonaVentisca>(FindObjectsSortMode.None);
+                foreach (Object o in Object.FindObjectsByType(t, FindObjectsSortMode.None))
+                {
+                    MonoBehaviour m = (MonoBehaviour)o;
+                    bool enVentisca = false;
+                    foreach (ZonaVentisca z in ventiscas)
+                    {
+                        Bounds b = z.GetComponent<Collider2D>().bounds;
+                        if (m.transform.position.x > b.min.x - 5f && m.transform.position.x < b.max.x + 5f) enVentisca = true;
+                    }
+                    if (e == null || !enVentisca) e = m;
+                    if (!enVentisca) break;
+                }
                 if (e == null) { Debug.LogWarning("[Enemigos] no hay " + t.Name); continue; }
+                // Tras una muerte el player reaparece: se busca de nuevo.
+                for (float w = 0f; w < 5f && Object.FindFirstObjectByType<PlayerControler>() == null; w += 0.25f) yield return new WaitForSeconds(0.25f);
                 p = Object.FindFirstObjectByType<PlayerControler>();
-                Teletransportar(e.transform.position + Vector3.left * 3.5f + Vector3.up * 0.3f);
+                if (p == null) { Debug.LogWarning("[Enemigos] sin player"); yield break; }
+                // En el suelo bajo el sitio (con los voladores el punto esta en el aire,
+                // y a veces encima de un hueco).
+                Vector3 junto = e.transform.position + Vector3.left * 3.5f + Vector3.up * 0.3f;
+                RaycastHit2D suelo = Physics2D.Raycast(junto, Vector2.down, 12f, LayerMask.GetMask("Ground"));
+                if (suelo) junto = (Vector3)suelo.point + Vector3.up * 0.6f;
+                Teletransportar(junto);
                 Mirar(1);
                 SetCampo(p, "isInvincible", false);
                 int v0 = Vida();
                 int golpes = 0, hitsPrev = v0;
                 for (float s = 0f; s < 7f; s += 0.5f)
                 {
-                    if (p == null) break;
+                    if (p == null || e == null) break;
                     if (Vida() < hitsPrev) golpes++;
                     hitsPrev = Vida();
                     // Si le quitan mucho, se cura para seguir mirando.
@@ -1463,6 +1497,433 @@ public static class PruebaNieve
         }
 
         // Crimson Wraith (Ronda12): cada ataque, resistencias, corazon y frenesi.
+        // ------------------------------------------------------------------ Fichas de enemigos
+
+        // Cada enemigo normal: lo que ha tomado de su ficha, captura junto al
+        // player (tamano) y los golpes reales del combo para matarlo.
+        private IEnumerator Fichas()
+        {
+            yield return new WaitForSeconds(1f);
+            var vistos = new HashSet<string>();
+            var lista = new List<EnemyHealth>(Object.FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None));
+            lista.Sort((a, b) => a.transform.position.x.CompareTo(b.transform.position.x));
+            foreach (EnemyHealth e in lista)
+            {
+                if (e == null || e.Definicion == null || !vistos.Add(e.Definicion.name)) continue;
+                DefinicionEnemigo d = e.Definicion;
+                IAfinidadElemental af = e.GetComponent<IAfinidadElemental>();
+                string afs = "";
+                foreach (Elemento el in Elementos.Todos) afs += $"{el}={(af != null ? af.Multiplicador(el) : 1f):0.00} ";
+                Debug.Log($"[Fichas] {e.name}: vida={e.MaxHealth} (ficha {d.Vida}) dano={d.DanoBase} almas={e.Almas} escala={e.transform.localScale.y:0.00} barra={e.OffsetBarra} {afs}");
+
+                // Captura del tamano: el player al lado, sin que le pegue.
+                Invulnerable();
+                Teletransportar(e.transform.position + Vector3.left * 2.2f + Vector3.up * 0.2f);
+                Mirar(1);
+                yield return new WaitForSeconds(0.6f);
+                yield return Captura("f_" + e.name, false);
+
+                // Combo de espada (15, 15, 22) hasta que muera.
+                int[] combo = { 15, 15, 22 };
+                int golpes = 0;
+                while (e != null && !e.Muerto && golpes < 60)
+                {
+                    EnemyHealth.ArmaDelGolpe = TipoArma.Espada;
+                    e.TakeHit(combo[golpes % 3], e.transform.position + Vector3.left, Vector2.zero, false);
+                    golpes++;
+                    yield return new WaitForSeconds(0.05f);
+                }
+                Debug.Log($"[Fichas] {d.name}: golpes para matarlo={golpes} (espada +{Equipo.NivelEspada}; esperado en su zona {d.GolpesParaMatarlo} con +{d.Zona.nivelEspada})");
+            }
+        }
+
+        // Altura de 100 saltos de cada enemigo que salta, solo y en pareja
+        // (dos a la vez, casi pegados). Con el juego acelerado.
+        private IEnumerator Saltos()
+        {
+            yield return new WaitForSeconds(0.5f);
+            foreach (EnemyHealth e in Object.FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None)) Destroy(e.gameObject);
+            yield return null;
+            var casos = new (string prefab, string metodo)[]
+            {
+                ("Nieve/RataEscarcha", "Salto"), ("Cueva/Slime", "Atacar"), ("Cueva/Mimic", "Mordisco"),
+                ("Nieve/HechiceroSombrio", "SaltoSombrio"), ("Nieve/ArqueraArcana", "Voltereta"),
+            };
+            Vector2 sitio = new Vector2(30f, 0.6f);
+            Time.timeScale = 4f;
+            foreach (var c in casos)
+            {
+                GameObject pf = AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/Prefabs/Enemies/{c.prefab}.prefab");
+                foreach (int cuantos in new[] { 1, 2 })
+                {
+                    var enemigos = new List<EnemigoBase>();
+                    for (int k = 0; k < cuantos; k++)
+                        enemigos.Add(Object.Instantiate(pf, sitio + new Vector2(k * 0.5f, k * 0.6f), Quaternion.identity).GetComponent<EnemigoBase>());
+                    yield return new WaitForSeconds(0.5f);
+                    var alturas = new List<float>();
+                    int vueltas = cuantos == 1 ? 100 : 50;
+                    for (int i = 0; i < vueltas; i++)
+                    {
+                        Invulnerable();
+                        Teletransportar(new Vector3(sitio.x - 3.6f, sitio.y + 0.4f, 0f));
+                        var y0 = new float[cuantos];
+                        var maxY = new float[cuantos];
+                        var rutinas = new List<IEnumerator>();
+                        for (int k = 0; k < cuantos; k++)
+                        {
+                            EnemigoBase eb = enemigos[k];
+                            eb.StopAllCoroutines();
+                            Rigidbody2D rb = eb.GetComponent<Rigidbody2D>();
+                            rb.linearVelocity = Vector2.zero;
+                            rb.position = sitio + new Vector2(k * 0.5f, 0f);
+                        }
+                        yield return new WaitForSeconds(0.4f);
+                        for (int k = 0; k < cuantos; k++)
+                        {
+                            EnemigoBase eb = enemigos[k];
+                            y0[k] = maxY[k] = eb.transform.position.y;
+                            Llamar(eb, "MirarAlPlayer");
+                            eb.StartCoroutine((IEnumerator)Llamar(eb, c.metodo));
+                        }
+                        for (float t = 0f; t < 2.2f; t += Time.deltaTime)
+                        {
+                            for (int k = 0; k < cuantos; k++) maxY[k] = Mathf.Max(maxY[k], enemigos[k].transform.position.y);
+                            yield return null;
+                        }
+                        for (int k = 0; k < cuantos; k++) alturas.Add(maxY[k] - y0[k]);
+                    }
+                    alturas.Sort();
+                    float media = 0f; foreach (float a in alturas) media += a; media /= alturas.Count;
+                    float var2 = 0f; foreach (float a in alturas) var2 += (a - media) * (a - media);
+                    Debug.Log($"[Saltos] {c.prefab} x{cuantos}: n={alturas.Count} min={alturas[0]:0.00} max={alturas[alturas.Count - 1]:0.00} media={media:0.00} desv={Mathf.Sqrt(var2 / alturas.Count):0.00} p90={alturas[(int)(alturas.Count * 0.9f)]:0.00}");
+                    foreach (EnemigoBase eb in enemigos) if (eb != null) Destroy(eb.gameObject);
+                    yield return null;
+                }
+            }
+            Time.timeScale = 1f;
+        }
+
+        // Saltos en situaciones reales: grupos con su IA normal (el player
+        // quieto e invulnerable delante), uno encima de otro, y golpeados en el aire.
+        private IEnumerator Saltos2()
+        {
+            yield return new WaitForSeconds(0.5f);
+            foreach (EnemyHealth e in Object.FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None)) Destroy(e.gameObject);
+            yield return null;
+            Vector2 sitio = new Vector2(30f, 0.6f);
+            Time.timeScale = 3f;
+            foreach (string prefab in new[] { "Nieve/RataEscarcha", "Cueva/Slime", "Nieve/HechiceroSombrio", "Cueva/Mimic" })
+            {
+                GameObject pf = AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/Prefabs/Enemies/{prefab}.prefab");
+                // 1) Grupo de 3 con su IA durante 40 s.
+                var grupo = new List<EnemyHealth>();
+                for (int k = 0; k < 3; k++) grupo.Add(Object.Instantiate(pf, sitio + new Vector2(k * 0.4f, 0f), Quaternion.identity).GetComponent<EnemyHealth>());
+                float suelo = sitio.y, maxSubida = 0f;
+                int sobre3 = 0;
+                var subiendo = new bool[3];
+                var baseY = new float[3];
+                for (int k = 0; k < 3; k++) baseY[k] = grupo[k].transform.position.y;
+                for (float t = 0f; t < 40f; t += Time.deltaTime)
+                {
+                    Invulnerable(); Curar();
+                    Teletransportar(new Vector3(sitio.x - 3f + Mathf.PingPong(t, 4f), sitio.y + 0.4f, 0f));
+                    for (int k = 0; k < 3; k++)
+                    {
+                        if (grupo[k] == null) continue;
+                        Rigidbody2D rb = grupo[k].GetComponent<Rigidbody2D>();
+                        float y = grupo[k].transform.position.y;
+                        if (rb.linearVelocity.y > 0.5f && !subiendo[k]) { subiendo[k] = true; baseY[k] = y; }
+                        if (subiendo[k] && rb.linearVelocity.y <= 0f)
+                        {
+                            subiendo[k] = false;
+                            float h = y - baseY[k];
+                            maxSubida = Mathf.Max(maxSubida, h);
+                            if (h > 3f) { sobre3++; Debug.Log($"[Saltos2] {prefab} grupo: subida {h:0.00} desde y={baseY[k]:0.00} t={t:0.0}"); }
+                        }
+                    }
+                    yield return null;
+                }
+                Debug.Log($"[Saltos2] {prefab} grupo x3 (40 s): subida maxima={maxSubida:0.00} subidas>3u={sobre3}");
+                foreach (EnemyHealth e in grupo) if (e != null) Destroy(e.gameObject);
+                yield return null;
+
+                // 2) Golpeado en el aire justo tras empezar a subir (tajo de espada).
+                EnemyHealth solo = Object.Instantiate(pf, sitio, Quaternion.identity).GetComponent<EnemyHealth>();
+                yield return new WaitForSeconds(0.5f);
+                float maxGolpe = 0f;
+                for (int i = 0; i < 20 && solo != null; i++)
+                {
+                    Rigidbody2D rb = solo.GetComponent<Rigidbody2D>();
+                    rb.position = sitio; rb.linearVelocity = Vector2.zero;
+                    yield return new WaitForSeconds(0.3f);
+                    float y0 = solo.transform.position.y;
+                    rb.linearVelocity = new Vector2(0f, 7f);
+                    yield return new WaitForSeconds(0.08f);
+                    solo.TakeHit(1, solo.transform.position + Vector3.left, new Vector2(2.5f, 1.5f), false);
+                    float m = y0;
+                    for (float t = 0f; t < 1.5f; t += Time.deltaTime) { m = Mathf.Max(m, solo.transform.position.y); yield return null; }
+                    maxGolpe = Mathf.Max(maxGolpe, m - y0);
+                    Curar();
+                }
+                Debug.Log($"[Saltos2] {prefab} golpeado subiendo: subida maxima={maxGolpe:0.00}");
+                if (solo != null) Destroy(solo.gameObject);
+                yield return null;
+            }
+            Time.timeScale = 1f;
+        }
+
+        // Reaccion a los golpes por rol: combo de 3 golpes (cuantas veces lo
+        // interrumpe), 8 golpes seguidos (sin aturdimiento infinito), el
+        // aturdimiento sagrado con armadura y el retroceso.
+        private IEnumerator Golpes()
+        {
+            yield return new WaitForSeconds(0.5f);
+            foreach (EnemyHealth e in Object.FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None)) Destroy(e.gameObject);
+            yield return null;
+            Vector2 sitio = new Vector2(30f, 0.6f);
+            foreach (string prefab in new[] { "Nieve/RataEscarcha", "Nieve/ArqueraArcana", "Nieve/HechiceroSombrio", "Cueva/Slime", "Cueva/Cacodemonio", "Cueva/Mimic", "Cueva/Mago", "Nieve/OjoVigia" })
+            {
+                GameObject pf = AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/Prefabs/Enemies/{prefab}.prefab");
+                EnemyHealth e = Object.Instantiate(pf, sitio + Vector2.up * (pf.GetComponent<Rigidbody2D>().gravityScale == 0f ? 1.5f : 0f), Quaternion.identity).GetComponent<EnemyHealth>();
+                EnemigoBase eb = e.GetComponent<EnemigoBase>();
+                SetCampo(e, "maxHealth", 99999); SetCampo(e, "currentHealth", 99999);
+                Invulnerable();
+                Teletransportar(new Vector3(sitio.x - 2.5f, sitio.y + 0.4f, 0f));
+                yield return new WaitForSeconds(1.2f);
+
+                // Combo: 3 golpes a 0.35 s.
+                int i0 = eb.Interrupciones;
+                float x0 = e.transform.position.x;
+                for (int k = 0; k < 3; k++) { e.TakeHit(15, e.transform.position + Vector3.left, new Vector2(2.5f, 1.5f), false); yield return new WaitForSeconds(0.35f); }
+                float empuje = e.transform.position.x - x0;
+                int combo = eb.Interrupciones - i0;
+                yield return new WaitForSeconds(2f);
+
+                // 8 golpes a 0.2 s: cuantos lo paran.
+                i0 = eb.Interrupciones;
+                for (int k = 0; k < 8; k++) { e.TakeHit(15, e.transform.position + Vector3.left, new Vector2(2.5f, 1.5f), false); yield return new WaitForSeconds(0.2f); }
+                int seguidos = eb.Interrupciones - i0;
+                yield return new WaitForSeconds(2f);
+
+                // Aturdimiento (sagrado/parry) con armadura puesta.
+                SetCampoBase(eb, "armadura", true);
+                i0 = eb.Interrupciones;
+                e.Stagger(0.6f);
+                bool armaduraFuera = !(bool)GetCampoBase(eb, "armadura");
+                Debug.Log($"[Golpes] {prefab} ({e.Definicion?.rol}): combo 3 golpes -> {combo} interrupciones, empuje {empuje:0.00}; 8 golpes -> {seguidos}; aturdido con armadura -> {eb.Interrupciones - i0} (armadura quitada={armaduraFuera})");
+                Destroy(e.gameObject);
+                yield return null;
+            }
+        }
+
+        private static void SetCampoBase(object o, string campo, object valor)
+        {
+            for (System.Type t = o.GetType(); t != null; t = t.BaseType)
+            {
+                FieldInfo f = t.GetField(campo, Priv | BindingFlags.Public);
+                if (f != null) { f.SetValue(o, valor); return; }
+            }
+        }
+
+        private static object GetCampoBase(object o, string campo)
+        {
+            for (System.Type t = o.GetType(); t != null; t = t.BaseType)
+            {
+                FieldInfo f = t.GetField(campo, Priv | BindingFlags.Public);
+                if (f != null) return f.GetValue(o);
+            }
+            return null;
+        }
+
+        // Movimiento: cuantos duermen lejos de la camara, y para cada tipo, dos
+        // juntos cerca del player durante 15 s: estados, aceleracion maxima,
+        // separacion minima, si salen de su zona y la subida maxima.
+        private IEnumerator Movimiento()
+        {
+            yield return new WaitForSeconds(1.5f);
+            int dormidos = 0, total = 0;
+            foreach (EnemigoBase e in EnemigoBase.Activos) { total++; if (e.Dormido) dormidos++; }
+            Debug.Log($"[Movimiento] al empezar: {dormidos} de {total} enemigos dormidos (lejos de la camara)");
+            foreach (EnemyHealth e in Object.FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None)) Destroy(e.gameObject);
+            yield return null;
+
+            Vector2 sitio = new Vector2(33f, 0.6f);
+            Time.timeScale = 2f;
+            foreach (string prefab in new[] { "Nieve/RataEscarcha", "Nieve/MurcielagoCumbres", "Nieve/OjoVigia", "Nieve/ArqueraArcana", "Nieve/HechiceroSombrio",
+                                              "Cueva/Slime", "Cueva/Cacodemonio", "Cueva/Mago", "Cueva/Mimic" })
+            {
+                GameObject pf = AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/Prefabs/Enemies/{prefab}.prefab");
+                bool vuela = pf.GetComponent<Rigidbody2D>().gravityScale == 0f;
+                var par = new List<EnemigoBase>();
+                for (int k = 0; k < 2; k++)
+                    par.Add(Object.Instantiate(pf, sitio + new Vector2(k * 0.3f, vuela ? 2.5f : 0f), Quaternion.identity).GetComponent<EnemigoBase>());
+                foreach (EnemigoBase e in par) { EnemyHealth s = e.GetComponent<EnemyHealth>(); SetCampo(s, "maxHealth", 99999); SetCampo(s, "currentHealth", 99999); }
+                var estados = new HashSet<string>();
+                float acelMax = 0f, fueraZona = 0f, subida = 0f;
+                int framesJuntos = 0, frames = 0;
+                var estadoPrev = new string[2];
+                float tPrev = Time.time;
+                var vPrev = new Vector2[2];
+                float y0 = sitio.y;
+                for (float t = 0f; t < 15f; t += Time.deltaTime)
+                {
+                    Invulnerable(); Curar();
+                    Teletransportar(new Vector3(sitio.x - 5f + Mathf.PingPong(t * 1.5f, 5f), sitio.y + 0.4f, 0f));
+                    for (int k = 0; k < 2; k++)
+                    {
+                        EnemigoBase e = par[k];
+                        if (e == null) continue;
+                        estados.Add(e.EstadoIA);
+                        Rigidbody2D rb = e.GetComponent<Rigidbody2D>();
+                        EnemyHealth s = e.GetComponent<EnemyHealth>();
+                        // Aceleracion andando (sin contar golpes, saltos ni ataques con empuje).
+                        bool andando = e.EstadoIA == "Persecucion" || e.EstadoIA == "Patrulla" || e.EstadoIA == "Regreso";
+                        if (!vuela && t > 1f && andando && estadoPrev[k] == e.EstadoIA && !s.Aturdido && Time.deltaTime > 0f)
+                            acelMax = Mathf.Max(acelMax, Mathf.Abs(rb.linearVelocity.x - vPrev[k].x) / Mathf.Max(0.001f, Time.time - tPrev));
+                        vPrev[k] = rb.linearVelocity;
+                        estadoPrev[k] = e.EstadoIA;
+                        fueraZona = Mathf.Max(fueraZona, Mathf.Abs(e.transform.position.x - e.OrigenZona.x) - e.RadioZona);
+                        if (!vuela) subida = Mathf.Max(subida, e.transform.position.y - y0);
+                    }
+                    if (par[0] != null && par[1] != null && t > 2f)
+                    {
+                        frames++;
+                        float sep = vuela ? Vector2.Distance(par[0].transform.position, par[1].transform.position)
+                                          : Mathf.Abs(par[0].transform.position.x - par[1].transform.position.x);
+                        if (sep < 0.3f) framesJuntos++;
+                    }
+                    tPrev = Time.time;
+                    if (Mathf.Abs(t - 6f) < Time.deltaTime) yield return Captura("m_" + prefab.Replace('/', '_'), false);
+                    yield return null;
+                }
+                Debug.Log($"[Movimiento] {prefab}: estados={string.Join(",", estados)} acelMax={acelMax:0.0} juntos={(frames > 0 ? 100f * framesJuntos / frames : 0f):0}% fueraDeZona={Mathf.Max(0f, fueraZona):0.00} subida={subida:0.00}");
+                foreach (EnemigoBase e in par) if (e != null) Destroy(e.gameObject);
+                yield return null;
+            }
+            Time.timeScale = 1f;
+        }
+
+        // Variantes de color y elites (no estan en los niveles): se crean al lado
+        // del player para verlos, con la barra y el titulo del elite.
+        private IEnumerator Variantes()
+        {
+            yield return new WaitForSeconds(1f);
+            foreach (EnemyHealth e in Object.FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None)) Destroy(e.gameObject);
+            yield return null;
+            Vector2 sitio = new Vector2(30f, 0.6f);
+            foreach (string carpeta in new[] { "Variantes", "Elites" })
+                foreach (string guid in AssetDatabase.FindAssets("t:Prefab", new[] { "Assets/Prefabs/Enemies/" + carpeta }))
+                {
+                    GameObject pf = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(guid));
+                    bool vuela = pf.GetComponent<Rigidbody2D>().gravityScale == 0f;
+                    EnemyHealth e = Object.Instantiate(pf, sitio + Vector2.up * (vuela ? 2f : 0f), Quaternion.identity).GetComponent<EnemyHealth>();
+                    DefinicionEnemigo d = e.Definicion;
+                    Invulnerable(); Curar();
+                    Teletransportar(new Vector3(sitio.x - 2.8f, sitio.y + 0.4f, 0f));
+                    Mirar(1);
+                    yield return new WaitForSeconds(0.9f);
+                    // Un golpe para que se vea la barra.
+                    e.TakeHit(5, e.transform.position + Vector3.left, Vector2.zero, false);
+                    yield return new WaitForSeconds(0.3f);
+                    yield return Captura("v_" + pf.name, true);
+                    Debug.Log($"[Variantes] {pf.name}: {d.nombre} zona {d.zona} {d.rol} vida={e.MaxHealth} dano={d.DanoBase} almas={e.Almas} tono={d.tono} elite={(d.EsElite ? d.NombreElite : "-")}");
+                    Destroy(e.gameObject);
+                    yield return new WaitForSeconds(0.2f);
+                }
+        }
+
+        // Barrido de tonos: cinco copias de cada enemigo con tonos distintos, quietas.
+        private IEnumerator Tonos()
+        {
+            yield return new WaitForSeconds(1f);
+            foreach (EnemyHealth e in Object.FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None)) Destroy(e.gameObject);
+            yield return null;
+            float[] tonos = { 0f, 30f, 60f, 90f, 120f, 150f, -30f, -60f, -90f };
+            foreach (string prefab in new[] { "Cueva/Slime" })
+            {
+                GameObject pf = AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/Prefabs/Enemies/{prefab}.prefab");
+                var lista = new List<GameObject>();
+                for (int i = 0; i < tonos.Length; i++)
+                {
+                    GameObject g = Object.Instantiate(pf, new Vector2(22f + i * 1.8f, 0.6f + (i % 2) * 1.2f), Quaternion.identity);
+                    foreach (MonoBehaviour m in g.GetComponents<EnemigoBase>()) m.enabled = false;
+                    g.GetComponent<Rigidbody2D>().simulated = false;
+                    SpriteRenderer sr = g.GetComponentInChildren<AnimadorHoja>().destino;
+                    var b = new MaterialPropertyBlock();
+                    sr.GetPropertyBlock(b);
+                    b.SetFloat("_Tono", tonos[i]);
+                    sr.SetPropertyBlock(b);
+                    lista.Add(g);
+                }
+                Invulnerable();
+                Teletransportar(new Vector3(29f, 0.8f, 0f));
+                yield return new WaitForSeconds(0.5f);
+                yield return Captura("t_" + pf.name, false);
+                foreach (GameObject g in lista) Destroy(g);
+                yield return null;
+            }
+        }
+
+        // Un murcielago con el player cerca: posicion, velocidad y estado.
+        private IEnumerator Murcielago()
+        {
+            yield return new WaitForSeconds(1f);
+            foreach (EnemyHealth e in Object.FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None)) Destroy(e.gameObject);
+            yield return null;
+            Vector2 sitio = new Vector2(33f, 3.1f);
+            GameObject pf = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Enemies/Nieve/MurcielagoCumbres.prefab");
+            EnemigoBase m = Object.Instantiate(pf, sitio, Quaternion.identity).GetComponent<EnemigoBase>();
+            for (float t = 0f; t < 20f && m != null; t += 0.2f)
+            {
+                Invulnerable(); Curar();
+                Teletransportar(new Vector3(28f + Mathf.PingPong(t * 1.5f, 5f), 1f, 0f));
+                Debug.Log($"[Murcielago] t={t:0.0} pos={m.transform.position:0.0} v={m.GetComponent<Rigidbody2D>().linearVelocity:0.0} estado={m.EstadoIA} player={p.transform.position:0.0}");
+                yield return new WaitForSeconds(0.2f);
+            }
+        }
+
+        // Sigue a los ojos vigia mientras el player esta cerca de cada uno.
+        private IEnumerator Ojos()
+        {
+            yield return new WaitForSeconds(1f);
+            foreach (EnemigoOjo o in Object.FindObjectsByType<EnemigoOjo>(FindObjectsSortMode.None))
+            {
+                Vector3 inicio = o.transform.position;
+                Teletransportar(inicio + Vector3.left * 3.5f + Vector3.down * 2f);
+                for (float t = 0f; t < 8f; t += 0.5f)
+                {
+                    p = Object.FindFirstObjectByType<PlayerControler>();
+                    if (o == null || p == null) break;
+                    Invulnerable();
+                    Debug.Log($"[Ojos] {inicio:0} t={t:0.0} pos={o.transform.position:0.0} v={o.GetComponent<Rigidbody2D>().linearVelocity:0.0} player={p.transform.position:0.0}");
+                    yield return new WaitForSeconds(0.5f);
+                }
+            }
+        }
+
+        // Aturdir al jefe en pleno combate (parry, sagrado, congelado) no debe
+        // reiniciarlo ni quitarle la armadura.
+        private IEnumerator JefesAturdir()
+        {
+            bool cueva = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Contains("Cueva");
+            Teletransportar(cueva ? new Vector3(146f, 4.8f, 0f) : new Vector3(368f, 3.8f, 0f));
+            JefeBase j = null;
+            for (float t = 0f; t < 6f && (j = Object.FindFirstObjectByType<JefeBase>()) == null; t += 0.2f) yield return new WaitForSeconds(0.2f);
+            if (j == null) { Debug.LogError("[JefesAturdir] no aparecio"); yield break; }
+            yield return new WaitForSeconds(4f);
+            EnemyHealth s = j.GetComponent<EnemyHealth>();
+            Vector3 antes = j.transform.position;
+            int i0 = j.Interrupciones;
+            for (int k = 0; k < 6; k++)
+            {
+                Invulnerable(); Curar();
+                s.Stagger(0.6f);
+                yield return new WaitForSeconds(1.2f);
+            }
+            Debug.Log($"[JefesAturdir] {j.name}: interrupciones={j.Interrupciones - i0} armadura={GetCampoBase(j, "armadura")} vida={s.CurrentHealth}/{s.MaxHealth} " +
+                      $"activo={Object.FindFirstObjectByType<JefeBase>() == j} movido={Vector2.Distance(antes, j.transform.position):0.0}");
+        }
+
         private IEnumerator Wraith()
         {
             Application.logMessageReceived += (c, st, t) => { if (t == LogType.Exception || t == LogType.Error) errores++; };

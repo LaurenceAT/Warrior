@@ -1,0 +1,104 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76e8f662e21a35542928a876995a6a50, type: 3}
+  m_Name: AjustesEnemigos
+  m_EditorClassIdentifier: 
+  multiplicadorVida: 1
+  multiplicadorDano: 1
+  multiplicadorAlmas: 1
+  danoGolpeJugador: 17.3
+  alturaJugador: 1.04
+  zonas:
+  - nombre: Nieve
+    nivelEspada: 0
+    nivelesVida: 1
+    golpesDebil: {x: 2, y: 2}
+    golpesComun: {x: 3, y: 3}
+    golpesPesado: {x: 5, y: 6}
+    golpesElite: {x: 10, y: 12}
+    danoDebil: 6
+    danoComun: 10
+    danoPesado: 20
+    danoElite: 25
+    almasDebil: 30
+    almasComun: 55
+    almasPesado: 180
+    almasElite: 450
+    debilidad: 1.25
+    resistencia: 1
+    acumulacionEstados: 1
+  - nombre: Cueva
+    nivelEspada: 1
+    nivelesVida: 4
+    golpesDebil: {x: 3, y: 3}
+    golpesComun: {x: 4, y: 4}
+    golpesPesado: {x: 7, y: 8}
+    golpesElite: {x: 15, y: 15}
+    danoDebil: 8
+    danoComun: 14
+    danoPesado: 26
+    danoElite: 35
+    almasDebil: 60
+    almasComun: 110
+    almasPesado: 320
+    almasElite: 800
+    debilidad: 1.25
+    resistencia: 0.75
+    acumulacionEstados: 0.8
+  - nombre: Zona 3
+    nivelEspada: 3
+    nivelesVida: 7
+    golpesDebil: {x: 3, y: 4}
+    golpesComun: {x: 5, y: 5}
+    golpesPesado: {x: 10, y: 10}
+    golpesElite: {x: 20, y: 20}
+    danoDebil: 10
+    danoComun: 18
+    danoPesado: 32
+    danoElite: 45
+    almasDebil: 100
+    almasComun: 180
+    almasPesado: 500
+    almasElite: 1300
+    debilidad: 1.5
+    resistencia: 0.5
+    acumulacionEstados: 0.6
+  roles:
+  - nombre: Debil
+    tamano: {x: 0.65, y: 0.95}
+    golpesParaAturdir: 1
+    esperaAturdir: 0.5
+    retroceso: 1.2
+  - nombre: Comun
+    tamano: {x: 0.9, y: 1.2}
+    golpesParaAturdir: 1
+    esperaAturdir: 0.8
+    retroceso: 1
+  - nombre: Pesado
+    tamano: {x: 1.25, y: 1.6}
+    golpesParaAturdir: 3
+    esperaAturdir: 1.5
+    retroceso: 0.45
+  - nombre: Elite
+    tamano: {x: 1.3, y: 1.8}
+    golpesParaAturdir: 4
+    esperaAturdir: 2
+    retroceso: 0.3
+  nombresElite:
+  - Vharok, el Desollado
+  - La Viuda de Ceniza
+  - Morgath Sin Ojos
+  - Sor Esquirla
+  - El Ultimo Centinela
+  - Ghul de la Brecha
+  - Aldren, Hueso Roto
+  - La Madre Carmesi

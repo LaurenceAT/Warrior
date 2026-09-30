@@ -43,6 +43,8 @@ public static class ActualizarProyecto
     public static void Ronda11() => global::Ronda11.Todo();
     // Duodecima ronda: Crimson Wraith mas fluido, poderes nuevos y resistencias.
     public static void Ronda12() => global::Ronda12.Todo();
+    // Decimotercera ronda: enemigos normales por golpes (fichas, curva y tamanos).
+    public static void Ronda13() => global::Ronda13.Todo();
 
     public static void Ronda5()
     {

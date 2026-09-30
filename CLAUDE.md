@@ -18,6 +18,7 @@ Jefe secreto (solo en Desafíos): The Blind Huntress, en la escena `Bosque Cazad
 - `RPG/`: `Progreso` (niveles y almas), `AjustesProgreso` (números editables), `Equipo` (mejoras de espada y frascos), `EstadosPlayer`, `EstadosEnemigo`, `ArmaImbuida`, `MenuHoguera`, `RecursosRPG` (sonidos e iconos por clave).
 - `Jefe/`: `JefeSombra`, `JefeWraith` (en 2 archivos: `JefeWraith` y `JefeWraithPoderes`), `PoseViva` (respira, se inclina y se estira: vida a las poses sueltas), `ArenaJefe` (combate, música, recompensa), `PeligrosJefe` (ataques en el escenario).
 - `Desafios/`: `Desafio` (estado), `ModoDesafio` (monta la arena en el nivel real), `TiendaTotem`/`TotemTienda`, `MenuDesafios`, `MenuLogros`, `Logros`, `Globales` (logros y tiempos en `globales.json`, aparte de las partidas). Fichas editables en `Resources/Desafios` (jefes y tienda) y `Resources/Logros`.
+- `Enemigos/`: enemigos normales. `EnemigoBase` (IA comun: estados con nombre, aceleracion, giro con retraso, alerta "!", separacion, vuelta a su zona, salto comun con tope, reaccion a golpes por rol, duerme lejos de la camara), `AjustesEnemigos` (curva por golpes en `Resources/AjustesEnemigos`), `DefinicionEnemigo` (una ficha por enemigo en `Assets/Data/Enemigos`), `DepuracionEnemigos` (F9, solo Editor). Variantes de color en `Prefabs/Enemies/Variantes` y elites en `Prefabs/Enemies/Elites` (sin colocar). `Ronda13` los genera; menu Warrior > Informe de dificultad.
 - `Cazadora/`: el jefe secreto. `JefeCazadora` (cerebro, en 3 archivos: nucleo, Ataques, Especiales), `CuerpoCazadora` (movimiento con aceleracion), `AnimCazadora` (cuerpo + efecto tenible), `OidoCazadora` (ruidos del player), `ArenaCazadora` (dialogo, musica por fase, reinicio), `IlusionCazadora`, `EfectosCazadora` (olas, marcas, estelas... con reserva), `UICazadora`, `DialogoCazadora`, `OscuridadCazadora`, `AmbienteBosque`, `ParallaxBosque`, `CamaraCazadora`, `DepuracionCazadora` (F10, solo Editor). Numeros en `Assets/Data/Jefes/Ajustes Cazadora`; sonidos en `Assets/Data/Sonidos/Sonidos Jefe Cazadora`. `Ronda10` genera sprites, fondo pixelado, prefab y escena.
 - `Menu/`: `MenuPrincipal`, `Partida` (partidas guardadas en JSON).
 - `UI/`: `EstiloMenu` (estilo común y sonidos de menús), `MenuPausa`, `PantallaCarga`, `PantallaMuerte`, `AvisoObjeto`.
@@ -51,6 +52,7 @@ Jefe secreto (solo en Desafíos): The Blind Huntress, en la escena `Bosque Cazad
 - La Cazadora: todo su dano va en fraccion de tu vida maxima; los golpes normales nunca matan con la vida llena (solo instakills, su estocada tras parry o tener poca vida).
 - Parry de la Cazadora: al contacto te aturde de verdad (sin control ni teclas guardadas) y ella reapunta a tu posicion real justo antes de la estocada; si sobrevives, sales despedido (`PlayerControler.Derribar`, invulnerable al caer). El escudo se rompe por golpes (10, o 5 con la espada imbuida de oscuridad), no por dano.
 - Crimson Wraith (Ronda12): se mueve con aceleracion y frenada, avisos ligero/pesado, poderes nuevos (Guadana doble, Cosecha de sangre, Transfusion, Raices carmesi, Semillas del vacio, Zigzag, Frenesi) y "corazon expuesto" tras Nova, Lluvia y Frenesi (x1.5). Fase 1: fuego x1.3, hielo x1.2, oscuridad x0.7, sangrado x0.6. Fase 2: sagrado x1.8, fuego x1.5, hielo x0.8, oscuridad x0.3, sangrado x0.2 y lo cura. Prueba: `PruebaNieve.WraithPrueba`.
+- Enemigos normales por golpes (Ronda13): la vida y el dano salen de golpes para matar y % de tu vida esperada en su zona (zona 1 Nieve, 2 Cueva, 3 futura). Roles Debil/Comun/Pesado/Elite. Ajuste global en AjustesEnemigos. Los enemigos no chocan entre si (se separan solos). Los jefes heredan de EnemigoBase, pero con `EsJefe` (JefeBase) todo eso se apaga: el parry no les quita la armadura ni los reinicia. El tono de las variantes lo hace el shader `Sprites/Flash` (_Tono, _Saturacion, _Brillo).
 - Se conservan en el código el arco, el combate sin arma y la rueda de pociones, aunque estén apagados.
 
 ## Hecho y funcionando
@@ -62,6 +64,7 @@ Jefe secreto (solo en Desafíos): The Blind Huntress, en la escena `Bosque Cazad
 - Mejoras: Piedras de forja (espada) y Lágrimas sagradas (frascos), en cofres ocultos y como recompensa de jefes.
 - Estatuas con pistas, libro de pistas, decoración extra en los dos niveles (objeto `DecoracionExtra`).
 - Menú de Desafíos (2 jefes, Normal/Difícil, tótem-tienda, cofre) y de Logros (9, ocultos). Prueba: `PruebaNieve.DesafioPrueba` y `DesafioDificilPrueba`.
+- Enemigos normales con fichas, curva por golpes, salto comun, movimiento con estados, elites y variantes. Pruebas: `PruebaNieve.FichasPrueba`, `GolpesPrueba`, `SaltosPrueba`, `MovimientoPrueba`, `VariantesPrueba`.
 - The Blind Huntress (jefe secreto, 3 barras, instakills, oscuridad, ilusiones). Prueba: `PruebaNieve.CazadoraPrueba`.
 - Tajos sincronizados con el ataque; colores propios; efectos en el arma; muerte en el aire; sangre.
 - Pruebas automáticas en batchmode pasando (sistemas, pociones, jefe, cueva, menú, ronda6, nivel, ronda8).
@@ -73,6 +76,7 @@ Jefe secreto (solo en Desafíos): The Blind Huntress, en la escena `Bosque Cazad
 - Probar a mano en Unity lo de la última ronda (menú de hoguera, cofres, estados) y ajustar números si hace falta.
 - Faltan sprites de cristales y huesos para la cueva, y un sonido propio de máquina de escribir (se usa el "tic" de los menús).
 - Faltan sonidos propios de compra y de logro (se usan `mejorar_equipo` y `objeto_obtenido`) y un icono de candado (dibujado por código).
+- Colocar elites (1 en la Nieve, 2 en la Cueva) y variantes al rediseñar las zonas. Probar a mano la nueva dificultad (la Cueva es mas dura) y ajustar AjustesEnemigos.
 - Optimización para itch.io: diagnóstico hecho, fase 2 aplazada (ver memoria).
 - Cazadora: faltan sonidos propios de rugido y voz (van sustitutos); latido, cristal y escritura ya son los de `Sonidos_nuevos` (Ronda11) y probarla a mano para ajustar numeros.
 
