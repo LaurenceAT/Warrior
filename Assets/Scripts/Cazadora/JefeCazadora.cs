@@ -159,6 +159,7 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
         PlayerControler p = PC;
         if (p == null) yield break;
         PlayerControler.TopeVentanaParry = ajustes.ventanaParryDialogo;
+        AnunciarAtaque("tajo_dialogo");
         MirarA(p.transform.position.x);
         yield return AvisoPose("estocada", 0, ajustes.avisoTajoDialogo, false);
         cuerpo.Trayecto(new Vector2(p.transform.position.x - mirada * 0.7f, suelo), 0.12f, 0f, CuerpoCazadora.Curva.Dash);
@@ -268,9 +269,9 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
         }
 
         float vida = salud.MaxHealth > 0 ? (float)salud.CurrentHealth / salud.MaxHealth : 1f;
-        if (!escudoUsado[fase] && vida <= ajustes.umbralEscudo) { yield return RugidoYEscudo(); yield break; }
+        if (!escudoUsado[fase] && vida <= ajustes.umbralEscudo) { AnunciarAtaque("escudo"); yield return RugidoYEscudo(); yield break; }
         if (PuedeInstakill(vida)) { yield return Instakill(); yield break; }
-        if (QuiereGuardia) { yield return Guardia(); yield break; }
+        if (QuiereGuardia) { AnunciarAtaque("guardia"); yield return Guardia(); yield break; }
 
         // Forzado desde las herramientas de depuracion.
         if (!string.IsNullOrEmpty(ataqueForzado))
@@ -304,6 +305,7 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
         // Te acercas corriendo: le caen ilusiones del cielo delante.
         if (fase >= 1 && Time.time - tIlusionesCaen > 9f && d < 7f && Acercandose(p))
         {
+            AnunciarAtaque("caen");
             yield return IlusionesCaen(2, false);
             yield return TrasAtaque(F.pausa.x);
             yield break;
@@ -360,6 +362,8 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
 
     public IEnumerator Ejecutar(string ataque)
     {
+        // Los instakills se apuntan al mostrar su aviso (en su propio codigo).
+        if (ataque != "ejecucion" && ataque != "sentencia" && ataque != "silencio") AnunciarAtaque(ataque);
         switch (ataque)
         {
             case "tresLunas": return TresLunas();

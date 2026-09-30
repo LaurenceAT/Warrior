@@ -1,13 +1,17 @@
 using UnityEngine;
 
 // Iconos pequenos de pixel art dibujados por codigo, para lo que no hay en el
-// pack de iconos: el candado (logros ocultos, dificultad bloqueada).
+// pack de iconos: el candado (logros ocultos, dificultad bloqueada). Si el
+// candado del pack (clave "candado" de RecursosRPG) esta puesto, se usa ese.
 public static class IconosDibujados
 {
     private static Sprite candado;
 
     public static Sprite Candado()
     {
+        RecursosRPG r = RecursosRPG.Get();
+        Sprite delPack = r != null ? r.Icono("candado") : null;
+        if (delPack != null) return delPack;
         if (candado != null) return candado;
         // 16x16: arco arriba y cuerpo abajo con el ojo de la cerradura.
         string[] filas =

@@ -21,30 +21,39 @@ MonoBehaviour:
   - elemento: 0
     multiplicador: 1.3
     cuando: Fase 1
+    fase: 0
   - elemento: 1
     multiplicador: 1.2
     cuando: Fase 1
+    fase: 0
   - elemento: 4
     multiplicador: 0.6
     cuando: Fase 1
+    fase: 0
   - elemento: 2
     multiplicador: 0.7
     cuando: Fase 1
+    fase: 0
   - elemento: 3
     multiplicador: 1.8
     cuando: Fase 2
+    fase: 0
   - elemento: 0
     multiplicador: 1.5
     cuando: Fase 2
+    fase: 0
   - elemento: 1
     multiplicador: 0.8
     cuando: Fase 2
+    fase: 0
   - elemento: 2
     multiplicador: 0.3
     cuando: Fase 2
+    fase: 0
   - elemento: 4
     multiplicador: 0.2
     cuando: Fase 2
+    fase: 0
   notaAfinidades: "Fase 2: su coraza resiste la espada sin imbuir (x0.6) y el sangrado
     lo cura. Tras Nova, Lluvia o Frenes\xED su coraz\xF3n brilla: recibe x1.5 de
     todo."
@@ -62,6 +71,188 @@ MonoBehaviour:
     la tuya. Sus garras arrancan lo que tocan. Sus tent\xE1culos buscan en la oscuridad
     lo que las garras no alcanzan. Y sus hechizos no piden permiso: la sangre simplemente
     obedece. Quienes lo vieron no saben describirlo. Solo dicen que sigue creciendo."
+  ataques:
+  - id: caida_entrada
+    nombre: "Ca\xEDda del techo"
+    fase: 1
+    instakill: 0
+    descripcion: "Al empezar, una sombra carmes\xED aparece bajo tus pies y el jefe
+      cae en picado sobre ella."
+    consejo: 'Sal de la sombra antes de que caiga, o recibe el impacto con un parry:
+      si lo paras, queda aturdido un buen rato.'
+  - id: tajos
+    nombre: Zarpazos
+    fase: 1
+    instakill: 0
+    descripcion: "Alza la garra y encadena dos zarpazos; si te pones a su espalda,
+      a\xF1ade un rev\xE9s."
+    consejo: "Para los dos zarpazos o al\xE9jate tras el primero. No lo rodees: el
+      rev\xE9s castiga a quien se queda detr\xE1s."
+  - id: embestida
+    nombre: Embestida
+    fase: 1
+    instakill: 0
+    descripcion: Se agacha y cruza el escenario dejando una estela.
+    consejo: "Cuando se agache, s\xE1ltalo o rueda a trav\xE9s de \xE9l en el \xFAltimo
+      momento."
+  - id: zigzag
+    nombre: Zigzag
+    fase: 1
+    instakill: 0
+    descripcion: Una embestida de ida y, casi sin respiro, la de vuelta.
+    consejo: "Esquiva la primera y prep\xE1rate enseguida para la segunda: vuelve
+      por el mismo camino."
+  - id: onda
+    nombre: "Onda carmes\xED"
+    fase: 1
+    instakill: 0
+    descripcion: Conjura y lanza dos ondas de sangre por el suelo.
+    consejo: Salta cada onda; tras la segunda queda un momento abierto.
+  - id: pilares
+    nombre: Pilares de sangre
+    fase: 1
+    instakill: 0
+    descripcion: Marca el suelo con glifos y brotan pilares de sangre que causan
+      sangrado.
+    consejo: 'Sal de los glifos en cuanto aparezcan: los pilares brotan justo donde
+      brillan.'
+  - id: orbes
+    nombre: Orbes
+    fase: 1
+    instakill: 0
+    descripcion: Flota y suelta orbes que te persiguen y causan sangrado.
+    consejo: "Un parry devuelve cada orbe contra \xE9l. Si no, sigue movi\xE9ndote
+      hasta que se deshagan."
+  - id: salto
+    nombre: Salto aplastante
+    fase: 1
+    instakill: 0
+    descripcion: "Se agacha, salta en arco hasta ti y cae con una onda de choque.
+      El sitio de ca\xEDda se marca en cuanto despega."
+    consejo: Mira la marca y sal de ella; la onda sale a los dos lados.
+  - id: medialuna
+    nombre: Media luna
+    fase: 1
+    instakill: 0
+    descripcion: Un zarpazo a distancia que vuela recto a la altura del pecho.
+    consejo: "S\xE1ltala o rueda a trav\xE9s de ella en el momento justo."
+  - id: raices
+    nombre: "Ra\xEDces carmes\xED"
+    fase: 1
+    instakill: 0
+    descripcion: "Tent\xE1culos que brotan del suelo por donde pasaste, uno tras
+      otro."
+    consejo: "Cambia de direcci\xF3n: las ra\xEDces siguen tu rastro, no a ti."
+  - id: cosecha
+    nombre: Cosecha de sangre
+    fase: 1
+    instakill: 0
+    descripcion: "Si tu barra de sangrado va por la mitad, cierra el pu\xF1o y la
+      hace estallar: un aro se cierra sobre ti y el da\xF1o depende de lo acumulado."
+    consejo: "Vigila tu sangrado. Cuando el aro se cierre, rueda justo antes de que
+      termine: la barra se vac\xEDa sin da\xF1o."
+  - id: zarpazo
+    nombre: Zarpazo gigante
+    fase: 2
+    instakill: 0
+    descripcion: Un zarpazo enorme que suelta ondas por el suelo.
+    consejo: "P\xE1ralo o al\xE9jate, y salta las ondas que salen de \xE9l."
+  - id: guadana
+    nombre: "Guada\xF1a doble"
+    fase: 2
+    instakill: 0
+    descripcion: "Un tajo enorme hacia delante y, sin girarse, otro hacia atr\xE1s.
+      A veces lo encadena tras el zarpazo, el salto o el teletransporte."
+    consejo: "No te pongas a su espalda: el segundo tajo castiga ah\xED. Al\xE9jate
+      despu\xE9s del primero."
+  - id: teletransporte
+    nombre: Teletransporte
+    fase: 2
+    instakill: 0
+    descripcion: Desaparece y reaparece a tu espalda con un golpe.
+    consejo: "Cuando desaparezca, date la vuelta o rueda hacia delante: sale detr\xE1s
+      de ti."
+  - id: cadena
+    nombre: Pilares en cadena
+    fase: 2
+    instakill: 0
+    descripcion: "Pilares de sangre que brotan en fila, uno detr\xE1s de otro, hacia
+      ti."
+    consejo: "Salta la fila o rueda a trav\xE9s de ella; no corras en su misma direcci\xF3n."
+  - id: lluvia
+    nombre: Lluvia de fuego
+    fase: 2
+    instakill: 0
+    descripcion: "Llueve fuego por toda la arena. Despu\xE9s su coraz\xF3n queda
+      expuesto."
+    consejo: "Busca los huecos entre las marcas y no dejes de moverte. Al terminar,
+      golp\xE9alo: recibe x1.5."
+  - id: vortice
+    nombre: "V\xF3rtice"
+    fase: 2
+    instakill: 0
+    descripcion: Un remolino de sangre que te atrae hacia su centro.
+    consejo: "Al\xE9jate del centro en cuanto aparezca; si te atrapa, rueda para
+      salir."
+  - id: nova
+    nombre: Nova
+    fase: 2
+    instakill: 0
+    descripcion: "Se carga con un aro que marca su alcance y estalla alrededor. Despu\xE9s
+      su coraz\xF3n queda expuesto."
+    consejo: 'Sal del aro antes de que estalle y vuelve enseguida: tras la Nova recibe
+      x1.5.'
+  - id: semillas
+    nombre: "Semillas del vac\xEDo"
+    fase: 2
+    instakill: 0
+    descripcion: "Lanza orbes morados en arco que caen al suelo y, un momento despu\xE9s,
+      brotan como pilares."
+    consejo: "Mira d\xF3nde caen las semillas y al\xE9jate de ellas antes de que
+      broten."
+  - id: transfusion
+    nombre: "Transfusi\xF3n"
+    fase: 2
+    instakill: 0
+    descripcion: "Un hilo de sangre te une a \xE9l; cada pulso que te llega le cura."
+    consejo: "Al\xE9jate para romper el hilo, o para un pulso con un parry."
+  - id: frenesi
+    nombre: "Frenes\xED"
+    fase: 2
+    instakill: 0
+    descripcion: "Con poca vida, ruge, la arena se oscurece y encadena ataques casi
+      sin pausa. Despu\xE9s queda agotado y con el coraz\xF3n expuesto."
+    consejo: "No ataques durante el frenes\xED: solo esquiva. Cuando quede agotado,
+      es tu momento."
+  fases:
+  - numero: 1
+    nombre: Forma humanoide
+    descripcion: "Se mueve con aceleraci\xF3n y frenada, y avisa de sus golpes: un
+      destello corto para los ligeros y uno largo para los pesados. Zarpazos, embestidas,
+      ondas y pilares de sangre."
+  - numero: 2
+    nombre: Forma grande
+    descripcion: "A mitad de vida toma su forma grande y la arena se ti\xF1e de rojo.
+      Ataca m\xE1s r\xE1pido y con menos pausa. Tras la Nova, la Lluvia de fuego
+      y el Frenes\xED su coraz\xF3n queda expuesto: todo lo que le hagas entra x1.5."
+  fragmentosHistoria:
+  - id: h1
+    cuando: 0
+    texto: Nadie recuerda su rostro, porque no tiene uno que la mente acepte.
+  - id: h2
+    cuando: 1
+    texto: "Crimson Wraith fue algo m\xE1s antiguo que la cueva, y la monta\xF1a
+      se cerr\xF3 a su alrededor como una herida que cicatriza sobre una astilla."
+  - id: h3
+    cuando: 3
+    texto: "Se alimenta de la sangre que baja hasta \xE9l: la de los mineros, la
+      de los que vinieron a matarlo, la tuya. Sus garras arrancan lo que tocan. Sus
+      tent\xE1culos buscan en la oscuridad lo que las garras no alcanzan. Y sus hechizos
+      no piden permiso: la sangre simplemente obedece."
+  - id: h4
+    cuando: 4
+    texto: Quienes lo vieron no saben describirlo. Solo dicen que sigue creciendo.
+  dialogoAlReiniciar: 0
   almasCofre: 2500
   objetosCofre: 000000000200000004000000
   multVida: 1.5

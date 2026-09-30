@@ -21,21 +21,27 @@ MonoBehaviour:
   - elemento: 3
     multiplicador: 1.4
     cuando: Fase 1
+    fase: 0
   - elemento: 2
     multiplicador: 0.5
     cuando: Fase 1
+    fase: 0
   - elemento: 0
     multiplicador: 1.6
     cuando: Fase 2
+    fase: 0
   - elemento: 4
     multiplicador: 1.1
     cuando: Fase 2
+    fase: 0
   - elemento: 1
     multiplicador: 0.2
     cuando: Fase 2
+    fase: 0
   - elemento: 2
     multiplicador: 0.8
     cuando: Fase 2
+    fase: 0
   notaAfinidades: Con x0.5 o menos, ese elemento no le aplica su estado (ni quemadura,
     ni escarcha...).
   informacion: "<b>Fase 1</b> (sombra): barrido a ras de suelo con mucho alcance;
@@ -53,8 +59,120 @@ MonoBehaviour:
     llega antes que el agarre. Quien lo ve venir a\xFAn puede huir. Quien duda, no
     vuelve. Lo que queda es una presencia paciente, hecha de agua negra y hielo roto,
     que espera a quien todav\xEDa cree que el camino sigue."
+  ataques:
+  - id: barrido
+    nombre: Barrido
+    fase: 1
+    instakill: 0
+    descripcion: Un tajo a ras de suelo con mucho alcance.
+    consejo: "S\xE1ltalo, o p\xE1ralo con un parry justo antes del impacto."
+  - id: barrido_alzado
+    nombre: Barrido y tajo alzado
+    fase: 1
+    instakill: 0
+    descripcion: "Tras el barrido, con un retraso que cambia cada vez, un tajo vertical
+      que castiga a quien salt\xF3 el primero."
+    consejo: "No saltes el barrido por reflejo: p\xE1ralo y guarda otro parry para
+      el tajo alzado. Son dos ventanas distintas."
+  - id: reves
+    nombre: "Rev\xE9s"
+    fase: 1
+    instakill: 0
+    descripcion: "Si te pones a su espalda, corta hacia atr\xE1s sin girarse."
+    consejo: "No te quedes pegado a su espalda: rueda a trav\xE9s de \xE9l y sal
+      de su alcance, o para el rev\xE9s."
+  - id: paso
+    nombre: "Paso sombr\xEDo"
+    fase: 1
+    instakill: 0
+    descripcion: Se convierte en una esfera de sombra, cruza al otro lado y sale
+      con un tajo circular.
+    consejo: "Cuando se haga esfera, al\xE9jate o prepara la esquiva: el tajo sale
+      justo al reaparecer."
+  - id: medialunas
+    nombre: Medialunas
+    fase: 1
+    instakill: 0
+    descripcion: Lanza medialunas que vuelan hacia ti y te hacen sangrar (en la fase
+      de hielo, te congelan).
+    consejo: "Rueda a trav\xE9s de ellas o s\xE1ltalas; acercarte entre dos le quita
+      espacio."
+  - id: caida
+    nombre: "Ca\xEDda desde lo alto"
+    fase: 1
+    instakill: 0
+    descripcion: Salta fuera de la vista y cae sobre una marca en el suelo; al impacto,
+      dos ondas recorren el suelo.
+    consejo: Sal de la marca en cuanto aparezca y salta las ondas que salen a los
+      lados.
+  - id: agarre
+    nombre: Agarre
+    fase: 1
+    instakill: 0
+    descripcion: 'Pose de carga muy visible. Aparece junto a ti y, si te atrapa,
+      te lanza al aire y te corta: con menos del 80 % de vida, mata.'
+    consejo: "Al aparecer hay un instante a c\xE1mara lenta: rueda justo entonces.
+      Si ves la pose de carga, prep\xE1rate para esquivar, no para atacar."
+  - id: triple
+    nombre: Barrido triple
+    fase: 2
+    instakill: 0
+    descripcion: Barrido, barrido y tajo alzado, sin respiro.
+    consejo: 'Tres ventanas de parry seguidas: si las paras todas, le rompes la postura.'
+  - id: lanzas
+    nombre: Lanzas de escarcha
+    fase: 2
+    instakill: 0
+    descripcion: Conjura lanzas de hielo que caen sobre ti.
+    consejo: "Mu\xE9vete sin parar mientras las conjura; nunca te quedes donde apuntan."
+  - id: estacas
+    nombre: Estacas de hielo
+    fase: 2
+    instakill: 0
+    descripcion: "Estacas que brotan del suelo en cadena, una detr\xE1s de otra,
+      hacia ti."
+    consejo: "Salta la cadena o rueda a trav\xE9s de ella; cuando pase, tienes un
+      momento para golpear."
+  - id: ventisca
+    nombre: Ventisca
+    fase: 2
+    instakill: 0
+    descripcion: "Una ventisca que te arrastra hacia \xE9l."
+    consejo: Camina contra el viento sin gastar la estamina; si llegas a su lado,
+      espera su golpe para pararlo.
+  fases:
+  - numero: 1
+    nombre: Sombra
+    descripcion: "Peque\xF1o y r\xE1pido, con una cola larga y una espada que deja
+      tajos blancos enormes. Castiga a quien salta a destiempo y a quien se queda
+      a su espalda. Cada golpe de un combo se puede parar: parar todos le rompe la
+      postura."
+  - numero: 2
+    nombre: Hielo
+    descripcion: "Al vaciar su vida no muere: cae, la escarcha se junta en su cuerpo
+      y se levanta imbuido en hielo. M\xE1s r\xE1pido y con pausas m\xE1s cortas;
+      sus tajos dejan escarcha que te ralentiza y suma hechizos de hielo."
+  fragmentosHistoria:
+  - id: h1
+    cuando: 0
+    texto: Antes de la nevada eterna, estos humedales alimentaban a un pueblo entero.
+  - id: h2
+    cuando: 1
+    texto: "Luego lleg\xF3 el fr\xEDo, y con \xE9l la sombra: algo que no caza por
+      hambre, sino por costumbre."
+  - id: h3
+    cuando: 3
+    texto: "Los que cruzaron la ci\xE9naga helada dicen que el silencio llega antes
+      que el agarre. Quien lo ve venir a\xFAn puede huir. Quien duda, no vuelve."
+  - id: h4
+    cuando: 4
+    texto: "Lo que queda es una presencia paciente, hecha de agua negra y hielo roto,
+      que espera a quien todav\xEDa cree que el camino sigue."
+  dialogoAlReiniciar: 0
   almasCofre: 2500
   objetosCofre: 000000000200000004000000
   multVida: 1.5
   multDano: 1.3
   multVelocidad: 1.35
+  secreto: 0
+  requisitos: []

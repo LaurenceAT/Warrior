@@ -4050,6 +4050,7 @@ public class PlayerControler : MonoBehaviour
     {
         if (isInvincible || hasIFrames || isPlunging || dano <= 0 || InvulnerableExterno || invulnerableDerribado) return;
         if (SiguienteNoLetal && currentHealth > 1) dano = Mathf.Min(dano, currentHealth - 1);
+        Bitacora.GolpeRecibido();
         currentHealth -= dano;
         PlayerHud.Get().Damage(currentHealth, maxHealth);
         if (currentHealth > 0) return;
@@ -4082,6 +4083,7 @@ public class PlayerControler : MonoBehaviour
         if (InvulnerableExterno || invulnerableDerribado) return false;
         if (SiguienteNoLetal && currentHealth > 1) damage = Mathf.Min(damage, currentHealth - 1);
 
+        Bitacora.GolpeRecibido();
         currentHealth -= damage;
 
         PlayerHud.Get().Damage(currentHealth, maxHealth);
@@ -4251,6 +4253,7 @@ public class PlayerControler : MonoBehaviour
     public void CorteAgarre(int dano)
     {
         if (!isAgarrado || currentHealth <= 0) return;
+        Bitacora.GolpeRecibido();
         // Es un golpe fisico: la resistencia a golpes lo reduce.
         currentHealth -= ConResistencia(Mathf.Max(1, dano), false);
         PlayerHud.Get().Damage(currentHealth, maxHealth);

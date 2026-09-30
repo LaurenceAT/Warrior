@@ -18,14 +18,17 @@ public class PantallaCarga : MonoBehaviour
     private CanvasGroup grupo;
     private CanvasGroup grupoTexto;
     private RectTransform relleno;
-    private TextMeshProUGUI textoPorcentaje;
+    private TextMeshProUGUI textoPorcentaje, textoTitulo;
 
     // Nombre de la escena (tal como sale en Build Settings) o vacio para la
     // siguiente de la lista. Si no hay siguiente, vuelve a la primera.
-    public static void Cargar(string escena, float fundido = 0.6f)
+    // "titulo": el texto sobre la barra (vacio = "Cargando nivel...").
+    public static void Cargar(string escena, float fundido = 0.6f, string titulo = null)
     {
         if (Cargando) return;
-        Crear().StartCoroutine(Secuencia(IndiceDestino(escena), fundido));
+        PantallaCarga p = Crear();
+        if (!string.IsNullOrEmpty(titulo)) p.textoTitulo.text = titulo;
+        p.StartCoroutine(Secuencia(IndiceDestino(escena), fundido));
     }
 
     public static void Cargar(int indice, float fundido = 0.6f)
@@ -156,6 +159,7 @@ public class PantallaCarga : MonoBehaviour
         p.grupoTexto.alpha = 0f;
 
         TextMeshProUGUI titulo = Texto("Cargando nivel...", textos.transform, 44, new Color(0.9f, 0.88f, 0.84f));
+        p.textoTitulo = titulo;
         RectTransform rt = titulo.rectTransform;
         rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
         rt.sizeDelta = new Vector2(900f, 70f);

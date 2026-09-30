@@ -1,0 +1,197 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c79175a5e307f67479bd20432e35342b, type: 3}
+  m_Name: Bestiario
+  m_EditorClassIdentifier: 
+  entradas:
+  - enemigo: {fileID: 11400000, guid: 9351d3bdd92b365468215548268630a4, type: 2}
+    retrato: {fileID: 21300000, guid: bf45c39b77523f949ba74976cfe2feac, type: 3}
+    relacionado: {fileID: 0}
+    descripcion: "Ratas que el fr\xEDo no mat\xF3: les hel\xF3 la sangre y las dej\xF3
+      con hambre. Nunca van solas. La que te ve primero chilla, y las dem\xE1s acuden."
+    patrones: "Mordisco: pegada a ti, un aviso muy corto y una dentellada.\nSalto:
+      a media distancia se agacha y salta encima de ti.\nGolpea y huye: tras atacar
+      se aparta. Esp\xE9rala con un parry o cast\xEDgala al aterrizar."
+    derrotasParaPatrones: 5
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: 79ee099826b9fed4bac16ae6679b6453, type: 2}
+    retrato: {fileID: 21300000, guid: 4e83e8f1afa251344b47342217c05ebe, type: 3}
+    relacionado: {fileID: 0}
+    descripcion: Anidan en las grietas de las cumbres, donde ya no llega el sol.
+      Vuelan sin rumbo hasta que huelen algo caliente.
+    patrones: "Vuelo err\xE1tico: te rodea a distinta altura cada vez.\nPicado en
+      arco: chilla, se lanza en curva hacia ti y vuelve a subir por el otro lado.
+      A veces encadena otro.\nChillido: si te acercas mucho, suelta una onda que
+      te empuja."
+    derrotasParaPatrones: 5
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: 2f8ec874924e5b14fb8ffc24512dc734, type: 2}
+    retrato: {fileID: 21300000, guid: 8ec24ef0f07fd7a46b5b4761895e432f, type: 3}
+    relacionado: {fileID: 0}
+    descripcion: "Un ojo sin p\xE1rpado que flota sobre el paso nevado. Vigila para
+      algo que dej\xF3 de mirar hace mucho tiempo."
+    patrones: "Se mantiene lejos y alto, y se aparta si te acercas.\nEscupitajo:
+      uno apuntado o una r\xE1faga de tres en abanico. Un parry lo devuelve.\nEmbestida
+      giratoria: si est\xE1s cerca, gira y embiste."
+    derrotasParaPatrones: 5
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: b34bf56ba5802174983024b42ff3ee51, type: 2}
+    retrato: {fileID: 21300000, guid: ba17ecca29d18da41bc4341528d846f7, type: 3}
+    relacionado: {fileID: 0}
+    descripcion: "Fue centinela del paso cuando a\xFAn hab\xEDa algo que guardar.
+      Sigue disparando a todo lo que se mueve, sin preguntarse a qui\xE9n sirve."
+    patrones: "Disparo: tensa el arco y suelta una flecha recta y r\xE1pida.\nLluvia:
+      dispara al cielo; unas marcas avisan de d\xF3nde caer\xE1n las flechas.\nVoltereta:
+      si te acercas, salta hacia atr\xE1s sin darte la espalda.\nDestello: arrinconada
+      contra una pared, se teletransporta lejos."
+    derrotasParaPatrones: 5
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: 20987edba0f1c894190632eb496574a4, type: 2}
+    retrato: {fileID: 21300000, guid: cc51022fb4dc58e4c924a6c76cb529fd, type: 3}
+    relacionado: {fileID: 0}
+    descripcion: "Busc\xF3 en la sombra un poder que lo protegiera del fr\xEDo. La
+      sombra lo encontr\xF3 primero. Lento, pesado, y nada lo detiene cuando ataca."
+    patrones: "Armadura: mientras ataca, tus golpes le quitan vida pero no lo paran.
+      Un parry s\xED.\nGarras de sombra: proyecta una sombra hacia delante, a media
+      distancia.\nGolpe de b\xE1culo: un barrido de cerca que a veces encadena con
+      las garras, con un retraso que cambia.\nSalto sombr\xEDo: salta por encima
+      de ti y cae a tu espalda."
+    derrotasParaPatrones: 5
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: 038f37150237b1a41b1d314dcafb3c34, type: 2}
+    retrato: {fileID: 21300000, guid: 0631f0a1db226864fb43156aadb60f09, type: 3}
+    relacionado: {fileID: 11400000, guid: 20987edba0f1c894190632eb496574a4, type: 2}
+    descripcion: "Se arranc\xF3 los ojos para no ver lo que la sombra le mostraba.
+      Sigue vi\xE9ndolo. Guarda el paso nevado como guardar\xEDa una tumba."
+    patrones: "Como el hechicero sombr\xEDo, pero m\xE1s duro: armadura al atacar,
+      garras de sombra, golpe de b\xE1culo encadenado y salto a tu espalda."
+    derrotasParaPatrones: 3
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: beecde23aac11724f9f7e0c9f12f7e96, type: 2}
+    retrato: {fileID: 21300000, guid: 0f1b017fd0ff3dd44a037a229405877d, type: 3}
+    relacionado: {fileID: 0}
+    descripcion: "Lo que queda cuando la cueva digiere algo. No piensa: se arrastra
+      hacia el calor y se lanza sobre \xE9l."
+    patrones: "Patrulla dando la vuelta en paredes y bordes.\nEmbestida: se encoge
+      (aviso) y se lanza hacia delante; despu\xE9s queda un momento expuesto.\nSi
+      falla, a veces rebota y repite la embestida enseguida."
+    derrotasParaPatrones: 5
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: 3a6d6319a63f89d41a792b0cb503ddbb, type: 2}
+    retrato: {fileID: 21300000, guid: d4b99e1eb2259604ca9f24bad98e5dc6, type: 3}
+    relacionado: {fileID: 0}
+    descripcion: 'Una boca con alas que llena la cueva con su rugido. Hasta la roca
+      le tiene miedo: se desprende a su paso.'
+    patrones: "Flota sobre ti, a un lado, meci\xE9ndose.\nRugido: se para, abre la
+      boca y ruge; las estalactitas cercanas caen sobre quien est\xE9 debajo.\nPicado:
+      se lanza recto hacia donde estabas, con armadura. Un parry lo para en seco;
+      si se estrella contra la roca, queda aturdido."
+    derrotasParaPatrones: 5
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: ae8246e2049b45a4dbd85c4d61a79c77, type: 2}
+    retrato: {fileID: 21300000, guid: ced7e50e68c9dba4bb5373a873018d7c, type: 3}
+    relacionado: {fileID: 0}
+    descripcion: Bajaron a la cueva a estudiar la sangre que empapa la roca. Algunos
+      aprendieron demasiado y ya no saben salir.
+    patrones: "Mantiene la distancia y lanza bolas m\xE1gicas: se pueden bloquear,
+      esquivar o devolver con un parry.\nSi te echas encima, retrocede sin darte
+      la espalda.\nEstallido: arrinconado contra una pared o un borde, suelta un
+      estallido a su alrededor con un aviso claro."
+    derrotasParaPatrones: 5
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: 17116abb40fee7445bd9ba4e5650a324, type: 2}
+    retrato: {fileID: 21300000, guid: e96ddb55259214949bfc5a543b906821, type: 3}
+    relacionado: {fileID: 0}
+    descripcion: "Un cofre que espera. La cueva ense\xF1a pronto que no todo lo que
+      brilla guarda un tesoro: a veces guarda dientes."
+    patrones: "Disfrazado no se mueve. Se abre al acercarte o al golpearlo.\nMordisco:
+      se alza con la boca abierta (aviso largo) y se lanza con un saltito. Mucho
+      da\xF1o.\nLatigazo: echa el cuerpo atr\xE1s (aviso corto) y barre hacia delante
+      con m\xE1s alcance. No te quedes a media distancia."
+    derrotasParaPatrones: 5
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: 82c9573dcae53fe4aba64c7791858ca1, type: 2}
+    retrato: {fileID: 21300000, guid: c71547e941231934098a384e9ad5ff3c, type: 3}
+    relacionado: {fileID: 11400000, guid: 9351d3bdd92b365468215548268630a4, type: 2}
+    descripcion: Las que bajaron a la cueva buscando calor, y lo encontraron. Ahora
+      arden por dentro y ya no temen al fuego.
+    patrones: "Como la rata de escarcha: mordisco r\xE1pido, salto desde media distancia
+      y huida tras atacar. Caza en manada."
+    derrotasParaPatrones: 5
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: 92006f98cdf513c4dbd9958e650e20a8, type: 2}
+    retrato: {fileID: 21300000, guid: e5fe06a39bdf2a0408c0b3ae29aeae27, type: 3}
+    relacionado: {fileID: 11400000, guid: 79ee099826b9fed4bac16ae6679b6453, type: 2}
+    descripcion: "Nunca han visto el cielo. Nacen, cazan y mueren en la oscuridad
+      de la cueva, y la oscuridad no les hace da\xF1o."
+    patrones: "Como el murci\xE9lago de las cumbres: vuelo err\xE1tico, picado en
+      arco (a veces dos seguidos) y un chillido que empuja si te acercas."
+    derrotasParaPatrones: 5
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: ba8d881deaac21c4ca1455b215005cbd, type: 2}
+    retrato: {fileID: 21300000, guid: f783c144d4e68214e9d29ab35a25cf87, type: 3}
+    relacionado: {fileID: 11400000, guid: b34bf56ba5802174983024b42ff3ee51, type: 2}
+    descripcion: "Otra centinela que baj\xF3 a la cueva. La sangre que empapa la
+      roca le ti\xF1\xF3 el arco, y ya no sangra cuando la hieres."
+    patrones: "Como la arquera arcana: disparo recto, lluvia de flechas con marcas
+      en el suelo, voltereta hacia atr\xE1s y destello si la arrinconas."
+    derrotasParaPatrones: 5
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: 8f74515293363f746a6fa650f81cefcd, type: 2}
+    retrato: {fileID: 21300000, guid: f4a433d1a4a0e8c4da89c860e44ffde6, type: 3}
+    relacionado: {fileID: 11400000, guid: 2f8ec874924e5b14fb8ffc24512dc734, type: 2}
+    descripcion: "Un ojo que mir\xF3 demasiado tiempo al fondo de la cueva. Lo que
+      vio le dio su color."
+    patrones: "Como el ojo vig\xEDa: se mantiene lejos, escupe (uno o tres en abanico;
+      un parry los devuelve) y embiste girando si est\xE1s cerca."
+    derrotasParaPatrones: 5
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: fc32b833ef49c634a8cb1aef71bd7246, type: 2}
+    retrato: {fileID: 21300000, guid: 4a30a92d38b8e27429adb0e21c81f770, type: 3}
+    relacionado: {fileID: 11400000, guid: 3a6d6319a63f89d41a792b0cb503ddbb, type: 2}
+    descripcion: "Dicen que de su boca nacieron todos los cacodemonios de la cueva.
+      El fuego que la engendr\xF3 ya no le hace da\xF1o."
+    patrones: "Como el cacodemonio, pero m\xE1s dura: rugido que derrumba las estalactitas
+      y picado con armadura. Un parry la para en seco."
+    derrotasParaPatrones: 3
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: baece10293a2e4a4a8c2f1ac7db6e5f2, type: 2}
+    retrato: {fileID: 21300000, guid: f0d40fcd685a5ed4ba5f8802971373a2, type: 3}
+    relacionado: {fileID: 11400000, guid: ae8246e2049b45a4dbd85c4d61a79c77, type: 2}
+    descripcion: "El primero que baj\xF3 a estudiar la sangre, y el \xFAltimo en
+      marcharse. Nunca se march\xF3."
+    patrones: "Como el mago, pero m\xE1s duro: bolas m\xE1gicas, retirada sin darte
+      la espalda y un estallido si lo arrinconas."
+    derrotasParaPatrones: 3
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: 203b01b51d38b69439f0158df4fbd516, type: 2}
+    retrato: {fileID: 21300000, guid: 24779bab65955c247a0282ed57330633, type: 3}
+    relacionado: {fileID: 11400000, guid: beecde23aac11724f9f7e0c9f12f7e96, type: 2}
+    descripcion: "M\xE1s hondo, donde la cueva ya no tiene nombre, los slimes se
+      vuelven oscuros y el fuego resbala sobre ellos."
+    patrones: "Como el slime: se encoge y embiste, queda expuesto despu\xE9s y, si
+      falla, a veces repite la embestida."
+    derrotasParaPatrones: 5
+    mostrar: 1
+  - enemigo: {fileID: 11400000, guid: cea126c72d595b24c92a26b0b5c4dbe6, type: 2}
+    retrato: {fileID: 21300000, guid: 79ea799c58d9d39479b8877bdf66bd47, type: 3}
+    relacionado: {fileID: 11400000, guid: ae8246e2049b45a4dbd85c4d61a79c77, type: 2}
+    descripcion: De los que se quedaron a estudiar la sangre, solo quedan los huesos.
+      Siguen lanzando hechizos, por costumbre.
+    patrones: "Como el mago: bolas m\xE1gicas a distancia, retrocede sin darte la
+      espalda y suelta un estallido si lo arrinconas."
+    derrotasParaPatrones: 5
+    mostrar: 1
+  nombresZona:
+  - Paso Nevado
+  - "Cueva Carmes\xED"
+  - "M\xE1s all\xE1"

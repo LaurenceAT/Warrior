@@ -209,6 +209,7 @@ public class ArenaJefe : MonoBehaviour
         pocionUsada = false;
         PantallaMuerte.BurlasJefe = burlas != null && burlas.Length > 0 ? burlas : null;
         AlEmpezarCombate?.Invoke();
+        Bitacora.Intento(FichaJefe.DeEscena(gameObject.scene.name));
 
         if (musica != null) Sonar(audioSrc, musica, inicioFase1, bucleFase1, volumen, 2f);
 

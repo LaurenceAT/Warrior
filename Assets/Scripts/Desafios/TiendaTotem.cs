@@ -8,7 +8,8 @@ using UnityEngine.UI;
 
 // La tienda del totem (desafios). Arriba la frase del totem (letra a letra);
 // a la izquierda una cuadricula con lo que vende; a la derecha lo que hace el
-// elegido y el boton de comprar. Todo se paga con almas y se aplica al momento.
+// elegido y el boton de comprar. Todo se paga con almas y va al inventario
+// del desafio: se aplica en la hoguera (MenuHoguera, "Aplicar mejoras").
 //   - Sin almas suficientes: precio en rojo, boton apagado y sonido de error.
 //   - Lo comprado queda "Agotado" (dura todo el desafio, aunque mueras).
 //   - Lista de deseos: M (o el boton de la estrella) marca un objeto; se ve
@@ -117,19 +118,8 @@ public class TiendaTotem : MonoBehaviour
     private bool Vendido(FichaTienda.Articulo a) => Desafio.Comprados.Contains(a.id);
     private bool Bloqueado(FichaTienda.Articulo a) => !string.IsNullOrEmpty(a.requiere) && !Desafio.Comprados.Contains(a.requiere);
 
-    // Ya al maximo (no tiene sentido comprarlo).
-    private static bool AlMaximo(FichaTienda.Articulo a)
-    {
-        switch (a.objeto)
-        {
-            case Equipo.Objeto.PiedraForja: return Equipo.NivelEspada >= Equipo.NivelMaximoEspada;
-            case Equipo.Objeto.LagrimaCarmesi: return Equipo.NivelCuracion >= Equipo.NivelMaximoCuracion;
-            case Equipo.Objeto.LagrimaCeleste: return Equipo.NivelMana >= Equipo.NivelMaximoMana;
-            case Equipo.Objeto.FrascoSangre: return Equipo.FrascosSangreExtra >= AjustesProgreso.Get().frascosExtraMaximo;
-            case Equipo.Objeto.FrascoMana: return Equipo.FrascosManaExtra >= AjustesProgreso.Get().frascosExtraMaximo;
-            default: return false;
-        }
-    }
+    // Ya al maximo, contando lo que hay sin aplicar (no tiene sentido comprarlo).
+    private static bool AlMaximo(FichaTienda.Articulo a) => Equipo.AlMaximo(a.objeto, Desafio.PorAplicar(a.objeto));
 
     private void Comprar()
     {
@@ -137,10 +127,11 @@ public class TiendaTotem : MonoBehaviour
         FichaTienda.Articulo a = actual.art;
         if (Vendido(a) || Bloqueado(a) || AlMaximo(a) || Progreso.Almas < a.precio) { SonidoMenu.Error(); return; }
         if (!Progreso.Gastar(a.precio)) { SonidoMenu.Error(); return; }
-        Equipo.SubirDirecto(a.objeto);
+        Desafio.GuardarObjeto(a.objeto);
         Desafio.Comprados.Add(a.id);
         if (Desafio.Deseado == a.id) Desafio.Deseado = null;
         Sonido.Reproducir("mejorar_equipo");
+        AvisoObjeto.Mostrar(RecursosRPG.Get().Icono(Equipo.ClaveIcono(a.objeto)), a.nombre, CofreMejora.AvisoDesafio);
         Refrescar();
     }
 
@@ -217,26 +208,48 @@ public class TiendaTotem : MonoBehaviour
         botonMarcar.GetComponentInChildren<TextMeshProUGUI>().text = Desafio.Deseado == a.id ? "Quitar de deseos (M)" : "Marcar como deseado (M)";
     }
 
-    // Lo que hace el objeto, con los numeros de ahora y los de despues.
+    // Lo que hace el objeto, con los numeros de despues de aplicar tambien lo
+    // que ya tienes sin aplicar. Lo comprado va al inventario.
     private static string Efecto(FichaTienda.Articulo a)
+    {
+        string que;
+        switch (a.objeto)
+        {
+            case Equipo.Objeto.PiedraForja: que = "Mejora la espada."; break;
+            case Equipo.Objeto.LagrimaCarmesi: que = "Cada frasco de sangre cura más."; break;
+            case Equipo.Objeto.LagrimaCeleste: que = "Cada frasco de maná devuelve más."; break;
+            case Equipo.Objeto.FrascoSangre: que = "Una carga más para el frasco de sangre."; break;
+            case Equipo.Objeto.FrascoMana: que = "Una carga más para el frasco de maná."; break;
+            default: return Equipo.Descripcion(a.objeto);
+        }
+        int pendientes = Desafio.PorAplicar(a.objeto);
+        return $"{que}\n{VistaPrevia(a.objeto, pendientes)}" +
+               (pendientes > 0 ? $"\n<size=85%><color={Gris}>Ya tienes {pendientes} sin aplicar.</color></size>" : "") +
+               $"\n\n<size=85%><color=#f0d49a>Se guarda en tu inventario: aplícalo en la hoguera.</color></size>";
+    }
+
+    // "Curación de sangre: 40 → 55": el efecto de aplicar uno mas, contando
+    // "antes" ya aplicados (lo que esta pendiente). Lo usa tambien la hoguera.
+    public static string VistaPrevia(Equipo.Objeto o, int antes = 0)
     {
         ReservaPociones r = ReservaPociones.Get();
         int vida = Progreso.VidaMax, mana = Mathf.RoundToInt(Progreso.ManaMax);
-        switch (a.objeto)
+        switch (o)
         {
             case Equipo.Objeto.PiedraForja:
-                return $"Mejora la espada al momento.\nDaño x{Equipo.MultiplicadorEspadaEn(Equipo.NivelEspada):0.00} → <color={Verde}>x{Equipo.MultiplicadorEspadaEn(Equipo.NivelEspada + 1):0.00}</color>";
+                int ne = Equipo.NivelEspada + antes;
+                return $"Daño de la espada: x{Equipo.MultiplicadorEspadaEn(ne):0.00} → <color={Verde}>x{Equipo.MultiplicadorEspadaEn(ne + 1):0.00}</color>";
             case Equipo.Objeto.LagrimaCarmesi:
-                int c0 = Mathf.RoundToInt(vida * Equipo.CuraFrascoEn(Equipo.NivelCuracion)), c1 = Mathf.RoundToInt(vida * Equipo.CuraFrascoEn(Equipo.NivelCuracion + 1));
-                return $"Cada frasco de sangre cura {c1 - c0} de vida más.\nCura {c0} → <color={Verde}>{c1}</color>";
+                int nc = Equipo.NivelCuracion + antes;
+                return $"Curación de sangre: {Mathf.RoundToInt(vida * Equipo.CuraFrascoEn(nc))} → <color={Verde}>{Mathf.RoundToInt(vida * Equipo.CuraFrascoEn(nc + 1))}</color>";
             case Equipo.Objeto.LagrimaCeleste:
-                int m0 = Mathf.RoundToInt(mana * Equipo.ManaFrascoEn(Equipo.NivelMana)), m1 = Mathf.RoundToInt(mana * Equipo.ManaFrascoEn(Equipo.NivelMana + 1));
-                return $"Cada frasco de maná devuelve {m1 - m0} de maná más.\nDevuelve {m0} → <color={Verde}>{m1}</color>";
+                int nm = Equipo.NivelMana + antes;
+                return $"Recuperación de maná: {Mathf.RoundToInt(mana * Equipo.ManaFrascoEn(nm))} → <color={Verde}>{Mathf.RoundToInt(mana * Equipo.ManaFrascoEn(nm + 1))}</color>";
             case Equipo.Objeto.FrascoSangre:
-                return $"Una carga más para el frasco de sangre.\nCargas {r.Maximo} → <color={Verde}>{r.Maximo + 1}</color>";
+                return $"Cargas del frasco de sangre: {r.Maximo + antes} → <color={Verde}>{r.Maximo + antes + 1}</color>";
             case Equipo.Objeto.FrascoMana:
-                return $"Una carga más para el frasco de maná.\nCargas {r.MaximoMana} → <color={Verde}>{r.MaximoMana + 1}</color>";
-            default: return Equipo.Descripcion(a.objeto);
+                return $"Cargas del frasco de maná: {r.MaximoMana + antes} → <color={Verde}>{r.MaximoMana + antes + 1}</color>";
+            default: return Equipo.Descripcion(o);
         }
     }
 
@@ -331,7 +344,7 @@ public class TiendaTotem : MonoBehaviour
         t.textoComprar = t.botonComprar.GetComponentInChildren<TextMeshProUGUI>();
         t.botonMarcar = EstiloMenu.Opcion(col.transform, "Marcar como deseado (M)", t.Marcar, 52f, 22f, RecursosRPG.Get().Icono("estrella"), TextAlignmentOptions.Left);
 
-        TextMeshProUGUI ayuda = EstiloMenu.Texto("Enter / clic: comprar      M: marcar deseado      F / Esc: salir", go.transform, 22, new Color(0.8f, 0.78f, 0.75f, 0.6f));
+        TextMeshProUGUI ayuda = EstiloMenu.Texto("Enter / clic: comprar (se aplica en la hoguera)      M: marcar deseado      F / Esc: salir", go.transform, 22, new Color(0.8f, 0.78f, 0.75f, 0.6f));
         ayuda.rectTransform.anchorMin = ayuda.rectTransform.anchorMax = new Vector2(0.5f, 0.05f);
         ayuda.rectTransform.sizeDelta = new Vector2(1400f, 40f);
 

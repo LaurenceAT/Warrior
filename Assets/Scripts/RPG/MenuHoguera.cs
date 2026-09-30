@@ -14,6 +14,9 @@ using UnityEngine.UI;
 //     como en Elden Ring.
 //   - Equipo: mejorar la espada (Piedras de forja) y los frascos (Lagrimas
 //     sagradas).
+//   - Aplicar mejoras (solo en los desafios, en lugar de Equipo): lo recogido
+//     en el cofre y comprado en el totem, con su vista previa. "Aplicar" uno a
+//     uno o "Aplicar todo".
 // Escape (o el boton este del mando) vuelve atras; en la principal, se levanta.
 // Al salir, las barras que hayan subido se ven crecer en el HUD.
 public class MenuHoguera : MonoBehaviour
@@ -23,10 +26,10 @@ public class MenuHoguera : MonoBehaviour
     // Momento (tiempo real) en que se cerro: la tecla que lo cierra no debe reabrirlo.
     public static float UltimoCierre { get; private set; } = -10f;
 
-    private enum Pagina { Principal, Nivel, Equipo }
+    private enum Pagina { Principal, Nivel, Equipo, Aplicar }
 
     private CanvasGroup grupo;
-    private RectTransform paginaPrincipal, paginaNivel, paginaEquipo;
+    private RectTransform paginaPrincipal, paginaNivel, paginaEquipo, paginaAplicar;
     private Pagina pagina;
     private bool abierto;
     private int cerradoEnFrame = -1;
@@ -46,6 +49,19 @@ public class MenuHoguera : MonoBehaviour
     // Equipo
     private TextMeshProUGUI textoEspada, textoFrascos, textoMana, textoInventario, avisoEquipo;
     private Button botonEspada, botonFrascos, botonMana;
+    private Button botonEquipo;
+
+    // Aplicar mejoras (desafios): una fila por objeto que haya sin aplicar.
+    private class FilaAplicar
+    {
+        public Equipo.Objeto objeto;
+        public Button boton;
+        public TextMeshProUGUI titulo, detalle;
+    }
+    private readonly System.Collections.Generic.List<FilaAplicar> filasAplicar = new System.Collections.Generic.List<FilaAplicar>();
+    private TextMeshProUGUI avisoAplicar, textoSinObjetos;
+    private Button botonAplicarTodo, botonVolverAplicar;
+    private Image destelloAplicar;
 
     private class Fila
     {
@@ -111,9 +127,10 @@ public class MenuHoguera : MonoBehaviour
         paginaPrincipal.gameObject.SetActive(p == Pagina.Principal);
         paginaNivel.gameObject.SetActive(p == Pagina.Nivel);
         paginaEquipo.gameObject.SetActive(p == Pagina.Equipo);
-        avisoPrincipal.text = avisoNivel.text = avisoEquipo.text = "";
+        paginaAplicar.gameObject.SetActive(p == Pagina.Aplicar);
+        avisoPrincipal.text = avisoNivel.text = avisoEquipo.text = avisoAplicar.text = "";
         Refrescar();
-        GameObject primero = p == Pagina.Principal ? botonDescansar.gameObject : p == Pagina.Nivel ? filas[0].boton.gameObject : botonEspada.gameObject;
+        GameObject primero = PrimeroDe(p);
         SonidoMenu.Silenciar();
         if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(primero);
     }
@@ -134,8 +151,7 @@ public class MenuHoguera : MonoBehaviour
         }
         // Que siempre haya algo elegido (tras un clic en el fondo).
         if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject == null)
-            EventSystem.current.SetSelectedGameObject(pagina == Pagina.Principal ? botonDescansar.gameObject
-                                                     : pagina == Pagina.Nivel ? filas[0].boton.gameObject : botonEspada.gameObject);
+            EventSystem.current.SetSelectedGameObject(PrimeroDe(pagina));
     }
 
     // ------------------------------------------------------------------ Acciones
@@ -188,6 +204,91 @@ public class MenuHoguera : MonoBehaviour
         Sonido.Reproducir("mejorar_equipo");
         Refrescar();
         StartCoroutine(Pulso((RectTransform)botonMana.transform));
+    }
+
+    // ------------------------------------------------------------------ Aplicar mejoras (desafios)
+
+    private GameObject PrimeroDe(Pagina p)
+    {
+        switch (p)
+        {
+            case Pagina.Nivel: return filas[0].boton.gameObject;
+            case Pagina.Equipo: return botonEspada.gameObject;
+            case Pagina.Aplicar:
+                FilaAplicar f = filasAplicar.Find(x => x.boton.gameObject.activeSelf);
+                return f != null ? f.boton.gameObject : botonVolverAplicar.gameObject;
+            default: return botonDescansar.gameObject;
+        }
+    }
+
+    private void AbrirEquipo() => Mostrar(Desafio.Activo ? Pagina.Aplicar : Pagina.Equipo);
+
+    private void Aplicar(FilaAplicar f)
+    {
+        if (Desafio.PorAplicar(f.objeto) <= 0) { SonidoMenu.Error(); return; }
+        if (!Desafio.Aplicar(f.objeto)) { avisoAplicar.text = $"{Equipo.Nombre(f.objeto)}: ya está al máximo"; SonidoMenu.Error(); return; }
+        avisoAplicar.text = $"{Equipo.Nombre(f.objeto)} aplicado";
+        Aplicado((RectTransform)f.boton.transform);
+    }
+
+    private void AplicarTodo()
+    {
+        int n = 0;
+        foreach (Equipo.Objeto o in Desafio.ObjetosMejora)
+            while (Desafio.PorAplicar(o) > 0 && Desafio.Aplicar(o)) n++;
+        if (n == 0) { avisoAplicar.text = Desafio.TotalPorAplicar > 0 ? "Lo que queda ya está al máximo" : "No hay nada por aplicar"; SonidoMenu.Error(); return; }
+        avisoAplicar.text = n == 1 ? "1 mejora aplicada" : $"{n} mejoras aplicadas";
+        Aplicado((RectTransform)botonAplicarTodo.transform);
+    }
+
+    // Sonido, destello dorado y la fila late. Lo demas (frascos, vida, espada)
+    // se actualiza solo con Equipo.AlCambiar.
+    private void Aplicado(RectTransform r)
+    {
+        Sonido.Reproducir("mejorar_equipo");
+        if (player == null) player = FindFirstObjectByType<PlayerControler>();
+        if (player != null) player.AplicarProgreso(false);
+        Refrescar();
+        StartCoroutine(Pulso(r));
+        StartCoroutine(Destello());
+        if (EventSystem.current != null && !r.gameObject.activeInHierarchy) EventSystem.current.SetSelectedGameObject(PrimeroDe(Pagina.Aplicar));
+    }
+
+    private IEnumerator Destello()
+    {
+        for (float t = 0f; t < 0.45f; t += Time.unscaledDeltaTime)
+        {
+            destelloAplicar.color = new Color(1f, 0.85f, 0.45f, 0.22f * (1f - t / 0.45f));
+            yield return null;
+        }
+        destelloAplicar.color = Color.clear;
+    }
+
+    private void RefrescarAplicar()
+    {
+        if (botonEquipo != null)
+        {
+            int total = Desafio.TotalPorAplicar;
+            botonEquipo.GetComponentInChildren<TextMeshProUGUI>().text = Desafio.Activo
+                ? (total > 0 ? $"Aplicar mejoras  <color=#f0d49a>({total})</color>" : "Aplicar mejoras")
+                : "Mejorar equipamiento";
+        }
+        if (paginaAplicar == null || !Desafio.Activo) return;
+        bool alguno = false;
+        foreach (FilaAplicar f in filasAplicar)
+        {
+            int n = Desafio.PorAplicar(f.objeto);
+            f.boton.gameObject.SetActive(n > 0);
+            if (n <= 0) continue;
+            alguno = true;
+            bool max = Equipo.AlMaximo(f.objeto);
+            f.titulo.text = $"{Equipo.Nombre(f.objeto)}  <color={Oro}>x{n}</color>";
+            f.detalle.text = max ? $"<color={Gris}>Ya está al máximo: no se puede aplicar.</color>"
+                                 : TiendaTotem.VistaPrevia(f.objeto);
+            f.boton.GetComponent<OpcionEstilo>().PonerActiva(!max);
+        }
+        textoSinObjetos.gameObject.SetActive(!alguno);
+        botonAplicarTodo.gameObject.SetActive(alguno);
     }
 
     private IEnumerator Pulso(RectTransform r)
@@ -245,6 +346,7 @@ public class MenuHoguera : MonoBehaviour
         botonFrascos.GetComponent<OpcionEstilo>().PonerActiva(!frascosMax && lagrimas >= Equipo.CosteFrascos);
         botonMana.GetComponent<OpcionEstilo>().PonerActiva(!manaMax && celestes >= Equipo.CosteFrascos);
         textoInventario.text = $"Piedras de forja: <b>{piedras}</b>      Lágrimas carmesí: <b>{lagrimas}</b>      Lágrimas celestes: <b>{celestes}</b>";
+        RefrescarAplicar();
     }
 
     private static string Pct(float f) => Mathf.RoundToInt(f * 100f) + " %";
@@ -294,6 +396,7 @@ public class MenuHoguera : MonoBehaviour
         m.ConstruirPrincipal(go.transform);
         m.ConstruirNivel(go.transform);
         m.ConstruirEquipo(go.transform);
+        m.ConstruirAplicar(go.transform);
 
         TextMeshProUGUI ayuda = EstiloMenu.Texto("Enter / clic: elegir      Esc: volver      F: levantarse", go.transform, 22, new Color(0.8f, 0.78f, 0.75f, 0.6f));
         ayuda.rectTransform.anchorMin = ayuda.rectTransform.anchorMax = new Vector2(0.5f, 0.05f);
@@ -325,7 +428,9 @@ public class MenuHoguera : MonoBehaviour
         RecursosRPG r = RecursosRPG.Get();
         botonDescansar = EstiloMenu.Opcion(col.transform, "Descansar", Descansar, 64f, 32f, r.Icono("ctrl_hoguera"), TextAlignmentOptions.Left);
         EstiloMenu.Opcion(col.transform, "Subir de nivel y estadísticas", () => Mostrar(Pagina.Nivel), 64f, 32f, r.Icono("stat_vida"), TextAlignmentOptions.Left);
-        EstiloMenu.Opcion(col.transform, "Mejorar equipamiento", () => Mostrar(Pagina.Equipo), 64f, 32f, r.Icono("ctrl_espada"), TextAlignmentOptions.Left);
+        // En los desafios: "Aplicar mejoras" (lo del cofre y el totem).
+        botonEquipo = EstiloMenu.Opcion(col.transform, "Mejorar equipamiento", AbrirEquipo, 64f, 32f, r.Icono("ctrl_espada"), TextAlignmentOptions.Left);
+        botonEquipo.GetComponentInChildren<TextMeshProUGUI>().richText = true;
         EstiloMenu.Opcion(col.transform, "Levantarse", Cerrar, 64f, 32f, null, TextAlignmentOptions.Left);
         avisoPrincipal = Aviso(panel, 50f);
     }
@@ -417,10 +522,39 @@ public class MenuHoguera : MonoBehaviour
         avisoEquipo = Aviso(panel, 55f);
     }
 
-    // Una seccion: la opcion (con su icono) y debajo lo que cambia y lo que cuesta.
-    private Button Seccion(Transform padre, string titulo, Sprite icono, UnityEngine.Events.UnityAction accion, out TextMeshProUGUI detalle)
+    private void ConstruirAplicar(Transform raiz)
     {
-        Button b = EstiloMenu.Opcion(padre, titulo, accion, 170f, 30f, icono, TextAlignmentOptions.TopLeft);
+        RectTransform panel = EstiloMenu.Panel(raiz, "APLICAR MEJORAS", new Vector2(1100f, 930f));
+        paginaAplicar = (RectTransform)panel.parent;
+        destelloAplicar = EstiloMenu.Caja("Destello", panel, Color.clear);
+        EstiloMenu.Estirar(destelloAplicar.rectTransform);
+
+        TextMeshProUGUI cab = EstiloMenu.Texto("Lo que has recogido o comprado en este desafío. Cada objeto se aplica aquí.", panel, 23, new Color(0.85f, 0.8f, 0.72f));
+        EstiloMenu.Arriba(cab.rectTransform, -112f, 34f);
+
+        RecursosRPG r = RecursosRPG.Get();
+        VerticalLayoutGroup col = EstiloMenu.Columna(panel, 60f, 60f, 160f, 100f, 8f);
+        foreach (Equipo.Objeto o in Desafio.ObjetosMejora)
+        {
+            FilaAplicar f = new FilaAplicar { objeto = o };
+            f.boton = Seccion(col.transform, Equipo.Nombre(o), r.Icono(Equipo.ClaveIcono(o)), () => Aplicar(f), out f.detalle, 116f);
+            f.titulo = f.boton.GetComponentInChildren<TextMeshProUGUI>();
+            f.titulo.richText = true;
+            filasAplicar.Add(f);
+        }
+        textoSinObjetos = EstiloMenu.Texto("No tienes objetos por aplicar.\n<size=80%>Los del cofre y el tótem se guardan aquí hasta que los apliques.</size>", col.transform, 26, EstiloMenu.TextoApagado);
+        textoSinObjetos.fontStyle = FontStyles.Italic;
+        LayoutElement le = textoSinObjetos.gameObject.AddComponent<LayoutElement>();
+        le.preferredHeight = le.minHeight = 120f;
+        botonAplicarTodo = EstiloMenu.Opcion(col.transform, "Aplicar todo", AplicarTodo, 60f, 28f);
+        botonVolverAplicar = EstiloMenu.Opcion(col.transform, "Volver", () => Mostrar(Pagina.Principal), 56f, 26f);
+        avisoAplicar = Aviso(panel, 55f);
+    }
+
+    // Una seccion: la opcion (con su icono) y debajo lo que cambia y lo que cuesta.
+    private Button Seccion(Transform padre, string titulo, Sprite icono, UnityEngine.Events.UnityAction accion, out TextMeshProUGUI detalle, float alto = 170f)
+    {
+        Button b = EstiloMenu.Opcion(padre, titulo, accion, alto, 30f, icono, TextAlignmentOptions.TopLeft);
         TextMeshProUGUI t = b.GetComponentInChildren<TextMeshProUGUI>();
         t.rectTransform.offsetMax = new Vector2(-20f, -16f);
         // El icono, algo mas grande y arriba.

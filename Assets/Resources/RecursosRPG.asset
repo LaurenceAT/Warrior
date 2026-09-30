@@ -690,6 +690,20 @@ MonoBehaviour:
     sprite: {fileID: 1174838128060318702, guid: 52422dab61184ab4e91cdec0423c057d, type: 3}
   - clave: marca_dificil
     sprite: {fileID: -3344190670405398769, guid: 3c8e7339213cff94dabaebe44f27e6fe, type: 3}
+  - clave: ficha_ataques
+    sprite: {fileID: -7203343154734116037, guid: 1620e6a1ed404d743a4aa1dbd68a7acc, type: 3}
+  - clave: ficha_debilidades
+    sprite: {fileID: 7611961799428228667, guid: 105c9c18c9405c94299ff2869c0296be, type: 3}
+  - clave: ficha_fases
+    sprite: {fileID: 3462921850605405017, guid: fab4b6392b641114bbaba7fad838b07f, type: 3}
+  - clave: ficha_historia
+    sprite: {fileID: -5993960606060507448, guid: 787e3a84d78cdac4487209275c4f4044, type: 3}
+  - clave: ficha_estadisticas
+    sprite: {fileID: 21300000, guid: 9b017c20229c90b4296634ee50530b92, type: 3}
+  - clave: candado
+    sprite: {fileID: -1404373347212710258, guid: f184fe614bfaa1f47bc419e61385ce6c, type: 3}
+  - clave: bestiario
+    sprite: {fileID: 3228096277499690683, guid: 654c69800e24baa4483d7b0bd1d045ae, type: 3}
   tajosElemento:
   - nombre: tajo_h_Fuego
     hoja: {fileID: 0}

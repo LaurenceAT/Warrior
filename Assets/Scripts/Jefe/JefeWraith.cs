@@ -206,7 +206,10 @@ public partial class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
                 yield return Transformacion();
             // Frenesi: una vez, con poca vida en la fase 2.
             if (fase2 && !frenesiHecho && salud.CurrentHealth <= salud.MaxHealth * umbralFrenesi)
+            {
+                AnunciarAtaque("frenesi");
                 yield return Frenesi();
+            }
             if (enFrenesi && Time.time >= finFrenesi) yield return FinFrenesi();
 
             yield return Reposicionar();
@@ -223,6 +226,7 @@ public partial class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
             {
                 yield return Esperar(0.08f);
                 ultimoAtaque = "guadana";
+                AnunciarAtaque("guadana");
                 yield return GuadanaDoble();
             }
 
@@ -237,6 +241,7 @@ public partial class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
 
     private IEnumerator Ejecutar(string ataque)
     {
+        AnunciarAtaque(ataque);
         switch (ataque)
         {
             case "tajos": return Tajos();
@@ -334,6 +339,7 @@ public partial class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
         if (sombra != null) Destroy(sombra.gameObject);
 
         // Cae en picado desde lo alto de la arena.
+        AnunciarAtaque("caida_entrada");
         transform.position = new Vector3(x, arena.yMax - 1f, 0f);
         MirarAlPlayer();
         MostrarSprite(true);

@@ -24,6 +24,8 @@ public static class SonidoMenu
 
     public static void Confirmar() => Sonido.Reproducir("menu_confirmar");
     public static void Cancelar() => Sonido.Reproducir("menu_cancelar", 0.6f);
+    // Volver atras un paso (no hay sonido propio: el de cancelar, algo mas suave).
+    public static void Atras() => Sonido.Reproducir("menu_cancelar", 0.5f);
     public static void Error() => Sonido.Reproducir("menu_error", 0.6f);
     public static void Abrir() => Sonido.Reproducir("menu_abrir", 0.6f);
 }
@@ -168,6 +170,21 @@ public static class EstiloMenu
         return b;
     }
 
+    // Marco hueco de 2 px (se estira sin deformar el borde). Se genera una vez.
+    private static Sprite borde;
+    public static Sprite Borde()
+    {
+        if (borde != null) return borde;
+        const int n = 6;
+        Texture2D t = new Texture2D(n, n, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp };
+        for (int y = 0; y < n; y++)
+            for (int x = 0; x < n; x++)
+                t.SetPixel(x, y, x < 2 || y < 2 || x >= n - 2 || y >= n - 2 ? Color.white : Color.clear);
+        t.Apply();
+        borde = Sprite.Create(t, new Rect(0, 0, n, n), new Vector2(0.5f, 0.5f), 100f, 0, SpriteMeshType.FullRect, new Vector4(2, 2, 2, 2));
+        return borde;
+    }
+
     // Mancha de luz suave y redonda (halos, brillos). Se genera una vez.
     private static Sprite resplandor;
     public static Sprite Resplandor()
@@ -250,19 +267,47 @@ public static class EstiloMenu
     }
 }
 
-// Aspecto de una opcion elegida (franja, marca y texto claro). Pasar el raton
-// por encima la elige, igual que moverse con el teclado o el mando.
-public class OpcionEstilo : MonoBehaviour, IPointerEnterHandler, ISelectHandler, IDeselectHandler
+// Aspecto de una opcion. Tres estados que se distinguen de un vistazo:
+//   - Resaltada (raton encima o teclado): franja tenue, marca y texto claro.
+//     Pasar el raton la resalta, igual que moverse con el teclado o el mando.
+//   - Marcada (menus por capas: se eligio con clic o Enter): franja mas fuerte,
+//     marca dorada y texto dorado. Se queda asi hasta volver atras o elegir otra.
+//   - Bloqueada: texto apagado; no responde al raton (quien la usa pone el candado).
+// "animar": crece un poco al resaltarla y se encoge al pulsarla (solo los menus
+// por capas; el resto sigue como siempre).
+public class OpcionEstilo : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerUpHandler, IPointerExitHandler,
+                            ISelectHandler, IDeselectHandler
 {
     public Image franja, marca;
     public TextMeshProUGUI texto;
+    public bool animar;
     // Apagada (sin almas, al maximo...): se ve gris, pero se puede elegir.
     public bool Activa { get; private set; } = true;
-    private bool elegida;
+    public bool Marcada { get; private set; }
+    public bool Bloqueada { get; private set; }
+    public bool Resaltada => elegida;
+    private bool elegida, pulsada;
+    private float escala = 1f;
+    private Image marco;
+
+    private static readonly Color FranjaMarcada = new Color(0.8f, 0.6f, 0.32f, 0.32f);
+    private static readonly Color MarcaDorada = new Color(1f, 0.82f, 0.45f, 1f);
 
     public void PonerActiva(bool activa)
     {
         Activa = activa;
+        Pintar();
+    }
+
+    public void PonerMarcada(bool marcada)
+    {
+        Marcada = marcada;
+        Pintar();
+    }
+
+    public void PonerBloqueada(bool bloqueada)
+    {
+        Bloqueada = bloqueada;
         Pintar();
     }
 
@@ -271,6 +316,10 @@ public class OpcionEstilo : MonoBehaviour, IPointerEnterHandler, ISelectHandler,
         if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject != gameObject)
             EventSystem.current.SetSelectedGameObject(gameObject);
     }
+
+    public void OnPointerDown(PointerEventData e) => pulsada = e.button == PointerEventData.InputButton.Left;
+    public void OnPointerUp(PointerEventData e) => pulsada = false;
+    public void OnPointerExit(PointerEventData e) => pulsada = false;
 
     public void OnSelect(BaseEventData e)
     {
@@ -282,15 +331,53 @@ public class OpcionEstilo : MonoBehaviour, IPointerEnterHandler, ISelectHandler,
     public void OnDeselect(BaseEventData e)
     {
         elegida = false;
+        pulsada = false;
         Pintar();
     }
 
     private void Pintar()
     {
-        if (franja != null) franja.enabled = elegida;
-        if (marca != null) marca.enabled = elegida;
+        if (franja != null)
+        {
+            franja.enabled = elegida || Marcada;
+            franja.color = Marcada ? FranjaMarcada : EstiloMenu.Franja;
+        }
+        // Marcada: un marco dorado fino alrededor (se distingue de un vistazo).
+        if (Marcada && marco == null)
+        {
+            marco = EstiloMenu.Caja("Marco", transform, new Color(1f, 0.8f, 0.42f, 0.8f));
+            marco.sprite = EstiloMenu.Borde();
+            marco.type = Image.Type.Sliced;
+            marco.fillCenter = false;
+            EstiloMenu.Estirar(marco.rectTransform);
+        }
+        if (marco != null) marco.enabled = Marcada;
+        if (marca != null)
+        {
+            marca.enabled = elegida || Marcada;
+            marca.color = Marcada ? MarcaDorada : EstiloMenu.Filo;
+        }
         if (texto != null)
-            texto.color = !Activa ? (elegida ? EstiloMenu.TextoNormal : EstiloMenu.TextoApagado)
-                                  : elegida ? EstiloMenu.TextoElegido : EstiloMenu.TextoNormal;
+            texto.color = Bloqueada ? EstiloMenu.TextoApagado
+                        : Marcada ? EstiloMenu.Titulo
+                        : !Activa ? (elegida ? EstiloMenu.TextoNormal : EstiloMenu.TextoApagado)
+                        : elegida ? EstiloMenu.TextoElegido : EstiloMenu.TextoNormal;
+    }
+
+    private void Update()
+    {
+        if (!animar) return;
+        float objetivo = pulsada ? 0.97f : elegida && !Bloqueada ? 1.025f : 1f;
+        if (Mathf.Approximately(escala, objetivo)) return;
+        escala = Mathf.MoveTowards(escala, objetivo, Time.unscaledDeltaTime * 0.6f);
+        transform.localScale = new Vector3(escala, escala, 1f);
+    }
+
+    private void OnDisable()
+    {
+        pulsada = false;
+        if (!animar) return;
+        escala = 1f;
+        transform.localScale = Vector3.one;
     }
 }

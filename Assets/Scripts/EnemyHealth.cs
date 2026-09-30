@@ -284,6 +284,8 @@ public class EnemyHealth : MonoBehaviour
         Elemento elemento = ElementoDelGolpe;
         UltimoDano = 0;
         if (muerto || agotado) { ElementoDelGolpe = Elemento.Ninguno; return false; }
+        // Bestiario y fichas de jefe: visto y reaccion al elemento.
+        Bitacora.Golpe(this, elemento);
         // El modificador puede mirar ElementoDelGolpe: se borra despues.
         if (modificador != null) damage = modificador.Modificar(damage, arma);
         ElementoDelGolpe = Elemento.Ninguno;
@@ -576,6 +578,7 @@ public class EnemyHealth : MonoBehaviour
         if (muerto) return;
         muerto = true;
         AlMorir?.Invoke();
+        Bitacora.Derrotado(this);
         TerminarComboAereo();
         if (rutinaAturdido != null) StopCoroutine(rutinaAturdido);
         if (tieneIsHurt && animator != null) animator.SetBool(IdIsHurt, false);

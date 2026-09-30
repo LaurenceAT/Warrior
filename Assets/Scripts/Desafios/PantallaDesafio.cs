@@ -29,8 +29,11 @@ public class PantallaDesafio : MonoBehaviour
         abierta = true;
 
         subtitulo.text = $"{f.nombre}  ·  {(dificil ? "<color=#e0776c>Difícil</color>" : "Normal")}";
+        // Lo nuevo de su ficha (Bitacora): la victoria desbloquea consejos e historia.
+        string nuevo = Bitacora.TomarResumen(f);
         datos.text = $"Tiempo  <b>{Globales.Tiempo(segundos)}</b>" + (record ? "   <color=#9fe0a0>¡Mejor tiempo!</color>" : "") +
-                     $"\nMuertes  <b>{muertes}</b>";
+                     $"\nMuertes  <b>{muertes}</b>" +
+                     (string.IsNullOrEmpty(nuevo) ? "" : $"\n<size=70%><color=#f0cc80><i>{nuevo}</i></color></size>");
         grupo.interactable = grupo.blocksRaycasts = true;
         for (float t = 0f; t < 0.6f; t += Time.unscaledDeltaTime)
         {
@@ -64,19 +67,20 @@ public class PantallaDesafio : MonoBehaviour
         GameObject go = new GameObject("PantallaDesafio");
         PantallaDesafio p = go.AddComponent<PantallaDesafio>();
         p.grupo = EstiloMenu.Lienzo(go, 110);
-        RectTransform panel = EstiloMenu.Panel(go.transform, "DESAFÍO COMPLETADO", new Vector2(900f, 520f));
+        RectTransform panel = EstiloMenu.Panel(go.transform, "DESAFÍO COMPLETADO", new Vector2(940f, 600f));
         p.subtitulo = EstiloMenu.Texto("", panel, 30, EstiloMenu.TextoElegido);
         EstiloMenu.Arriba(p.subtitulo.rectTransform, -120f, 40f);
         p.datos = EstiloMenu.Texto("", panel, 32, EstiloMenu.TextoElegido);
         p.datos.lineSpacing = 16f;
-        p.datos.rectTransform.anchoredPosition = new Vector2(0f, 10f);
-        p.datos.rectTransform.sizeDelta = new Vector2(800f, 140f);
+        p.datos.enableWordWrapping = true;
+        p.datos.rectTransform.anchoredPosition = new Vector2(0f, 20f);
+        p.datos.rectTransform.sizeDelta = new Vector2(840f, 200f);
         p.susurro = EstiloMenu.Texto("", panel, 24, new Color(0.7f, 0.85f, 0.72f));
         p.susurro.fontStyle = FontStyles.Italic;
         p.susurro.alpha = 0f;
-        p.susurro.rectTransform.anchoredPosition = new Vector2(0f, -90f);
+        p.susurro.rectTransform.anchoredPosition = new Vector2(0f, -110f);
         p.susurro.rectTransform.sizeDelta = new Vector2(800f, 40f);
-        VerticalLayoutGroup col = EstiloMenu.Columna(panel, 180f, 180f, 380f, 40f, 0f);
+        VerticalLayoutGroup col = EstiloMenu.Columna(panel, 180f, 180f, 450f, 40f, 0f);
         p.volver = EstiloMenu.Opcion(col.transform, "Volver a Desafíos", Desafio.Salir, 64f, 30f);
         // Activo pero invisible (alfa 0): asi puede arrancar su entrada.
         p.grupo.interactable = p.grupo.blocksRaycasts = false;

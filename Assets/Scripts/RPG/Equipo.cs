@@ -165,6 +165,21 @@ public static class Equipo
         }
     }
 
+    // Ya al maximo contando "pendientes" mas por aplicar (el inventario de los
+    // desafios): no tiene sentido conseguir otro.
+    public static bool AlMaximo(Objeto o, int pendientes = 0)
+    {
+        switch (o)
+        {
+            case Objeto.PiedraForja: return NivelEspada + pendientes >= NivelMaximoEspada;
+            case Objeto.LagrimaCarmesi: return NivelCuracion + pendientes >= NivelMaximoCuracion;
+            case Objeto.LagrimaCeleste: return NivelMana + pendientes >= NivelMaximoMana;
+            case Objeto.FrascoSangre: return FrascosSangreExtra + pendientes >= A.frascosExtraMaximo;
+            case Objeto.FrascoMana: return FrascosManaExtra + pendientes >= A.frascosExtraMaximo;
+            default: return false;
+        }
+    }
+
     // Empieza de cero (partida nueva, desafios y pruebas).
     public static void Reiniciar()
     {

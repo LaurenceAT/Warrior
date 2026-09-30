@@ -44,7 +44,7 @@ public class PantallaMuerte : MonoBehaviour
 
     private static PantallaMuerte instancia;
     private CanvasGroup grupo;
-    private TextMeshProUGUI titulo, frase, aviso;
+    private TextMeshProUGUI titulo, frase, aviso, resumen;
     private bool activa, puedeContinuar, continuar;
 
     // Mientras se ve (desde la muerte hasta que se abre otra vez).
@@ -56,6 +56,8 @@ public class PantallaMuerte : MonoBehaviour
         string[] lista = contraJefe ? (BurlasJefe != null && BurlasJefe.Length > 0 ? BurlasJefe : BurlasWraith)
                                     : (FrasesNivel != null && FrasesNivel.Length > 0 ? FrasesNivel : FrasesCueva);
         instancia.frase.text = lista[Random.Range(0, lista.Length)];
+        // En un desafio: lo nuevo que se ha descubierto del jefe (Bitacora).
+        instancia.resumen.text = Desafio.Activo ? Bitacora.TomarResumen(Desafio.Ficha) : Bitacora.TomarResumen(null);
         instancia.activa = true;
         instancia.puedeContinuar = false;
         instancia.continuar = false;
@@ -177,6 +179,8 @@ public class PantallaMuerte : MonoBehaviour
         p.frase.fontStyle = FontStyles.Italic;
         p.aviso = Texto(go.transform, "Pulsa cualquier botón para continuar", 26, new Color(0.7f, 0.66f, 0.62f), new Vector2(0.5f, 0.16f));
         p.aviso.characterSpacing = 6f;
+        p.resumen = Texto(go.transform, "", 24, new Color(0.95f, 0.8f, 0.5f), new Vector2(0.5f, 0.3f));
+        p.resumen.fontStyle = FontStyles.Italic;
         return p;
     }
 

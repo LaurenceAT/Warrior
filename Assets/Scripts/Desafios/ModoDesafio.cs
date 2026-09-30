@@ -30,6 +30,8 @@ public class ModoDesafio : MonoBehaviour
 
     private void Awake()
     {
+        Desafio.Reiniciando = false;
+        IndicadorInventario.Crear();
         arena = FindFirstObjectByType<ArenaJefe>();
         if (arena == null) arena = FindFirstObjectByType<ArenaCazadora>();
         if (arena == null) { Debug.LogWarning("[Desafio] La escena no tiene ArenaJefe"); return; }
@@ -112,13 +114,13 @@ public class ModoDesafio : MonoBehaviour
         ArenaJefe.AlVencer -= Vencido;
     }
 
-    private void SumarMuerte() { if (!Desafio.Completado) Desafio.Muertes++; }
+    private void SumarMuerte() { if (!Desafio.Completado && !Desafio.Reiniciando) Desafio.Muertes++; }
     private void Vencido() => Desafio.Completar();
 
     private void Update()
     {
-        // El tiempo del desafio corre con el juego (no en pausa ni en menus).
-        if (Desafio.Activo && !Desafio.Completado) Desafio.Segundos += Time.deltaTime;
+        // El tiempo del desafio corre con el juego (no en pausa, en menus ni cargando).
+        if (Desafio.Activo && !Desafio.Completado && !Desafio.Reiniciando && !PantallaCarga.Cargando) Desafio.Segundos += Time.deltaTime;
     }
 
     // ------------------------------------------------------------------ Ayudas

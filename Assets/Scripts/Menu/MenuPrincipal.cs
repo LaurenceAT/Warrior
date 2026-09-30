@@ -10,6 +10,7 @@ using UnityEngine.UI;
 // poco de luz al titulo (poca: el tono es oscuro y sobrio). Opciones:
 //   Nueva Partida  -> empieza de cero (nivel 1) en el primer nivel.
 //   Cargar Partida -> las partidas guardadas, con nivel, hoguera y tiempo jugado.
+//   Desafios, Logros y Bestiario (no necesitan partida).
 //   Opciones       -> volumen general, de musica y de efectos, y brillo.
 //   Controles      -> todos los controles y mecanicas, con iconos.
 //   Salir
@@ -49,9 +50,10 @@ public class MenuPrincipal : MonoBehaviour
     private TextMeshProUGUI textoTitulo;
     private Image resplandor, brilloSuelo;
     private CanvasGroup grupo;
-    private GameObject panelPrincipal, panelCargar, panelOpciones, panelControles, panelDesafios, panelLogros;
+    private GameObject panelPrincipal, panelCargar, panelOpciones, panelControles, panelDesafios, panelLogros, panelBestiario;
     private MenuDesafios menuDesafios;
     private MenuLogros menuLogros;
+    private MenuBestiario menuBestiario;
     private RectTransform listaPartidas;
     private GameObject primeroPrincipal;
     private AudioSource fuenteAmbiente;
@@ -114,8 +116,8 @@ public class MenuPrincipal : MonoBehaviour
         Gamepad g = Gamepad.current;
         bool atras = (k != null && k.escapeKey.wasPressedThisFrame) || (m != null && m.rightButton.wasPressedThisFrame)
                      || (g != null && g.buttonEast.wasPressedThisFrame);
-        // (En Desafios, Esc primero cierra la confirmacion si esta abierta.)
-        if (atras && !panelPrincipal.activeSelf && !saliendo && !(panelDesafios.activeSelf && menuDesafios.Atras()))
+        // (En Desafios y el Bestiario, atras vuelve un paso: de la ficha a la lista.)
+        if (atras && !panelPrincipal.activeSelf && !saliendo && !(panelDesafios.activeSelf && menuDesafios.Atras()) && !(panelBestiario.activeSelf && menuBestiario.Atras()))
         {
             SonidoMenu.Cancelar();
             Mostrar(panelPrincipal);
@@ -245,9 +247,11 @@ public class MenuPrincipal : MonoBehaviour
         panelControles.SetActive(panel == panelControles);
         panelDesafios.SetActive(panel == panelDesafios);
         panelLogros.SetActive(panel == panelLogros);
+        panelBestiario.SetActive(panel == panelBestiario);
         if (panel == panelCargar) RellenarPartidas();
         if (panel == panelDesafios) menuDesafios.Abrir();
         if (panel == panelLogros) menuLogros.Abrir();
+        if (panel == panelBestiario) menuBestiario.Abrir();
         SonidoMenu.Silenciar();
         SeleccionarPrimero();
     }
@@ -258,6 +262,7 @@ public class MenuPrincipal : MonoBehaviour
         GameObject g = panelPrincipal.activeSelf ? primeroPrincipal
                      : panelDesafios.activeSelf ? menuDesafios.Primero()
                      : panelLogros.activeSelf ? menuLogros.Primero()
+                     : panelBestiario.activeSelf ? menuBestiario.Primero()
                      : PrimerBoton(panelCargar.activeSelf ? panelCargar : panelOpciones.activeSelf ? panelOpciones : panelControles);
         EventSystem.current.SetSelectedGameObject(g);
     }
@@ -323,14 +328,15 @@ public class MenuPrincipal : MonoBehaviour
         }
 
         panelPrincipal = Panel("Principal");
-        VerticalLayoutGroup vl = Columna(panelPrincipal.transform, new Vector2(0f, -70f), 460f, 6f);
-        primeroPrincipal = Opcion("Nueva Partida", vl.transform, NuevaPartida);
-        Opcion("Cargar Partida", vl.transform, () => Mostrar(panelCargar));
-        Opcion("Desafíos", vl.transform, () => Mostrar(panelDesafios));
-        Opcion("Logros", vl.transform, () => Mostrar(panelLogros));
-        Opcion("Opciones", vl.transform, () => Mostrar(panelOpciones));
-        Opcion("Controles", vl.transform, () => Mostrar(panelControles));
-        Opcion("Salir", vl.transform, Salir);
+        VerticalLayoutGroup vl = Columna(panelPrincipal.transform, new Vector2(0f, -44f), 460f, 6f);
+        primeroPrincipal = Opcion("Nueva Partida", vl.transform, NuevaPartida, 50f);
+        Opcion("Cargar Partida", vl.transform, () => Mostrar(panelCargar), 50f);
+        Opcion("Desafíos", vl.transform, () => Mostrar(panelDesafios), 50f);
+        Opcion("Logros", vl.transform, () => Mostrar(panelLogros), 50f);
+        Opcion("Bestiario", vl.transform, () => Mostrar(panelBestiario), 50f);
+        Opcion("Opciones", vl.transform, () => Mostrar(panelOpciones), 50f);
+        Opcion("Controles", vl.transform, () => Mostrar(panelControles), 50f);
+        Opcion("Salir", vl.transform, Salir, 50f);
 
         TextMeshProUGUI pie = Texto("Enter / Clic: aceptar     Esc / Clic derecho: volver", lienzo, 20f, new Color(0.45f, 0.42f, 0.4f));
         pie.rectTransform.anchorMin = pie.rectTransform.anchorMax = new Vector2(0.5f, 0f);
@@ -343,6 +349,8 @@ public class MenuPrincipal : MonoBehaviour
         panelDesafios = menuDesafios.gameObject;
         menuLogros = MenuLogros.Construir(lienzo, () => Mostrar(panelPrincipal));
         panelLogros = menuLogros.gameObject;
+        menuBestiario = MenuBestiario.Construir(lienzo, () => Mostrar(panelPrincipal));
+        panelBestiario = menuBestiario.gameObject;
     }
 
     private GameObject Panel(string nombre)

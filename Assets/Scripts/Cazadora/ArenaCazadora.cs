@@ -143,8 +143,12 @@ public class ArenaCazadora : MonoBehaviour
         UICazadora.MontarEnBarra(barra);
         UICazadora.FaseActual(0);
 
-        bool primeraVez = intentos == 1;
-        bool completo = primeraVez && !Globales.Marca("dialogo_cazadora");
+        FichaJefe ficha = FichaJefe.DeEscena(gameObject.scene.name);
+        Bitacora.Intento(ficha);
+        // Tras "Reiniciar desafio" cuenta como un reintento (salvo que la ficha pida el dialogo).
+        bool reiniciado = Desafio.Activo && Desafio.Reiniciado && (ficha == null || !ficha.dialogoAlReiniciar);
+        bool primeraVez = intentos == 1 && !reiniciado;
+        bool completo = primeraVez && (!Globales.Marca("dialogo_cazadora") || (Desafio.Activo && Desafio.Reiniciado));
         float acercarse = primeraVez ? 2.2f : 0.6f;
         // La camara va despacio hacia ella (y vuelve a ti al acabar).
         if (GameManager.Instance != null) GameManager.Instance.SeguirConCamara(jefe.transform);
@@ -213,6 +217,7 @@ public class ArenaCazadora : MonoBehaviour
     private void NuevaFase(int f)
     {
         SeguirJefa(false);
+        Bitacora.Fase(FichaJefe.DeEscena(gameObject.scene.name), f + 1);
         AjustesCazadora.Fase datos = ajustes.FaseN(f);
         if (barra != null) barra.NuevaFase(datos.colorBarra, nombre + "  ·  " + datos.nombre);
         UICazadora.FaseActual(f);

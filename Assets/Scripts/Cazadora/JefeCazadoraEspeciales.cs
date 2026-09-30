@@ -508,6 +508,7 @@ public partial class JefeCazadora
         float otro = dir > 0 ? cuerpo.XMax : cuerpo.XMin;
 
         AlAvisoInstakill?.Invoke(true);
+        AnunciarAtaque("ejecucion");
         MarcaSuelo linea = MarcaSuelo.Poner(MarcaSuelo.Forma.Franja, new Vector2((cuerpo.XMin + cuerpo.XMax) * 0.5f, suelo + 0.07f),
                                             new Vector2(cuerpo.XMax - cuerpo.XMin + 1.6f, 0.15f), ajustes.colorInstakill, ajustes.avisoEjecucion + 0.3f);
         Sonar("aviso_ejecucion", 1f);
@@ -536,6 +537,7 @@ public partial class JefeCazadora
         if (p == null) yield break;
         elementoAtaque = Elemento.Ninguno;
         AlAvisoInstakill?.Invoke(true);
+        AnunciarAtaque("sentencia");
         Sonar("salto", 0.8f);
         cuerpoAnim.Reproducir("salto", 1.5f);
         cuerpo.Trayecto(new Vector2(Pos.x, suelo + 8f), 0.3f, 0f, CuerpoCazadora.Curva.Suave);
@@ -591,6 +593,7 @@ public partial class JefeCazadora
         instakillUsado[2] = true;
         elementoAtaque = Elemento.Ninguno;
         AlSilencioCaza?.Invoke(true);
+        AnunciarAtaque("silencio");
         Sonar("aviso_silencio", 1f);
         cuerpo.Parar(ajustes.frenada);
         cuerpoAnim.Pose("tajoArriba", 0);

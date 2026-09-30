@@ -186,6 +186,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
 
     private IEnumerator Ejecutar(string ataque)
     {
+        AnunciarAtaque(ataque);
         switch (ataque)
         {
             case "barrido": return Barrido(false);

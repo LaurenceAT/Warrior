@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
         // Con la pantalla de muerte, Escape es "cualquier boton" para continuar.
         if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame && !PantallaMuerte.Activa
             && !RuedaImbuir.Abierta && !MenuHoguera.Abierto && !CuadroPista.Abierto && !MenuPausa.LibroAbierto
-            && !TiendaTotem.Abierta && !PantallaDesafio.Abierta && !Cinematica.Activa)
+            && !TiendaTotem.Abierta && !PantallaDesafio.Abierta && !Cinematica.Activa && !PantallaCarga.Cargando)
         {
             if (isPaused)
                 ResumeGame();

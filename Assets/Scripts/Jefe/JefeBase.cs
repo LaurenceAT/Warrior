@@ -35,7 +35,19 @@ public abstract class JefeBase : EnemigoBase
     protected static float PausaDesafio(float segundos) => segundos / Desafio.MultVelocidad;
 
     protected void AvisarAterrizaje() => AlAterrizar?.Invoke();
-    protected void AvisarCambioFase() => AlCambiarFase?.Invoke();
+
+    // Bitacora (fichas de Desafios): el jefe empieza un ataque (los instakills,
+    // al mostrar su aviso) y cambia de fase. El id es el de su ficha.
+    private FichaJefe fichaBitacora;
+    private int faseBitacora = 1;
+    protected FichaJefe FichaBitacora => fichaBitacora != null ? fichaBitacora : fichaBitacora = FichaJefe.DeEscena(gameObject.scene.name);
+    protected void AnunciarAtaque(string ataque) => Bitacora.Ataque(FichaBitacora, ataque);
+
+    protected void AvisarCambioFase()
+    {
+        AlCambiarFase?.Invoke();
+        Bitacora.Fase(FichaBitacora, ++faseBitacora);
+    }
     protected void AvisarDerrota() => AlDerrotado?.Invoke();
     protected void AvisarSilencio() => AlSilencio?.Invoke();
 }

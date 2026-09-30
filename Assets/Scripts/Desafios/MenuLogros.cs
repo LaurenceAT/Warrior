@@ -16,6 +16,7 @@ public class MenuLogros : MonoBehaviour
     private Button botonVolver;
     private FichaLogro.Seccion seccion;
     private System.Action volverAlMenu;
+    private readonly GrupoMarcado grupo = new GrupoMarcado();
 
     public static MenuLogros Construir(Transform lienzo, System.Action volver)
     {
@@ -36,26 +37,20 @@ public class MenuLogros : MonoBehaviour
 
     private static readonly string[] Nombres = { "Partida", "Desafíos", "Difícil" };
 
-    // La pestana abierta lleva la marca »; todas dicen cuantos llevas.
+    // La pestana abierta queda marcada (clic o Enter; pasar el raton solo la
+    // resalta). Todas dicen cuantos llevas.
     private void PintarPestanas()
     {
+        grupo.Marcar(pestanas[(int)seccion].GetComponent<OpcionEstilo>());
         for (int i = 0; i < pestanas.Count; i++)
         {
             FichaLogro.Seccion s = (FichaLogro.Seccion)i;
             pestanas[i].GetComponentInChildren<TextMeshProUGUI>().text =
-                $"{(s == seccion ? "» " : "")}{Nombres[i]}  <size=80%><color=#8f8780>{Logros.Desbloqueados(s)}/{Logros.Total(s)}</color></size>";
+                $"{Nombres[i]}  <size=80%><color=#8f8780>{Logros.Desbloqueados(s)}/{Logros.Total(s)}</color></size>";
         }
     }
 
-    public GameObject Primero() => pestanas.Count > 0 ? pestanas[0].gameObject : botonVolver.gameObject;
-
-    private void Update()
-    {
-        // La pestana elegida con el teclado o el raton muestra su seccion.
-        GameObject sel = EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
-        int i = pestanas.FindIndex(b => b.gameObject == sel);
-        if (i >= 0 && (FichaLogro.Seccion)i != seccion) Mostrar((FichaLogro.Seccion)i);
-    }
+    public GameObject Primero() => pestanas.Count > 0 ? pestanas[(int)seccion].gameObject : botonVolver.gameObject;
 
     private void Mostrar(FichaLogro.Seccion s)
     {
@@ -117,7 +112,9 @@ public class MenuLogros : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             FichaLogro.Seccion s = (FichaLogro.Seccion)i;
-            pestanas.Add(EstiloMenu.Opcion(barra, "", () => Mostrar(s), 60f, 28f));
+            Button b = EstiloMenu.Opcion(barra, "", () => Mostrar(s), 60f, 28f);
+            grupo.Anadir(b.GetComponent<OpcionEstilo>());
+            pestanas.Add(b);
         }
 
         lista = new GameObject("Lista", typeof(RectTransform)).GetComponent<RectTransform>();
@@ -132,5 +129,6 @@ public class MenuLogros : MonoBehaviour
 
         VerticalLayoutGroup col = EstiloMenu.Columna(panel, 560f, 560f, 790f, 36f, 0f);
         botonVolver = EstiloMenu.Opcion(col.transform, "Volver", () => volverAlMenu?.Invoke(), 54f, 26f);
+        botonVolver.GetComponent<OpcionEstilo>().animar = true;
     }
 }

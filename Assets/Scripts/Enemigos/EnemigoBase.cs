@@ -361,6 +361,7 @@ public abstract class EnemigoBase : MonoBehaviour
         // Un elite se presenta la primera vez que se le ve (una vez por partida).
         DefinicionEnemigo d = salud != null ? salud.Definicion : null;
         if (d != null && d.EsElite && ElitesPresentados.Add(d.NombreElite)) MensajePantalla.TituloElite(d.NombreElite);
+        Bitacora.Visto(salud);
         AlDescubrir();
     }
 
