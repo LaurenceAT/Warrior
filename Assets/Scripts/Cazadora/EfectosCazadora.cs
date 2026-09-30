@@ -271,12 +271,27 @@ public class EstelaFantasma : MonoBehaviour
         e.transform.position = pos;
         e.transform.localScale = new Vector3(volteado ? -1f : 1f, 1f, 1f);
         e.sr.sprite = s;
+        e.sr.sortingLayerName = "Player";
         e.sr.sortingOrder = orden;
         e.color = c;
         e.vida = Mathf.Max(0.05f, segundos);
         e.t = 0f;
         e.sr.color = c;
+        Ultima = e;
     }
+
+    // Con escala propia (jefes grandes, sprites a otra resolucion).
+    public static void Lanzar(Sprite s, Vector3 pos, Vector3 escala, Color c, float segundos, string capa, int orden)
+    {
+        if (s == null) return;
+        Lanzar(s, pos, false, c, segundos, orden);
+        EstelaFantasma e = Ultima;
+        if (e == null) return;
+        e.transform.localScale = escala;
+        e.sr.sortingLayerName = capa;
+    }
+
+    private static EstelaFantasma Ultima;
 
     private void Update()
     {

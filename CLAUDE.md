@@ -16,7 +16,7 @@ Jefe secreto (solo en Desafíos): The Blind Huntress, en la escena `Bosque Cazad
 - `GatherInput.cs`: teclas. Q frasco de sangre, R frasco de maná, F interactuar, E rueda de imbuir. El arco está apagado.
 - `PlayerHud.cs`: barras de vida/estamina/maná, anillo de imbuición, barras de estados.
 - `RPG/`: `Progreso` (niveles y almas), `AjustesProgreso` (números editables), `Equipo` (mejoras de espada y frascos), `EstadosPlayer`, `EstadosEnemigo`, `ArmaImbuida`, `MenuHoguera`, `RecursosRPG` (sonidos e iconos por clave).
-- `Jefe/`: `JefeSombra`, `JefeWraith`, `ArenaJefe` (combate, música, recompensa), `PeligrosJefe` (ataques en el escenario).
+- `Jefe/`: `JefeSombra`, `JefeWraith` (en 2 archivos: `JefeWraith` y `JefeWraithPoderes`), `PoseViva` (respira, se inclina y se estira: vida a las poses sueltas), `ArenaJefe` (combate, música, recompensa), `PeligrosJefe` (ataques en el escenario).
 - `Desafios/`: `Desafio` (estado), `ModoDesafio` (monta la arena en el nivel real), `TiendaTotem`/`TotemTienda`, `MenuDesafios`, `MenuLogros`, `Logros`, `Globales` (logros y tiempos en `globales.json`, aparte de las partidas). Fichas editables en `Resources/Desafios` (jefes y tienda) y `Resources/Logros`.
 - `Cazadora/`: el jefe secreto. `JefeCazadora` (cerebro, en 3 archivos: nucleo, Ataques, Especiales), `CuerpoCazadora` (movimiento con aceleracion), `AnimCazadora` (cuerpo + efecto tenible), `OidoCazadora` (ruidos del player), `ArenaCazadora` (dialogo, musica por fase, reinicio), `IlusionCazadora`, `EfectosCazadora` (olas, marcas, estelas... con reserva), `UICazadora`, `DialogoCazadora`, `OscuridadCazadora`, `AmbienteBosque`, `ParallaxBosque`, `CamaraCazadora`, `DepuracionCazadora` (F10, solo Editor). Numeros en `Assets/Data/Jefes/Ajustes Cazadora`; sonidos en `Assets/Data/Sonidos/Sonidos Jefe Cazadora`. `Ronda10` genera sprites, fondo pixelado, prefab y escena.
 - `Menu/`: `MenuPrincipal`, `Partida` (partidas guardadas en JSON).
@@ -50,6 +50,7 @@ Jefe secreto (solo en Desafíos): The Blind Huntress, en la escena `Bosque Cazad
 - Jefe secreto: se desbloquea con los desafios Normal de Wraith y Wetlands (se calcula con `globales.json`). Hasta entonces no sale en Desafios ni cuentan sus 2 logros. Marcas globales: `revelado_*`, `dialogo_cazadora`, `forzar_*`/`bloqueo_*` (pruebas).
 - La Cazadora: todo su dano va en fraccion de tu vida maxima; los golpes normales nunca matan con la vida llena (solo instakills, su estocada tras parry o tener poca vida).
 - Parry de la Cazadora: al contacto te aturde de verdad (sin control ni teclas guardadas) y ella reapunta a tu posicion real justo antes de la estocada; si sobrevives, sales despedido (`PlayerControler.Derribar`, invulnerable al caer). El escudo se rompe por golpes (10, o 5 con la espada imbuida de oscuridad), no por dano.
+- Crimson Wraith (Ronda12): se mueve con aceleracion y frenada, avisos ligero/pesado, poderes nuevos (Guadana doble, Cosecha de sangre, Transfusion, Raices carmesi, Semillas del vacio, Zigzag, Frenesi) y "corazon expuesto" tras Nova, Lluvia y Frenesi (x1.5). Fase 1: fuego x1.3, hielo x1.2, oscuridad x0.7, sangrado x0.6. Fase 2: sagrado x1.8, fuego x1.5, hielo x0.8, oscuridad x0.3, sangrado x0.2 y lo cura. Prueba: `PruebaNieve.WraithPrueba`.
 - Se conservan en el código el arco, el combate sin arma y la rueda de pociones, aunque estén apagados.
 
 ## Hecho y funcionando

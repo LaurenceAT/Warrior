@@ -23,7 +23,7 @@ using UnityEngine;
 // sagrada (x1.8); la oscuridad apenas le hace nada. Hay que imbuir la espada.
 //
 // Los ataques grandes abren la camara (CamaraDinamica.Ampliar) para que se vean.
-public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturdible
+public partial class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturdible
 {
 
     [Header("Dano")]
@@ -45,7 +45,25 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
     [SerializeField] private float multArco = 1f;
     [SerializeField] private float multSagrado = 1.8f;
     [SerializeField] private float multFuego = 1f;
-    [SerializeField] private float multOscuro = 0.4f;
+    [SerializeField] private float multOscuro = 0.3f;
+    [SerializeField] private float multHielo = 0.8f;
+    [Tooltip("Tus golpes con sangrado le hacen esto... y lo curan (ver Absorcion).")]
+    [SerializeField] private float multSangrado = 0.2f;
+    [Tooltip("Fase 2: parte del dano de tus golpes con sangrado que se convierte en vida suya.")]
+    [Range(0f, 1f)] [SerializeField] private float absorcionSangrado = 0.3f;
+
+    [Header("Debilidad en la fase 1")]
+    [SerializeField] private float fase1Fuego = 1.3f;
+    [SerializeField] private float fase1Hielo = 1.2f;
+    [Tooltip("Con 0.5 o menos, el sangrado tampoco le aplica su estado.")]
+    [SerializeField] private float fase1Sangrado = 0.6f;
+    [SerializeField] private float fase1Oscuro = 0.7f;
+    [SerializeField] private float fase1Sagrado = 1f;
+
+    [Header("Corazon expuesto (tras Nova, Lluvia y Frenesi)")]
+    [Tooltip("Todo el dano se multiplica por esto mientras el nucleo brilla.")]
+    [SerializeField] private float multCorazon = 1.5f;
+    [SerializeField] private float duracionCorazon = 2f;
 
     [Header("Parry")]
     // Aturdimiento al parar el impacto de la entrada, y el de un golpe normal.
@@ -115,6 +133,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
         // Nada interrumpe al jefe salvo el parry (lo gestiona el propio jefe).
         armadura = true;
         EstadosPlayer.efectoSangrado = fxSangre;
+        IniciarPoderes();
     }
 
     // ------------------------------------------------------------------ Debilidad
@@ -122,7 +141,21 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
     public int Modificar(int dano, TipoArma arma)
     {
         if (transformando || invisible) return 0;
+        // Corazon expuesto: todo entra mas.
+        if (CorazonExpuesto) dano = Mathf.RoundToInt(dano * multCorazon);
         if (!fase2) return dano;
+
+        // Esta hecho de sangre: tus golpes con sangrado lo curan un poco.
+        if (EnemyHealth.ElementoDelGolpe == Elemento.Sangrado && absorcionSangrado > 0f)
+        {
+            int cura = Mathf.RoundToInt(dano * absorcionSangrado);
+            if (cura > 0)
+            {
+                salud.Curar(cura);
+                TextoFlotante.Mostrar("Absorbe +" + cura, (Vector2)transform.position + new Vector2(Random.Range(-0.6f, 0.6f), 3.6f),
+                                      new Color(0.9f, 0.2f, 0.25f), 0.9f);
+            }
+        }
 
         // Con la espada imbuida manda la afinidad (Multiplicador), que ya avisa.
         if (arma == TipoArma.Espada && EnemyHealth.ElementoDelGolpe != Elemento.Ninguno) return dano;
@@ -133,15 +166,30 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
         return Mathf.Max(1, Mathf.RoundToInt(dano * m));
     }
 
-    // En la fase 1 todos los elementos hacen lo normal. En la 2, la luz lo quema.
+    // Fase 1: el fuego hace hervir su sangre y el hielo la congela; resiste la
+    // oscuridad y el sangrado. Fase 2: la luz lo quema y el fuego mas; la
+    // oscuridad y el hielo apenas; el sangrado casi nada (y lo cura).
     public float Multiplicador(Elemento e)
     {
-        if (!fase2) return 1f;
+        if (!fase2)
+        {
+            switch (e)
+            {
+                case Elemento.Fuego: return fase1Fuego;
+                case Elemento.Hielo: return fase1Hielo;
+                case Elemento.Sangrado: return fase1Sangrado;
+                case Elemento.Oscuro: return fase1Oscuro;
+                case Elemento.Sagrado: return fase1Sagrado;
+                default: return 1f;
+            }
+        }
         switch (e)
         {
             case Elemento.Sagrado: return multSagrado;
             case Elemento.Fuego: return multFuego;
             case Elemento.Oscuro: return multOscuro;
+            case Elemento.Hielo: return multHielo;
+            case Elemento.Sangrado: return multSangrado;
             default: return 1f;
         }
     }
@@ -156,6 +204,10 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
         {
             if (!fase2 && salud.CurrentHealth <= salud.MaxHealth * umbralFase2)
                 yield return Transformacion();
+            // Frenesi: una vez, con poca vida en la fase 2.
+            if (fase2 && !frenesiHecho && salud.CurrentHealth <= salud.MaxHealth * umbralFrenesi)
+                yield return Frenesi();
+            if (enFrenesi && Time.time >= finFrenesi) yield return FinFrenesi();
 
             yield return Reposicionar();
 
@@ -164,11 +216,22 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
             parado = false;
             yield return Ejecutar(ataque);
 
+            // Fase 2: a veces encadena sin respiro (zarpazo o teletransporte y
+            // guadana doble).
+            if (fase2 && !parado && aturdimientoSagrado <= 0f && (ataque == "zarpazo" || ataque == "teletransporte" || ataque == "salto")
+                && Random.value < probabilidadCombo)
+            {
+                yield return Esperar(0.08f);
+                ultimoAtaque = "guadana";
+                yield return GuadanaDoble();
+            }
+
             float sagrado = aturdimientoSagrado;
             aturdimientoSagrado = 0f;
             if (parado) yield return Aturdido(aturdidoParry);
             else if (sagrado > 0f) yield return Aturdido(sagrado);
-            else yield return Pausa(fase2 ? Random.Range(0.25f, 0.5f) : Random.Range(0.55f, 0.95f));
+            else if (enFrenesi) yield return Pausa(0.05f);
+            else yield return Pausa(fase2 ? Random.Range(pausaFase2.x, pausaFase2.y) : Random.Range(pausaFase1.x, pausaFase1.y));
         }
     }
 
@@ -189,6 +252,13 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
             case "medialuna": return Medialuna();
             case "vortice": return Vortice();
             case "nova": return Nova();
+            case "guadana": return GuadanaDoble();
+            case "cosecha": return CosechaDeSangre();
+            case "transfusion": return Transfusion();
+            case "raices": return RaicesCarmesi();
+            case "semillas": return SemillasDelVacio();
+            case "zigzag": return Zigzag();
+            case "frenesi": return Frenesi();
             default: return Pausa(0.3f);
         }
     }
@@ -196,6 +266,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
     // Elige ataque segun la distancia y la fase, sin repetir el anterior.
     private string Elegir()
     {
+        if (!string.IsNullOrEmpty(ataqueForzado)) { string f = ataqueForzado; ataqueForzado = null; return f; }
         float d = Mathf.Abs(DxPlayer);
         var opciones = new List<(string, float)>();
         if (!fase2)
@@ -203,6 +274,9 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
             if (d < 4.5f) { opciones.Add(("tajos", 3f)); opciones.Add(("onda", 1f)); opciones.Add(("pilares", 1f)); opciones.Add(("salto", 1f)); }
             else if (d < 9f) { opciones.Add(("embestida", 2.5f)); opciones.Add(("pilares", 2f)); opciones.Add(("orbes", 1.5f)); opciones.Add(("onda", 1f)); opciones.Add(("salto", 2f)); opciones.Add(("medialuna", 2f)); }
             else { opciones.Add(("embestida", 2f)); opciones.Add(("orbes", 2.5f)); opciones.Add(("pilares", 1.5f)); opciones.Add(("salto", 2f)); opciones.Add(("medialuna", 2.5f)); }
+            // Nuevos: raices que siguen tu rastro y la embestida doble.
+            if (Time.time - tRaices > 10f) opciones.Add(("raices", 1.8f));
+            if (d >= 4.5f) opciones.Add(("zigzag", 1.6f));
         }
         else
         {
@@ -211,8 +285,13 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
             if (Time.time - tLluvia > 12f) opciones.Add(("lluvia", 3f));
             if (Time.time - tVortice > 10f) opciones.Add(("vortice", 2.5f));
             if (Time.time - tNova > 9f && d < 7f) opciones.Add(("nova", 2.5f));
+            if (d < 5.5f) opciones.Add(("guadana", 2.2f));
+            if (Time.time - tSemillas > 11f) opciones.Add(("semillas", 2f));
+            if (Time.time - tTransfusion > 14f && d < 8f) opciones.Add(("transfusion", 1.8f));
         }
 
+        // Cosecha (fases 1 y 2): solo si tu barra de sangrado va por la mitad.
+        if (Time.time - tCosecha > 8f && SangradoDelPlayer() >= umbralCosecha) opciones.Add(("cosecha", 4f));
         opciones.RemoveAll(o => o.Item1 == ultimoAtaque);
         float total = 0f;
         foreach (var o in opciones) total += o.Item2;
@@ -260,13 +339,15 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
         MostrarSprite(true);
         invisible = false;
         anim.Reproducir("caida", true);
-        while (transform.position.y > suelo + 0.05f)
+        // Por fisica (con interpolacion): sin tirones.
+        rb.position = transform.position;
+        while (rb.position.y > suelo + 0.05f)
         {
-            float y = Mathf.MoveTowards(transform.position.y, suelo, 30f * Time.deltaTime);
-            transform.position = new Vector3(x, y, 0f);
-            yield return null;
+            rb.MovePosition(new Vector2(x, Mathf.MoveTowards(rb.position.y, suelo, 30f * Time.fixedDeltaTime)));
+            yield return new WaitForFixedUpdate();
         }
-        transform.position = new Vector3(x, suelo, 0f);
+        rb.position = new Vector2(x, suelo);
+        Pose?.Estirar(1.15f, 0.85f, 0.2f);
         rb.bodyType = RigidbodyType2D.Dynamic;
 
         // Impacto: polvo, sacudida y onda de choque alrededor.
@@ -295,11 +376,12 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
         {
             MirarAlPlayer();
             anim.Reproducir("preparar", true);
-            float aviso = i == 0 ? 0.6f : 0.35f;
-            LanzarAviso(aviso, 0.6f);
+            float aviso = i == 0 ? 0.5f : 0.3f;
+            AvisoLigero(aviso);
             yield return Esperar(aviso);
 
             anim.Reproducir("tajo", true);
+            Pose?.Soltar();
             Sonar("jefe_tajo", 0.8f);
             if (i == golpes - 1) CamaraDinamica.Acercar(4.6f, 0.3f);
             float t = 0f;
@@ -309,7 +391,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
                 t += Time.deltaTime;
                 // Avanza con el zarpazo durante los dos primeros fotogramas.
                 bool activo = anim.Fotograma <= 1;
-                rb.linearVelocity = new Vector2(activo ? mirada * 4.5f : 0f, rb.linearVelocity.y);
+                Acelerar(activo ? mirada * 4.5f : 0f, activo ? 60f : 28f);
                 if (activo && !pego)
                 {
                     var r = Golpear(new Vector2(2.2f, 1.8f), new Vector2(4f, 3.4f), danoNormal);
@@ -317,19 +399,21 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
                 }
                 yield return null;
             }
-            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+            FrenarSuave(28f);
             if (Mathf.Abs(DxPlayer) > 6f) break;
         }
-        yield return Esperar(0.35f);
+        yield return RevesSiDetras();
+        if (parado) yield break;
+        yield return Esperar(0.25f);
     }
 
-    private IEnumerator Embestida()
+    private IEnumerator Embestida(float aviso = 0.55f)
     {
         MirarAlPlayer();
         anim.Reproducir("guardia", true);
-        LanzarAviso(0.6f, 0.65f);
+        AvisoPesado(aviso);
         // Se agacha: echa el cuerpo atras un poco mientras avisa.
-        yield return Temblar(0.6f, 0.05f);
+        yield return Temblar(aviso, 0.05f);
 
         float destino = Mathf.Clamp(PosPlayer.x + mirada * 3.5f, arena.xMin + 1.5f, arena.xMax - 1.5f);
         anim.Reproducir("embestida", true);
@@ -338,8 +422,8 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
         while (t < 1.2f && (destino - transform.position.x) * mirada > 0.2f)
         {
             t += Time.deltaTime;
-            rb.linearVelocity = new Vector2(mirada * 19f, rb.linearVelocity.y);
-            if ((tEstela -= Time.deltaTime) <= 0f) { Estela(); tEstela = 0.05f; }
+            Acelerar(mirada * 19f, 110f);
+            if ((tEstela -= Time.deltaTime) <= 0f) { Estela(); tEstela = 0.04f; }
             if (!pego)
             {
                 var r = Golpear(new Vector2(0.4f, 1.6f), new Vector2(3f, 3.2f), danoNormal);
@@ -350,17 +434,19 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
         }
 
         // Frena levantando polvo.
-        rb.linearVelocity = Vector2.zero;
+        FrenarSuave(75f);
         anim.Reproducir("frenar", true);
+        Pose?.Estirar(1.1f, 0.92f, 0.25f);
         EfectoVisual.Crear(fxPolvo, (Vector2)transform.position + Vector2.up * 0.4f, 1.8f, new Color(0.8f, 0.6f, 0.6f), mirada < 0);
-        yield return Esperar(0.45f);
+        for (float tf = 0f; tf < 0.4f && Mathf.Abs(rb.linearVelocity.x) > 0.3f; tf += Time.deltaTime) yield return null;
+        yield return Esperar(0.2f);
     }
 
     private IEnumerator Onda()
     {
         MirarAlPlayer();
         anim.Reproducir(fase2 ? "grande_guardia" : "conjuro", true);
-        LanzarAviso(0.6f, 0.6f);
+        AvisoPesado(0.6f);
         CamaraDinamica.Ampliar(6.4f, 2.4f);
         yield return Esperar(0.6f);
 
@@ -372,6 +458,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
             Vector2 pie = new Vector2(transform.position.x, suelo);
             OndaCarmesi.Lanzar(fxOnda, pie + Vector2.right * 1.2f, 1, fase2 ? 10.5f : 9f, danoNormal, 22f, colorOnda, 1.2f, EstadoPlayer.Sangrado, 20f);
             OndaCarmesi.Lanzar(fxOnda, pie + Vector2.left * 1.2f, -1, fase2 ? 10.5f : 9f, danoNormal, 22f, colorOnda, 1.2f, EstadoPlayer.Sangrado, 20f);
+            if (!fase2 && anim.Tiene("zarpazo_reves")) anim.Reproducir(i % 2 == 0 ? "zarpazo_reves" : "zarpazo", true);
             yield return Esperar(0.55f);
         }
         yield return Esperar(0.3f);
@@ -380,7 +467,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
     private IEnumerator Pilares()
     {
         anim.Reproducir("conjuro", true);
-        LanzarAviso(0.5f, 0.5f);
+        AvisoLigero(0.45f);
         yield return Esperar(0.4f);
 
         // Uno bajo el player y dos a los lados: hay que leer el hueco.
@@ -391,13 +478,13 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
             float px = Mathf.Clamp(x + dx, arena.xMin + 0.6f, arena.xMax - 0.6f);
             PilarSangre.Invocar(fxGlifo, fxPilar, new Vector2(px, suelo), 0.9f, danoNormal, sangradoPilar, carmesi);
         }
-        yield return Esperar(1.3f);
+        yield return Esperar(1f);
     }
 
     private IEnumerator Orbes()
     {
         anim.Reproducir(fase2 ? "grande_rugido" : "flotar", true);
-        LanzarAviso(0.45f, 0.5f);
+        AvisoLigero(0.45f);
         yield return Esperar(0.45f);
 
         int n = fase2 ? 5 : 3;
@@ -416,7 +503,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
     private IEnumerator Transformacion()
     {
         transformando = true;
-        rb.linearVelocity = Vector2.zero;
+        Detener();
         anim.Reproducir("grande_rugido", true);
         CamaraDinamica.Ampliar(7f, 3.2f);
         CamaraDinamica.Encuadrar((Vector2)transform.position + Vector2.up * 2.5f, 0.7f, 3f);
@@ -445,16 +532,17 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
     private IEnumerator Zarpazo()
     {
         MirarAlPlayer();
-        anim.Reproducir("grande_guardia", true);
-        LanzarAviso(0.7f, 0.7f);
+        anim.Reproducir(anim.Tiene("grande_preparar") ? "grande_preparar" : "grande_guardia", true);
+        AvisoPesado(0.65f);
         CamaraDinamica.Ampliar(6.4f, 2f);
-        yield return Temblar(0.7f, 0.04f);
+        yield return Temblar(0.65f, 0.04f);
 
         anim.Reproducir("grande_zarpazo", true);
+        Pose?.Soltar(1.3f, 0.15f);
         Sacudir(1.5f);
         CamaraDinamica.Acercar(4.5f, 0.4f);
         Sonar("jefe_golpe_fuerte");
-        rb.linearVelocity = new Vector2(mirada * 3f, 0f);
+        Acelerar(mirada * 3f, 40f);
         var r = Golpear(new Vector2(2.8f, 2.2f), new Vector2(5.6f, 4.6f), danoFuerte);
         if (r == PlayerControler.ResultadoDano.Parry) { parado = true; yield break; }
 
@@ -463,15 +551,15 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
         OndaCarmesi.Lanzar(fxOnda, pie + Vector2.right * mirada * 3f, mirada, 11f, danoNormal, 18f, colorOnda, 1.2f, EstadoPlayer.Sangrado, 20f);
         OndaCarmesi.Lanzar(fxOnda, pie - Vector2.right * mirada * 1.5f, -mirada, 11f, danoNormal, 18f, colorOnda, 1.2f, EstadoPlayer.Sangrado, 20f);
         yield return Esperar(0.25f);
-        rb.linearVelocity = Vector2.zero;
-        yield return Esperar(0.45f);
+        FrenarSuave(30f);
+        yield return Esperar(0.35f);
     }
 
     private IEnumerator Lluvia()
     {
         tLluvia = Time.time;
         anim.Reproducir("grande_rugido", true);
-        LanzarAviso(0.7f, 0.7f);
+        AvisoPesado(0.7f);
         // Area de toda la arena: la camara se abre del todo.
         CamaraDinamica.Ampliar(8f, 5f);
         Sacudir(0.8f);
@@ -484,7 +572,9 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
             Meteoro.Caer(fxMeteoro, fxExplosion, fxGlifo, new Vector2(x, suelo), arena.yMax + 1f, 1f, danoNormal, new Color(1f, 0.45f, 0.2f), EstadoPlayer.Quemadura, 45f);
             yield return Esperar(0.28f);
         }
-        yield return Esperar(1f);
+        yield return Esperar(0.5f);
+        ExponerCorazon();
+        yield return Esperar(0.4f);
     }
 
     private IEnumerator Teletransporte()
@@ -513,7 +603,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
     {
         MirarAlPlayer();
         anim.Reproducir("grande_rugido", true);
-        LanzarAviso(0.5f, 0.6f);
+        AvisoPesado(0.5f);
         yield return Esperar(0.5f);
 
         // Una fila de pilares que avanza desde el jefe hacia el player y le pasa.
@@ -533,8 +623,8 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
     private IEnumerator Salto()
     {
         MirarAlPlayer();
-        anim.Reproducir(fase2 ? "grande_guardia" : "guardia", true);
-        LanzarAviso(0.5f, 0.6f);
+        anim.Reproducir(fase2 && anim.Tiene("grande_preparar") ? "grande_preparar" : fase2 ? "grande_guardia" : "guardia", true);
+        AvisoPesado(0.5f);
         yield return Temblar(0.5f, 0.05f);
 
         float destino = Mathf.Clamp(PosPlayer.x, arena.xMin + 2f, arena.xMax - 2f);
@@ -548,15 +638,18 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
         anim.Reproducir(fase2 ? "grande_guardia" : "caida", true);
         const float vuelo = 0.8f;
         float alto = fase2 ? 5f : 6f;
-        for (float t = 0f; t < vuelo; t += Time.deltaTime)
+        // Arco por fisica: sale y llega suave en horizontal, sin tirones.
+        Pose?.Estirar(0.9f, 1.12f, 0.2f);
+        for (float t = 0f; t < vuelo; t += Time.fixedDeltaTime)
         {
             float u = t / vuelo;
-            float x = Mathf.Lerp(inicio.x, destino, u);
+            float x = Mathf.Lerp(inicio.x, destino, u * u * (3f - 2f * u));
             float y = suelo + alto * 4f * u * (1f - u);
-            transform.position = new Vector3(x, Mathf.Max(suelo, y), 0f);
-            yield return null;
+            rb.MovePosition(new Vector2(x, Mathf.Max(suelo, y)));
+            yield return new WaitForFixedUpdate();
         }
-        transform.position = new Vector3(destino, suelo, 0f);
+        rb.position = new Vector2(destino, suelo);
+        Pose?.Estirar(1.15f, 0.85f, 0.2f);
         rb.bodyType = RigidbodyType2D.Dynamic;
         if (marca != null) Destroy(marca.gameObject);
 
@@ -580,10 +673,11 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
     {
         MirarAlPlayer();
         anim.Reproducir("preparar", true);
-        LanzarAviso(0.55f, 0.6f);
-        yield return Esperar(0.55f);
+        AvisoLigero(0.5f);
+        yield return Esperar(0.5f);
 
         anim.Reproducir("tajo", true);
+        Pose?.Soltar();
         Sacudir(0.4f);
         MedialunaSangre.Lanzar(fxMedialuna, (Vector2)transform.position + new Vector2(mirada * 2f, 1.1f), mirada, 10f, danoNormal, transform, carmesi, EstadoPlayer.Sangrado, 30f);
         yield return Esperar(0.5f);
@@ -594,7 +688,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
     {
         tVortice = Time.time;
         anim.Reproducir("grande_rugido", true);
-        LanzarAviso(0.6f, 0.6f);
+        AvisoPesado(0.6f);
         CamaraDinamica.Ampliar(6.4f, 4f);
         yield return Esperar(0.5f);
 
@@ -617,9 +711,9 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
     private IEnumerator Nova()
     {
         tNova = Time.time;
-        rb.linearVelocity = Vector2.zero;
+        Detener();
         anim.Reproducir("grande_rugido", true);
-        LanzarAviso(1.1f, 0.8f);
+        AvisoPesado(1.1f);
         CamaraDinamica.Ampliar(6.6f, 2.5f);
         Vector2 centro = (Vector2)transform.position + Vector2.up * 1.6f;
         yield return AroDeAviso(centro, 5f, 1.1f, 0.05f);
@@ -630,7 +724,8 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
         Sacudir(1.6f);
         var r = GolpearCirculo(centro, 5f, danoFuerte, EstadoPlayer.Sangrado, 50f);
         if (r == PlayerControler.ResultadoDano.Parry) { parado = true; yield break; }
-        yield return Esperar(0.7f);
+        ExponerCorazon();
+        yield return Esperar(0.6f);
     }
 
     // Aro que crece hasta el radio del ataque y parpadea: el aviso de las areas.
@@ -688,27 +783,22 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
         {
             t += Time.deltaTime;
             MirarAlPlayer();
-            rb.linearVelocity = new Vector2(mirada * velocidadDeslizar * (fase2 ? 1.4f : 1f), rb.linearVelocity.y);
+            Acelerar(mirada * velocidadDeslizar * (fase2 ? 1.4f : 1f), 14f);
             yield return null;
         }
-        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        FrenarSuave(18f);
     }
 
     private IEnumerator Pausa(float segundos)
     {
         segundos = PausaDesafio(segundos);
+        FrenarSuave(30f);
         anim.Reproducir(fase2 ? "grande_guardia" : "guardia");
         float t = 0f;
         while (t < segundos)
         {
             t += Time.deltaTime;
             MirarAlPlayer();
-            // Respira: se hincha un poco, que no parezca una foto.
-            if (visual != null)
-            {
-                float s = 1f + 0.015f * Mathf.Sin(Time.time * 3f);
-                visual.localScale = new Vector3(Mathf.Sign(visual.localScale.x) * Mathf.Abs(visual.localScale.y), s, 1f);
-            }
             yield return null;
         }
     }
@@ -717,7 +807,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
     // para castigarlo (y el contraataque del player hace x2).
     private IEnumerator Aturdido(float segundos)
     {
-        rb.linearVelocity = Vector2.zero;
+        Detener();
         anim.Reproducir(fase2 ? "grande_guardia" : "aturdido", true);
         TextoFlotante.Mostrar("Aturdido", (Vector2)transform.position + Vector2.up * 4.2f, new Color(1f, 0.95f, 0.7f), 1f);
         Color previo = colorAviso;
@@ -762,7 +852,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
     private IEnumerator Esperar(float segundos)
     {
         float t = 0f;
-        while (t < segundos) { t += Time.deltaTime; yield return null; }
+        while (t < segundos) { t += Time.deltaTime * (enFrenesi ? ritmoFrenesi : 1f); yield return null; }
     }
 
     private IEnumerator Temblar(float segundos, float fuerza)
@@ -819,30 +909,7 @@ public class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
     private void Estela()
     {
         if (sr == null) return;
-        SpriteRenderer copia = new GameObject("Estela").AddComponent<SpriteRenderer>();
-        copia.sprite = sr.sprite;
-        copia.transform.position = visual.position;
-        copia.transform.localScale = visual.lossyScale;
-        copia.sortingLayerName = sr.sortingLayerName;
-        copia.sortingOrder = sr.sortingOrder - 1;
-        copia.color = new Color(1f, 0.2f, 0.25f, 0.5f);
-        copia.sharedMaterial = EfectoVisual.MaterialSinLuz();
-        copia.gameObject.AddComponent<Desvanecer>().segundos = 0.3f;
+        EstelaFantasma.Lanzar(sr.sprite, visual.position, visual.lossyScale, new Color(1f, 0.2f, 0.25f, 0.5f), 0.3f, sr.sortingLayerName, sr.sortingOrder - 1);
     }
 
-    private class Desvanecer : MonoBehaviour
-    {
-        public float segundos = 0.3f;
-        private float t;
-        private SpriteRenderer s;
-        private void Awake() { s = GetComponent<SpriteRenderer>(); }
-        private void Update()
-        {
-            t += Time.deltaTime;
-            Color c = s.color;
-            c.a = Mathf.Lerp(0.5f, 0f, t / segundos);
-            s.color = c;
-            if (t >= segundos) Destroy(gameObject);
-        }
-    }
 }

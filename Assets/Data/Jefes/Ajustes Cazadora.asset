@@ -21,8 +21,8 @@ MonoBehaviour:
     pausa: {x: 0.45, y: 0.8}
     colorBarra: {r: 0.4, g: 0.52, b: 0.3, a: 1}
     musica:
-      pista: {fileID: 8300000, guid: bb88fc8ccdd779d4c907a440cdfc23ff, type: 3}
-      volumen: 0.6
+      pista: {fileID: 8300000, guid: 79536c1c3119de340a4b78931e0208c3, type: 3}
+      volumen: 0.851
       inicio: 0
       bucle: {x: 0, y: 0}
     luz: {r: 0.78, g: 0.86, b: 0.8, a: 1}
@@ -37,7 +37,7 @@ MonoBehaviour:
     pausa: {x: 0.3, y: 0.6}
     colorBarra: {r: 0.62, g: 0.62, b: 0.3, a: 1}
     musica:
-      pista: {fileID: 8300000, guid: 6cf7dbb19a7004e4ca552946b610634a, type: 3}
+      pista: {fileID: 8300000, guid: 822c628a5788087458c8bf8980440beb, type: 3}
       volumen: 0.62
       inicio: 0
       bucle: {x: 0, y: 0}
@@ -53,7 +53,7 @@ MonoBehaviour:
     pausa: {x: 0.2, y: 0.45}
     colorBarra: {r: 0.75, g: 0.2, b: 0.2, a: 1}
     musica:
-      pista: {fileID: 8300000, guid: e04619a52fba2ff4eac913ddb5277feb, type: 3}
+      pista: {fileID: 8300000, guid: 7e70e8082afbbd94297ca22de12df2e1, type: 3}
       volumen: 0.62
       inicio: 18
       bucle: {x: 0, y: 0}
@@ -309,8 +309,8 @@ MonoBehaviour:
   avisoTajoDialogo: 0.32
   danoTajoDialogo: 0.3
   ventanaParryDialogo: 0.14
-  finBarra1: "\xBFEso fue todo el ruido que sabes hacer?"
-  finBarra2: "Ya casi puedo o\xEDr tu final."
+  finBarra1: "\xBFEso fue todo lo que sabes hacer?"
+  finBarra2: No. No. No. Aun no.
   muerteFinal: ...Por fin... silencio.
   colorNormal: {r: 0.93, g: 0.97, b: 1, a: 1}
   colorFuego: {r: 1, g: 0.55, b: 0.16, a: 1}

@@ -161,6 +161,13 @@ public class EstadosPlayer : MonoBehaviour
         foreach (Barra b in barras) { b.carga = 0f; b.finEfecto = -99f; }
     }
 
+    // Vacia un solo estado (el Crimson Wraith "cosecha" tu sangrado).
+    public void Vaciar(EstadoPlayer e)
+    {
+        if (e == EstadoPlayer.Ninguno) return;
+        barras[(int)e].carga = 0f;
+    }
+
     private void Sumar(EstadoPlayer e, float cantidad)
     {
         Barra b = barras[(int)e];

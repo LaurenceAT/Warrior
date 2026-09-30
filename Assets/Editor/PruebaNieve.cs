@@ -28,6 +28,7 @@ public static class PruebaNieve
     public static void Enemigos() => Lanzar("enemigos", Escena);
     public static void Jefe() => Lanzar("jefe", Escena);
     public static void Cueva() => Lanzar("cueva", "Assets/Scenes/Nivel Cueva.unity");
+    public static void WraithPrueba() => Lanzar("wraith", "Assets/Scenes/Nivel Cueva.unity");
     // Fotos del nivel en los puntos de la variable de entorno VISTAS ("x,y;x,y").
     public static void PintarCuevaPrueba() => Lanzar("pintarcueva", "Assets/Scenes/Nivel Cueva.unity");
     public static void DecoracionPrueba() => Lanzar("decoracion", System.Environment.GetEnvironmentVariable("VISTAS_ESCENA") ?? Escena);
@@ -107,7 +108,7 @@ public static class PruebaNieve
             if (p == null) { Debug.LogError("[Prueba] sin player"); EditorApplication.ExitPlaymode(); yield break; }
             Debug.Log($"[Prueba] modo={modo} player={(p != null)} vida={Vida()}/{p.VidaMaxima}");
             IEnumerator rutina = modo == "sistemas" ? Sistemas() : modo == "nivel" ? Nivel() : modo == "enemigos" ? Enemigos()
-                               : modo == "jefe" ? Jefe() : modo == "vistas" ? Vistas() : modo == "cornisa" ? Cornisa() : modo == "pintar" ? Pintar() : modo == "pintarcueva" ? PintarCueva() : modo == "decoracion" ? PintarDecoracion() : modo == "pociones" ? Pociones() : modo == "portal" ? Portal() : modo == "ronda6" ? Ronda6() : modo == "ronda8" ? Ronda8() : Cueva();
+                               : modo == "jefe" ? Jefe() : modo == "vistas" ? Vistas() : modo == "cornisa" ? Cornisa() : modo == "pintar" ? Pintar() : modo == "pintarcueva" ? PintarCueva() : modo == "decoracion" ? PintarDecoracion() : modo == "pociones" ? Pociones() : modo == "portal" ? Portal() : modo == "ronda6" ? Ronda6() : modo == "ronda8" ? Ronda8() : modo == "wraith" ? Wraith() : Cueva();
             float limite = Time.realtimeSinceStartup + 240f;
             while (rutina.MoveNext())
             {
@@ -1459,6 +1460,75 @@ public static class PruebaNieve
             // Debilidad: sagrado frente a espada sin imbuir.
             IAfinidadElemental af = j;
             Debug.Log($"[Cueva] fase2 sagrado x{af.Multiplicador(Elemento.Sagrado)} oscuro x{af.Multiplicador(Elemento.Oscuro)}");
+        }
+
+        // Crimson Wraith (Ronda12): cada ataque, resistencias, corazon y frenesi.
+        private IEnumerator Wraith()
+        {
+            Application.logMessageReceived += (c, st, t) => { if (t == LogType.Exception || t == LogType.Error) errores++; };
+            Teletransportar(new Vector3(146f, 4.8f, 0f));
+            JefeWraith j = null;
+            for (float t = 0f; t < 6f && (j = Object.FindFirstObjectByType<JefeWraith>()) == null; t += 0.2f) yield return new WaitForSeconds(0.2f);
+            if (j == null) { Debug.LogError("[Wraith] no aparecio"); yield break; }
+            yield return new WaitForSeconds(3.5f);
+            EnemyHealth s = j.GetComponent<EnemyHealth>();
+            IAfinidadElemental af = j;
+            string Tabla() => string.Join(" ", Elementos.Todos.Select(e => $"{Elementos.Nombre(e)}x{af.Multiplicador(e):0.0#}"));
+            Debug.Log($"[Wraith] fase 1: {Tabla()} pose viva={(j.Pose != null)}");
+            curando = true;
+            StartCoroutine(MantenerVivo());
+
+            IEnumerator Forzar(string a, float seg, string cap = null, float cuando = 0.8f)
+            {
+                Curar();
+                vidaMinima = p.VidaMaxima;
+                j.ForzarAtaque(a);
+                float t0 = Time.time;
+                bool hecha = cap == null;
+                while (Time.time - t0 < seg)
+                {
+                    if (!hecha && Time.time - t0 >= cuando) { hecha = true; yield return Captura(cap, true); }
+                    yield return null;
+                }
+                Debug.Log($"[Wraith] {a}: vida minima {vidaMinima}/{p.VidaMaxima} corazon={j.CorazonVisible}");
+            }
+
+            float x0 = j.transform.position.x;
+            yield return Forzar("tajos", 3.5f, "w01_tajos", 0.7f);
+            yield return Forzar("embestida", 3.5f);
+            yield return Forzar("zigzag", 5f, "w02_zigzag", 1.2f);
+            yield return Forzar("raices", 4.5f, "w03_raices", 1.5f);
+            yield return Forzar("onda", 3f, "w04_onda", 0.9f);
+            yield return Forzar("salto", 3f, "w05_salto", 0.9f);
+            EstadosPlayer.Acumular(p, EstadoPlayer.Sangrado, 70f);
+            float antes = EstadosPlayer.Instancia.Fraccion(EstadoPlayer.Sangrado);
+            yield return Forzar("cosecha", 3f, "w06_cosecha", 0.7f);
+            Debug.Log($"[Wraith] cosecha: sangrado {antes:0.00} -> {EstadosPlayer.Instancia.Fraccion(EstadoPlayer.Sangrado):0.00}");
+
+            // Fase 2.
+            s.DanoEstado(s.MaxHealth / 2 + 5);
+            yield return new WaitForSeconds(5f);
+            Debug.Log($"[Wraith] fase 2={j.Fase2}: {Tabla()}");
+            int v0 = s.CurrentHealth;
+            EnemyHealth.ElementoDelGolpe = Elemento.Sangrado;
+            s.TakeDamage(100, p.transform.position, 0f);
+            Debug.Log($"[Wraith] golpe de 100 con sangrado: vida {v0} -> {s.CurrentHealth} (absorbe)");
+            yield return Forzar("guadana", 3f, "w07_guadana", 0.75f);
+            yield return Forzar("semillas", 4f, "w08_semillas", 1.3f);
+            yield return Forzar("transfusion", 6f, "w09_transfusion", 2f);
+            yield return Forzar("nova", 3.5f, "w10_nova", 1.9f);
+            yield return Forzar("lluvia", 5f);
+            // Frenesi: con poca vida.
+            s.DanoEstado(s.CurrentHealth - Mathf.RoundToInt(s.MaxHealth * 0.15f));
+            float tf = Time.time;
+            while (!j.EnFrenesi && Time.time - tf < 8f) yield return null;
+            yield return new WaitForSeconds(1.5f);
+            yield return Captura("w11_frenesi", true);
+            Debug.Log($"[Wraith] frenesi={j.EnFrenesi}");
+            while (j.EnFrenesi && Time.time - tf < 20f) yield return null;
+            yield return new WaitForSeconds(0.5f);
+            Debug.Log($"[Wraith] tras el frenesi: agotado con corazon={j.CorazonVisible} errores={errores}");
+            curando = false;
         }
 
         // ------------------------------------------------------------------ Ayudas

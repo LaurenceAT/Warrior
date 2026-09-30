@@ -18,21 +18,43 @@ MonoBehaviour:
   orden: 1
   imagen: {fileID: 21300000, guid: e44b3befa9dc6704da7b24bcfd5cad5a, type: 3}
   afinidades:
+  - elemento: 0
+    multiplicador: 1.3
+    cuando: Fase 1
+  - elemento: 1
+    multiplicador: 1.2
+    cuando: Fase 1
+  - elemento: 4
+    multiplicador: 0.6
+    cuando: Fase 1
+  - elemento: 2
+    multiplicador: 0.7
+    cuando: Fase 1
   - elemento: 3
     multiplicador: 1.8
     cuando: Fase 2
-  - elemento: 2
-    multiplicador: 0.4
+  - elemento: 0
+    multiplicador: 1.5
     cuando: Fase 2
-  notaAfinidades: "En la fase 1 todo le hace el da\xF1o normal. En la fase 2 su coraza
-    resiste la espada sin imbuir (x0.6): hay que imbuirla."
+  - elemento: 1
+    multiplicador: 0.8
+    cuando: Fase 2
+  - elemento: 2
+    multiplicador: 0.3
+    cuando: Fase 2
+  - elemento: 4
+    multiplicador: 0.2
+    cuando: Fase 2
+  notaAfinidades: "Fase 2: su coraza resiste la espada sin imbuir (x0.6) y el sangrado
+    lo cura. Tras Nova, Lluvia o Frenes\xED su coraz\xF3n brilla: recibe x1.5 de
+    todo."
   informacion: "Cae del techo al empezar: un parry justo al aterrizar lo deja aturdido.\n<b>Fase
-    1</b>: alza la garra y encadena dos zarpazos; embiste cruzando la arena; lanza
-    ondas de sangre por el suelo (s\xE1ltalas); hace brotar pilares de sangre bajo
-    tus pies y suelta orbes que te persiguen (un parry los devuelve). Pilares y orbes
-    causan sangrado.\n<b>Fase 2</b> (a mitad de vida): toma su forma grande y la
-    arena se ti\xF1e de rojo. Zarpazo gigante con ondas, lluvia de fuego, teletransporte
-    a tu espalda y pilares en cadena, con menos pausa entre ataques."
+    1</b>: zarpazos, embestida (y Zigzag de ida y vuelta), ondas de sangre, pilares,
+    orbes, ra\xEDces que brotan por donde pasas y Cosecha: si tu sangrado va por
+    la mitad, lo hace estallar.\n<b>Fase 2</b> (a mitad de vida): forma grande. Guada\xF1a
+    doble (adelante y atr\xE1s), lluvia de fuego, teletransporte, pilares en cadena,
+    Semillas del vac\xEDo, Transfusi\xF3n (un hilo que lo cura: al\xE9jate o para
+    el pulso) y, con poca vida, Frenes\xED."
   historia: "Nadie recuerda su rostro, porque no tiene uno que la mente acepte. Crimson
     Wraith fue algo m\xE1s antiguo que la cueva, y la monta\xF1a se cerr\xF3 a su
     alrededor como una herida que cicatriza sobre una astilla. Se alimenta de la
@@ -45,3 +67,5 @@ MonoBehaviour:
   multVida: 1.5
   multDano: 1.3
   multVelocidad: 1.35
+  secreto: 0
+  requisitos: []

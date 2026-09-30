@@ -41,6 +41,8 @@ public static class ActualizarProyecto
     public static void Ronda10() => global::Ronda10.Todo();
     // Undecima ronda: parry de la Cazadora, escudo a golpes y sonidos nuevos.
     public static void Ronda11() => global::Ronda11.Todo();
+    // Duodecima ronda: Crimson Wraith mas fluido, poderes nuevos y resistencias.
+    public static void Ronda12() => global::Ronda12.Todo();
 
     public static void Ronda5()
     {
