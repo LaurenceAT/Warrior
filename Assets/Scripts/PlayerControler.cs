@@ -3992,6 +3992,7 @@ public class PlayerControler : MonoBehaviour
     {
         SiguienteGolpeMagico = false;
         SiguienteGolpeFisico = false;
+        CausaMuerte.Golpe(atacante);
         // Desafio en modo Dificil: el jefe pega mas (1 fuera de el).
         damage = Mathf.RoundToInt(damage * Desafio.MultDano);
         damage = ConResistencia(damage, tipo == TipoDano.Magico);
@@ -4063,6 +4064,7 @@ public class PlayerControler : MonoBehaviour
     // Devuelve false si el golpe no ha entrado (invulnerable, barrido, estocada).
     public bool TakeDamage(int damage)
     {
+        CausaMuerte.Golpe(null);
         return RecibirDano(ConResistencia(damage, false));
     }
 

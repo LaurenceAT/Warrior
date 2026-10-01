@@ -73,12 +73,14 @@ public class MenuHoguera : MonoBehaviour
 
     public static void Abrir() => Abrir(null, Object.FindFirstObjectByType<PlayerControler>());
 
-    public static void Abrir(Hoguera h, PlayerControler p)
+    // "aviso": una linea al abrir (por ejemplo, "Hoguera activada").
+    public static void Abrir(Hoguera h, PlayerControler p, string aviso = null)
     {
         if (instancia == null) instancia = Crear();
         instancia.hoguera = h;
         instancia.player = p;
         instancia.AbrirInterno();
+        if (!string.IsNullOrEmpty(aviso)) instancia.avisoPrincipal.text = aviso;
     }
 
     private void AbrirInterno()
@@ -221,12 +223,13 @@ public class MenuHoguera : MonoBehaviour
         }
     }
 
-    private void AbrirEquipo() => Mostrar(Desafio.Activo ? Pagina.Aplicar : Pagina.Equipo);
+    // En todos los niveles: lo recogido se aplica aqui (la pagina vieja de Equipo ya no se usa).
+    private void AbrirEquipo() => Mostrar(Pagina.Aplicar);
 
     private void Aplicar(FilaAplicar f)
     {
-        if (Desafio.PorAplicar(f.objeto) <= 0) { SonidoMenu.Error(); return; }
-        if (!Desafio.Aplicar(f.objeto)) { avisoAplicar.text = $"{Equipo.Nombre(f.objeto)}: ya está al máximo"; SonidoMenu.Error(); return; }
+        if (Inventario.PorAplicar(f.objeto) <= 0) { SonidoMenu.Error(); return; }
+        if (!Inventario.Aplicar(f.objeto)) { avisoAplicar.text = $"{Equipo.Nombre(f.objeto)}: ya está al máximo"; SonidoMenu.Error(); return; }
         avisoAplicar.text = $"{Equipo.Nombre(f.objeto)} aplicado";
         Aplicado((RectTransform)f.boton.transform);
     }
@@ -235,8 +238,8 @@ public class MenuHoguera : MonoBehaviour
     {
         int n = 0;
         foreach (Equipo.Objeto o in Desafio.ObjetosMejora)
-            while (Desafio.PorAplicar(o) > 0 && Desafio.Aplicar(o)) n++;
-        if (n == 0) { avisoAplicar.text = Desafio.TotalPorAplicar > 0 ? "Lo que queda ya está al máximo" : "No hay nada por aplicar"; SonidoMenu.Error(); return; }
+            while (Inventario.PorAplicar(o) > 0 && Inventario.Aplicar(o)) n++;
+        if (n == 0) { avisoAplicar.text = Inventario.Total > 0 ? "Lo que queda ya está al máximo" : "No hay nada por aplicar"; SonidoMenu.Error(); return; }
         avisoAplicar.text = n == 1 ? "1 mejora aplicada" : $"{n} mejoras aplicadas";
         Aplicado((RectTransform)botonAplicarTodo.transform);
     }
@@ -268,16 +271,14 @@ public class MenuHoguera : MonoBehaviour
     {
         if (botonEquipo != null)
         {
-            int total = Desafio.TotalPorAplicar;
-            botonEquipo.GetComponentInChildren<TextMeshProUGUI>().text = Desafio.Activo
-                ? (total > 0 ? $"Aplicar mejoras  <color=#f0d49a>({total})</color>" : "Aplicar mejoras")
-                : "Mejorar equipamiento";
+            int total = Inventario.Total;
+            botonEquipo.GetComponentInChildren<TextMeshProUGUI>().text = total > 0 ? $"Aplicar mejoras  <color=#f0d49a>({total})</color>" : "Aplicar mejoras";
         }
-        if (paginaAplicar == null || !Desafio.Activo) return;
+        if (paginaAplicar == null) return;
         bool alguno = false;
         foreach (FilaAplicar f in filasAplicar)
         {
-            int n = Desafio.PorAplicar(f.objeto);
+            int n = Inventario.PorAplicar(f.objeto);
             f.boton.gameObject.SetActive(n > 0);
             if (n <= 0) continue;
             alguno = true;
@@ -529,7 +530,7 @@ public class MenuHoguera : MonoBehaviour
         destelloAplicar = EstiloMenu.Caja("Destello", panel, Color.clear);
         EstiloMenu.Estirar(destelloAplicar.rectTransform);
 
-        TextMeshProUGUI cab = EstiloMenu.Texto("Lo que has recogido o comprado en este desafío. Cada objeto se aplica aquí.", panel, 23, new Color(0.85f, 0.8f, 0.72f));
+        TextMeshProUGUI cab = EstiloMenu.Texto("Objetos recogidos y aún sin aplicar. Cada uno se aplica aquí.", panel, 23, new Color(0.85f, 0.8f, 0.72f));
         EstiloMenu.Arriba(cab.rectTransform, -112f, 34f);
 
         RecursosRPG r = RecursosRPG.Get();
@@ -542,7 +543,7 @@ public class MenuHoguera : MonoBehaviour
             f.titulo.richText = true;
             filasAplicar.Add(f);
         }
-        textoSinObjetos = EstiloMenu.Texto("No tienes objetos por aplicar.\n<size=80%>Los del cofre y el tótem se guardan aquí hasta que los apliques.</size>", col.transform, 26, EstiloMenu.TextoApagado);
+        textoSinObjetos = EstiloMenu.Texto("No tienes objetos por aplicar.\n<size=80%>Lo que encuentres en cofres (o compres en el tótem) espera aquí.</size>", col.transform, 26, EstiloMenu.TextoApagado);
         textoSinObjetos.fontStyle = FontStyles.Italic;
         LayoutElement le = textoSinObjetos.gameObject.AddComponent<LayoutElement>();
         le.preferredHeight = le.minHeight = 120f;

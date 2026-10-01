@@ -31,7 +31,8 @@ public class ModoDesafio : MonoBehaviour
     private void Awake()
     {
         Desafio.Reiniciando = false;
-        IndicadorInventario.Crear();
+        IndicadorInventario.Asegurar();
+        IndicadorDeseo.Asegurar();
         arena = FindFirstObjectByType<ArenaJefe>();
         if (arena == null) arena = FindFirstObjectByType<ArenaCazadora>();
         if (arena == null) { Debug.LogWarning("[Desafio] La escena no tiene ArenaJefe"); return; }

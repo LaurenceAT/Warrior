@@ -100,32 +100,23 @@ public class CofreMejora : MonoBehaviour, IInteractuable
         ParticulasFx.Rafaga((Vector2)transform.position + Vector2.up * 0.3f, 20, colorBrillo, Color.white, new Vector2(1f, 3f), -0.2f,
                             new Vector2(0.04f, 0.09f), new Vector2(0.4f, 0.8f), 60f, 90f);
         if (almas > 0) OrbeAlma.Soltar((Vector2)transform.position + Vector2.up * 0.6f, almas);
-        // En un desafio no se aplican al momento: van al inventario (se aplican en la hoguera).
-        bool desafio = Desafio.Activo;
-        if (desafio)
-        {
-            Desafio.GuardarObjeto(objeto, cantidad);
-            foreach (Equipo.Objeto o in extra) Desafio.GuardarObjeto(o);
-        }
-        else
-        {
-            Equipo.Sumar(objeto, cantidad);
-            foreach (Equipo.Objeto o in extra) Equipo.Sumar(o);
-        }
+        // No se aplican al momento: van al inventario (se aplican en la hoguera).
+        Inventario.Guardar(objeto, cantidad);
+        foreach (Equipo.Objeto o in extra) Inventario.Guardar(o);
         string nombre = Equipo.Nombre(objeto) + (cantidad > 1 ? " x" + cantidad : "");
         Sprite icono = RecursosRPG.Get().Icono(Equipo.ClaveIcono(objeto));
-        string texto = desafio ? AvisoDesafio : Equipo.Descripcion(objeto);
+        string texto = AvisoDesafio;
         if (p != null) p.LevantarObjeto(icono, nombre, texto);
         else AvisoObjeto.Mostrar(icono, nombre, texto);
         // Los demas, uno detras de otro.
         foreach (Equipo.Objeto o in extra)
         {
             yield return new WaitForSecondsRealtime(2.2f);
-            AvisoObjeto.Mostrar(RecursosRPG.Get().Icono(Equipo.ClaveIcono(o)), Equipo.Nombre(o), desafio ? AvisoDesafio : Equipo.Descripcion(o));
+            AvisoObjeto.Mostrar(RecursosRPG.Get().Icono(Equipo.ClaveIcono(o)), Equipo.Nombre(o), AvisoDesafio);
         }
     }
 
-    public const string AvisoDesafio = "Guardado en tu inventario. Aplícalo en la hoguera.";
+    public const string AvisoDesafio = Inventario.Aviso;
 
     // Lo usa el modo desafio para montar su cofre a partir de uno del nivel.
     public void Configurar(string nuevaClave, Equipo.Objeto principal, Equipo.Objeto[] otros, int nuevasAlmas)

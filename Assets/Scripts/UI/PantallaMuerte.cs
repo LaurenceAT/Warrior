@@ -5,39 +5,17 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 // Pantalla de muerte: la imagen se funde a negro, aparece "HAS MUERTO" en rojo y,
-// debajo, una frase (una burla del jefe si se muere contra el, o una frase de la
-// cueva). Se queda en negro hasta que el jugador pulsa cualquier boton; entonces
-// el player reaparece detras y la pantalla se abre.
+// debajo, una frase burlona segun la causa (TextosMuerte, en Resources). Se
+// queda en negro hasta que el jugador pulsa cualquier boton; entonces el player
+// reaparece detras y la pantalla se abre.
 //
 // GameManager espera con EsperarContinuar() antes de hacer reaparecer al player.
 public class PantallaMuerte : MonoBehaviour
 {
-    // Burlas del jefe que se esta combatiendo (las pone su arena). Si no hay, las
-    // del Espectro Carmesi.
+    // Ya no se usan (las frases estan en TextosMuerte): se conservan porque las
+    // arenas y los niveles aun las rellenan.
     public static string[] BurlasJefe;
-    // Frases del nivel (las pone DatosNivel). Si no hay, las de la cueva.
     public static string[] FrasesNivel;
-
-    private static readonly string[] BurlasWraith =
-    {
-        "«Tu sangre ya me pertenece.»",
-        "«Vuelve. La niebla siempre te trae de nuevo a mí.»",
-        "«¿Eso era todo tu acero?»",
-        "«Otro caballero más para adornar mi cueva.»",
-        "«Arrodíllate. Ya sabes cómo se hace.»",
-        "«Tu mano tiembla. Puedo olerlo.»",
-        "«Cada vez que caes, mi hambre crece.»",
-        "«Ni siquiera has visto mi verdadera forma.»",
-        "«Corre hacia la hoguera. Te estaré esperando.»",
-    };
-
-    private static readonly string[] FrasesCueva =
-    {
-        "La cueva no perdona los pasos en falso.",
-        "Las sombras recuerdan cada error.",
-        "Levántate, caballero. Aún no has terminado.",
-        "Algo carmesí se alimenta de tu caída.",
-    };
 
     // Tiempo minimo en negro antes de admitir el boton (que no se salte sin leer).
     private const float EsperaMinima = 1.5f;
@@ -53,9 +31,8 @@ public class PantallaMuerte : MonoBehaviour
     public static void Mostrar(bool contraJefe)
     {
         if (instancia == null) instancia = Crear();
-        string[] lista = contraJefe ? (BurlasJefe != null && BurlasJefe.Length > 0 ? BurlasJefe : BurlasWraith)
-                                    : (FrasesNivel != null && FrasesNivel.Length > 0 ? FrasesNivel : FrasesCueva);
-        instancia.frase.text = lista[Random.Range(0, lista.Length)];
+        TextosMuerte textos = TextosMuerte.Get();
+        instancia.frase.text = textos != null ? textos.Elegir(CausaMuerte.Ahora()) : "Has muerto.";
         // En un desafio: lo nuevo que se ha descubierto del jefe (Bitacora).
         instancia.resumen.text = Desafio.Activo ? Bitacora.TomarResumen(Desafio.Ficha) : Bitacora.TomarResumen(null);
         instancia.activa = true;
@@ -177,6 +154,8 @@ public class PantallaMuerte : MonoBehaviour
         p.titulo = Texto(go.transform, "HAS MUERTO", 120, new Color(0.62f, 0.05f, 0.08f), new Vector2(0.5f, 0.55f));
         p.frase = Texto(go.transform, "", 34, new Color(0.85f, 0.78f, 0.74f), new Vector2(0.5f, 0.42f));
         p.frase.fontStyle = FontStyles.Italic;
+        p.frase.enableWordWrapping = true;
+        p.frase.rectTransform.sizeDelta = new Vector2(1500f, 160f);
         p.aviso = Texto(go.transform, "Pulsa cualquier botón para continuar", 26, new Color(0.7f, 0.66f, 0.62f), new Vector2(0.5f, 0.16f));
         p.aviso.characterSpacing = 6f;
         p.resumen = Texto(go.transform, "", 24, new Color(0.95f, 0.8f, 0.5f), new Vector2(0.5f, 0.3f));

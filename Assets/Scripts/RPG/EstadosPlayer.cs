@@ -197,13 +197,13 @@ public class EstadosPlayer : MonoBehaviour
                 if (efectoSangrado != null)
                     EfectoVisual.Crear(efectoSangrado, (Vector2)transform.position + Vector2.up * 0.2f, 1.1f, Color.white);
                 Sonido.Reproducir("jugador_sangrado");
-                Danar(Mathf.RoundToInt(max * a.danoFraccion) + a.danoFijo);
+                Danar(Mathf.RoundToInt(max * a.danoFraccion) + a.danoFijo, EstadoPlayer.Sangrado);
                 break;
             case EstadoPlayer.Congelacion:
                 Sonido.Reproducir("hielo_congelar");
                 ParticulasFx.Rafaga((Vector2)transform.position + Vector2.up * 0.4f, 22, new Color(0.85f, 0.95f, 1f), c,
                                     new Vector2(1f, 3f), 0.8f, new Vector2(0.05f, 0.11f), new Vector2(0.4f, 0.8f));
-                Danar(Mathf.RoundToInt(max * a.danoFraccion) + a.danoFijo);
+                Danar(Mathf.RoundToInt(max * a.danoFraccion) + a.danoFijo, EstadoPlayer.Congelacion);
                 break;
             case EstadoPlayer.Quemadura:
                 // El dano se reparte en toques durante el efecto (Update).
@@ -212,8 +212,9 @@ public class EstadosPlayer : MonoBehaviour
         }
     }
 
-    private void Danar(int dano)
+    private void Danar(int dano, EstadoPlayer e)
     {
+        CausaMuerte.Estado(e);
         if (player != null) player.DanoEstado(Mathf.Max(1, dano));
     }
 
@@ -233,7 +234,7 @@ public class EstadosPlayer : MonoBehaviour
                     b.siguienteTick = ahora + quemaduraIntervalo;
                     int toques = Mathf.Max(1, Mathf.RoundToInt(a.duracionEfecto / Mathf.Max(0.05f, quemaduraIntervalo)));
                     int max = player != null ? player.VidaMaxima : 100;
-                    Danar(Mathf.RoundToInt((max * a.danoFraccion + a.danoFijo) / toques));
+                    Danar(Mathf.RoundToInt((max * a.danoFraccion + a.danoFijo) / toques), EstadoPlayer.Quemadura);
                     ParticulasFx.Rafaga((Vector2)transform.position + new Vector2(UnityEngine.Random.Range(-0.3f, 0.3f), 0.2f), 4,
                                         new Color(1f, 0.6f, 0.15f), new Color(1f, 0.2f, 0.05f), new Vector2(0.6f, 1.4f), -0.6f,
                                         new Vector2(0.05f, 0.1f), new Vector2(0.3f, 0.6f), 60f, 90f);

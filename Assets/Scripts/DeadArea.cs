@@ -17,6 +17,7 @@ public class DeadArea : MonoBehaviour
             player = other.gameObject.GetComponent<PlayerControler>();
 
             // EJECUTA LA MUERTE DEL JUGADOR
+            CausaMuerte.Caida(); // para la frase de la pantalla de muerte
             player.Die();
 
             // INICIA EL PROCESO DE REAPARICIÓN DEL JUGADOR

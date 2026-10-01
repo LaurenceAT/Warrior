@@ -106,8 +106,10 @@ public class FichaJefe : ScriptableObject
     [Tooltip("Al reiniciar el desafio desde la pausa, el dialogo de entrada sale como la primera vez (si no, como al reintentar tras morir).")]
     public bool dialogoAlReiniciar;
 
-    [Header("Cofre de la arena")]
+    [Header("Cofre de la arena y totem (todo lo de este desafio, aqui)")]
     public int almasCofre = 2500;
+    [Tooltip("Multiplicador de los precios del totem en este desafio (1 = los de la tienda).")]
+    public float multPrecios = 1f;
     public Equipo.Objeto[] objetosCofre = { Equipo.Objeto.PiedraForja, Equipo.Objeto.LagrimaCarmesi, Equipo.Objeto.FrascoSangre };
 
     [Header("Modo Dificil (solo numeros: mismos ataques y avisos)")]

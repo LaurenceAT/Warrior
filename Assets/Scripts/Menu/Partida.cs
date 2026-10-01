@@ -38,8 +38,11 @@ public static class Partida
         public int piedrasForja, lagrimas, nivelEspada, nivelFrascos;
         public int version;
         public int lagrimasCuracion, lagrimasMana, nivelCuracion, nivelMana;
-        // Cargas extra de cada frasco.
+        // Cargas extra de cada frasco (ya aplicadas).
         public int frascosSangre, frascosMana;
+        // Frascos recogidos y aun sin aplicar en la hoguera (partidas viejas: 0).
+        // Las piedras y lagrimas sin usar ya son "por aplicar" (piedrasForja...).
+        public int frascosSangrePendientes, frascosManaPendientes;
         // Pistas de las estatuas ya leidas (el libro de pistas del menu de pausa).
         public List<PistaLeida> pistas = new List<PistaLeida>();
         // Manchas de sangre que deja el player al morir, por nivel.

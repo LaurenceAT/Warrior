@@ -19,6 +19,17 @@ public class PantallaCarga : MonoBehaviour
     private CanvasGroup grupoTexto;
     private RectTransform relleno;
     private TextMeshProUGUI textoPorcentaje, textoTitulo;
+    private bool animarPuntos;
+
+    // Los puntos aparecen de uno en uno hasta el maximo y vuelven a empezar (AjustesInterfaz).
+    private void Update()
+    {
+        if (!animarPuntos || textoTitulo == null) return;
+        AjustesInterfaz ai = AjustesInterfaz.Get();
+        int max = Mathf.Max(1, ai.maximoPuntos);
+        int n = 1 + Mathf.FloorToInt(Time.unscaledTime * Mathf.Max(0.1f, ai.puntosPorSegundo)) % max;
+        textoTitulo.text = "Cargando" + new string('.', n);
+    }
 
     // Nombre de la escena (tal como sale en Build Settings) o vacio para la
     // siguiente de la lista. Si no hay siguiente, vuelve a la primera.
@@ -27,7 +38,7 @@ public class PantallaCarga : MonoBehaviour
     {
         if (Cargando) return;
         PantallaCarga p = Crear();
-        if (!string.IsNullOrEmpty(titulo)) p.textoTitulo.text = titulo;
+        if (!string.IsNullOrEmpty(titulo)) { p.textoTitulo.text = titulo; p.animarPuntos = false; }
         p.StartCoroutine(Secuencia(IndiceDestino(escena), fundido));
     }
 
@@ -145,6 +156,8 @@ public class PantallaCarga : MonoBehaviour
         cs.matchWidthOrHeight = 0.5f;
 
         PantallaCarga p = go.AddComponent<PantallaCarga>();
+        // Partida normal: "Cargando......." con los puntos animados. Desafios: "Cargando nivel...".
+        p.animarPuntos = !Desafio.Activo;
         p.grupo = go.AddComponent<CanvasGroup>();
         p.grupo.alpha = 0f;
         p.grupo.blocksRaycasts = true;

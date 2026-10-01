@@ -94,6 +94,10 @@ public static class PruebaNieve
         {
             carpeta = Path.Combine(Directory.GetCurrentDirectory(), "PruebaNieve");
             Directory.CreateDirectory(carpeta);
+            // Nunca la carpeta real del progreso (las pruebas que lo necesitan ponen la suya).
+            Partida.CarpetaPruebas = Path.Combine(carpeta, "PartidasPrueba");
+            Directory.CreateDirectory(Partida.CarpetaPruebas);
+            Globales.Recargar();
             Progreso.Reiniciar();
             PlayerPrefs.DeleteKey("cofre_Nivel Nieve_cofre");
             if (modo == "menu" || modo == "desafio" || modo == "desafio2" || modo == "cazadora" || modo == "cazadora2")
@@ -1201,7 +1205,9 @@ public static class PruebaNieve
             Debug.Log($"[Cazadora] completado={Globales.Completado("blind_huntress", false)} logro={Globales.TieneLogro("prueba_bosque")} " +
                       $"dificil desbloqueado={Desafio.DificilDesbloqueado(caz)} logros={Logros.Desbloqueados()}/{Logros.Total()} errores={errores}");
             DepuracionCazadora.VerCajas = false;
-            Partida.CarpetaPruebas = null;
+            // La carpeta de pruebas se queda puesta: lo que se guarde al salir no toca el progreso real.
+            Partida.Descargar();
+            Globales.GuardarPendiente();
         }
 
         // Parry de la Cazadora y escudo a golpes (con y sin oscuridad).
@@ -1308,7 +1314,9 @@ public static class PruebaNieve
             p.InvulnerableExterno = false;
             DepuracionCazadora.VerCajas = false;
             Debug.Log($"[Cazadora2] fin errores={errores}");
-            Partida.CarpetaPruebas = null;
+            // La carpeta de pruebas se queda puesta: lo que se guarde al salir no toca el progreso real.
+            Partida.Descargar();
+            Globales.GuardarPendiente();
         }
 
         private IEnumerator PruebaDesafioDificil()
@@ -1416,7 +1424,9 @@ public static class PruebaNieve
             p = Object.FindFirstObjectByType<PlayerControler>();
             Debug.Log($"[Menu] cargada: player={p?.transform.position} almas={Progreso.Almas} checkpoint={GameManager.Instance.hasCheckPointActive}");
             yield return Captura("m4_cargada", true);
-            Partida.CarpetaPruebas = null;
+            // La carpeta de pruebas se queda puesta: lo que se guarde al salir no toca el progreso real.
+            Partida.Descargar();
+            Globales.GuardarPendiente();
         }
 
         private IEnumerator EsperarEscena(string nombre)

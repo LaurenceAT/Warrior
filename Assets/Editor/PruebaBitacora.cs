@@ -93,7 +93,9 @@ public static class PruebaBitacora
             else Ok("sin errores ni excepciones en la consola");
             Debug.Log($"[Bitacora] RESULTADO {modo}: {ok} OK, {fallos} FALLOS");
             Time.timeScale = 1f;
-            Partida.CarpetaPruebas = null;
+            // La carpeta de pruebas se queda puesta: lo que se guarde al salir no toca el progreso real.
+            Partida.Descargar();
+            Globales.GuardarPendiente();
             EditorApplication.ExitPlaymode();
         }
 

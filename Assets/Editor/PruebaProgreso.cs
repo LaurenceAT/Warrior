@@ -212,7 +212,9 @@ public static class PruebaProgreso
 
             Comprobar(errores == 0, $"sin errores en la consola ({errores})");
             Debug.Log($"[Progreso] RESULTADO codigo: {ok} OK, {fallos} FALLOS");
-            Partida.CarpetaPruebas = null;
+            // La carpeta de pruebas se queda puesta: lo que se guarde al salir no toca el progreso real.
+            Partida.Descargar();
+            Globales.GuardarPendiente();
             EditorApplication.ExitPlaymode();
         }
 

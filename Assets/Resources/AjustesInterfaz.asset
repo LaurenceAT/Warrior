@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a5edbc92a6aee148bf773e028ba9941, type: 3}
+  m_Name: AjustesInterfaz
+  m_EditorClassIdentifier: 
+  margen: 40
+  anchoPila: 440
+  alturaFrascos: 28
+  alturaAviso: 112
+  anchoAlmas: 250
+  espacioMarcas: 200
+  holgura: 30
+  anchoBarraMaximo: 900
+  anchoBarraMinimo: 420
+  alturaBarra: 82
+  alturaBarraElevada: 210
+  radioLatido: 4
+  velocidadLatido: 1.2
+  intensidadLatido: 0.08
+  anchoDeseo: 330
+  margenArribaDeseo: 30
+  puntosPorSegundo: 5
+  maximoPuntos: 7

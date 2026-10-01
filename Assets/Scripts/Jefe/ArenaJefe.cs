@@ -310,11 +310,12 @@ public class ArenaJefe : MonoBehaviour
         yield return new WaitForSeconds(2.5f);
         foreach (Equipo.Objeto o in recompensa)
         {
-            Equipo.Sumar(o);
+            // Al inventario: se aplica en la hoguera.
+            Inventario.Guardar(o);
             PlayerControler p = FindFirstObjectByType<PlayerControler>();
             Sprite icono = RecursosRPG.Get().Icono(Equipo.ClaveIcono(o));
-            if (p == null) { AvisoObjeto.Mostrar(icono, Equipo.Nombre(o), Equipo.Descripcion(o)); continue; }
-            p.LevantarObjeto(icono, Equipo.Nombre(o), Equipo.Descripcion(o));
+            if (p == null) { AvisoObjeto.Mostrar(icono, Equipo.Nombre(o), Inventario.Aviso); continue; }
+            p.LevantarObjeto(icono, Equipo.Nombre(o), Inventario.Aviso);
             yield return new WaitForSeconds(0.5f);
             while (p != null && p.LevantandoObjeto) yield return null;
             yield return new WaitForSeconds(0.3f);

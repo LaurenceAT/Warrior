@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Barra de vida grande del jefe, abajo en el centro, con su nombre encima. Mas
+// Barra de vida grande del jefe, abajo y larga, con su nombre encima. Mas
 // ancha y distinta a las barras pequenas de los enemigos comunes:
 //   - Relleno carmesi y, detras, un rastro claro que baja con retraso (se ve
 //     cuanto ha quitado el ultimo golpe).
@@ -16,7 +16,18 @@ public class BarraJefe : MonoBehaviour
     private CanvasGroup grupo;
     private float objetivo = 1f, valorRastro = 1f, esperaRastro;
     private float alfaObjetivo;
-    private RectTransform marco;
+    private RectTransform marco, lienzo;
+
+    // Larga, desde la izquierda hasta la columna de la derecha (AjustesInterfaz).
+    private void Colocar()
+    {
+        if (marco == null || lienzo == null) return;
+        AjustesInterfaz.Get().Barra(lienzo.rect.width, out float x, out float ancho, out float altura);
+        marco.sizeDelta = new Vector2(ancho, 22f);
+        marco.anchoredPosition = new Vector2(x, altura);
+    }
+
+    private void LateUpdate() => Colocar();
 
     // Iconos de los estados del jefe (quemado, sangrado...), bajo la barra.
     public void PonerEstados(EnemyHealth salud)
@@ -41,11 +52,15 @@ public class BarraJefe : MonoBehaviour
         b.grupo = go.AddComponent<CanvasGroup>();
         b.grupo.alpha = 0f;
 
+        // Abajo, larga, hasta la columna de la derecha (AjustesInterfaz): se ajusta
+        // cada fotograma al tamano real de la pantalla.
         RectTransform marco = b.Caja("Marco", go.transform, new Color(0.55f, 0.45f, 0.4f, 0.9f));
-        marco.anchorMin = new Vector2(0.18f, 0.075f);
-        marco.anchorMax = new Vector2(0.82f, 0.075f);
-        marco.sizeDelta = new Vector2(0f, 22f);
+        marco.anchorMin = marco.anchorMax = new Vector2(0f, 0f);
+        marco.pivot = new Vector2(0f, 0f);
+        marco.sizeDelta = new Vector2(1000f, 22f);
         b.marco = marco;
+        b.lienzo = (RectTransform)go.transform;
+        b.Colocar();
 
         RectTransform fondo = b.Caja("Fondo", marco, new Color(0.05f, 0.02f, 0.03f, 1f));
         Estirar(fondo, 2f);

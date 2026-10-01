@@ -165,6 +165,72 @@ public static class Equipo
         }
     }
 
+    // ------------------------------------------------------------------ Por aplicar (partida normal)
+
+    // Lo recogido que aun no se ha aplicado en la hoguera ("Aplicar mejoras").
+    // Piedras y lagrimas: las que hay sin gastar. Frascos: sus pendientes.
+    private static int sesionFrascoSangrePend, sesionFrascoManaPend;
+
+    public static int Pendientes(Objeto o)
+    {
+        Partida.Datos d = Partida.Actual;
+        switch (o)
+        {
+            case Objeto.PiedraForja: return Cantidad(o) / Mathf.Max(1, CosteEspada);
+            case Objeto.LagrimaCarmesi:
+            case Objeto.LagrimaCeleste: return Cantidad(o) / Mathf.Max(1, CosteFrascos);
+            case Objeto.FrascoSangre: return d != null ? d.frascosSangrePendientes : sesionFrascoSangrePend;
+            case Objeto.FrascoMana: return d != null ? d.frascosManaPendientes : sesionFrascoManaPend;
+            default: return 0;
+        }
+    }
+
+    // Recoger un objeto: va al inventario (no se aplica todavia).
+    public static void GuardarPendiente(Objeto o, int cantidad = 1)
+    {
+        if (cantidad <= 0) return;
+        Partida.Datos d = Partida.Actual;
+        switch (o)
+        {
+            case Objeto.FrascoSangre:
+                if (d != null) d.frascosSangrePendientes += cantidad; else sesionFrascoSangrePend += cantidad;
+                Partida.Guardar();
+                AlCambiar?.Invoke();
+                break;
+            case Objeto.FrascoMana:
+                if (d != null) d.frascosManaPendientes += cantidad; else sesionFrascoManaPend += cantidad;
+                Partida.Guardar();
+                AlCambiar?.Invoke();
+                break;
+            case Objeto.PiedraForja: Sumar(o, cantidad * Mathf.Max(1, CosteEspada)); break;
+            case Objeto.LagrimaCarmesi:
+            case Objeto.LagrimaCeleste: Sumar(o, cantidad * Mathf.Max(1, CosteFrascos)); break;
+            default: Sumar(o, cantidad); break; // la vieja lagrima sagrada: una de cada
+        }
+    }
+
+    // Aplicar uno en la hoguera. False si no hay o ya esta al maximo.
+    public static bool AplicarPendiente(Objeto o)
+    {
+        if (Pendientes(o) <= 0 || AlMaximo(o)) return false;
+        Partida.Datos d = Partida.Actual;
+        switch (o)
+        {
+            case Objeto.PiedraForja: return MejorarEspada();
+            case Objeto.LagrimaCarmesi: return MejorarCuracion();
+            case Objeto.LagrimaCeleste: return MejorarMana();
+            case Objeto.FrascoSangre:
+                if (d != null) d.frascosSangrePendientes--; else sesionFrascoSangrePend--;
+                Sumar(o);
+                return true;
+            case Objeto.FrascoMana:
+                if (d != null) d.frascosManaPendientes--; else sesionFrascoManaPend--;
+                Sumar(o);
+                return true;
+            default: return false;
+        }
+    }
+
     // Ya al maximo contando "pendientes" mas por aplicar (el inventario de los
     // desafios): no tiene sentido conseguir otro.
     public static bool AlMaximo(Objeto o, int pendientes = 0)
@@ -184,6 +250,7 @@ public static class Equipo
     public static void Reiniciar()
     {
         sesionPiedras = sesionCarmesi = sesionCeleste = sesionEspada = sesionCuracion = sesionMana = sesionFrascoSangre = sesionFrascoMana = 0;
+        sesionFrascoSangrePend = sesionFrascoManaPend = 0;
         AlCambiar?.Invoke();
     }
 }

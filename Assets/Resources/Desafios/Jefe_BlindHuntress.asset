@@ -221,8 +221,9 @@ MonoBehaviour:
     texto: En el bosque sin hojas todo se oye, y ella escucha desde hace tanto que
       ya no recuerda otra cosa que el sonido de quien viene a morir.
   dialogoAlReiniciar: 0
-  almasCofre: 2500
-  objetosCofre: 000000000200000004000000
+  almasCofre: 4500
+  multPrecios: 1
+  objetosCofre: 0000000002000000030000000500000004000000
   multVida: 1.5
   multDano: 1.3
   multVelocidad: 1.35

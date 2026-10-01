@@ -125,8 +125,8 @@ public class TiendaTotem : MonoBehaviour
     {
         if (actual == null) return;
         FichaTienda.Articulo a = actual.art;
-        if (Vendido(a) || Bloqueado(a) || AlMaximo(a) || Progreso.Almas < a.precio) { SonidoMenu.Error(); return; }
-        if (!Progreso.Gastar(a.precio)) { SonidoMenu.Error(); return; }
+        if (Vendido(a) || Bloqueado(a) || AlMaximo(a) || Progreso.Almas < Desafio.Precio(a)) { SonidoMenu.Error(); return; }
+        if (!Progreso.Gastar(Desafio.Precio(a))) { SonidoMenu.Error(); return; }
         Desafio.GuardarObjeto(a.objeto);
         Desafio.Comprados.Add(a.id);
         if (Desafio.Deseado == a.id) Desafio.Deseado = null;
@@ -164,20 +164,20 @@ public class TiendaTotem : MonoBehaviour
         almas.text = $"Almas  <b>{alm:N0}</b>";
         FichaTienda.Articulo d = celdas.Select(c => c.art).FirstOrDefault(a => a.id == Desafio.Deseado);
         if (d == null) deseo.text = $"<color={Gris}>Marca un objeto con M para tenerlo a la vista</color>";
-        else if (Bloqueado(d)) deseo.text = $"Deseado: <b>{d.nombre}</b> ({d.precio:N0})  ·  <color={Gris}>antes: {celdas.Select(c => c.art).FirstOrDefault(a => a.id == d.requiere)?.nombre}</color>";
-        else if (alm >= d.precio) deseo.text = $"Deseado: <b>{d.nombre}</b>  ·  <color={Verde}>Puedes comprarlo</color>";
-        else deseo.text = $"Deseado: <b>{d.nombre}</b> ({d.precio:N0})  ·  <color={Rojo}>te faltan {d.precio - alm:N0}</color>";
+        else if (Bloqueado(d)) deseo.text = $"Deseado: <b>{d.nombre}</b> ({Desafio.Precio(d):N0})  ·  <color={Gris}>antes: {celdas.Select(c => c.art).FirstOrDefault(a => a.id == d.requiere)?.nombre}</color>";
+        else if (alm >= Desafio.Precio(d)) deseo.text = $"Deseado: <b>{d.nombre}</b>  ·  <color={Verde}>Puedes comprarlo</color>";
+        else deseo.text = $"Deseado: <b>{d.nombre}</b> ({Desafio.Precio(d):N0})  ·  <color={Rojo}>te faltan {Desafio.Precio(d) - alm:N0}</color>";
 
         foreach (Celda c in celdas)
         {
             FichaTienda.Articulo a = c.art;
             bool vendido = Vendido(a), bloq = Bloqueado(a), max = AlMaximo(a);
-            bool alcanza = alm >= a.precio;
+            bool alcanza = alm >= Desafio.Precio(a);
             c.agotado.gameObject.SetActive(vendido || max);
             c.agotado.text = vendido ? "AGOTADO" : "AL MÁXIMO";
             c.candado.enabled = bloq && !vendido;
             c.estrella.enabled = Desafio.Deseado == a.id;
-            c.precio.text = vendido ? "" : $"<color={(alcanza ? "#f0d49a" : Rojo)}>{a.precio:N0}</color> almas";
+            c.precio.text = vendido ? "" : $"<color={(alcanza ? "#f0d49a" : Rojo)}>{Desafio.Precio(a):N0}</color> almas";
             float atenuar = vendido || bloq || max ? 0.35f : 1f;
             c.icono.color = new Color(atenuar, atenuar, atenuar, 1f);
             c.fondo.color = Desafio.Deseado == a.id ? new Color(0.35f, 0.26f, 0.1f, 0.9f) : new Color(0.08f, 0.07f, 0.08f, 0.9f);
@@ -201,9 +201,9 @@ public class TiendaTotem : MonoBehaviour
             efecto += $"\n\n<color={Rojo}>Compra antes: {(req != null ? req.nombre : a.requiere)}</color>";
         }
         detTexto.text = efecto;
-        bool alcanza = Progreso.Almas >= a.precio;
-        detPrecio.text = vendido ? "Agotado" : max ? "Ya está al máximo" : $"Precio: <color={(alcanza ? "#f0d49a" : Rojo)}><b>{a.precio:N0}</b></color> almas";
-        textoComprar.text = vendido ? "Agotado" : $"Comprar ({a.precio:N0})";
+        bool alcanza = Progreso.Almas >= Desafio.Precio(a);
+        detPrecio.text = vendido ? "Agotado" : max ? "Ya está al máximo" : $"Precio: <color={(alcanza ? "#f0d49a" : Rojo)}><b>{Desafio.Precio(a):N0}</b></color> almas";
+        textoComprar.text = vendido ? "Agotado" : $"Comprar ({Desafio.Precio(a):N0})";
         botonComprar.GetComponent<OpcionEstilo>().PonerActiva(!vendido && !bloq && !max && alcanza);
         botonMarcar.GetComponentInChildren<TextMeshProUGUI>().text = Desafio.Deseado == a.id ? "Quitar de deseos (M)" : "Marcar como deseado (M)";
     }

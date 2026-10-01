@@ -1,0 +1,104 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0029fdb48b621cd498e0b48de1ddb043, type: 3}
+  m_Name: TextosMuerte
+  m_EditorClassIdentifier: 
+  generales:
+  - "Otra vez muerto. Qu\xE9 sorpresa tan poco sorprendente."
+  - "Cada muerte ense\xF1a algo. T\xFA a\xFAn no has aprendido nada."
+  - "Si morir fuera un deporte, ser\xEDas campe\xF3n."
+  - "El suelo te extra\xF1aba."
+  - "Hasta los esqueletos se est\xE1n riendo."
+  - "Qu\xE9 espect\xE1culo. L\xE1stima que nadie aplauda."
+  - "Te falt\xF3 poco. Bueno, te falt\xF3 mucho."
+  - "Eso fue valiente. Est\xFApido, pero valiente."
+  - "Tu espada estaba de adorno, \xBFverdad?"
+  - La hoguera ya ni se sorprende de verte.
+  - "Esquivar tambi\xE9n es una opci\xF3n. Por si no lo sab\xEDas."
+  - Atacar sin pensar tiene un precio. Hoy lo pagaste entero.
+  enemigoComun:
+  - "Perdiste contra un enemigo com\xFAn. Que no te lo cuenten."
+  - "Era el enemigo m\xE1s f\xE1cil de la zona. Era."
+  - "Eso no era un jefe. Rep\xEDtelo hasta cre\xE9rtelo."
+  - "Cay\xF3 un caballero. Lo mat\xF3 algo que cabe en una bota."
+  - "Hasta las ratas tienen mejor t\xE9cnica que t\xFA."
+  - "Ni siquiera ten\xEDa nombre propio. Y aun as\xED gan\xF3."
+  jefe:
+  - Los jefes no necesitan esforzarse contigo.
+  - "El jefe ni sud\xF3."
+  - "El jefe dice gracias por la pr\xE1ctica."
+  - "Le diste un buen calentamiento. \xC9l te dio un final."
+  - "Cada intento tuyo es su momento favorito del d\xEDa."
+  porJefe:
+  - jefe: shadowed_wetlands
+    frases:
+    - "La sombra ni se molest\xF3 en sacar la escarcha."
+    - Los humedales se tragan a los que dudan. Dudaste.
+    - Saltaste el barrido. El tajo alzado te esperaba arriba.
+    - "Otro cuerpo para la ci\xE9naga. Ni siquiera flota."
+  - jefe: crimson_wraith
+    frases:
+    - "El Espectro bebe tu sangre y a\xFAn tiene sed."
+    - "Tu sangre ya le pertenec\xEDa. \xC9l solo vino a cobrarla."
+    - La cueva sigue creciendo. Gracias por tu aporte.
+    - "Ni viste su verdadera forma. Mejor as\xED."
+  - jefe: blind_huntress
+    frases:
+    - "Te oy\xF3 respirar. Siempre se oye."
+    - "Ella no ve. T\xFA tampoco, por lo visto."
+    - "Corriste. Ella escuch\xF3. Fin de la historia."
+    - "Los \xE1rboles del bosque ya tienen un hueso m\xE1s."
+  caida:
+  - "El suelo exist\xEDa. T\xFA decidiste ignorarlo."
+  - "Volar no era una opci\xF3n. Ahora lo sabes."
+  - "El abismo no te empuj\xF3. Fuiste t\xFA solito."
+  - "Mirar d\xF3nde pisas: ese gran misterio sin resolver."
+  - "Bonito salto. L\xE1stima que no hubiera nada al otro lado."
+  letal:
+  - "La se\xF1al roja estaba ah\xED. Hermosa, \xBFno? Y no le hiciste caso."
+  - Te pidieron silencio. Ni eso.
+  - "Un aviso enorme, brillante y rojo. Y aun as\xED, sorpresa."
+  - Golpeaste a quien estaba en guardia. Brillante idea.
+  - Te avisaron. Con luces. Y te quedaste mirando.
+  rapida:
+  - "\xBFYa? Ni siquiera calentaste."
+  - "R\xE9cord personal... de lo r\xE1pido que se muere."
+  - Entraste, miraste, moriste. Muy eficiente.
+  - "Eso dur\xF3 menos que la pantalla de carga."
+  racha5:
+  - "Quinta vez. La esperanza es lo \xFAltimo que se pierde, y t\xFA vas por buen
+    camino."
+  - Cinco muertes seguidas. Ya tienes una rutina.
+  racha10:
+  - "Diez muertes. \xBFSeguro que no prefieres un juego m\xE1s tranquilo?"
+  - Diez veces. El jefe ya te guarda sitio en la arena.
+  racha20:
+  - Llevas tantas muertes que el juego ya te conoce por tu nombre.
+  - "Veinte y subiendo. Esto ya no es un desaf\xEDo, es una costumbre."
+  - A estas alturas, morir es tu estilo de juego.
+  almas:
+  - "Todas esas almas y no pudiste con ellas. Qu\xE9 desperdicio."
+  - "Tus almas ahora son de otro. Cu\xEDdalas mejor, si las recuperas."
+  - Cargabas una fortuna. Ahora la carga el suelo.
+  - "Tanto esfuerzo juntando almas para regalarlas as\xED."
+  sangrado:
+  - Te desangraste. Elegante forma de fracasar.
+  - "Gota a gota. Y t\xFA pusiste todas las gotas."
+  frio:
+  - "Te congelaste. Fr\xEDa actitud, para ser sinceros."
+  - "Quieto como una estatua. Y casi igual de \xFAtil."
+  fuego:
+  - "Fuego, hielo, sangre... y t\xFA sigues sin esquivar."
+  - Ardiste. Al menos diste un poco de luz.
+  segundosRapida: 12
+  almasMuchas: 1000
+  cadaRacha: 5

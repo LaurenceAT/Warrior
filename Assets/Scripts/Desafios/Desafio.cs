@@ -36,6 +36,10 @@ public static class Desafio
     public static float MultDano => Activo && Dificil && Ficha != null ? Mathf.Max(0.1f, Ficha.multDano) : 1f;
     public static float MultVelocidad => Activo && Dificil && Ficha != null ? Mathf.Max(0.1f, Ficha.multVelocidad) : 1f;
 
+    // Precio de un objeto del totem en este desafio (multiplicador de la ficha del jefe).
+    public static int Precio(FichaTienda.Articulo a) =>
+        a == null ? 0 : Mathf.Max(0, Mathf.RoundToInt(a.precio * (Activo && Ficha != null ? Mathf.Max(0.1f, Ficha.multPrecios) : 1f)));
+
     public static bool DificilDesbloqueado(FichaJefe f) => f != null && Globales.Completado(f.id, false);
 
     public static void Empezar(FichaJefe f, bool dificil)
@@ -90,7 +94,7 @@ public static class Desafio
 
         Reiniciado = true;
         DeCero();
-        PantallaCarga.Cargar(Ficha.escena, 0.35f, "Reiniciando el desafío...");
+        PantallaCarga.Cargar(Ficha.escena, 0.35f);
     }
 
     // Jefe vencido: se apunta (tiempo y logros) y sale la pantalla final.

@@ -192,17 +192,18 @@ public class UICazadora : MonoBehaviour
 
     private void MontarBarra(RectTransform marco)
     {
-        // Marcas I II III a la derecha de la barra.
+        // Marcas I II III encima de la barra, en su extremo derecho (el nombre va
+        // encima a la izquierda): asi la barra puede ser larga (AjustesInterfaz).
         for (int i = 0; i < 3; i++)
         {
             TextMeshProUGUI t = EstiloMenu.Texto(Romano(i), marco, 26, Color.white);
             t.outlineWidth = 0.2f;
             t.outlineColor = new Color32(0, 0, 0, 255);
             RectTransform r = t.rectTransform;
-            r.anchorMin = r.anchorMax = new Vector2(1f, 0.5f);
-            r.pivot = new Vector2(0f, 0.5f);
-            r.sizeDelta = new Vector2(60f, 34f);
-            r.anchoredPosition = new Vector2(14f + i * 52f, 0f);
+            r.anchorMin = r.anchorMax = new Vector2(1f, 1f);
+            r.pivot = new Vector2(1f, 0f);
+            r.sizeDelta = new Vector2(48f, 34f);
+            r.anchoredPosition = new Vector2(-(2 - i) * 50f, 6f);
             marcas[i] = t;
         }
         FaseActual(fase);

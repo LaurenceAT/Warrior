@@ -75,7 +75,7 @@ public class FrascoExtra : MonoBehaviour
         ParticulasFx.Rafaga((Vector2)transform.position + Vector2.up * 0.5f, 24, new Color(1f, 0.3f, 0.3f), new Color(1f, 0.9f, 0.6f),
                             new Vector2(1.5f, 4f), -0.3f, new Vector2(0.05f, 0.12f), new Vector2(0.5f, 1.1f));
         Equipo.Objeto o = Equipo.Objeto.FrascoSangre;
-        AvisoObjeto.Mostrar(RecursosRPG.Get().Icono(Equipo.ClaveIcono(o)), Equipo.Nombre(o), Equipo.Descripcion(o));
+        AvisoObjeto.Mostrar(RecursosRPG.Get().Icono(Equipo.ClaveIcono(o)), Equipo.Nombre(o), Inventario.Aviso);
         Destroy(gameObject);
     }
 }

@@ -3,11 +3,12 @@ using System.Collections;
 using UnityEngine;
 
 // Hoguera al estilo Souls (la torre de la luna de sangre). Al acercarse aparece
-// "Presiona F"; al pulsarla se enciende (la primera vez) y se abre su menu:
+// "Presiona F"; al pulsarla se enciende (la primera vez, con el aviso "Hoguera
+// activada"), queda como punto de reaparicion y se abre su menu:
 //   1. Descansar: cura del todo, rellena los frascos, reaparecen los enemigos,
 //      queda como punto de reaparicion y se guarda la partida.
 //   2. Subir de nivel y estadisticas.
-//   3. Mejorar equipamiento (espada y frascos).
+//   3. Aplicar mejoras (lo recogido en cofres y jefes).
 // Quien quiera enterarse de un descanso escucha AlDescansar.
 public class Hoguera : MonoBehaviour, IInteractuable
 {
@@ -25,6 +26,8 @@ public class Hoguera : MonoBehaviour, IInteractuable
     [SerializeField] private string textoInteractuar = "Presiona F para usar la hoguera";
     [SerializeField] private string textoEncender = "Presiona F para encender la hoguera";
     [SerializeField] private string textoDescanso = "Has descansado";
+    [Tooltip("Aviso la primera vez que se enciende (sale en el menu de la hoguera).")]
+    [SerializeField] private string textoActivada = "Hoguera activada. Si caes, volverás aquí.";
 
     [Header("Efecto")]
     [SerializeField] private SpriteRenderer torre;
@@ -78,6 +81,7 @@ public class Hoguera : MonoBehaviour, IInteractuable
 
     public void Usar(PlayerControler p)
     {
+        bool primera = !encendida;
         if (!encendida)
         {
             encendida = true;
@@ -85,7 +89,27 @@ public class Hoguera : MonoBehaviour, IInteractuable
             if (efecto != null) StopCoroutine(efecto);
             efecto = StartCoroutine(Efecto(false));
         }
-        MenuHoguera.Abrir(this, p);
+        // Al usarla ya es tu punto de reaparicion (sin descansar).
+        FijarReaparicion();
+        MenuHoguera.Abrir(this, p, primera ? textoActivada : null);
+    }
+
+    // Reapareces aqui. En la partida se apunta en memoria: se escribe con el
+    // siguiente guardado de siempre (al descansar, al reaparecer, cada minuto...).
+    private void FijarReaparicion()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.hasCheckPointActive = true;
+            GameManager.Instance.checkpointRespawnPosition = transform.position + (Vector3)puntoReaparicion;
+        }
+        UltimaUsada = this;
+        Partida.Datos d = Partida.Actual;
+        if (d == null) return;
+        d.enHoguera = true;
+        d.x = PuntoReaparicion.x;
+        d.y = PuntoReaparicion.y;
+        d.lugar = NombreLugar;
     }
 
     // "Descansar" en el menu: cura, rellena, reaparecen los enemigos y se guarda.

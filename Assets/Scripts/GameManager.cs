@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour
 
         UpdateDiamondUI();
         ContadorAlmas.Asegurar();
+        IndicadorInventario.Asegurar();
         ManchaAlmas.Colocar();
     }
 
@@ -233,12 +234,12 @@ public class GameManager : MonoBehaviour
 
         if (nextScene < SceneManager.sceneCountInBuildSettings)
         {
-            SceneManager.LoadScene(nextScene);
+            PantallaCarga.Cargar(nextScene);
         }
         else
         {
             // Si no hay más niveles, vuelve al menú principal.
-            SceneManager.LoadScene(0);
+            PantallaCarga.Cargar(0);
         }
     }
 

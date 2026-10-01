@@ -35,6 +35,10 @@ public static class Bitacora
     public static string ClaveElemento(string enemigo, Elemento e) => $"b:{enemigo}:e:{(int)e}";
     public static string ContadorDerrotas(string enemigo) => $"b:{enemigo}";
 
+    // El jefe con el que se pelea ahora y su ataque en curso (pantalla de muerte).
+    public static FichaJefe JefeEnCombate => ArenaJefe.EnCombate ? jefeActual : null;
+    public static FichaJefe.Ataque AtaqueEnCurso => JefeEnCombate != null && ataqueActual != null ? jefeActual.BuscarAtaque(ataqueActual) : null;
+
     public static bool Tiene(string clave) => Globales.Descubierto(clave);
     public static bool Nuevo(string clave) => Globales.Descubierto(clave) && !Globales.Visto(clave);
 

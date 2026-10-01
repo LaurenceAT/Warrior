@@ -124,13 +124,13 @@ public class ReservaPociones : MonoBehaviour
         AlCambiarAlgo?.Invoke();
     }
 
-    // La recompensa del camino secreto: una carga mas para siempre (y llena).
-    // Solo una por partida (la marca "frasco_extra").
+    // La recompensa del camino secreto (y del Mimic): un frasco de sangre al
+    // inventario (se aplica en la hoguera). Solo una por partida ("frasco_extra").
     public void AumentarMaximo()
     {
         recompensaCogida = true;
         Partida.PonerBandera("frasco_extra");
-        Equipo.Sumar(Equipo.Objeto.FrascoSangre);
+        Inventario.Guardar(Equipo.Objeto.FrascoSangre);
     }
 
     // Frasco de pixel art dibujado a mano en codigo (16x20): cristal, liquido rojo
@@ -164,7 +164,7 @@ public class ReservaPociones : MonoBehaviour
     }
 }
 
-// Contador de frascos en pantalla, abajo a la izquierda: el frasco de sangre (Q) y el de
+// Contador de frascos en pantalla, abajo a la derecha (encima de las almas): el frasco de sangre (Q) y el de
 // mana (R) con sus cargas.
 public class ContadorPociones : MonoBehaviour
 {
@@ -196,8 +196,11 @@ public class ContadorPociones : MonoBehaviour
 
         RecursosRPG rec = RecursosRPG.Get();
         Sprite vida = rec.Icono("pocion");
-        cp.huecos[0] = cp.NuevoHueco(go.transform, "Vida", vida != null ? vida : ReservaPociones.Frasco(), new Vector2(44f, 60f));
-        cp.huecos[1] = cp.NuevoHueco(go.transform, "Mana", rec.Icono("pocion_mana"), new Vector2(250f, 60f));
+        // Abajo a la derecha, encima de las almas (y debajo del aviso de objetos por
+        // aplicar): AjustesInterfaz. Sangre a la izquierda y mana a la derecha.
+        AjustesInterfaz ai = AjustesInterfaz.Get();
+        cp.huecos[0] = cp.NuevoHueco(go.transform, "Vida", vida != null ? vida : ReservaPociones.Frasco(), new Vector2(-ai.margen - 206f, ai.alturaFrascosColumna));
+        cp.huecos[1] = cp.NuevoHueco(go.transform, "Mana", rec.Icono("pocion_mana"), new Vector2(-ai.margen, ai.alturaFrascosColumna));
 
         ReservaPociones.AlCambiarAlgo += cp.Actualizar;
         ReservaPociones.AlBeber += cp.Pulso;
@@ -209,10 +212,10 @@ public class ContadorPociones : MonoBehaviour
         Hueco h = new Hueco();
         h.caja = new GameObject(nombre).AddComponent<RectTransform>();
         h.caja.SetParent(padre, false);
-        // Abajo a la izquierda, como los objetos rapidos de los Souls (arriba, bajo
-        // las barras, van los estados que se acumulan).
-        h.caja.anchorMin = h.caja.anchorMax = new Vector2(0f, 0f);
-        h.caja.pivot = new Vector2(0f, 0f);
+        // Abajo a la derecha, encima de las almas (arriba, bajo las barras, van los
+        // estados que se acumulan).
+        h.caja.anchorMin = h.caja.anchorMax = new Vector2(1f, 0f);
+        h.caja.pivot = new Vector2(1f, 0f);
         h.caja.anchoredPosition = pos;
         h.caja.sizeDelta = new Vector2(200f, 70f);
 
