@@ -69,7 +69,8 @@ public static class Partida
 
     // Las pruebas automaticas guardan en otra carpeta para no tocar las partidas reales.
     public static string CarpetaPruebas;
-    private static string Carpeta => CarpetaPruebas ?? Path.Combine(Application.persistentDataPath, "Partidas");
+    // La del perfil activo (RegistroGuardado: real o "Simular jugador nuevo").
+    private static string Carpeta => RegistroGuardado.Carpeta;
     private static string Archivo(int ranura) => Path.Combine(Carpeta, $"partida_{ranura}.json");
 
     // Nombre bonito de cada escena para la lista de partidas.
@@ -188,8 +189,7 @@ public static class Partida
         Actual.fecha = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
         try
         {
-            Directory.CreateDirectory(Carpeta);
-            File.WriteAllText(Archivo(Actual.ranura), JsonUtility.ToJson(Actual, true));
+            RegistroGuardado.EscribirSeguro(Archivo(Actual.ranura), JsonUtility.ToJson(Actual, true));
         }
         catch (Exception e) { Debug.LogWarning("[Partida] No se pudo guardar: " + e.Message); }
     }

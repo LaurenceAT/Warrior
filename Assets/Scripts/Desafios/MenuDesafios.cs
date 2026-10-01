@@ -17,6 +17,8 @@ using UnityEngine.UI;
 // Navegacion por capas: pasar el raton solo resalta; clic o Enter selecciona y
 // se queda marcado. Atras (clic derecho o Esc) vuelve un paso: de la ficha a la
 // lista, y de la lista al menu principal.
+// Codigos secretos (CodigosSecretos): mientras esta pantalla esta abierta y sin
+// confirmacion, se escuchan las letras que se escriben (sin cuadro de texto).
 public class MenuDesafios : MonoBehaviour
 {
     private class Fila
@@ -64,6 +66,11 @@ public class MenuDesafios : MonoBehaviour
     private Button botonEntrar;
     private System.Action volverAlMenu;
     private Coroutine transicion;
+    // Codigos secretos: lo ultimo escrito (sin mostrarlo) y cuando.
+    private Transform listaJefes;
+    private TextMeshProUGUI susurro;
+    private string escrito = "";
+    private float ultimaLetra;
 
     public static MenuDesafios Construir(Transform lienzo, System.Action volver)
     {
@@ -88,14 +95,7 @@ public class MenuDesafios : MonoBehaviour
         Desafio.Ultima = null;
         if (inicial != null) Seleccionar(inicial);
         else Deseleccionar();
-        // Un jefe secreto recien desbloqueado aparece con un destello (solo la
-        // primera vez; despues ya se queda en la lista).
-        foreach (Fila f in filas)
-            if (f.ficha.secreto && !Globales.Marca("revelado_" + f.ficha.id))
-            {
-                Globales.PonerMarca("revelado_" + f.ficha.id, true);
-                StartCoroutine(Revelar(f));
-            }
+        RevelarSecretos();
     }
 
     private IEnumerator Revelar(Fila f)
@@ -467,19 +467,16 @@ public class MenuDesafios : MonoBehaviour
         cab.alignment = TextAlignmentOptions.Left;
         EstiloMenu.Arriba(cab.rectTransform, 0f, 30f);
         VerticalLayoutGroup col = EstiloMenu.Columna(izq, 0f, 0f, 46f, 70f, 10f);
-        foreach (FichaJefe f in FichaJefe.Visibles())
-        {
-            FichaJefe fj = f;
-            Button b = EstiloMenu.Opcion(col.transform, f.nombre, () => Seleccionar(fj), 104f, 28f, f.imagen, TextAlignmentOptions.Left);
-            Fila fila = new Fila { ficha = f, boton = b, estilo = b.GetComponent<OpcionEstilo>(), texto = b.GetComponentInChildren<TextMeshProUGUI>() };
-            fila.texto.richText = true;
-            fila.texto.rectTransform.offsetMax = new Vector2(-100f, 0f);
-            fila.marcaNormal = Marca(b.transform, r.Icono("marca_desafio"), -52f);
-            fila.marcaDificil = Marca(b.transform, r.Icono("marca_dificil"), -6f);
-            fila.nuevo = PuntoNuevo.Crear(b.transform, new Vector2(0f, 1f), new Vector2(22f, -16f));
-            grupoJefes.Anadir(fila.estilo);
-            filas.Add(fila);
-        }
+        listaJefes = col.transform;
+        foreach (FichaJefe f in FichaJefe.Visibles()) NuevaFila(f);
+
+        // La frase del codigo secreto ("Algo desperto en el bosque..."), abajo.
+        susurro = EstiloMenu.Texto("", panel, 24, new Color(0.7f, 0.85f, 0.72f));
+        susurro.fontStyle = FontStyles.Italic;
+        susurro.alpha = 0f;
+        susurro.rectTransform.anchorMin = susurro.rectTransform.anchorMax = new Vector2(0.5f, 0f);
+        susurro.rectTransform.sizeDelta = new Vector2(900f, 36f);
+        susurro.rectTransform.anchoredPosition = new Vector2(0f, 22f);
         VerticalLayoutGroup pie = EstiloMenu.Columna(izq, 0f, 0f, 0f, 0f, 0f);
         pie.childAlignment = TextAnchor.LowerCenter;
         botonVolver = EstiloMenu.Opcion(pie.transform, "Volver", Volver, 56f, 26f, null, TextAlignmentOptions.Left);
@@ -629,6 +626,103 @@ public class MenuDesafios : MonoBehaviour
 
         ficha.gameObject.SetActive(false);
         MontarConfirmacion(raiz);
+    }
+
+    private Fila NuevaFila(FichaJefe f)
+    {
+        RecursosRPG r = RecursosRPG.Get();
+        FichaJefe fj = f;
+        Button b = EstiloMenu.Opcion(listaJefes, f.nombre, () => Seleccionar(fj), 104f, 28f, f.imagen, TextAlignmentOptions.Left);
+        Fila fila = new Fila { ficha = f, boton = b, estilo = b.GetComponent<OpcionEstilo>(), texto = b.GetComponentInChildren<TextMeshProUGUI>() };
+        fila.texto.richText = true;
+        fila.texto.rectTransform.offsetMax = new Vector2(-100f, 0f);
+        fila.marcaNormal = Marca(b.transform, r.Icono("marca_desafio"), -52f);
+        fila.marcaDificil = Marca(b.transform, r.Icono("marca_dificil"), -6f);
+        fila.nuevo = PuntoNuevo.Crear(b.transform, new Vector2(0f, 1f), new Vector2(22f, -16f));
+        grupoJefes.Anadir(fila.estilo);
+        filas.Add(fila);
+        return fila;
+    }
+
+    // ------------------------------------------------------------------ Codigos secretos
+
+    // Se escucha el teclado solo mientras esta pantalla esta abierta (al salir
+    // se desactiva este objeto y lo escrito se olvida).
+    private void OnEnable()
+    {
+        escrito = "";
+        if (Keyboard.current != null) Keyboard.current.onTextInput += Letra;
+    }
+
+    private void OnDisable()
+    {
+        escrito = "";
+        if (Keyboard.current != null) Keyboard.current.onTextInput -= Letra;
+    }
+
+    private void Letra(char c)
+    {
+        CodigosSecretos cs = CodigosSecretos.Get();
+        if (cs == null || !cs.codigosActivos || !isActiveAndEnabled) return;
+        // Con la confirmacion abierta no cuenta (y se olvida lo escrito).
+        if (confirmacion != null && confirmacion.activeSelf) { escrito = ""; return; }
+        if (Time.unscaledTime - ultimaLetra > cs.olvidarTras) escrito = "";
+        ultimaLetra = Time.unscaledTime;
+        string n = CodigosSecretos.Normalizar(c.ToString());
+        if (n.Length == 0) return;
+        escrito += n;
+        int largo = Mathf.Max(1, cs.Largo);
+        if (escrito.Length > largo) escrito = escrito.Substring(escrito.Length - largo);
+        CodigosSecretos.Codigo codigo = cs.Buscar(escrito);
+        if (codigo == null) return;
+        escrito = "";
+        Usar(codigo);
+    }
+
+    private void Usar(CodigosSecretos.Codigo codigo)
+    {
+        switch (codigo.accion)
+        {
+            case CodigosSecretos.Accion.DesbloquearJefeSecreto:
+                FichaJefe f = FichaJefe.DeId(codigo.parametro);
+                if (f == null) { Debug.LogWarning("[Codigos] No hay jefe con id " + codigo.parametro); return; }
+                // Ya desbloqueado: solo un sonido discreto.
+                if (f.Desbloqueado) { SonidoMenu.Confirmar(); return; }
+                // Solo el desbloqueo: ni completa desafios, ni da logros, ni informacion del jefe.
+                Globales.PonerMarca(CodigosSecretos.Marca(f.id), true);
+                StartCoroutine(Despertar());
+                break;
+        }
+    }
+
+    // Como el desbloqueo normal: la frase con el sonido inquietante y, despues,
+    // el jefe aparece en la lista con su destello.
+    private IEnumerator Despertar()
+    {
+        Sonido.Reproducir("secreto_inquietante", 0.8f);
+        susurro.text = "Algo despertó en el bosque...";
+        for (float t = 0f; t < 1.4f; t += Time.unscaledDeltaTime) { susurro.alpha = Mathf.Clamp01(t / 1.4f) * 0.85f; yield return null; }
+        foreach (FichaJefe f in FichaJefe.Visibles())
+            if (!filas.Any(x => x.ficha == f)) PintarFila(NuevaFila(f));
+        // En el orden de la lista.
+        FichaJefe[] orden = FichaJefe.Visibles();
+        foreach (Fila fl in filas) fl.boton.transform.SetSiblingIndex(System.Array.IndexOf(orden, fl.ficha));
+        RevelarSecretos();
+        yield return new WaitForSecondsRealtime(2.5f);
+        for (float t = 0f; t < 1.2f; t += Time.unscaledDeltaTime) { susurro.alpha = 0.85f * (1f - t / 1.2f); yield return null; }
+        susurro.alpha = 0f;
+    }
+
+    // Un jefe secreto recien desbloqueado aparece con un destello (solo la
+    // primera vez; despues ya se queda en la lista).
+    private void RevelarSecretos()
+    {
+        foreach (Fila f in filas)
+            if (f.ficha.secreto && !Globales.Marca("revelado_" + f.ficha.id))
+            {
+                Globales.PonerMarca("revelado_" + f.ficha.id, true);
+                StartCoroutine(Revelar(f));
+            }
     }
 
     // Texto pegado arriba de la ficha, a la derecha de la imagen.

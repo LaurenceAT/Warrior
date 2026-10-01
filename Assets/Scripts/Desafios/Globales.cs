@@ -49,7 +49,7 @@ public static class Globales
     private static HashSet<string> descubiertos, vistos;
     private static bool pendiente;
 
-    private static string Archivo => Path.Combine(Partida.CarpetaPruebas ?? Path.Combine(Application.persistentDataPath, "Partidas"), "globales.json");
+    private static string Archivo => Path.Combine(RegistroGuardado.Carpeta, RegistroGuardado.ArchivoGlobales);
 
     private static Datos D
     {
@@ -79,8 +79,7 @@ public static class Globales
         pendiente = false;
         try
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(Archivo));
-            File.WriteAllText(Archivo, JsonUtility.ToJson(D, true));
+            RegistroGuardado.EscribirSeguro(Archivo, JsonUtility.ToJson(D, true));
         }
         catch (Exception e) { Debug.LogWarning("[Globales] No se pudo guardar: " + e.Message); }
     }
@@ -104,6 +103,43 @@ public static class Globales
     {
         datos = null;
         pendiente = false;
+    }
+
+    // Borra una categoria de globales.json (reinicio del Editor, RegistroGuardado):
+    //   - Desafios: desafios completados, tiempos, estadisticas, fichas de jefe
+    //     ("j:") y todas las marcas (jefe secreto, dialogo, codigos, migracion).
+    //   - Logros: los logros.
+    //   - Bestiario: lo descubierto y las derrotas ("b:").
+    // Si un dato nuevo va en globales.json, su parte se borra aqui.
+    public static void Borrar(CategoriaGuardado c)
+    {
+        Datos d = D;
+        switch (c)
+        {
+            case CategoriaGuardado.Desafios:
+                d.desafios.Clear();
+                d.marcas.Clear();
+                Quitar(d, "j:");
+                break;
+            case CategoriaGuardado.Logros:
+                d.logros.Clear();
+                break;
+            case CategoriaGuardado.Bestiario:
+                Quitar(d, "b:");
+                break;
+            default:
+                return;
+        }
+        Guardar();
+    }
+
+    private static void Quitar(Datos d, string prefijo)
+    {
+        d.descubiertos.RemoveAll(x => x.StartsWith(prefijo));
+        d.vistos.RemoveAll(x => x.StartsWith(prefijo));
+        d.contadores.RemoveAll(x => x.clave.StartsWith(prefijo));
+        descubiertos = new HashSet<string>(d.descubiertos);
+        vistos = new HashSet<string>(d.vistos);
     }
 
     // ------------------------------------------------------------------ Logros

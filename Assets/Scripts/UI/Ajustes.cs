@@ -13,20 +13,20 @@ public static class ControlVolumen
 
     public static float General
     {
-        get => PlayerPrefs.GetFloat("volGeneral", 1f);
-        set { PlayerPrefs.SetFloat("volGeneral", value); AudioListener.volume = value; AlCambiar?.Invoke(); }
+        get => PlayerPrefs.GetFloat(RegistroGuardado.Clave("volGeneral"), 1f);
+        set { PlayerPrefs.SetFloat(RegistroGuardado.Clave("volGeneral"), value); AudioListener.volume = value; AlCambiar?.Invoke(); }
     }
 
     public static float Musica
     {
-        get => PlayerPrefs.GetFloat("volMusica", 1f);
-        set { PlayerPrefs.SetFloat("volMusica", value); AlCambiar?.Invoke(); }
+        get => PlayerPrefs.GetFloat(RegistroGuardado.Clave("volMusica"), 1f);
+        set { PlayerPrefs.SetFloat(RegistroGuardado.Clave("volMusica"), value); AlCambiar?.Invoke(); }
     }
 
     public static float Efectos
     {
-        get => PlayerPrefs.GetFloat("volEfectos", 1f);
-        set { PlayerPrefs.SetFloat("volEfectos", value); AlCambiar?.Invoke(); }
+        get => PlayerPrefs.GetFloat(RegistroGuardado.Clave("volEfectos"), 1f);
+        set { PlayerPrefs.SetFloat(RegistroGuardado.Clave("volEfectos"), value); AlCambiar?.Invoke(); }
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -45,8 +45,8 @@ public static class ControlBrillo
 
     public static float Brillo
     {
-        get => PlayerPrefs.GetFloat("brillo", 1f);
-        set { PlayerPrefs.SetFloat("brillo", Mathf.Clamp(value, 0.5f, 1.5f)); Aplicar(); }
+        get => PlayerPrefs.GetFloat(RegistroGuardado.Clave("brillo"), 1f);
+        set { PlayerPrefs.SetFloat(RegistroGuardado.Clave("brillo"), Mathf.Clamp(value, 0.5f, 1.5f)); Aplicar(); }
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]

@@ -120,3 +120,6 @@ InitTestScene*.unity*
 /NivelNieve_*.png
 /AnalisisLimpieza.txt
 /LimpiezaHecha.txt
+
+# Respaldos del progreso (Herramientas > Progreso del juego)
+/_RespaldoProgreso/

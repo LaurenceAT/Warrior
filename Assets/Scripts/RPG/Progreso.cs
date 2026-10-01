@@ -152,22 +152,22 @@ public static class Progreso
     {
         if (cargado || Aislado) return;
         cargado = true;
-        almas = PlayerPrefs.GetInt("rpg_almas", 0);
-        for (int i = 0; i < NumEstadisticas; i++) niveles[i] = PlayerPrefs.GetInt("rpg_nivel_" + i, 0);
-        AlmasPerdidas = PlayerPrefs.GetInt("rpg_mancha", 0);
-        PosicionMancha = new Vector2(PlayerPrefs.GetFloat("rpg_mancha_x", 0f), PlayerPrefs.GetFloat("rpg_mancha_y", 0f));
-        EscenaMancha = PlayerPrefs.GetString("rpg_mancha_escena", "");
+        almas = PlayerPrefs.GetInt(RegistroGuardado.Clave("rpg_almas"), 0);
+        for (int i = 0; i < NumEstadisticas; i++) niveles[i] = PlayerPrefs.GetInt(RegistroGuardado.Clave("rpg_nivel_" + i), 0);
+        AlmasPerdidas = PlayerPrefs.GetInt(RegistroGuardado.Clave("rpg_mancha"), 0);
+        PosicionMancha = new Vector2(PlayerPrefs.GetFloat(RegistroGuardado.Clave("rpg_mancha_x"), 0f), PlayerPrefs.GetFloat(RegistroGuardado.Clave("rpg_mancha_y"), 0f));
+        EscenaMancha = PlayerPrefs.GetString(RegistroGuardado.Clave("rpg_mancha_escena"), "");
     }
 
     private static void Guardar()
     {
         if (Aislado) return;
-        PlayerPrefs.SetInt("rpg_almas", almas);
-        for (int i = 0; i < NumEstadisticas; i++) PlayerPrefs.SetInt("rpg_nivel_" + i, niveles[i]);
-        PlayerPrefs.SetInt("rpg_mancha", AlmasPerdidas);
-        PlayerPrefs.SetFloat("rpg_mancha_x", PosicionMancha.x);
-        PlayerPrefs.SetFloat("rpg_mancha_y", PosicionMancha.y);
-        PlayerPrefs.SetString("rpg_mancha_escena", EscenaMancha ?? "");
+        PlayerPrefs.SetInt(RegistroGuardado.Clave("rpg_almas"), almas);
+        for (int i = 0; i < NumEstadisticas; i++) PlayerPrefs.SetInt(RegistroGuardado.Clave("rpg_nivel_" + i), niveles[i]);
+        PlayerPrefs.SetInt(RegistroGuardado.Clave("rpg_mancha"), AlmasPerdidas);
+        PlayerPrefs.SetFloat(RegistroGuardado.Clave("rpg_mancha_x"), PosicionMancha.x);
+        PlayerPrefs.SetFloat(RegistroGuardado.Clave("rpg_mancha_y"), PosicionMancha.y);
+        PlayerPrefs.SetString(RegistroGuardado.Clave("rpg_mancha_escena"), EscenaMancha ?? "");
         PlayerPrefs.Save();
     }
 

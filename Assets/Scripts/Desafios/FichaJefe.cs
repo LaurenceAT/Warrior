@@ -139,6 +139,8 @@ public class FichaJefe : ScriptableObject
             if (!secreto) return true;
             if (Globales.Marca("bloqueo_" + id)) return false;
             if (Globales.Marca("forzar_" + id)) return true;
+            // Desbloqueado con un codigo secreto (menu de Desafios).
+            if (Globales.Marca(CodigosSecretos.Marca(id))) return true;
             return requisitos != null && requisitos.All(r => Globales.Completado(r, false));
         }
     }
