@@ -153,7 +153,7 @@ public static class PruebaRonda17
 
             // Al jefe: la barra, el nombre y las marcas I II III.
             // La entrada de su arena (la misma que usa PruebaNieve.CazadoraPrueba).
-            Teletransportar(new Vector3(4f, 0.8f, 0f));
+            Teletransportar(new Vector3(8f, 0.8f, 0f));
             yield return new WaitForSeconds(1f);
             Comprobar(!ind.CercaDeHoguera, "lejos de la hoguera: no late");
             float t0 = Time.time;

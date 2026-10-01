@@ -5,13 +5,14 @@ using UnityEngine;
 //   1. La camara se acerca despacio a ella, con bandas de cine. Ella habla hacia
 //      el vacio (nunca te mira). Solo la primera vez: el dialogo completo, con
 //      tu respuesta. Al reintentar, la pelea empieza enseguida.
-//   2. El bloqueo de la arena se cierra: no se sale hasta vencer.
+//   2. Al empezar de verdad el combate (tras el dialogo y la eleccion) el muro de
+//      niebla de su ZonaJefe se forma detras: no se sale hasta vencer.
 //   3. Musica por fase, con fundido cruzado en cada muerte falsa, y bajada
 //      (ducking) en el aviso de cada instakill y en El Silencio.
 //   4. El ambiente cambia con las fases (niebla, cielo, luz, oscuridad).
 // Si el player muere, todo vuelve a como estaba antes de entrar.
 [RequireComponent(typeof(Collider2D))]
-public class ArenaCazadora : MonoBehaviour
+public class ArenaCazadora : MonoBehaviour, IArenaJefe
 {
     private enum Estado { Esperando, Entrada, Combate, Vencido }
 
@@ -110,9 +111,18 @@ public class ArenaCazadora : MonoBehaviour
         if (Actual == this) Actual = null;
     }
 
+    // ------------------------------------------------------------------ Zona de entrada (ZonaJefe)
+
+    // Con una ZonaJefe enlazada, la entrada la empieza su activador y el muro de
+    // niebla se forma cuando empieza de verdad el combate (tras el dialogo).
+    public ZonaJefe ZonaEntrada { get; set; }
+    public bool PuedeEmpezar => estado == Estado.Esperando && prefabJefe != null;
+    public Vector2 PuntoJefe => new Vector2(xAparicion, suelo + 1.5f);
+    public void EmpezarDesdeZona(PlayerControler p) { if (PuedeEmpezar) StartCoroutine(Entrada(p)); }
+
     private void OnTriggerEnter2D(Collider2D otro)
     {
-        if (estado != Estado.Esperando || !otro.CompareTag("Player") || prefabJefe == null) return;
+        if (ZonaEntrada != null || estado != Estado.Esperando || !otro.CompareTag("Player") || prefabJefe == null) return;
         StartCoroutine(Entrada(otro.GetComponent<PlayerControler>()));
     }
 
@@ -126,7 +136,7 @@ public class ArenaCazadora : MonoBehaviour
         UICazadora.Bandas(true);
         ArenaJefe.CombateExterno(true);
         PantallaMuerte.BurlasJefe = burlas != null && burlas.Length > 0 ? burlas : null;
-        PonerMuro(true);
+        if (ZonaEntrada == null) PonerMuro(true);
         if (ambiente != null) ambiente.Fase(ajustes.FaseN(0));
 
         jefe = Instantiate(prefabJefe, new Vector3(xAparicion, suelo, 0f), Quaternion.identity);
@@ -181,6 +191,8 @@ public class ArenaCazadora : MonoBehaviour
         EmpezarMusica(0, 2f);
         camara.Seguir(jefe.transform, true);
         estado = Estado.Combate;
+        // Ahora si: la niebla se cierra detras (tambien si eligio "Retirarme").
+        if (ZonaEntrada != null) ZonaEntrada.Cerrar();
 
         // "Voy a derrotarte": un tajo rapido. Si lo paras, empieza aturdida.
         if (eleccion == 1) yield return jefe.TajoDialogo();
@@ -270,6 +282,7 @@ public class ArenaCazadora : MonoBehaviour
         MensajePantalla.Banner(bannerVictoria, new Color(0.8f, 0.95f, 0.8f), 4f);
         Sonido.Reproducir("victoria");
         PonerMuro(false);
+        if (ZonaEntrada != null) ZonaEntrada.Abrir(true);
         if (ambiente != null) ambiente.Fase(ajustes.FaseN(0));
         UICazadora.Bandas(false);
         PlayerControler p = FindFirstObjectByType<PlayerControler>();
@@ -302,6 +315,7 @@ public class ArenaCazadora : MonoBehaviour
         UICazadora.Resistencia(Elemento.Ninguno);
         resistenciaMostrada = Elemento.Ninguno;
         PonerMuro(false);
+        if (ZonaEntrada != null) ZonaEntrada.Reiniciar();
         Cinematica.Activa = false;
         PlayerControler.TopeVentanaParry = -1f;
         camara.Seguir(null, false);

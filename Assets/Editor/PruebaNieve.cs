@@ -392,7 +392,7 @@ public static class PruebaNieve
 
         private IEnumerator Jefe()
         {
-            Teletransportar(new Vector3(368f, 3.8f, 0f));
+            Teletransportar(new Vector3(372f, 3.8f, 0f));
             yield return new WaitForSeconds(1f);
             JefeSombra j = null;
             for (float t = 0f; t < 5f && j == null; t += 0.2f) { j = Object.FindFirstObjectByType<JefeSombra>(); yield return new WaitForSeconds(0.2f); }
@@ -449,7 +449,7 @@ public static class PruebaNieve
             Debug.Log($"[Jefe] reaparece: {(p != null)} jefe reiniciado={(Object.FindFirstObjectByType<JefeSombra>() == null)}");
 
             // Otra vez a la arena; se le vacia la fase 1 para ver la resurreccion.
-            Teletransportar(new Vector3(368f, 3.8f, 0f));
+            Teletransportar(new Vector3(372f, 3.8f, 0f));
             for (float t = 0f; t < 5f && (j = Object.FindFirstObjectByType<JefeSombra>()) == null; t += 0.2f) yield return new WaitForSeconds(0.2f);
             if (j == null) yield break;
             s = j.GetComponent<EnemyHealth>();
@@ -1121,7 +1121,7 @@ public static class PruebaNieve
             StartCoroutine(MantenerVivo());
 
             // Entra en la arena: la primera vez, el dialogo.
-            Teletransportar(new Vector3(4f, 0.8f, 0f));
+            Teletransportar(new Vector3(8f, 0.8f, 0f));
             yield return new WaitForSeconds(4.5f);
             yield return Captura("c05_dialogo", true);
             DialogoCazadora dlg = Object.FindFirstObjectByType<DialogoCazadora>();
@@ -1226,7 +1226,7 @@ public static class PruebaNieve
             yield return EsperarEscena(caz.escena);
             yield return new WaitForSeconds(2.5f);
             p = Object.FindFirstObjectByType<PlayerControler>();
-            Teletransportar(new Vector3(4f, 0.8f, 0f));
+            Teletransportar(new Vector3(8f, 0.8f, 0f));
             yield return new WaitForSeconds(4f);
             JefeCazadora j = JefeCazadora.Actual;
             if (j == null || !j.Activa) { Debug.LogError("[Cazadora2] la jefa no empezo"); yield break; }
@@ -1490,7 +1490,7 @@ public static class PruebaNieve
         private IEnumerator Cueva()
         {
             ArenaJefe arena = Object.FindFirstObjectByType<ArenaJefe>();
-            Teletransportar(new Vector3(146f, 4.8f, 0f));
+            Teletransportar(new Vector3(150f, 4.8f, 0f));
             JefeWraith j = null;
             for (float t = 0f; t < 6f && (j = Object.FindFirstObjectByType<JefeWraith>()) == null; t += 0.2f) yield return new WaitForSeconds(0.2f);
             Debug.Log($"[Cueva] jefe={(j != null)}");
@@ -2134,7 +2134,7 @@ public static class PruebaNieve
         private IEnumerator JefesAturdir()
         {
             bool cueva = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name.Contains("Cueva");
-            Teletransportar(cueva ? new Vector3(146f, 4.8f, 0f) : new Vector3(368f, 3.8f, 0f));
+            Teletransportar(cueva ? new Vector3(150f, 4.8f, 0f) : new Vector3(372f, 3.8f, 0f));
             JefeBase j = null;
             for (float t = 0f; t < 6f && (j = Object.FindFirstObjectByType<JefeBase>()) == null; t += 0.2f) yield return new WaitForSeconds(0.2f);
             if (j == null) { Debug.LogError("[JefesAturdir] no aparecio"); yield break; }
@@ -2155,7 +2155,7 @@ public static class PruebaNieve
         private IEnumerator Wraith()
         {
             Application.logMessageReceived += (c, st, t) => { if (t == LogType.Exception || t == LogType.Error) errores++; };
-            Teletransportar(new Vector3(146f, 4.8f, 0f));
+            Teletransportar(new Vector3(150f, 4.8f, 0f));
             JefeWraith j = null;
             for (float t = 0f; t < 6f && (j = Object.FindFirstObjectByType<JefeWraith>()) == null; t += 0.2f) yield return new WaitForSeconds(0.2f);
             if (j == null) { Debug.LogError("[Wraith] no aparecio"); yield break; }

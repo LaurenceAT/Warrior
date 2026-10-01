@@ -6676,6 +6676,7 @@ Transform:
   - {fileID: 1669088723}
   - {fileID: 1588356056}
   - {fileID: 423941651}
+  - {fileID: 1855671945}
   m_Father: {fileID: 1297260731}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &650650650
@@ -16185,6 +16186,7 @@ MonoBehaviour:
   textoInteractuar: Presiona F para usar la hoguera
   textoEncender: Presiona F para encender la hoguera
   textoDescanso: Has descansado
+  textoActivada: "Hoguera activada. Si caes, volver\xE1s aqu\xED."
   torre: {fileID: 1289345387}
   colorDestello: {r: 1, g: 0.2, b: 0.15, a: 0.35}
   tiempoDestello: 0.35
@@ -16949,6 +16951,7 @@ MonoBehaviour:
   textoInteractuar: Presiona F para usar la hoguera
   textoEncender: Presiona F para encender la hoguera
   textoDescanso: Has descansado
+  textoActivada: "Hoguera activada. Si caes, volver\xE1s aqu\xED."
   torre: {fileID: 1645191522}
   colorDestello: {r: 1, g: 0.2, b: 0.15, a: 0.35}
   tiempoDestello: 0.35
@@ -18545,13 +18548,8 @@ MonoBehaviour:
   colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
   nombreFase2: 
   recompensa: 000000000200000003000000
-  muroNiebla: {fileID: 1669088722}
-  visualNiebla:
-  - {fileID: 1619945685}
-  - {fileID: 2046010772}
-  - {fileID: 1149027345}
-  - {fileID: 477356117}
-  - {fileID: 790027872}
+  muroNiebla: {fileID: 0}
+  visualNiebla: []
   nieblaAbierta: {r: 0.8, g: 0.15, b: 0.2, a: 0.25}
   nieblaCerrada: {r: 0.9, g: 0.1, b: 0.15, a: 0.75}
   salida: {fileID: 654260164}
@@ -19439,12 +19437,12 @@ GameObject:
   - component: {fileID: 1669088723}
   - component: {fileID: 1669088722}
   m_Layer: 7
-  m_Name: NieblaJefe
+  m_Name: NieblaJefe (antigua, sin uso)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &1669088722
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -188861,6 +188859,148 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1855671944
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 632925045}
+    m_Modifications:
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 140.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 484480950564023850, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: arena
+      value: 
+      objectReference: {fileID: 1588356057}
+    - target: {fileID: 484480950564023850, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: altoActivador
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 484480950564023850, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: largoActivador
+      value: 27.172222
+      objectReference: {fileID: 0}
+    - target: {fileID: 484480950564023850, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: distanciaActivador
+      value: 7.7277718
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: alto
+      value: 21
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorBorde.b
+      value: 0.74
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorBorde.g
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorBorde.r
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorDenso.b
+      value: 0.58
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorDenso.g
+      value: 0.66
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorDenso.r
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorNiebla.b
+      value: 0.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorNiebla.g
+      value: 0.52
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorNiebla.r
+      value: 0.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 6088388652216395524, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Size.x
+      value: 27.172222
+      objectReference: {fileID: 0}
+    - target: {fileID: 6088388652216395524, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Size.y
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 6088388652216395524, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Offset.x
+      value: 21.313883
+      objectReference: {fileID: 0}
+    - target: {fileID: 6088388652216395524, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Offset.y
+      value: 8.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6137135487896715052, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Name
+      value: ZonaJefe
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072128018375717956, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Size.y
+      value: 21
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072128018375717956, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Offset.y
+      value: 10.5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+--- !u!4 &1855671945 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+  m_PrefabInstance: {fileID: 1855671944}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1859219900
 GameObject:
   m_ObjectHideFlags: 0

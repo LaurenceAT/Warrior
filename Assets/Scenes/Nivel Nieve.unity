@@ -2527,6 +2527,7 @@ MonoBehaviour:
   textoInteractuar: Presiona F para usar la hoguera
   textoEncender: Presiona F para encender la hoguera
   textoDescanso: Has descansado
+  textoActivada: "Hoguera activada. Si caes, volver\xE1s aqu\xED."
   torre: {fileID: 1198268285}
   colorDestello: {r: 1, g: 0.2, b: 0.15, a: 0.35}
   tiempoDestello: 0.35
@@ -2672,6 +2673,7 @@ MonoBehaviour:
   textoInteractuar: Presiona F para usar la hoguera
   textoEncender: Presiona F para encender la hoguera
   textoDescanso: Has descansado
+  textoActivada: "Hoguera activada. Si caes, volver\xE1s aqu\xED."
   torre: {fileID: 1086159119}
   colorDestello: {r: 1, g: 0.2, b: 0.15, a: 0.35}
   tiempoDestello: 0.35
@@ -8661,12 +8663,12 @@ GameObject:
   - component: {fileID: 703325176}
   - component: {fileID: 703325175}
   m_Layer: 7
-  m_Name: NieblaJefe
+  m_Name: NieblaJefe (antigua, sin uso)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &703325175
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -74021,13 +74023,8 @@ MonoBehaviour:
   colorBarraFase2: {r: 0.25, g: 0.62, b: 0.95, a: 1}
   nombreFase2: "Sombra de los Humedales \u2014 Escarcha"
   recompensa: 00000000
-  muroNiebla: {fileID: 703325175}
-  visualNiebla:
-  - {fileID: 643602019}
-  - {fileID: 980198855}
-  - {fileID: 1048375151}
-  - {fileID: 687139207}
-  - {fileID: 1680806002}
+  muroNiebla: {fileID: 0}
+  visualNiebla: []
   nieblaAbierta: {r: 0.7, g: 0.85, b: 1, a: 0.25}
   nieblaCerrada: {r: 0.75, g: 0.9, b: 1, a: 0.8}
   salida: {fileID: 654260164}
@@ -74563,6 +74560,7 @@ MonoBehaviour:
   textoInteractuar: Presiona F para usar la hoguera
   textoEncender: Presiona F para encender la hoguera
   textoDescanso: Has descansado
+  textoActivada: "Hoguera activada. Si caes, volver\xE1s aqu\xED."
   torre: {fileID: 890608412}
   colorDestello: {r: 1, g: 0.2, b: 0.15, a: 0.35}
   tiempoDestello: 0.35
@@ -75420,6 +75418,132 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 70, y: 16}
   m_EdgeRadius: 0
+--- !u!1001 &1855671944
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1882549819}
+    m_Modifications:
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 362.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 484480950564023850, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: arena
+      value: 
+      objectReference: {fileID: 1767745856}
+    - target: {fileID: 484480950564023850, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: altoActivador
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 484480950564023850, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: largoActivador
+      value: 27.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 484480950564023850, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: distanciaActivador
+      value: 7.5999813
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: alto
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorBorde.r
+      value: 0.93
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorDenso.g
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorDenso.r
+      value: 0.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorNiebla.g
+      value: 0.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorNiebla.r
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6088388652216395524, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Size.x
+      value: 27.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6088388652216395524, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Size.y
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 6088388652216395524, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Offset.x
+      value: 21.149982
+      objectReference: {fileID: 0}
+    - target: {fileID: 6088388652216395524, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Offset.y
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6137135487896715052, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Name
+      value: ZonaJefe
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072128018375717956, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Size.y
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072128018375717956, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Offset.y
+      value: 10
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+--- !u!4 &1855671945 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+  m_PrefabInstance: {fileID: 1855671944}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1863612270
 GameObject:
   m_ObjectHideFlags: 0
@@ -75810,6 +75934,7 @@ Transform:
   m_Children:
   - {fileID: 703325176}
   - {fileID: 1767745855}
+  - {fileID: 1855671945}
   m_Father: {fileID: 1996976641}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1893768671
@@ -78683,6 +78808,7 @@ MonoBehaviour:
   textoInteractuar: Presiona F para usar la hoguera
   textoEncender: Presiona F para encender la hoguera
   textoDescanso: Has descansado
+  textoActivada: "Hoguera activada. Si caes, volver\xE1s aqu\xED."
   torre: {fileID: 1744544643}
   colorDestello: {r: 1, g: 0.2, b: 0.15, a: 0.35}
   tiempoDestello: 0.35

@@ -692,13 +692,8 @@ MonoBehaviour:
   - "Te o\xED respirar. Siempre se oye."
   - "Los \xE1rboles ya tienen un hueso m\xE1s."
   - "Corre m\xE1s despacio la pr\xF3xima vez. As\xED suena menos."
-  muro: {fileID: 703325175}
-  visualMuro:
-  - {fileID: 643602019}
-  - {fileID: 980198855}
-  - {fileID: 1048375151}
-  - {fileID: 687139207}
-  - {fileID: 1680806002}
+  muro: {fileID: 0}
+  visualMuro: []
   muroAbierto: {r: 0.55, g: 0.7, b: 0.6, a: 0.2}
   muroCerrado: {r: 0.6, g: 0.78, b: 0.66, a: 0.75}
   ambiente: {fileID: 782401321}
@@ -2421,12 +2416,12 @@ GameObject:
   - component: {fileID: 703325176}
   - component: {fileID: 703325175}
   m_Layer: 7
-  m_Name: BloqueoArena
+  m_Name: BloqueoArena (antigua, sin uso)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &703325175
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4049,6 +4044,148 @@ Transform:
   - {fileID: 384736881}
   m_Father: {fileID: 629724819}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1131181916
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1627080588}
+    m_Modifications:
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 484480950564023850, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: arena
+      value: 
+      objectReference: {fileID: 202337878}
+    - target: {fileID: 484480950564023850, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: altoActivador
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 484480950564023850, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: largoActivador
+      value: 38.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 484480950564023850, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: encuadrarAlEmpezar
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: alto
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorBorde.b
+      value: 0.64
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorBorde.g
+      value: 0.86
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorBorde.r
+      value: 0.62
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorDenso.b
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorDenso.g
+      value: 0.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorDenso.r
+      value: 0.31
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorNiebla.b
+      value: 0.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorNiebla.g
+      value: 0.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 3926219787989036773, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: colorNiebla.r
+      value: 0.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 6088388652216395524, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Size.x
+      value: 38.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6088388652216395524, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Size.y
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 6088388652216395524, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Offset.x
+      value: 25.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6088388652216395524, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Offset.y
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6137135487896715052, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Name
+      value: ZonaJefe
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072128018375717956, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Size.y
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 9072128018375717956, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+      propertyPath: m_Offset.y
+      value: 9.5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+--- !u!4 &1131181917 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 321694565960140958, guid: 2db3babc5907684459c332ba982e6c16, type: 3}
+  m_PrefabInstance: {fileID: 1131181916}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1134326517
 GameObject:
   m_ObjectHideFlags: 0
@@ -27336,6 +27473,7 @@ Transform:
   - {fileID: 202337877}
   - {fileID: 585163278}
   - {fileID: 1979184727}
+  - {fileID: 1131181917}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1680806001
@@ -29009,6 +29147,7 @@ MonoBehaviour:
   textoInteractuar: Presiona F para usar la hoguera
   textoEncender: Presiona F para encender la hoguera
   textoDescanso: Has descansado
+  textoActivada: "Hoguera activada. Si caes, volver\xE1s aqu\xED."
   torre: {fileID: 1744544643}
   colorDestello: {r: 1, g: 0.2, b: 0.15, a: 0.35}
   tiempoDestello: 0.35

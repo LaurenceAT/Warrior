@@ -2,8 +2,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-// La arena de un jefe. Al entrar el player (trigger de este objeto):
-//   - La niebla de la puerta se vuelve solida: no se sale hasta vencer.
+// La arena de un jefe. Al pisar el activador de su ZonaJefe (sin ZonaJefe: el
+// trigger de este objeto):
+//   - El muro de niebla se forma detras del player: no se sale hasta vencer.
 //   - Empieza la musica de la fase 1 con un fundido.
 //   - Aparece el jefe, su barra grande y su nombre.
 // En la fase 2 la luz se tine, caen particulas (brasas o nieve) y la musica pasa
@@ -15,7 +16,7 @@ using UnityEngine.Rendering.Universal;
 // tramo que se repite (bucle). Asi una misma pista puede dar la parte tranquila
 // a la fase 1 y el climax a la fase 2 sin empezar siempre desde el principio.
 [RequireComponent(typeof(Collider2D))]
-public class ArenaJefe : MonoBehaviour
+public class ArenaJefe : MonoBehaviour, IArenaJefe
 {
     // Se lanza al vencer al jefe (la parte de las pociones mira aqui el reto).
     public static event System.Action AlVencer;
@@ -186,9 +187,18 @@ public class ArenaJefe : MonoBehaviour
         if (estado == Estado.Combate) pocionUsada = true;
     }
 
+    // ------------------------------------------------------------------ Zona de entrada (ZonaJefe)
+
+    // Con una ZonaJefe enlazada, la pelea la empieza su activador (y no el
+    // trigger de la arena) y la niebla es su muro.
+    public ZonaJefe ZonaEntrada { get; set; }
+    public bool PuedeEmpezar => estado == Estado.Esperando && prefabJefe != null;
+    public Vector2 PuntoJefe => new Vector2(zona.center.x, suelo + 2f);
+    public void EmpezarDesdeZona(PlayerControler p) { if (PuedeEmpezar) Empezar(); }
+
     private void OnTriggerEnter2D(Collider2D otro)
     {
-        if (estado != Estado.Esperando || !otro.CompareTag("Player") || prefabJefe == null) return;
+        if (ZonaEntrada != null || estado != Estado.Esperando || !otro.CompareTag("Player") || prefabJefe == null) return;
         Empezar();
     }
 
@@ -205,6 +215,7 @@ public class ArenaJefe : MonoBehaviour
         EnCombate = true;
         EnFase2 = false;
         PonerNiebla(true);
+        if (ZonaEntrada != null) ZonaEntrada.Cerrar();
         intentos++;
         pocionUsada = false;
         PantallaMuerte.BurlasJefe = burlas != null && burlas.Length > 0 ? burlas : null;
@@ -283,6 +294,7 @@ public class ArenaJefe : MonoBehaviour
         MensajePantalla.Banner(bannerVictoria, new Color(1f, 0.85f, 0.45f), 4f);
         Sonido.Reproducir("victoria");
         PonerNiebla(false, true);
+        if (ZonaEntrada != null) ZonaEntrada.Abrir(true);
         if (salida != null) salida.SetActive(true);
         StartCoroutine(TenirLuz(luzOriginal, intensidadOriginal, 3f));
         if (brasas != null) brasas.Stop();
@@ -335,6 +347,7 @@ public class ArenaJefe : MonoBehaviour
         Fundir(0f, 1f);
         Fundir2(0f, 1f);
         PonerNiebla(false);
+        if (ZonaEntrada != null) ZonaEntrada.Reiniciar();
         if (luzGlobal != null) { luzGlobal.color = luzOriginal; luzGlobal.intensity = intensidadOriginal; }
         if (brasas != null) Destroy(brasas.gameObject);
     }
