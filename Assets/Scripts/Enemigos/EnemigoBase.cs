@@ -52,6 +52,11 @@ public abstract class EnemigoBase : MonoBehaviour
     [Tooltip("Respiracion en reposo (0 = nada).")]
     [SerializeField] protected float respiracion = 0.015f;
 
+    [Header("Aviso en cadena")]
+    [Tooltip("Al descubrir al player por si mismo, avisa a este numero de enemigos cercanos (0 = a nadie). Los avisados no avisan a su vez (asi no se despierta medio nivel).")]
+    [SerializeField] protected int avisarCercanos = 0;
+    [SerializeField] protected float radioAviso = 7f;
+
     [Header("Rendimiento")]
     [Tooltip("Mas lejos que esto de la camara (y sin estar peleando) se duerme.")]
     [SerializeField] protected float distanciaDormir = 26f;
@@ -322,7 +327,7 @@ public abstract class EnemigoBase : MonoBehaviour
         }
 
         bool despejado = !Physics2D.Linecast(ojos, player.position, capaSuelo);
-        if (despejado && !alerta) Descubrir(0f);
+        if (despejado && !alerta) Descubrir(0f, false);
         if (!despejado && !alerta) { if (EstadoIA != "Regreso") EstadoIA = "Patrulla"; return false; }
 
         if (Reaccionando)
@@ -349,7 +354,7 @@ public abstract class EnemigoBase : MonoBehaviour
 
     // Acaba de verlo: "!" encima, un saltito y un momento quieto (cada uno tarda
     // un poco distinto).
-    private void Descubrir(float extra)
+    private void Descubrir(float extra, bool porAviso)
     {
         alerta = true;
         finAlerta = Time.time + Random.Range(reaccionAlerta.x, reaccionAlerta.y) / variacion + extra;
@@ -363,6 +368,22 @@ public abstract class EnemigoBase : MonoBehaviour
         if (d != null && d.EsElite && ElitesPresentados.Add(d.NombreElite)) MensajePantalla.TituloElite(d.NombreElite);
         Bitacora.Visto(salud);
         AlDescubrir();
+        if (!porAviso && avisarCercanos > 0) AvisarCercanos();
+    }
+
+    // Aviso en cadena con tope: los mas cercanos que aun no le han visto.
+    public int Avisados { get; private set; }
+    private void AvisarCercanos()
+    {
+        var cercanos = new List<EnemigoBase>();
+        foreach (EnemigoBase o in Activos)
+            if (o != null && o != this && !o.alerta && !o.muerto && Vector2.Distance(o.transform.position, transform.position) < radioAviso)
+                cercanos.Add(o);
+        cercanos.Sort((a, b) => Vector2.Distance(a.transform.position, transform.position).CompareTo(Vector2.Distance(b.transform.position, transform.position)));
+        int n = Mathf.Min(avisarCercanos, cercanos.Count);
+        if (n == 0) return;
+        Sonido.Reproducir("peligro", 0.35f, 1.2f);
+        for (int i = 0; i < n; i++) { cercanos[i].Alertar(Random.Range(0.2f, 0.45f)); Avisados++; }
     }
 
     private static readonly HashSet<string> ElitesPresentados = new HashSet<string>();
@@ -376,7 +397,7 @@ public abstract class EnemigoBase : MonoBehaviour
         if (muerto || alerta) return;
         if (dormido) Despertar();
         if (!BuscarPlayer()) return;
-        Descubrir(retraso);
+        Descubrir(retraso, true);
     }
 
     private void Olvidar()

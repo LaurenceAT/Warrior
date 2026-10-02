@@ -25,6 +25,7 @@ public static class PruebaCueva
     {
         SessionState.SetBool(Clave, true);
         EditorSceneManager.OpenScene(Escena);
+        ArranquePruebas.Proteger();
         EditorApplication.EnterPlaymode();
     }
 
@@ -35,6 +36,7 @@ public static class PruebaCueva
         SessionState.SetBool(Clave, true);
         SessionState.SetBool(Clave + ".Golpes", true);
         EditorSceneManager.OpenScene(Escena);
+        ArranquePruebas.Proteger();
         EditorApplication.EnterPlaymode();
     }
 
@@ -85,6 +87,7 @@ public static class PruebaCueva
         SessionState.SetBool(Clave, true);
         SessionState.SetBool(Clave + ".Vida", true);
         EditorSceneManager.OpenScene(Escena);
+        ArranquePruebas.Proteger();
         EditorApplication.EnterPlaymode();
     }
 
@@ -144,6 +147,7 @@ public static class PruebaCueva
         SessionState.SetBool(Clave, true);
         SessionState.SetBool(Clave + ".UI", true);
         EditorSceneManager.OpenScene(Escena);
+        ArranquePruebas.Proteger();
         EditorApplication.EnterPlaymode();
     }
 
@@ -237,6 +241,7 @@ public static class PruebaCueva
         SessionState.SetBool(Clave, true);
         SessionState.SetBool(Clave + ".Parte4", true);
         EditorSceneManager.OpenScene(Escena);
+        ArranquePruebas.Proteger();
         EditorApplication.EnterPlaymode();
     }
 
@@ -320,6 +325,7 @@ public static class PruebaCueva
         SessionState.SetBool(Clave, true);
         SessionState.SetBool(Clave + ".Reinicio", true);
         EditorSceneManager.OpenScene(Escena);
+        ArranquePruebas.Proteger();
         EditorApplication.EnterPlaymode();
     }
 
@@ -379,6 +385,7 @@ public static class PruebaCueva
         SessionState.SetBool(Clave, true);
         SessionState.SetBool(Clave + ".Jefe", true);
         EditorSceneManager.OpenScene(Escena);
+        ArranquePruebas.Proteger();
         EditorApplication.EnterPlaymode();
     }
 

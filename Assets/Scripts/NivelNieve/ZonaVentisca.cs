@@ -17,6 +17,8 @@ public class ZonaVentisca : MonoBehaviour
     [SerializeField] private float duracionRafaga = 1.6f;
     [Range(0f, 1f)] [SerializeField] private float neblina = 0.32f;
     public AnimadorHoja.Clip clipVentisca;
+    // Depuracion: false = la ventisca no empuja.
+    public static bool Activa = true;
 
     private PlayerControler player;
     private bool dentro;
@@ -77,6 +79,8 @@ public class ZonaVentisca : MonoBehaviour
     private void FixedUpdate()
     {
         if (!dentro || player == null) return;
+        // Tras una roca (RefugioViento) el viento no empuja.
+        if (!Activa || RefugioViento.Protege(player.transform.position)) return;
         float t = Time.time - inicioRafaga;
         bool soplando = t >= avisoRafaga && t < avisoRafaga + duracionRafaga;
         float fuerza = soplando ? fuerzaRafaga : fuerzaBase * (0.7f + 0.3f * Mathf.Sin(Time.time * 1.3f));

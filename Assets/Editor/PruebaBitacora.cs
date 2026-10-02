@@ -40,6 +40,7 @@ public static class PruebaBitacora
     {
         SessionState.SetString(Clave, modo);
         EditorSceneManager.OpenScene(escena);
+        ArranquePruebas.Proteger();
         EditorApplication.EnterPlaymode();
     }
 

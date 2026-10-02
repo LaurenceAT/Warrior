@@ -45,6 +45,7 @@ public static class PruebaRonda17
     {
         SessionState.SetString(Clave, modo);
         EditorSceneManager.OpenScene(escena);
+        ArranquePruebas.Proteger();
         EditorApplication.EnterPlaymode();
     }
 
@@ -221,7 +222,8 @@ public static class PruebaRonda17
             int maximo = rp.Maximo;
 
             // El cofre de almas y su frasco: al inventario.
-            CofreAlmas ca = Object.FindObjectsByType<CofreAlmas>(FindObjectsSortMode.None).FirstOrDefault();
+            // El cofre que da el frasco (en la nieve nueva hay otros, solo de almas).
+            CofreAlmas ca = Object.FindObjectsByType<CofreAlmas>(FindObjectsSortMode.None).FirstOrDefault(c => (bool)Campo(c, "darFrasco"));
             Comprobar(ca != null, "la Nieve tiene su cofre de almas");
             Teletransportar(ca.transform.position + Vector3.right * 0.5f + Vector3.up * 0.5f);
             yield return new WaitForSeconds(0.3f);

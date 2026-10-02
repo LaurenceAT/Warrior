@@ -65,6 +65,7 @@ public static class PruebaNieve
     {
         SessionState.SetString(Clave, modo);
         EditorSceneManager.OpenScene(escena);
+        ArranquePruebas.Proteger();
         EditorApplication.EnterPlaymode();
     }
 

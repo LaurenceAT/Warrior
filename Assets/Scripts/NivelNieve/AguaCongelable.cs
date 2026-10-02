@@ -22,10 +22,25 @@ public class AguaCongelable : MonoBehaviour, IGolpeable
         anchoLago = ancho;
     }
 
+    [Tooltip("Si tiene clave, una vez congelado sigue congelado en la partida (vacio = vuelve al reaparecer).")]
+    public string clave = "";
+    private string Bandera => "sello_" + gameObject.scene.name + "_" + clave;
+
     private void Awake()
     {
         if (puenteHielo != null) puenteHielo.enabled = false;
         if (visualHielo != null) visualHielo.SetActive(false);
+    }
+
+    private void Start()
+    {
+        if (string.IsNullOrEmpty(clave) || !Partida.Bandera(Bandera)) return;
+        // Ya se congelo en esta partida: el puente sigue ahi.
+        congelada = true;
+        if (puenteHielo != null) puenteHielo.enabled = true;
+        if (visualHielo != null) visualHielo.SetActive(true);
+        if (visualAgua != null)
+            foreach (AnimadorHoja a in visualAgua.GetComponentsInChildren<AnimadorHoja>()) a.multiplicador = 0f;
     }
 
     public void Golpear(Elemento elemento, Vector2 punto)
@@ -49,6 +64,7 @@ public class AguaCongelable : MonoBehaviour, IGolpeable
     private IEnumerator Congelar(Vector2 desde)
     {
         congelada = true;
+        if (!string.IsNullOrEmpty(clave)) Partida.PonerBandera(Bandera);
         Sonido.Reproducir("hielo_congelar_lago");
         CamaraDinamica.Sacudir(0.3f);
         if (puenteHielo != null) puenteHielo.enabled = true;

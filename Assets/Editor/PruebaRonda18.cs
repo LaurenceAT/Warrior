@@ -43,6 +43,7 @@ public static class PruebaRonda18
     {
         SessionState.SetString(Clave, modo);
         EditorSceneManager.OpenScene(escena);
+        ArranquePruebas.Proteger();
         EditorApplication.EnterPlaymode();
     }
 

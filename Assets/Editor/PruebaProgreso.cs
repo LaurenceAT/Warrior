@@ -126,6 +126,7 @@ public static class PruebaProgreso
     {
         SessionState.SetString(Clave, "codigo");
         EditorSceneManager.OpenScene("Assets/Scenes/Menu Principal.unity");
+        ArranquePruebas.Proteger();
         EditorApplication.EnterPlaymode();
     }
 

@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1690ef6fb73164640b507ef5a8c842bd, type: 3}
+  m_Name: PistasSellos
+  m_EditorClassIdentifier: 
+  entradas:
+  - elemento: 3
+    color: {r: 1, g: 0.84, b: 0.4, a: 1}
+    runa: {fileID: 1674804629613845060, guid: ce71eeb16f4a5e042940c724d7911c65, type: 3}
+    sonidoReaccion: sombra_rebote
+    sonidoAbrir: sello_roto
+    textoPista: Las sombras absorben el golpe. Solo la luz sagrada las disipa
+    textoAbrir: La luz disipa las sombras
+  - elemento: 0
+    color: {r: 1, g: 0.55, b: 0.2, a: 1}
+    runa: {fileID: 4673908504923276263, guid: 1f11297410252ba4280b98d58ed237e7, type: 3}
+    sonidoReaccion: hielo_rebote
+    sonidoAbrir: hielo_romper
+    textoPista: "El hielo es demasiado duro. Quiz\xE1 el fuego..."
+    textoAbrir: "\xA1El hielo se derrite!"
+  - elemento: 1
+    color: {r: 0.6, g: 0.85, b: 1, a: 1}
+    runa: {fileID: -9065347158251605998, guid: dc8b6c4aa2006bd43a5940fbd24ca60c, type: 3}
+    sonidoReaccion: agua_chapoteo
+    sonidoAbrir: hielo_congelar_lago
+    textoPista: "El agua est\xE1 helada... casi a punto de congelarse"
+    textoAbrir: Se congela
+  - elemento: 2
+    color: {r: 0.62, g: 0.42, b: 0.95, a: 1}
+    runa: {fileID: 0}
+    sonidoReaccion: sombra_rebote
+    sonidoAbrir: sello_roto
+    textoPista: 
+    textoAbrir: 
+  - elemento: 4
+    color: {r: 0.9, g: 0.2, b: 0.25, a: 1}
+    runa: {fileID: 0}
+    sonidoReaccion: sombra_rebote
+    sonidoAbrir: sello_roto
+    textoPista: 
+    textoAbrir: 

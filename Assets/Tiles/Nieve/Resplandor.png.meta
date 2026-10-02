@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ce71eeb16f4a5e042940c724d7911c65
+guid: 4bd6d604a5708de4e800e4275deb5c11
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1674804629613845060
-    second: icon_14_0
+      213: -8182987949356817128
+    second: Resplandor_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 28
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: icon_14_0
+      name: Resplandor_0
       rect:
         serializedVersion: 2
-        x: 4
-        y: 2
-        width: 24
-        height: 28
+        x: 7
+        y: 7
+        width: 18
+        height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 44a1058efe91e3710800000000000000
-      internalID: 1674804629613845060
+      spriteID: 815e84db0df207e80800000000000000
+      internalID: -8182987949356817128
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      icon_14_0: 1674804629613845060
+      Resplandor_0: -8182987949356817128
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

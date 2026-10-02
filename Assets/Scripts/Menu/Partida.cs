@@ -71,7 +71,25 @@ public static class Partida
     public static Vector2 PosicionAparicion { get; private set; }
 
     // Las pruebas automaticas guardan en otra carpeta para no tocar las partidas reales.
-    public static string CarpetaPruebas;
+    // En las pruebas por linea de comandos (solo Editor) la carpeta se fija antes de
+    // darle a Play (ArranquePruebas), asi ni el primer fotograma toca el progreso real.
+    public static string CarpetaPruebas
+    {
+        get
+        {
+#if UNITY_EDITOR
+            if (carpetaPruebas == null && Application.isBatchMode)
+            {
+                string s = UnityEditor.SessionState.GetString(ClaveCarpetaArranque, "");
+                if (s != "") return s;
+            }
+#endif
+            return carpetaPruebas;
+        }
+        set => carpetaPruebas = value;
+    }
+    private static string carpetaPruebas;
+    public const string ClaveCarpetaArranque = "Warrior.CarpetaPruebasArranque";
     // La del perfil activo (RegistroGuardado: real o "Simular jugador nuevo").
     private static string Carpeta => RegistroGuardado.Carpeta;
     private static string Archivo(int ranura) => Path.Combine(Carpeta, $"partida_{ranura}.json");
