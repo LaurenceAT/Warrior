@@ -3074,9 +3074,12 @@ public class PlayerControler : MonoBehaviour
     }
 
     // Solo se para lo que viene de delante.
-    private bool GolpeDeFrente(Transform atacante)
+    // "origenX": de donde viene el golpe (NaN = de donde esta el atacante ahora).
+    // Para los dashes rapidos que te atraviesan: cuenta el lado por el que venian.
+    private bool GolpeDeFrente(Transform atacante, float origenX = float.NaN)
     {
-        float dx = atacante.position.x - m_transform.position.x;
+        float x = float.IsNaN(origenX) ? atacante.position.x : origenX;
+        float dx = x - m_transform.position.x;
         return Mathf.Abs(dx) < 0.05f || (int)Mathf.Sign(dx) == direction;
     }
 
@@ -3972,6 +3975,11 @@ public class PlayerControler : MonoBehaviour
     // (proyectiles, peligros del escenario) magicos. Los jefes no usan esto:
     // dicen el tipo de cada ataque (TakeDamage con TipoDano).
     public static bool SiguienteGolpeMagico;
+    // El siguiente golpe viene desde arriba (la Cazadora cayendo encima): se
+    // puede parar mires hacia donde mires.
+    public static bool SiguienteDesdeArriba;
+    // El siguiente golpe viene de esta x (un dash que te atraviesa): cuenta ese lado.
+    public static float SiguienteOrigenX = float.NaN;
     // Lo contrario: un proyectil fisico (una flecha) cuenta como golpe.
     public static bool SiguienteGolpeFisico;
 
@@ -3992,13 +4000,17 @@ public class PlayerControler : MonoBehaviour
     {
         SiguienteGolpeMagico = false;
         SiguienteGolpeFisico = false;
+        bool desdeArriba = SiguienteDesdeArriba;
+        SiguienteDesdeArriba = false;
+        float origenX = SiguienteOrigenX;
+        SiguienteOrigenX = float.NaN;
         CausaMuerte.Golpe(atacante);
         // Desafio en modo Dificil: el jefe pega mas (1 fuera de el).
         damage = Mathf.RoundToInt(damage * Desafio.MultDano);
         damage = ConResistencia(damage, tipo == TipoDano.Magico);
         if (InvulnerableExterno || invulnerableDerribado) return ResultadoDano.Ignorado;
 
-        if (atacante != null && isBlocking && !isInvincible && GolpeDeFrente(atacante.transform))
+        if (atacante != null && isBlocking && !isInvincible && (desdeArriba || GolpeDeFrente(atacante.transform, origenX)))
         {
             float ventana = TopeVentanaParry > 0f ? Mathf.Min(ventanaParryActual, TopeVentanaParry) : ventanaParryActual;
             if (tBloqueo <= ventana) { Parry(atacante); return ResultadoDano.Parry; }

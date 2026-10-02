@@ -42,6 +42,13 @@ public partial class JefeCazadora
                               CamaraCazadora.Sacudir(ajustes.temblorLigero);
                               if (this != null && !muertaDelTodo) RobarVidaCon(e);
                           }
+                          // Durante su escudo, parar una ola le quita 1 al momento (y otro
+                          // mas cuando la ola devuelta le llega).
+                          else if (r == PlayerControler.ResultadoDano.Parry && this != null && escudoActivo)
+                          {
+                              OlasParadasEscudo++;
+                              RestarEscudo(1f, PC != null ? (Vector2)PC.transform.position + Vector2.up * 0.6f : Pos);
+                          }
                       }, esc);
         Sonar("ola", 0.8f);
     }
@@ -67,6 +74,8 @@ public partial class JefeCazadora
         ultimoResultado = null;
         bool pego = false;
         float anterior = Pos.x, siguiente = 0f, inicio = Time.time;
+        // De donde viene: el parry cuenta ese lado aunque ya te haya atravesado.
+        float desdeX = Pos.x;
         while (cuerpo.EnTrayecto)
         {
             yield return new WaitForFixedUpdate();
@@ -82,7 +91,7 @@ public partial class JefeCazadora
             if (DepuracionCazadora.VerCajas) CajaDebug.Mostrar(centro, tam, Color.red, 0.03f);
             EstadoPlayer estado = letal ? EstadoPlayer.Ninguno : OlaLuz.EstadoDe(elementoAtaque);
             if (estado == EstadoPlayer.Sangrado) estado = EstadoPlayer.Ninguno;
-            var r = GolpeCazadora.Caja(centro, tam, dano, this, PlayerControler.TipoDano.Fisico, estado, ajustes.acumulacionEstado, !letal && noLetalAccion, imparable);
+            var r = GolpeCazadora.Caja(centro, tam, dano, this, PlayerControler.TipoDano.Fisico, estado, ajustes.acumulacionEstado, !letal && noLetalAccion, imparable, false, desdeX);
             anterior = Pos.x;
             if (!r.HasValue || r.Value == PlayerControler.ResultadoDano.Ignorado) continue;
             pego = true;
@@ -103,11 +112,14 @@ public partial class JefeCazadora
         int a0 = Mathf.Max(0, c.PrimerActivo), a1 = Mathf.Max(a0, c.UltimoActivo);
         il.anim.Reproducir(clip, ((a1 - a0 + 1) / c.fps) / Mathf.Max(0.02f, segundos), a0);
         il.anim.ColorEfecto(Color.Lerp(ColorElemento(elementoAtaque), ajustes.colorIlusion, 0.4f));
-        bool pego = false;
+        bool pego = false, listo = false;
         for (float t = 0f; il.Viva && t < segundos + 0.05f && il.anim.Fotograma <= a1; t += Time.deltaTime)
         {
             if (!pego && il.anim.CuadroActivo)
             {
+                // Un fotograma de margen: si paras a la verdadera en ese instante, la
+                // ilusion se deshace antes de tocarte.
+                if (!listo) { listo = true; yield return null; if (!il.Viva) break; }
                 Rect caja = c.Caja(il.anim.Fotograma);
                 Vector2 centro = il.Posicion + new Vector2(il.Mirada * caja.center.x, caja.center.y);
                 if (DepuracionCazadora.VerCajas) CajaDebug.Mostrar(centro, caja.size, Color.magenta, 0.03f);
@@ -126,7 +138,7 @@ public partial class JefeCazadora
         il.anim.ColorEfecto(ajustes.colorIlusion);
         il.Mover(new Vector2(destino, suelo), segundos);
         bool pego = false;
-        float anterior = il.Posicion.x, siguiente = 0f;
+        float anterior = il.Posicion.x, siguiente = 0f, desdeX = il.Posicion.x;
         while (il.Viva && il.Moviendose)
         {
             yield return null;
@@ -138,7 +150,19 @@ public partial class JefeCazadora
             if (pego) continue;
             float x0 = Mathf.Min(anterior, il.Posicion.x) - 0.45f, x1 = Mathf.Max(anterior, il.Posicion.x) + 0.45f;
             Vector2 centro = new Vector2((x0 + x1) * 0.5f, suelo + 0.7f);
-            var r = GolpeCazadora.Caja(centro, new Vector2(x1 - x0, 1.4f), dano, il, PlayerControler.TipoDano.Fisico, EstadoPlayer.Ninguno, 0f, noLetalAccion);
+            // El parry a la verdadera manda: si la ilusion llega un instante antes,
+            // espera (hasta 0,12 s) a que ella resuelva su golpe; si la paras, se deshace.
+            if (GolpeCazadora.PlayerEn(centro, new Vector2(x1 - x0, 1.4f)) != null)
+            {
+                float espera = 0f;
+                do { yield return null; espera += Time.deltaTime; }
+                while (il.Viva && ilusionesConElla.Contains(il) && enGolpe && espera < 0.12f);
+                if (!il.Viva) break;
+                x0 = Mathf.Min(x0, il.Posicion.x - 0.45f);
+                x1 = Mathf.Max(x1, il.Posicion.x + 0.45f);
+                centro = new Vector2((x0 + x1) * 0.5f, suelo + 0.7f);
+            }
+            var r = GolpeCazadora.Caja(centro, new Vector2(x1 - x0, 1.4f), dano, il, PlayerControler.TipoDano.Fisico, EstadoPlayer.Ninguno, 0f, noLetalAccion, false, false, desdeX);
             anterior = il.Posicion.x;
             if (r.HasValue) pego = true;
         }
@@ -268,7 +292,7 @@ public partial class JefeCazadora
             if (Time.time >= siguiente) { siguiente = Time.time + ajustes.cadaEstela * 2f; Estela(); }
             if (cortando && !pego)
             {
-                var r = GolpearCuadro(c, 1, dano, PlayerControler.TipoDano.Fisico, 1f, false, noLetalAccion);
+                var r = GolpearCuadro(c, 1, dano, PlayerControler.TipoDano.Fisico, 1f, false, noLetalAccion, true);
                 if (r.HasValue) { pego = true; ultimoResultado = r; TrasPegar(r.Value, dano); }
             }
             yield return null;
@@ -312,7 +336,7 @@ public partial class JefeCazadora
         resistido = e;
         finResistencia = Time.time + ajustes.duracionResistencia;
         siguienteResistencia = Time.time + ajustes.enfriamientoResistencia;
-        TextoFlotante.Mostrar("Resiste " + Elementos.Nombre(e), Pos + Vector2.up * 2.1f, c, 1f);
+        TextoFlotante.Mostrar("Resiste " + Elementos.Nombre(e), Pos + Vector2.up * 2.1f * Tam, c, 1f);
         cuerpoAnim.ColorEfecto(c);
     }
 
@@ -339,8 +363,10 @@ public partial class JefeCazadora
             otras.Add(il);
         }
         yield return AvisoConIlusiones("estocada", 0, Aviso(ajustes.flanqueo, true), true, otras);
-        if (il != null && il.Viva) StartCoroutine(GolpeIlusion(il, alta ? "luna" : "barrido", GolpeT(ajustes.flanqueo), Dano(ajustes.danoIlusion)));
+        ilusionesConElla.Clear();
+        if (il != null && il.Viva) { ilusionesConElla.Add(il); StartCoroutine(GolpeIlusion(il, alta ? "luna" : "barrido", GolpeT(ajustes.flanqueo), Dano(ajustes.danoIlusion))); }
         yield return Golpe("barrido", GolpeT(ajustes.flanqueo), Dano(ajustes.flanqueo.dano));
+        ilusionesConElla.Clear();
         if (il != null) il.Deshacer();
         if (parado) yield break;
         yield return Recuperar(ajustes.flanqueo, true);
@@ -383,8 +409,10 @@ public partial class JefeCazadora
         Vector2 centro = new Vector2(x + il.Mirada * caja.center.x, suelo + Mathf.Max(0.6f, caja.center.y));
         Vector2 tam = new Vector2(caja.width, Mathf.Max(1.2f, caja.height * 0.7f));
         if (DepuracionCazadora.VerCajas) CajaDebug.Mostrar(centro, tam, Color.magenta, 0.15f);
-        var r = GolpeCazadora.Caja(centro, tam, Dano(ajustes.ilusionCae.dano), il, PlayerControler.TipoDano.Fisico, EstadoPlayer.Ninguno, 0f, noLetalAccion);
+        var r = GolpeCazadora.Caja(centro, tam, Dano(ajustes.ilusionCae.dano), il, PlayerControler.TipoDano.Fisico, EstadoPlayer.Ninguno, 0f, noLetalAccion, false, true);
         if (r.HasValue && r.Value == PlayerControler.ResultadoDano.Recibido) CamaraCazadora.Sacudir(ajustes.temblorLigero);
+        // Durante su escudo, parar una ilusion que cae le quita un golpe al escudo.
+        if (r.HasValue && r.Value == PlayerControler.ResultadoDano.Parry && escudoActivo) { IlusionesParadasEscudo++; RestarEscudo(1f, new Vector2(x, suelo + 0.8f)); }
         CamaraCazadora.Sacudir(ajustes.temblorLigero * 0.6f);
         PolvoCazadora.Soltar(new Vector2(x, suelo + 0.1f), new Color(0.7f, 0.82f, 1f, 0.8f), 10, 1.2f, false);
         il.anim.Reproducir("tajoAbajo", 1f, 2);
@@ -541,7 +569,7 @@ public partial class JefeCazadora
                 Estela();
                 if (!pego)
                 {
-                    var r = GolpearCuadro(c, 1, dano, PlayerControler.TipoDano.Fisico, 1f, false, noLetalAccion);
+                    var r = GolpearCuadro(c, 1, dano, PlayerControler.TipoDano.Fisico, 1f, false, noLetalAccion, true);
                     if (r.HasValue) { pego = true; TrasPegar(r.Value, dano); }
                 }
                 yield return null;
@@ -565,7 +593,10 @@ public partial class JefeCazadora
         PrepararElementos();
         Vector2 pp = p.transform.position;
         int lado = Pos.x < pp.x ? -1 : 1;
-        float xa = cuerpo.Limitar(pp.x + lado * 4.5f), xb = cuerpo.Limitar(pp.x - lado * 4.5f);
+        // Las dos a la misma distancia de ti (si una pared recorta un lado, el otro
+        // tambien): llegan a la vez, y asi se puede parar a la verdadera.
+        float hueco = Mathf.Min(4.5f, Mathf.Abs(cuerpo.Limitar(pp.x + lado * 4.5f) - pp.x), Mathf.Abs(cuerpo.Limitar(pp.x - lado * 4.5f) - pp.x));
+        float xa = pp.x + lado * hueco, xb = pp.x - lado * hueco;
         MirarA(xa);
         cuerpoAnim.Pose("cruce", 1);
         yield return Dash(xa, 0.22f);
@@ -577,8 +608,11 @@ public partial class JefeCazadora
         yield return AvisoConIlusiones("cruce", 0, Aviso(ajustes.cruceDoble, true), true, otras);
         pp = p.transform.position;
         float dur = GolpeT(ajustes.cruceDoble) / RapidezElemento;
-        if (il != null && il.Viva) StartCoroutine(CruceIlusion(il, cuerpo.Limitar(pp.x + lado * ajustes.cruceDetras), dur / Mathf.Max(0.1f, F.velocidadMovimiento), Dano(ajustes.danoIlusion)));
-        yield return CruceCuerpo(cuerpo.Limitar(pp.x - lado * ajustes.cruceDetras), dur, Dano(ajustes.cruceDoble.dano), false, false, false);
+        ilusionesConElla.Clear();
+        float detras = Mathf.Min(ajustes.cruceDetras, Mathf.Abs(cuerpo.Limitar(pp.x + lado * ajustes.cruceDetras) - pp.x), Mathf.Abs(cuerpo.Limitar(pp.x - lado * ajustes.cruceDetras) - pp.x));
+        if (il != null && il.Viva) { ilusionesConElla.Add(il); StartCoroutine(CruceIlusion(il, pp.x + lado * detras, dur, Dano(ajustes.danoIlusion))); }
+        yield return CruceCuerpo(pp.x - lado * detras, dur, Dano(ajustes.cruceDoble.dano), false, false, false);
+        ilusionesConElla.Clear();
         if (il != null) il.Deshacer();
         if (parado) yield break;
         yield return Recuperar(ajustes.cruceDoble, true);

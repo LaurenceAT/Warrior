@@ -138,7 +138,7 @@ MonoBehaviour:
   - golpes: 10
     golpesOscuridad: 5
     tiempo: 7
-    cura: 0.3
+    cura: 0.2
     aturdida: 3
     bonusDano: 1.3
     cadaOla: 1.2
@@ -150,7 +150,7 @@ MonoBehaviour:
   - golpes: 10
     golpesOscuridad: 5
     tiempo: 7
-    cura: 0.3
+    cura: 0.2
     aturdida: 3
     bonusDano: 1.3
     cadaOla: 1.6
@@ -162,7 +162,7 @@ MonoBehaviour:
   - golpes: 10
     golpesOscuridad: 5
     tiempo: 5.5
-    cura: 0.3
+    cura: 0.2
     aturdida: 3
     bonusDano: 1.3
     cadaOla: 1.3

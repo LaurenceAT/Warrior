@@ -24,7 +24,7 @@ public partial class JefeCazadora
         cuerpoAnim.Pose("muerte", 1);
         cuerpoAnim.Temblar(0.02f);
         if (!string.IsNullOrEmpty(texto))
-            TextoFlotante.Mostrar(texto, Pos + Vector2.up * 2.1f, new Color(1f, 0.95f, 0.7f), 1f);
+            TextoFlotante.Mostrar(texto, Pos + Vector2.up * 2.1f * Tam, new Color(1f, 0.95f, 0.7f), 1f);
         Sonar("aturdida", 0.8f);
         bonusActivo = conBonus;
         float siguiente = 0f;
@@ -63,6 +63,7 @@ public partial class JefeCazadora
         Sonar("guardia", 0.8f);
         if (vidaBaja) UICazadora.Latido(true);
         enGuardia = true;
+        inicioGuardia = Time.time;
         parryHecho = false;
         float siguiente = 0f;
         for (float t = 0f; t < ajustes.duracionPose && !parryHecho; t += Time.deltaTime)
@@ -70,7 +71,7 @@ public partial class JefeCazadora
             if (Time.time >= siguiente)
             {
                 siguiente = Time.time + 0.16f;
-                PolvoCazadora.Soltar(Pos + new Vector2(mirada * 0.25f, 1.5f), new Color(1f, 1f, 1f, 0.9f), 2, 0.25f);
+                PolvoCazadora.Soltar(Pos + new Vector2(mirada * 0.25f, 1.5f) * Tam, new Color(1f, 1f, 1f, 0.9f), 2, 0.25f);
             }
             cuerpoAnim.Destello(new Color(0.9f, 0.95f, 1f), 0.18f + 0.12f * Mathf.Sin(t * 18f), 0.05f);
             yield return null;
@@ -86,6 +87,18 @@ public partial class JefeCazadora
         yield return EstocadaTrasParry(vidaBaja);
     }
 
+    // Al principio de la guardia: tu golpe rebota en su espada sin castigo.
+    private float inicioGuardia = -99f;
+    public int RebotesGuardia { get; private set; }
+    public bool ParoTuGolpe => parryHecho;
+
+    private void ReboteGuardia()
+    {
+        RebotesGuardia++;
+        Sonar("guardia", 0.5f, 1.3f);
+        PolvoCazadora.Soltar(Pos + new Vector2(mirada * 0.4f, 1.1f) * Tam, Color.white, 6, 0.6f);
+    }
+
     // El contacto (lo llama tu golpe, desde Modificar).
     private void ParryDeLaCazadora()
     {
@@ -93,11 +106,11 @@ public partial class JefeCazadora
         enGuardia = false;
         parryHecho = true;
         Sonar("parry", 1f);
-        PolvoCazadora.Soltar(Pos + new Vector2(mirada * 0.4f, 1.1f), Color.white, 24, 1.8f);
+        PolvoCazadora.Soltar(Pos + new Vector2(mirada * 0.4f, 1.1f) * Tam, Color.white, 24, 1.8f);
         ScreenFlash.Destello(new Color(1f, 1f, 1f, 0.3f), 0.12f);
         CamaraCazadora.Congelar(ajustes.hitStopParry);
         CamaraCazadora.Acercar(ajustes.zoomParry, ajustes.esperaEstocada + 0.6f);
-        TextoFlotante.Mostrar("¡Parada!", Pos + Vector2.up * 2.2f, new Color(1f, 0.9f, 0.6f), 1f);
+        TextoFlotante.Mostrar("¡Parada!", Pos + Vector2.up * 2.2f * Tam, new Color(1f, 0.9f, 0.6f), 1f);
         PlayerControler p = PC;
         if (p != null)
         {
@@ -154,8 +167,8 @@ public partial class JefeCazadora
         cuerpoAnim.ColorEfecto(ajustes.colorNormal);
         Sonar("tajo", 1f, 0.9f);
         Estela();
-        Vector2 centro = new Vector2(Pos.x + dir * (ajustes.alcanceEstocada * 0.5f + 0.2f), suelo + 0.75f);
-        Vector2 tam = new Vector2(ajustes.alcanceEstocada + 1f, 1.6f);
+        Vector2 centro = new Vector2(Pos.x + dir * (ajustes.alcanceEstocada * 0.5f + 0.2f), suelo + 0.75f * Tam);
+        Vector2 tam = new Vector2(ajustes.alcanceEstocada + 1f, 1.6f * Tam);
         if (DepuracionCazadora.VerCajas) CajaDebug.Mostrar(centro, tam, Color.red, 0.2f);
         var r = GolpeCazadora.Caja(centro, tam, Dano(ajustes.danoEstocadaParry), this, PlayerControler.TipoDano.Fisico, EstadoPlayer.Ninguno, 0f, false, true);
         enGolpe = false;
@@ -254,9 +267,24 @@ public partial class JefeCazadora
         cuerpoAnim.Temblar(0.01f);
         float siguienteOla = 0.5f, siguienteCaida = es.inicioCaidas, siguienteLuz = 0f;
         PrepararElementos();
+        // Se cura poco a poco mientras dura: empieza casi sin curarse y va
+        // acelerando (premia romperlo pronto); si aguanta entero, suma "cura".
+        // Si le rompes el escudo deja de curarse, pero no pierde lo ya curado.
+        float curaTotal = salud.MaxHealth * es.cura, pendiente = 0f;
+        int curado = 0;
         float t2 = 0f;
         while (t2 < es.tiempo && escudoActivo)
         {
+            float duracion = Mathf.Max(0.1f, es.tiempo);
+            pendiente += curaTotal * 2f * (t2 / duracion) * DtReal / duracion;
+            if (pendiente >= 1f && salud.CurrentHealth < salud.MaxHealth)
+            {
+                int n = Mathf.FloorToInt(pendiente);
+                pendiente -= n;
+                curado += n;
+                salud.Curar(n);
+                if (Random.value < 0.35f) PolvoCazadora.Soltar(Pos + new Vector2(Random.Range(-0.4f, 0.4f), 0.4f) * Tam, new Color(1f, 0.85f, 0.45f, 1f), 1, 0.35f);
+            }
             // La camara se abre para verte a ti, a ella y al escudo.
             CamaraCazadora.Ampliar(ajustes.zoomEscudo, 0.25f);
             if (Time.time >= siguienteLuz)
@@ -297,12 +325,50 @@ public partial class JefeCazadora
         }
         escudoActivo = false;
         if (burbuja != null) burbuja.enabled = false;
-        int cura = Mathf.RoundToInt(salud.MaxHealth * es.cura);
-        salud.Curar(cura);
+        // Ya se curo durante el escudo: aqui solo el aviso de lo que gano.
         Sonar("curar", 0.9f);
-        TextoFlotante.Mostrar("+" + cura, Pos + Vector2.up * 2.1f, new Color(1f, 0.9f, 0.55f), 1.1f);
+        TextoFlotante.Mostrar("+" + curado, Pos + Vector2.up * 2.1f * Tam, new Color(1f, 0.9f, 0.55f), 1.1f);
         PolvoCazadora.Soltar(Pos + Vector2.up * 0.8f, new Color(1f, 0.92f, 0.6f, 1f), 30, 1.6f);
         yield return Pausa(0.4f);
+    }
+
+    // Una ola suya que le devolviste con un parry. True si la toca (y se deshace).
+    //   - Con escudo: le quita 1 golpe.
+    //   - En guardia: se deshace sin efecto (no es un golpe tuyo: no te castiga).
+    //   - Si no: le hace dano (danoOlaDevuelta de su barra).
+    public int OlasDevueltas { get; private set; }
+    public int IlusionesParadasEscudo { get; private set; }
+    public int OlasParadasEscudo { get; private set; }
+    public bool RecibirOlaDevuelta(Vector2 centro, Vector2 tam)
+    {
+        if (muertaDelTodo) return false;
+        Collider2D col = GetComponent<Collider2D>();
+        Bounds b = col != null ? col.bounds : new Bounds(Pos + Vector2.up * 0.8f * Tam, new Vector3(0.9f, 1.7f, 0f) * Tam);
+        Rect ola = new Rect(centro - tam * 0.5f, tam);
+        if (!ola.Overlaps(Rect.MinMaxRect(b.min.x, b.min.y, b.max.x, b.max.y))) return false;
+        if (cuerpoAnim.AlfaActual < 0.2f) return false;   // fuera de la vista (saltando, fundida): pasa de largo
+        OlasDevueltas++;
+        Vector2 punto = new Vector2(Mathf.Clamp(centro.x, b.min.x, b.max.x), b.min.y + 0.4f);
+        PolvoCazadora.Soltar(punto, new Color(1f, 0.95f, 0.75f, 1f), 12, 1.2f);
+        if (escudoActivo) { RestarEscudo(1f, punto); return true; }
+        if (enGuardia || invulnerable || transicion) { Sonar("guardia", 0.5f, 1.3f); return true; }
+        int dano = Mathf.Max(1, Mathf.RoundToInt(salud.MaxHealth * ajustes.danoOlaDevuelta));
+        salud.TakeDamage(dano, punto, 0f);
+        Sonar("tajo", 0.6f, 1.3f);
+        return true;
+    }
+
+    // Quita golpes al escudo sin ser un golpe de espada (ola devuelta, parry a una
+    // ilusion que cae): mismo aviso visual que un golpe normal.
+    private void RestarEscudo(float cantidad, Vector2 punto)
+    {
+        if (!escudoActivo) return;
+        golpesEscudo += cantidad;
+        Sonar("escudo_golpe", 0.8f, 1.15f);
+        PolvoCazadora.Soltar(punto, new Color(1f, 0.95f, 0.75f, 1f), 8, 1f);
+        if (burbuja != null) StartCoroutine(DestelloBurbuja(new Color(1f, 1f, 1f, 0.6f)));
+        ActualizarEscudo();
+        if (golpesEscudo >= golpesEscudoMax - 0.001f) RomperEscudo();
     }
 
     // Un golpe tuyo contra el escudo (desde Modificar). Cuenta 1 por golpe que
@@ -625,7 +691,7 @@ public partial class JefeCazadora
         if (!delatado)
         {
             AlSilencioCaza?.Invoke(false);
-            TextoFlotante.Mostrar("...", Pos + Vector2.up * 2f, new Color(0.8f, 0.9f, 1f), 1f);
+            TextoFlotante.Mostrar("...", Pos + Vector2.up * 2f * Tam, new Color(0.8f, 0.9f, 1f), 1f);
             yield return Aturdida(ajustes.expuestaTrasInstakill + 1f, "Perdió tu rastro", false);
             yield break;
         }

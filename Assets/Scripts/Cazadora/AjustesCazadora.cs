@@ -148,6 +148,10 @@ public class AjustesCazadora : ScriptableObject
     public float duracionPose = 1.1f;
     [Tooltip("Tiempo minimo entre dos guardias.")]
     public float enfriamientoParry = 12f;
+    [Tooltip("Gracia al empezar la guardia (segundos): el golpe que ya ibas a dar rebota sin castigo. Solo castiga si sigues pegando despues.")]
+    public float graciaGuardia = 0.3f;
+    [Tooltip("Dano de una ola suya que le devuelves con un parry (fraccion de su barra) cuando no tiene escudo. Con escudo le quita 1 golpe.")]
+    [Range(0f, 0.2f)] public float danoOlaDevuelta = 0.03f;
     [Tooltip("Pausa muy breve al contacto (segundos reales).")]
     public float hitStopParry = 0.08f;
     [Tooltip("Lo que quedas aturdido cuando te para el golpe (sin moverte, atacar, rodar, saltar, beber ni imbuir). Cubre hasta la estocada.")]

@@ -152,8 +152,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.68}
-  m_Size: {x: 0.75, y: 1.35}
+  m_Offset: {x: 0, y: 0.85}
+  m_Size: {x: 0.9375, y: 1.6875}
   m_Direction: 0
 --- !u!114 &9209567910248065355
 MonoBehaviour:
@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc7a0991f13a91a4dbb00423cf5a85af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  definicion: {fileID: 0}
   maxHealth: 2400
   currentHealth: 0
   deathVFX: {fileID: 0}
@@ -240,6 +241,21 @@ MonoBehaviour:
     m_Bits: 0
   spriteMiraDerecha: 1
   colorAviso: {r: 1, g: 0.55, b: 0.15, a: 1}
+  aceleracion: 16
+  frenada: 24
+  retrasoGiro: {x: 0.08, y: 0.2}
+  reaccionAlerta: {x: 0.25, y: 0.45}
+  distanciaGrupo: 0.8
+  respiracion: 0.015
+  avisarCercanos: 0
+  radioAviso: 7
+  distanciaDormir: 26
+  alturaSaltoMaxima: 2.5
+  distanciaSaltoMaxima: 9
+  preparacionSalto: 0.22
+  recuperacionSalto: 0.2
+  enfriamientoSalto: 1
+  radioZona: 14
   sonidos: {fileID: 11400000, guid: 17c005cddcc41e9419097c4e5c4471f2, type: 2}
   ajustes: {fileID: 11400000, guid: 6279ce7575d5cdc4cbeecac110663f00, type: 2}
   cuerpoAnim: {fileID: 1605958919371165503}
@@ -975,7 +991,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.68}
+  m_Offset: {x: 0, y: 0.85}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -985,7 +1001,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.75, y: 1.35}
+  m_Size: {x: 0.9375, y: 1.6875}
   m_EdgeRadius: 0
 --- !u!114 &570804701159648142
 MonoBehaviour:
@@ -999,6 +1015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc7a0991f13a91a4dbb00423cf5a85af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  definicion: {fileID: 0}
   maxHealth: 999999
   currentHealth: 0
   deathVFX: {fileID: 0}

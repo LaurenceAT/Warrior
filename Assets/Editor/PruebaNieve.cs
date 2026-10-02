@@ -1240,6 +1240,8 @@ public static class PruebaNieve
                 j.ForzarAtaque("guardia");
                 float t0 = Time.time;
                 while (!(bool)GetCampo(j, "enGuardia") && Time.time - t0 < 8f) yield return null;
+                // Pasada la gracia del principio de la guardia (ahi tu golpe solo rebota).
+                yield return new WaitForSeconds(j.Ajustes.graciaGuardia + 0.05f);
                 float xj = j.transform.position.x;
                 int lado = intento == 0 ? -1 : 1;
                 Teletransportar(new Vector3(j.Cuerpo.Limitar(xj + lado * 0.9f), 0.8f, 0f));

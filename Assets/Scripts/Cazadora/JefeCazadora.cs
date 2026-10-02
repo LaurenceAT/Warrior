@@ -194,7 +194,13 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
     {
         if (invulnerable || transicion || muertaDelTodo) return 0;
         // En guardia: tu golpe rebota (parry de la Cazadora).
-        if (enGuardia) { ParryDeLaCazadora(); return 0; }
+        if (enGuardia)
+        {
+            // Al empezar la guardia, tu golpe rebota sin castigo (no te dio tiempo a verla).
+            if (Time.time - inicioGuardia < ajustes.graciaGuardia) ReboteGuardia();
+            else ParryDeLaCazadora();
+            return 0;
+        }
         // El escudo se lleva el golpe (cuenta golpes, no dano).
         if (escudoActivo) { GolpeAlEscudo(EnemyHealth.ElementoDelGolpe); return 0; }
         if (bonusActivo) dano = Mathf.RoundToInt(dano * bonusDano);
@@ -575,7 +581,8 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
         }
         enGolpe = false;
         // Llamas del fuego donde cae el tajo.
-        if (elementoAtaque == Elemento.Fuego)
+        // (si lo has parado, no: un parry perfecto no te deja quemado)
+        if (elementoAtaque == Elemento.Fuego && ultimoResultado != PlayerControler.ResultadoDano.Parry)
         {
             Rect caja = c.Caja(a0);
             LlamaSuelo.Poner(new Vector2(Pos.x + mirada * caja.center.x, suelo), ajustes.duracionLlamas, Mathf.Max(1, dano / 8), ajustes.acumulacionEstado * 0.4f);
@@ -583,7 +590,7 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
     }
 
     private PlayerControler.ResultadoDano? GolpearCuadro(SpritesCazadora.Clip c, int cuadro, int dano, PlayerControler.TipoDano tipo,
-                                                         float escala, bool imparable, bool noLetal)
+                                                         float escala, bool imparable, bool noLetal, bool desdeArriba = false)
     {
         Rect caja = c.Caja(cuadro);
         if (caja.width <= 0f) return null;
@@ -593,8 +600,16 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
         if (DepuracionCazadora.VerCajas) CajaDebug.Mostrar(centro, tam, Color.red, 0.03f);
         EstadoPlayer estado = OlaLuz.EstadoDe(elementoAtaque);
         if (estado == EstadoPlayer.Sangrado) estado = EstadoPlayer.Ninguno;
-        return GolpeCazadora.Caja(centro, tam, dano, this, tipo, estado, ajustes.acumulacionEstado, noLetal, imparable);
+        return GolpeCazadora.Caja(centro, tam, dano, this, tipo, estado, ajustes.acumulacionEstado, noLetal, imparable, desdeArriba);
     }
+
+    // Cuanto se ha agrandado su cuerpo (los sprites; Ronda20): lo que va pegado a
+    // ella (sombra, burbuja, textos, chispas) crece igual.
+    private float Tam => cuerpoAnim != null && cuerpoAnim.hojas != null ? cuerpoAnim.hojas.Escala : 1f;
+
+    // Ilusiones que atacan a la vez que ella (Flanqueo, Cruce doble): si paras a
+    // la verdadera, se deshacen.
+    private readonly List<IlusionCazadora> ilusionesConElla = new List<IlusionCazadora>();
 
     // Lo que pasa al conectar: parry (se aturde), o golpe (camara, robo de vida).
     private void TrasPegar(PlayerControler.ResultadoDano r, int dano)
@@ -602,6 +617,11 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
         if (r == PlayerControler.ResultadoDano.Parry)
         {
             parado = true;
+            // Se frena en seco: no sigue deslizandose a traves de ti.
+            cuerpo.CortarTrayecto();
+            cuerpo.Detener();
+            foreach (IlusionCazadora il in ilusionesConElla) if (il != null && il.Viva) il.Deshacer();
+            ilusionesConElla.Clear();
             Sonar("parry", 0.9f);
             CamaraCazadora.Lenta(ajustes.lentaParry, ajustes.lentaParryTiempo);
             return;
@@ -637,7 +657,7 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
 
     private void TextoCura(int cura)
     {
-        TextoFlotante.Mostrar("+" + cura, Pos + Vector2.up * 1.9f, new Color(0.95f, 0.35f, 0.4f), 0.8f);
+        TextoFlotante.Mostrar("+" + cura, Pos + Vector2.up * 1.9f * Tam, new Color(0.95f, 0.35f, 0.4f), 0.8f);
         PolvoCazadora.Soltar(Pos + Vector2.up * 0.8f, new Color(0.95f, 0.2f, 0.25f, 0.8f), 8, 0.6f);
     }
 
@@ -649,8 +669,8 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
         if (!aRuido || p == null || ultimoResultado.HasValue) yield break;
         if (Vector2.Distance(p.transform.position, apuntado) < 1.8f) yield break;
         cuerpoAnim.Reproducir("quieto");
-        TextoFlotante.Mostrar("?", Pos + Vector2.up * 2f, new Color(0.8f, 0.9f, 1f), 1f);
-        AnilloRuido.Mostrar(Pos + Vector2.up * 1.6f, 0.4f);
+        TextoFlotante.Mostrar("?", Pos + Vector2.up * 2f * Tam, new Color(0.8f, 0.9f, 1f), 1f);
+        AnilloRuido.Mostrar(Pos + Vector2.up * 1.6f * Tam, 0.4f);
         yield return Esperar(ajustes.confusion);
     }
 
@@ -759,7 +779,7 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
             float alto = Mathf.Max(0f, Pos.y - suelo);
             sombra.transform.position = new Vector3(Pos.x, suelo + 0.03f, 0f);
             float e = Mathf.Clamp01(1f - alto * 0.12f);
-            sombra.transform.localScale = new Vector3(1.1f * e, 0.22f * e, 1f);
+            sombra.transform.localScale = new Vector3(1.1f * e * Tam, 0.22f * e * Tam, 1f);
             sombra.enabled = !muertaDelTodo && cuerpoAnim.AlfaActual > 0.2f;
         }
         if (contorno != null)
@@ -780,7 +800,7 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
         }
         if (burbuja != null && escudoActivo)
         {
-            float s = 2.4f + 0.12f * Mathf.Sin(Time.time * 6f);
+            float s = (2.4f + 0.12f * Mathf.Sin(Time.time * 6f)) * Tam;
             burbuja.transform.localScale = new Vector3(s, s, 1f);
         }
         cuerpoAnim.multiplicador = Ritmo;

@@ -301,25 +301,25 @@ MonoBehaviour:
     bucle: 0
     cajas:
     - serializedVersion: 2
-      x: -0.32142857
+      x: -0.4017857
       y: 0
-      width: 0.17857143
-      height: 0.5
+      width: 0.2232143
+      height: 0.625
     - serializedVersion: 2
-      x: -0.25
-      y: -0.035714287
-      width: 0.8214286
-      height: 2.5714285
+      x: -0.3125
+      y: -0.04464286
+      width: 1.0267857
+      height: 3.2142856
     - serializedVersion: 2
-      x: -0.25
-      y: 0.035714287
-      width: 0.85714287
-      height: 2.5357144
+      x: -0.3125
+      y: 0.04464286
+      width: 1.0714285
+      height: 3.169643
     - serializedVersion: 2
-      x: -0.17857143
-      y: 0.071428575
-      width: 0.78571427
-      height: 2.5357144
+      x: -0.2232143
+      y: 0.08928572
+      width: 0.9821428
+      height: 3.169643
     activos: 00010000
   - nombre: tajoAbajo
     cuerpo:
@@ -336,25 +336,25 @@ MonoBehaviour:
     bucle: 0
     cajas:
     - serializedVersion: 2
-      x: -0.35714287
-      y: 0.85714287
-      width: 0.17857143
-      height: 0.5
+      x: -0.4464286
+      y: 1.0714285
+      width: 0.2232143
+      height: 0.625
     - serializedVersion: 2
-      x: -0.25
-      y: -1.1071428
-      width: 0.8214286
-      height: 2.5714285
+      x: -0.3125
+      y: -1.3839285
+      width: 1.0267857
+      height: 3.2142856
     - serializedVersion: 2
-      x: -0.25
-      y: -1.1428572
-      width: 0.85714287
-      height: 2.5357144
+      x: -0.3125
+      y: -1.4285715
+      width: 1.0714285
+      height: 3.169643
     - serializedVersion: 2
-      x: -0.17857143
-      y: -1.1785715
-      width: 0.78571427
-      height: 2.4642856
+      x: -0.2232143
+      y: -1.4732144
+      width: 0.9821428
+      height: 3.080357
     activos: 00010000
   - nombre: tajoArriba
     cuerpo:
@@ -371,25 +371,25 @@ MonoBehaviour:
     bucle: 0
     cajas:
     - serializedVersion: 2
+      x: -0.4464286
+      y: -0.04464286
+      width: 0.2232143
+      height: 0.625
+    - serializedVersion: 2
       x: -0.35714287
-      y: -0.035714287
-      width: 0.17857143
-      height: 0.5
+      y: -0.08928572
+      width: 1.0267857
+      height: 3.2142856
     - serializedVersion: 2
-      x: -0.2857143
-      y: -0.071428575
-      width: 0.8214286
-      height: 2.5714285
-    - serializedVersion: 2
-      x: -0.2857143
+      x: -0.35714287
       y: 0
-      width: 0.85714287
-      height: 2.5357144
+      width: 1.0714285
+      height: 3.169643
     - serializedVersion: 2
-      x: -0.21428572
-      y: 0.071428575
-      width: 0.78571427
-      height: 2.5357144
+      x: -0.26785713
+      y: 0.08928572
+      width: 0.9821428
+      height: 3.169643
     activos: 00010000
   - nombre: barrido
     cuerpo:
@@ -404,20 +404,20 @@ MonoBehaviour:
     bucle: 0
     cajas:
     - serializedVersion: 2
-      x: -0.64285713
-      y: -0.071428575
-      width: 3.607143
-      height: 0.8214286
+      x: -0.8035714
+      y: -0.08928572
+      width: 4.508929
+      height: 1.0267857
     - serializedVersion: 2
-      x: -0.6785714
-      y: 0.14285715
-      width: 3.6785715
-      height: 0.64285713
+      x: -0.84821427
+      y: 0.17857143
+      width: 4.598214
+      height: 0.8035714
     - serializedVersion: 2
-      x: 2.25
-      y: 0.21428572
-      width: 0.78571427
-      height: 0.53571427
+      x: 2.8125
+      y: 0.26785713
+      width: 0.9821428
+      height: 0.6696428
     activos: 010000
   - nombre: luna
     cuerpo:
@@ -436,30 +436,30 @@ MonoBehaviour:
     bucle: 0
     cajas:
     - serializedVersion: 2
-      x: -0.96428573
-      y: 0.42857143
-      width: 0.64285713
-      height: 0.2857143
-    - serializedVersion: 2
-      x: -1
-      y: -0.071428575
-      width: 2.642857
-      height: 1.6428572
-    - serializedVersion: 2
-      x: -0.64285713
-      y: -0.071428575
-      width: 2.25
-      height: 1.6785715
-    - serializedVersion: 2
-      x: -0.64285713
-      y: -0.035714287
-      width: 2.25
-      height: 1.6785715
-    - serializedVersion: 2
-      x: 0.39285713
-      y: 0.035714287
-      width: 0.53571427
+      x: -1.2053572
+      y: 0.53571427
+      width: 0.8035714
       height: 0.35714287
+    - serializedVersion: 2
+      x: -1.25
+      y: -0.08928572
+      width: 3.3035712
+      height: 2.0535715
+    - serializedVersion: 2
+      x: -0.8035714
+      y: -0.08928572
+      width: 2.8125
+      height: 2.0982144
+    - serializedVersion: 2
+      x: -0.8035714
+      y: -0.04464286
+      width: 2.8125
+      height: 2.0982144
+    - serializedVersion: 2
+      x: 0.4910714
+      y: 0.04464286
+      width: 0.6696428
+      height: 0.4464286
     activos: 0001000000
   - nombre: estocada
     cuerpo:
@@ -479,15 +479,15 @@ MonoBehaviour:
       width: 0
       height: 0
     - serializedVersion: 2
-      x: -3.107143
+      x: -3.8839288
       y: 0
-      width: 3.0357144
-      height: 0.60714287
+      width: 3.794643
+      height: 0.7589286
     - serializedVersion: 2
-      x: -2.357143
+      x: -2.9464288
       y: 0
-      width: 2.25
-      height: 0.60714287
+      width: 2.8125
+      height: 0.7589286
     activos: 000100
   - nombre: cruce
     cuerpo:
@@ -511,25 +511,25 @@ MonoBehaviour:
       width: 0
       height: 0
     - serializedVersion: 2
-      x: -0.21428572
-      y: -0.071428575
-      width: 3.392857
-      height: 1.3571428
+      x: -0.26785713
+      y: -0.08928572
+      width: 4.241071
+      height: 1.6964285
     - serializedVersion: 2
-      x: -2.4642856
-      y: -0.071428575
-      width: 2.8214285
-      height: 1.3571428
+      x: -3.080357
+      y: -0.08928572
+      width: 3.5267856
+      height: 1.6964285
     - serializedVersion: 2
-      x: -2.357143
+      x: -2.9464288
       y: 0
-      width: 2.5
-      height: 1.2857143
+      width: 3.125
+      height: 1.6071428
     - serializedVersion: 2
-      x: -2.3214285
-      y: -0.071428575
-      width: 2.0357144
-      height: 0.42857143
+      x: -2.9017856
+      y: -0.08928572
+      width: 2.544643
+      height: 0.53571427
     activos: 0001000000
   - nombre: golpe
     cuerpo:
@@ -623,4 +623,4 @@ MonoBehaviour:
       height: 0
     activos: 00000000000000000000
   golpe: {fileID: -8466838035857919800, guid: d523008620cf1c548a0b48b977f48382, type: 3}
-  pixelesPorUnidad: 28
+  pixelesPorUnidad: 22.4

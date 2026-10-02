@@ -38,8 +38,11 @@ public class SpritesCazadora : ScriptableObject
     public List<Clip> clips = new List<Clip>();
     [Tooltip("La silueta blanca (Hit): el destello al recibir dano cuando esta quieta.")]
     public Sprite golpe;
-    [Tooltip("Pixeles por unidad (el mismo que el player: 28).")]
+    [Tooltip("Pixeles por unidad de sus sprites (28 = el tamano del player; menos = mas grande). Lo cambia Ronda20.")]
     public float pixelesPorUnidad = 28f;
+
+    // Lo que se ha agrandado respecto al dibujo original (28 px por unidad).
+    public float Escala => 28f / Mathf.Max(1f, pixelesPorUnidad);
 
     private Dictionary<string, Clip> porNombre;
 

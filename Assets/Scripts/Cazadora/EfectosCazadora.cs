@@ -212,21 +212,28 @@ public static class GolpeCazadora
     // Golpea al player si esta en la caja. "noLetal": deja al menos 1 de vida
     // (los ataques normales nunca matan con la vida llena). "imparable": no se
     // puede bloquear ni parar (instakills): solo se esquiva.
+    // "desdeArriba": cae encima del player (se para mire hacia donde mire).
     public static PlayerControler.ResultadoDano? Caja(Vector2 centro, Vector2 tamano, int dano, Component atacante,
                                                      PlayerControler.TipoDano tipo, EstadoPlayer estado = EstadoPlayer.Ninguno,
-                                                     float acumulacion = 0f, bool noLetal = false, bool imparable = false)
+                                                     float acumulacion = 0f, bool noLetal = false, bool imparable = false, bool desdeArriba = false,
+                                                     float origenX = float.NaN)
     {
         PlayerControler p = PlayerEn(centro, tamano);
         if (p == null) return null;
-        return Aplicar(p, dano, atacante, tipo, estado, acumulacion, noLetal, imparable);
+        return Aplicar(p, dano, atacante, tipo, estado, acumulacion, noLetal, imparable, desdeArriba, origenX);
     }
 
     public static PlayerControler.ResultadoDano Aplicar(PlayerControler p, int dano, Component atacante, PlayerControler.TipoDano tipo,
-                                                       EstadoPlayer estado, float acumulacion, bool noLetal, bool imparable)
+                                                       EstadoPlayer estado, float acumulacion, bool noLetal, bool imparable, bool desdeArriba = false,
+                                                       float origenX = float.NaN)
     {
         PlayerControler.SiguienteNoLetal = noLetal;
+        PlayerControler.SiguienteDesdeArriba = desdeArriba;
+        PlayerControler.SiguienteOrigenX = origenX;
         PlayerControler.ResultadoDano r = p.TakeDamage(dano, imparable ? null : atacante, tipo, estado, acumulacion);
         PlayerControler.SiguienteNoLetal = false;
+        PlayerControler.SiguienteDesdeArriba = false;
+        PlayerControler.SiguienteOrigenX = float.NaN;
         if (DepuracionCazadora.VerCajas) CajaDebug.Mostrar(p.transform.position, Vector2.one * 0.3f, Color.yellow);
         return r;
     }
@@ -355,6 +362,9 @@ public class OlaLuz : MonoBehaviour
     private float velocidad, alcance, recorrido, xMin, xMax, siguienteLlama;
     private Rect caja;
     private bool pego, acabando;
+    // Devuelta con un parry: vuelve hacia ella (no te golpea ni deja llamas).
+    private bool devuelta;
+    public bool Devuelta => devuelta;
     private float fundido;
     private Elemento elemento;
     private AjustesCazadora aj;
@@ -378,7 +388,7 @@ public class OlaLuz : MonoBehaviour
         o.dano = dano;
         o.caja = cajaEfecto;
         o.recorrido = 0f;
-        o.pego = o.acabando = false;
+        o.pego = o.acabando = o.devuelta = false;
         o.fundido = 0f;
         o.elemento = elemento;
         o.aj = aj;
@@ -406,23 +416,45 @@ public class OlaLuz : MonoBehaviour
         // Se deshace al llegar a la pared de la arena o al acabar su alcance.
         if (recorrido >= alcance || p.x <= xMin || p.x >= xMax) { acabando = true; return; }
 
-        if (elemento == Elemento.Fuego && recorrido >= siguienteLlama)
+        if (!devuelta && elemento == Elemento.Fuego && recorrido >= siguienteLlama)
         {
             siguienteLlama = recorrido + 1.1f;
             LlamaSuelo.Poner(new Vector2(p.x - dir * 0.6f, p.y), aj.duracionLlamas, Mathf.Max(1, dano / 6), aj.acumulacionEstado * 0.4f);
         }
 
-        if (pego || caja.width <= 0f) return;
+        if (caja.width <= 0f) return;
         // Solo la parte baja del dibujo (la ola en si): se salta por encima.
         Vector2 centro = new Vector2(p.x + dir * caja.center.x * escala, p.y + Mathf.Min(caja.center.y, 0.45f) * escala);
         Vector2 tam = new Vector2(caja.width * escala * 0.85f, Mathf.Min(caja.height, 0.9f) * escala);
-        if (DepuracionCazadora.VerCajas) CajaDebug.Mostrar(centro, tam, Color.cyan, 0.02f);
+        if (DepuracionCazadora.VerCajas) CajaDebug.Mostrar(centro, tam, devuelta ? Color.yellow : Color.cyan, 0.02f);
+        // Devuelta: va a por ella (escudo, guardia o dano: lo decide la Cazadora).
+        if (devuelta)
+        {
+            JefeCazadora j = JefeCazadora.Actual;
+            if (j != null && j.RecibirOlaDevuelta(centro, tam)) acabando = true;
+            return;
+        }
+        if (pego) return;
         EstadoPlayer estado = EstadoDe(elemento);
         var r = GolpeCazadora.Caja(centro, tam, dano, this, PlayerControler.TipoDano.Magico, estado, aj != null ? aj.acumulacionEstado : 0f, noLetal);
         if (!r.HasValue) return;
         pego = true;
         alGolpear?.Invoke(r.Value);
-        if (r.Value == PlayerControler.ResultadoDano.Parry) acabando = true;
+        if (r.Value == PlayerControler.ResultadoDano.Parry) Devolver();
+    }
+
+    // Tu parry la desvia: vuelve hacia ella, mas rapida y con otro color.
+    private void Devolver()
+    {
+        devuelta = true;
+        dir = -dir;
+        velocidad *= 1.5f;
+        recorrido = 0f;
+        alcance += 30f;     // hasta llegar a ella o a la pared
+        transform.localScale = new Vector3(dir * escala, escala, 1f);
+        sr.color = new Color(1f, 0.97f, 0.82f, 1f);
+        Sonido.Reproducir("parry_brillo", 0.7f, 1.2f);
+        PolvoCazadora.Soltar((Vector2)transform.position + Vector2.up * 0.3f, new Color(1f, 0.95f, 0.75f, 1f), 10, 1f);
     }
 
     public static EstadoPlayer EstadoDe(Elemento e)
@@ -574,7 +606,7 @@ public class TajoAparecido : MonoBehaviour
             Vector2 centro = destino + new Vector2(dir * caja.center.x * escala, caja.center.y * escala);
             Vector2 tam = new Vector2(caja.width, caja.height) * escala;
             if (DepuracionCazadora.VerCajas) CajaDebug.Mostrar(centro, tam, Color.red, 0.15f);
-            var r = GolpeCazadora.Caja(centro, tam, dano, this, PlayerControler.TipoDano.Magico, estado, acumulacion, noLetal, imparable);
+            var r = GolpeCazadora.Caja(centro, tam, dano, this, PlayerControler.TipoDano.Magico, estado, acumulacion, noLetal, imparable, caidaDesde > 0f);
             alTerminar?.Invoke(r);
         }
         if (t >= Vida) PoolCazadora.Devolver(this);
