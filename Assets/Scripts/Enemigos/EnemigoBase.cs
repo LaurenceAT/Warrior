@@ -5,9 +5,17 @@ using UnityEngine;
 // Base de todos los enemigos normales. La vida, el retroceso, el combo aereo y
 // la barra los lleva EnemyHealth (con su ficha); aqui va lo comun de la IA:
 //   - Un "cerebro" (corrutina) que cada enemigo escribe a su manera.
-//   - Estados con nombre (EstadoIA, lo ensena la depuracion): Patrulla, Alerta,
-//     Persecucion, Anticipacion, Ataque, Salto, Recuperacion, Reposicion,
-//     Golpeado, Regreso y Dormido.
+//   - Maquina de estados (EstadoEnemigo): todo cambio pasa por CambiarEstado,
+//     que guarda el anterior y el tiempo en el estado, llama a AlSalirEstado /
+//     AlEntrarEstado y avisa con EstadoCambiado. De Muerto no se sale.
+//     Transiciones principales:
+//       Patrulla -> Alerta (te ve) -> Persecucion -> Anticipacion -> Ataque
+//         -> Recuperacion -> Persecucion
+//       Persecucion -> Regreso (te pierde o sale de su zona) -> Patrulla
+//       Persecucion -> Reposicion / Salto / Retirada -> Persecucion
+//       cualquiera -> Golpeado -> Persecucion o Patrulla
+//       cualquiera <-> Dormido (lejos de la camara)
+//       cualquiera -> Muerto (final)
 //   - Movimiento vivo: acelera y frena (no cambia de velocidad de golpe), se
 //     gira con un pequeno retraso, reacciona un instante al descubrir al player,
 //     se separa de los otros enemigos, vuelve a su zona si te pierde y respira
@@ -22,6 +30,12 @@ using UnityEngine;
 //
 // El sprite va en un hijo ("Visual"): se voltea el hijo, no el objeto, para que
 // el golpe de escala del HitFlash no pise el volteo.
+public enum EstadoEnemigo
+{
+    Patrulla, Alerta, Persecucion, Anticipacion, Ataque, Recuperacion,
+    Salto, Reposicion, Regreso, Retirada, Golpeado, Dormido, Muerto
+}
+
 [RequireComponent(typeof(Rigidbody2D), typeof(EnemyHealth))]
 public abstract class EnemigoBase : MonoBehaviour
 {
@@ -73,8 +87,30 @@ public abstract class EnemigoBase : MonoBehaviour
     // volador, por ejemplo).
     protected bool armadura;
 
-    // Estado actual, para la depuracion.
-    public string EstadoIA { get; protected set; } = "Patrulla";
+    // ------------------------------------------------------------------ Maquina de estados
+    public EstadoEnemigo Estado { get; private set; } = EstadoEnemigo.Patrulla;
+    public EstadoEnemigo EstadoAnterior { get; private set; } = EstadoEnemigo.Patrulla;
+    public float TiempoEnEstado => Time.time - inicioEstado;
+    // (enemigo, anterior, nuevo)
+    public event System.Action<EnemigoBase, EstadoEnemigo, EstadoEnemigo> EstadoCambiado;
+    // El estado como texto (lo usan la depuracion F9 y las pruebas).
+    public string EstadoIA => Estado.ToString();
+    private float inicioEstado;
+
+    protected void CambiarEstado(EstadoEnemigo nuevo)
+    {
+        if (nuevo == Estado || Estado == EstadoEnemigo.Muerto) return;
+        EstadoEnemigo anterior = Estado;
+        AlSalirEstado(anterior);
+        EstadoAnterior = anterior;
+        Estado = nuevo;
+        inicioEstado = Time.time;
+        AlEntrarEstado(nuevo);
+        EstadoCambiado?.Invoke(this, anterior, nuevo);
+    }
+
+    protected virtual void AlEntrarEstado(EstadoEnemigo estado) { }
+    protected virtual void AlSalirEstado(EstadoEnemigo estado) { }
     public bool Alerta => alerta;
     public bool Dormido => dormido;
     public float RadioDeteccion => radioDeteccion;
@@ -255,7 +291,7 @@ public abstract class EnemigoBase : MonoBehaviour
 
     private IEnumerator Reaccion()
     {
-        EstadoIA = "Golpeado";
+        CambiarEstado(EstadoEnemigo.Golpeado);
         bool clip = anim.Tiene("golpe");
         if (clip) anim.Reproducir("golpe", true);
         float minimo = Mathf.Max(0.25f, anim.Duracion("golpe"));
@@ -279,7 +315,7 @@ public abstract class EnemigoBase : MonoBehaviour
     protected virtual void AlMorir()
     {
         muerto = true;
-        EstadoIA = "Muerto";
+        CambiarEstado(EstadoEnemigo.Muerto);
         StopAllCoroutines();
         QuitarAviso();
         if (rb != null && rb.simulated) rb.linearVelocity = Vector2.zero;
@@ -322,22 +358,22 @@ public abstract class EnemigoBase : MonoBehaviour
         if (d > radio || fuera)
         {
             if (alerta) Olvidar();
-            if (EstadoIA != "Regreso") EstadoIA = "Patrulla";
+            if (Estado != EstadoEnemigo.Regreso) CambiarEstado(EstadoEnemigo.Patrulla);
             return false;
         }
 
         bool despejado = !Physics2D.Linecast(ojos, player.position, capaSuelo);
         if (despejado && !alerta) Descubrir(0f, false);
-        if (!despejado && !alerta) { if (EstadoIA != "Regreso") EstadoIA = "Patrulla"; return false; }
+        if (!despejado && !alerta) { if (Estado != EstadoEnemigo.Regreso) CambiarEstado(EstadoEnemigo.Patrulla); return false; }
 
         if (Reaccionando)
         {
-            EstadoIA = "Alerta";
+            CambiarEstado(EstadoEnemigo.Alerta);
             MirarYa();
             if (rb.gravityScale > 0f) Frenar(frenada);
             return false;
         }
-        EstadoIA = "Persecucion";
+        CambiarEstado(EstadoEnemigo.Persecucion);
         return true;
     }
 
@@ -358,7 +394,7 @@ public abstract class EnemigoBase : MonoBehaviour
     {
         alerta = true;
         finAlerta = Time.time + Random.Range(reaccionAlerta.x, reaccionAlerta.y) / variacion + extra;
-        EstadoIA = "Alerta";
+        CambiarEstado(EstadoEnemigo.Alerta);
         MirarYa();
         Deformar(0.88f, 1.16f);
         Vector2 sobre = salud != null ? salud.OffsetBarra : Vector2.up;
@@ -403,7 +439,7 @@ public abstract class EnemigoBase : MonoBehaviour
     private void Olvidar()
     {
         alerta = false;
-        EstadoIA = "Regreso";
+        CambiarEstado(EstadoEnemigo.Regreso);
         Vector2 sobre = salud != null ? salud.OffsetBarra : Vector2.up;
         TextoFlotante.Mostrar("?", (Vector2)transform.position + sobre + Vector2.up * 0.15f, new Color(0.8f, 0.85f, 0.95f), 0.7f);
     }
@@ -479,7 +515,7 @@ public abstract class EnemigoBase : MonoBehaviour
     protected PlayerControler.ResultadoDano? Golpear(Vector2 offset, Vector2 tamano, int dano, PlayerControler.TipoDano tipo,
                                                      EstadoPlayer estado = EstadoPlayer.Ninguno, float acumulacion = 0f)
     {
-        EstadoIA = "Ataque";
+        CambiarEstado(EstadoEnemigo.Ataque);
         float s = Escala;
         Vector2 centro = (Vector2)transform.position + new Vector2(offset.x * mirada, offset.y) * s;
         foreach (Collider2D c in Physics2D.OverlapBoxAll(centro, tamano * s, 0f))
@@ -519,7 +555,7 @@ public abstract class EnemigoBase : MonoBehaviour
     {
         // El color se fija al empezar: quien lo lance puede cambiar colorAviso despues.
         Color color = colorAviso;
-        EstadoIA = "Anticipacion";
+        CambiarEstado(EstadoEnemigo.Anticipacion);
         float t = 0f;
         while (t < duracion)
         {
@@ -605,7 +641,7 @@ public abstract class EnemigoBase : MonoBehaviour
     private float frenoAtaqueHasta;
     protected void FrenarAtaque()
     {
-        EstadoIA = "Anticipacion";
+        CambiarEstado(EstadoEnemigo.Anticipacion);
         frenoAtaqueHasta = Time.time + 0.2f;
         velocidadPedida = 0f;
     }
@@ -632,7 +668,7 @@ public abstract class EnemigoBase : MonoBehaviour
     {
         if (EsJefe) { rb.linearVelocity = new Vector2(velocidad * dir, rb.linearVelocity.y); return; }
         if (Reaccionando) { Frenar(frenada); return; }
-        if (EstadoIA != "Persecucion" && EstadoIA != "Regreso" && EstadoIA != "Reposicion") EstadoIA = alerta ? "Persecucion" : "Patrulla";
+        if (Estado != EstadoEnemigo.Persecucion && Estado != EstadoEnemigo.Regreso && Estado != EstadoEnemigo.Reposicion) CambiarEstado(alerta ? EstadoEnemigo.Persecucion : EstadoEnemigo.Patrulla);
         velocidadPedida = Mathf.Abs(velocidad * variacion);
         float objetivo = velocidad * variacion * dir + EmpujeSeparacion();
         float vx = Mathf.MoveTowards(rb.linearVelocity.x, objetivo, aceleracion * PesoRol * Time.deltaTime);
@@ -688,10 +724,10 @@ public abstract class EnemigoBase : MonoBehaviour
     protected bool VolverAZona(float velocidad)
     {
         float dx = origenZona.x - transform.position.x;
-        if (Mathf.Abs(dx) < 1.2f * Escala) { if (EstadoIA == "Regreso") EstadoIA = "Patrulla"; return false; }
+        if (Mathf.Abs(dx) < 1.2f * Escala) { if (Estado == EstadoEnemigo.Regreso) CambiarEstado(EstadoEnemigo.Patrulla); return false; }
         Mirar(dx > 0f ? 1 : -1);
         if (!HaySueloDelante(0.6f) || HayParedDelante(0.6f)) { Frenar(frenada); return false; }
-        EstadoIA = "Regreso";
+        CambiarEstado(EstadoEnemigo.Regreso);
         Andar(velocidad);
         return true;
     }
@@ -703,7 +739,7 @@ public abstract class EnemigoBase : MonoBehaviour
     // Retrocede un poco mirando al player (cambia de distancia tras atacar).
     protected IEnumerator Reposicionar(float distancia, float velocidad)
     {
-        EstadoIA = "Reposicion";
+        CambiarEstado(EstadoEnemigo.Reposicion);
         int lejos = DxPlayer > 0f ? -1 : 1;
         float recorrido = 0f, t = 0f;
         float s = Escala;
@@ -806,7 +842,7 @@ public abstract class EnemigoBase : MonoBehaviour
     protected bool Impulsar(float dx, float altura)
     {
         if (!CalcularSalto(dx, altura, out Vector2 v)) return false;
-        EstadoIA = "Salto";
+        CambiarEstado(EstadoEnemigo.Salto);
         rb.linearVelocity = v;
         listoSalto = Time.time + enfriamientoSalto;
         yInicioSalto = rb.position.y;
@@ -819,7 +855,7 @@ public abstract class EnemigoBase : MonoBehaviour
     // Se agacha (aviso visible) el tiempo indicado.
     protected IEnumerator Agacharse(float segundos)
     {
-        EstadoIA = "Anticipacion";
+        CambiarEstado(EstadoEnemigo.Anticipacion);
         float t = 0f;
         while (t < segundos)
         {
@@ -853,7 +889,7 @@ public abstract class EnemigoBase : MonoBehaviour
             if (t > 0.12f && EnSuelo) break;
             yield return null;
         }
-        EstadoIA = "Recuperacion";
+        CambiarEstado(EstadoEnemigo.Recuperacion);
         rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.3f, rb.linearVelocity.y);
         Deformar(1.2f, 0.8f);
         float r = 0f;
@@ -938,7 +974,7 @@ public abstract class EnemigoBase : MonoBehaviour
     private void Dormir()
     {
         dormido = true;
-        EstadoIA = "Dormido";
+        CambiarEstado(EstadoEnemigo.Dormido);
         if (cerebro != null) { StopCoroutine(cerebro); cerebro = null; }
         QuitarAviso();
         if (rb != null) { rb.linearVelocity = Vector2.zero; rb.simulated = false; }
@@ -949,7 +985,7 @@ public abstract class EnemigoBase : MonoBehaviour
     {
         if (!dormido) return;
         dormido = false;
-        EstadoIA = "Patrulla";
+        CambiarEstado(EstadoEnemigo.Patrulla);
         if (rb != null && !muerto) rb.simulated = true;
         if (anim != null) anim.enabled = true;
         Pensar();

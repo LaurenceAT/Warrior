@@ -194,7 +194,7 @@ public class EnemigoRata : EnemigoBase
     private IEnumerator Huir()
     {
         retiradaHecha = true;
-        EstadoIA = "Retirada";
+        CambiarEstado(EstadoEnemigo.Retirada);
         Sonido.Reproducir("rata_chillido", 0.6f, 1.4f);
         Mirar(DxPlayer > 0f ? -1 : 1);
         MirarYa();
@@ -214,7 +214,7 @@ public class EnemigoRata : EnemigoBase
         anim.Reproducir("quieto");
         yield return EsperarRitmo(0.6f);
         listoPara = Time.time + 0.3f;
-        EstadoIA = "Persecucion";
+        CambiarEstado(EstadoEnemigo.Persecucion);
     }
 
     private IEnumerator Retirarse()
