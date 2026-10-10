@@ -211,7 +211,7 @@ public class MenuPausa : MonoBehaviour
                     LayoutElement le = t.gameObject.AddComponent<LayoutElement>();
                     le.preferredHeight = le.minHeight = 36f;
                 }
-                Button b = EstiloMenu.Opcion(listaLibro, string.IsNullOrEmpty(p.titulo) ? "Inscripción" : p.titulo, null, 46f, 24f, null, TextAlignmentOptions.Left);
+                Button b = EstiloMenu.Opcion(listaLibro, TituloPista(p), null, 46f, 24f, null, TextAlignmentOptions.Left);
                 entradas[b.gameObject] = p;
                 grupoLibro.Anadir(b.GetComponent<OpcionEstilo>());
                 Button esta = b;
@@ -243,10 +243,20 @@ public class MenuPausa : MonoBehaviour
         if (!entradas.TryGetValue(b.gameObject, out Partida.PistaLeida p)) return;
         if (grupoLibro.Actual == null) capasLibro.Entrar(() => { grupoLibro.Desmarcar(); NingunaLeida(); });
         grupoLibro.Marcar(b.GetComponent<OpcionEstilo>());
-        tituloLeido.text = string.IsNullOrEmpty(p.titulo) ? "" : p.titulo.ToUpper();
-        textoLeido.text = p.texto;
+        tituloLeido.text = TituloPista(p).ToUpper();
+        // La lectura mas clara que se ha leido, con el texto actual de la ficha
+        // (si la estatua no esta en ella, la copia guardada).
+        textoLeido.text = PistasEstatuas.Texto(p.escena, p.id, p.Lectura) ?? p.texto;
         textoLeido.color = EstiloMenu.TextoElegido;
         textoLeido.fontStyle = FontStyles.Normal;
+    }
+
+    // El titulo actual de la ficha de estatuas (o el guardado, si no esta en ella).
+    private static string TituloPista(Partida.PistaLeida p)
+    {
+        PistasEstatuas.Pista f = PistasEstatuas.Buscar(p.escena, p.id);
+        string t = f != null && !string.IsNullOrEmpty(f.titulo) ? f.titulo : p.titulo;
+        return string.IsNullOrEmpty(t) ? "Inscripción" : t;
     }
 
     private void NingunaLeida()

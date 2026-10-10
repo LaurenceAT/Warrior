@@ -64,6 +64,9 @@ public class ArenaCazadora : MonoBehaviour, IArenaJefe
     private bool enSilencio;
     private float siguienteLatido;
     private Elemento resistenciaMostrada = Elemento.Ninguno;
+    // Barra en la que esta (0, 1 o 2) y si ya dijo la frase de "casi vencida".
+    private int barraActual;
+    private bool dichoCasiVencida;
 
     public static ArenaCazadora Actual { get; private set; }
     public JefeCazadora Jefe => jefe;
@@ -149,6 +152,9 @@ public class ArenaCazadora : MonoBehaviour, IArenaJefe
         barra = BarraJefe.Crear(nombre, 0f);
         EnemyHealth salud = jefe.GetComponent<EnemyHealth>();
         salud.AlCambiarVida += barra.Actualizar;
+        barraActual = 0;
+        dichoCasiVencida = false;
+        salud.AlCambiarVida += CasiVencida;
         barra.PonerEstados(salud);
         UICazadora.MontarEnBarra(barra);
         UICazadora.FaseActual(0);
@@ -160,6 +166,8 @@ public class ArenaCazadora : MonoBehaviour, IArenaJefe
         bool primeraVez = intentos == 1 && !reiniciado;
         bool completo = primeraVez && (!Globales.Marca("dialogo_cazadora") || (Desafio.Activo && Desafio.Reiniciado));
         float acercarse = primeraVez ? 2.2f : 0.6f;
+        // Sin el dialogo completo (reintento): una frase suelta, segun como moriste.
+        if (!completo) UICazadora.Subtitulo(FraseReintento(ficha), ajustes.segundosReintento);
         // La camara va despacio hacia ella (y vuelve a ti al acabar).
         if (GameManager.Instance != null) GameManager.Instance.SeguirConCamara(jefe.transform);
         CamaraDinamica.Acercar(zoomEntrada, completo ? 60f : acercarse + 0.8f);
@@ -197,6 +205,8 @@ public class ArenaCazadora : MonoBehaviour, IArenaJefe
         // "Voy a derrotarte": un tajo rapido. Si lo paras, empieza aturdida.
         if (eleccion == 1) yield return jefe.TajoDialogo();
         jefe.Activar();
+        // Comenta lo que oye (frases sueltas, con tope y pausa entre ellas).
+        jefe.gameObject.AddComponent<ReaccionesCazadora>().Configurar(ajustes);
     }
 
     // Los avisos de la jefa: fases, instakills, frases y victoria.
@@ -209,6 +219,42 @@ public class ArenaCazadora : MonoBehaviour, IArenaJefe
         jefe.AlFrase += t => UICazadora.Subtitulo(t);
         jefe.AlMuerteReal += MuerteReal;
         jefe.AlDerrotado += Victoria;
+    }
+
+    // ------------------------------------------------------------------ Frases sueltas
+
+    // Al volver a entrar: segun de que moriste la ultima vez contra ella (en
+    // memoria, CausaMuerte). Si no se sabe, una general; con racha larga, a veces
+    // rompe la cuarta pared. Nunca la misma frase dos veces seguidas.
+    private string FraseReintento(FichaJefe ficha)
+    {
+        CausaMuerte.Ultima u = CausaMuerte.TomarUltima();
+        bool suya = u.valida && ficha != null && u.jefe == ficha.id;
+        string f = null;
+        if (suya && u.seguidas >= ajustes.rachaCuartaPared && Random.value < ajustes.probabilidadCuartaPared)
+            f = AjustesCazadora.Una(ajustes.reintentoRacha);
+        if (f == null && suya && ajustes.reintentoPorCausa != null)
+        {
+            bool estado = u.tipo == CausaMuerte.Tipo.Sangrado || u.tipo == CausaMuerte.Tipo.Frio || u.tipo == CausaMuerte.Tipo.Fuego;
+            foreach (AjustesCazadora.ReintentoCausa c in ajustes.reintentoPorCausa)
+            {
+                if (c == null) continue;
+                bool encaja = (c.estadoAlterado && estado) || (!estado && u.ataque != null && System.Array.IndexOf(c.ataques, u.ataque) >= 0);
+                if (!encaja) continue;
+                f = AjustesCazadora.Una(c.frases);
+                if (f != null) break;
+            }
+        }
+        return f ?? AjustesCazadora.Una(ajustes.reintentoGeneral);
+    }
+
+    // En la ultima barra, con poca vida: una vez por intento.
+    private void CasiVencida(int vida, int maxima)
+    {
+        if (dichoCasiVencida || estado != Estado.Combate || barraActual < 2 || maxima <= 0 || vida <= 0) return;
+        if (vida > maxima * ajustes.casiVencida) return;
+        dichoCasiVencida = true;
+        UICazadora.Subtitulo(AjustesCazadora.Una(ajustes.frasesCasiVencida));
     }
 
     // ------------------------------------------------------------------ Avisos de la jefa
@@ -228,6 +274,7 @@ public class ArenaCazadora : MonoBehaviour, IArenaJefe
 
     private void NuevaFase(int f)
     {
+        barraActual = f;
         SeguirJefa(false);
         Bitacora.Fase(FichaJefe.DeEscena(gameObject.scene.name), f + 1);
         AjustesCazadora.Fase datos = ajustes.FaseN(f);

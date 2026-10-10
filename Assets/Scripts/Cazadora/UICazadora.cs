@@ -53,6 +53,9 @@ public class UICazadora : MonoBehaviour
 
     public static void Bandas(bool mostrar) { if (inst != null) inst.bandasObjetivo = mostrar ? 1f : 0f; }
 
+    // Hay una frase suya en pantalla (las reacciones no la pisan).
+    public static bool SubtituloActivo => inst != null && Time.unscaledTime < inst.finSubtitulo;
+
     public static void Subtitulo(string texto, float segundos = 3.5f)
     {
         if (inst == null || string.IsNullOrEmpty(texto)) return;
@@ -128,6 +131,7 @@ public class UICazadora : MonoBehaviour
 
         alfaSubtitulo = Mathf.MoveTowards(alfaSubtitulo, Time.unscaledTime < finSubtitulo ? 1f : 0f, dt * 3f);
         Color cs = subtitulo.color; cs.a = alfaSubtitulo; subtitulo.color = cs;
+        ColocarSubtitulo();
 
         bordes = Mathf.MoveTowards(bordes, bordesObjetivo, dt * 1.5f);
         float rojo = 0f;
@@ -147,6 +151,18 @@ public class UICazadora : MonoBehaviour
         oido.color = new Color(0.85f, 0.92f, 1f, Mathf.MoveTowards(oido.color.a, ao, dt * 3f));
     }
 
+    // Sobre la barra del jefe y sus marcas (AjustesInterfaz), nunca por debajo
+    // del 15 % de la pantalla (donde iba antes).
+    private void ColocarSubtitulo()
+    {
+        RectTransform lienzo = transform as RectTransform;
+        if (lienzo == null) return;
+        AjustesInterfaz ai = AjustesInterfaz.Get();
+        ai.Barra(lienzo.rect.width, out _, out _, out float altura);
+        float y = Mathf.Max(lienzo.rect.height * 0.15f + 22f, altura + ai.separacionSubtitulo);
+        subtitulo.rectTransform.anchoredPosition = new Vector2(0f, y);
+    }
+
     // ------------------------------------------------------------------ Construccion
 
     private void Montar(Transform raiz)
@@ -163,11 +179,13 @@ public class UICazadora : MonoBehaviour
         subtitulo.fontStyle = FontStyles.Italic;
         subtitulo.outlineWidth = 0.2f;
         subtitulo.outlineColor = new Color32(0, 0, 0, 255);
+        // Abajo, por encima de la barra del jefe (la altura la pone Update).
         RectTransform rs = subtitulo.rectTransform;
-        rs.anchorMin = new Vector2(0.15f, 0.15f);
-        rs.anchorMax = new Vector2(0.85f, 0.15f);
+        rs.anchorMin = new Vector2(0.15f, 0f);
+        rs.anchorMax = new Vector2(0.85f, 0f);
+        rs.pivot = new Vector2(0.5f, 0f);
         rs.sizeDelta = new Vector2(0f, 50f);
-        rs.anchoredPosition = new Vector2(0f, 22f);
+        rs.anchoredPosition = new Vector2(0f, 184f);
 
         oido = EstiloMenu.Caja("Oido", raiz, new Color(1f, 1f, 1f, 0f));
         oido.sprite = DibujosCazadora.Oido();

@@ -55,6 +55,9 @@ public static class Partida
     public class PistaLeida
     {
         public string escena, id, titulo, texto;
+        // Lectura mas clara que se ha leido (1 o 2). Partidas viejas: 0, que cuenta como 1.
+        public int lectura;
+        public int Lectura => Mathf.Max(1, lectura);
     }
 
     [Serializable]
@@ -258,13 +261,15 @@ public static class Partida
 
     public static bool PistaLeidaYa(string escena, string id) => Pistas.Any(p => p.escena == escena && p.id == id);
 
-    // Apunta la pista (o la actualiza si se cambio su texto) y guarda.
-    public static void LeerPista(string escena, string id, string titulo, string texto)
+    // Apunta la pista (o la actualiza si se cambio su texto) y guarda. Se queda
+    // con la lectura mas clara (una segunda lectura no vuelve a la primera).
+    public static void LeerPista(string escena, string id, string titulo, string texto, int lectura = 1)
     {
         PistaLeida p = Pistas.FirstOrDefault(x => x.escena == escena && x.id == id);
         if (p == null) Pistas.Add(p = new PistaLeida { escena = escena, id = id });
         p.titulo = titulo;
-        p.texto = texto;
+        if (lectura >= p.Lectura || p.lectura == 0) p.texto = texto;
+        p.lectura = Mathf.Max(p.Lectura, lectura);
         Guardar();
     }
 

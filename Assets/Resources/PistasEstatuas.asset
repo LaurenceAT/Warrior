@@ -1,0 +1,127 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a5b011413ec30c4ead7afef417a9e38, type: 3}
+  m_Name: PistasEstatuas
+  m_EditorClassIdentifier: 
+  pistas:
+  - escena: Nivel Nieve
+    id: estatua_1
+    voz: Un instructor viejo (tutorial)
+    titulo: La espada clavada
+    primera: "Una hoja desnuda corta poco aqu\xED arriba. Lejos de la hoguera, pulsa
+      E y elige con qu\xE9 vestirla. Cada bestia de estas cumbres teme algo distinto."
+    segunda: "Te lo repito: la E abre la rueda lejos de la hoguera. Cada elemento
+      cuesta man\xE1, y la sangre se cobra en vida. No cambies por capricho."
+  - escena: Nivel Nieve
+    id: estatua_claro
+    voz: Un peregrino (tutorial)
+    titulo: La sombra del claro
+    primera: "Los peregrinos dejaban sellos para guardar sus caminos. El color del
+      sello y la runa grabada al lado dicen qu\xE9 elemento lo abre. Dale a tu hoja
+      ese mismo color y golpea."
+    segunda: Compara el brillo del sello con los colores de tu rueda. Solo uno coincide.
+  - escena: Nivel Nieve
+    id: estatua_2
+    voz: Un mensajero con prisa (tutorial)
+    titulo: La ladera helada
+    primera: "\xA1Ojo con la ladera! El hielo brilla como un espejo y, si corres,
+      no frenas cuando quieres."
+    segunda: 'Repito: en el hielo frenas tarde. Afloja antes, no encima del precipicio.'
+  - escena: Nivel Nieve
+    id: estatua_3
+    voz: Un pastor de las cumbres (tutorial)
+    titulo: La ventisca
+    primera: "M\xE1s all\xE1 el viento no descansa. Cuando la nieve se espesa, viene
+      la r\xE1faga: espera, y avanza cuando afloje."
+    segunda: "Avanza a tramos cortos. Cuando la nieve se espesa, para: el empuj\xF3n
+      llega justo despu\xE9s."
+  - escena: Nivel Nieve
+    id: estatua_ermitano
+    voz: "Un ermita\xF1o que cuenta inviernos"
+    titulo: "El ermita\xF1o"
+    primera: "Cont\xE9 los inviernos en esta roca. El viento del paso tiene un enemigo:
+      las piedras altas. Detr\xE1s de ellas, hasta la nieve cae despacio."
+    segunda: "Las piedras altas del paso son refugio. Espera a su sombra a que pase
+      la r\xE1faga."
+  - escena: Nivel Nieve
+    id: estatua_picadores
+    voz: Un picador cansado
+    titulo: Los picadores de hielo
+    primera: "Cavamos bajo la orilla para volver a la lumbre sin dar la vuelta. Cuando
+      se hundi\xF3 el t\xFAmulo, tapamos la boca con piedras. Por dentro, claro."
+    segunda: "Ese mont\xF3n de piedras junto a la orilla esconde un atajo. Se abre
+      desde el otro lado."
+  - escena: Nivel Nieve
+    id: estatua_cripta
+    voz: "Un guardi\xE1n que se apaga"
+    titulo: La cripta de los guardianes
+    primera: "Guardianes. Bajo cada bulto de nieve... uno. Se levantan si pasas cerca.
+      Lo que custodian... m\xE1s adentro."
+    segunda: "Los mont\xEDculos de nieve no son nieve... Ac\xE9rcate con la espada
+      lista. Lo valioso est\xE1 al final."
+  - escena: Nivel Nieve
+    id: estatua_vigias
+    voz: "Un vig\xEDa que ya no ve bien"
+    titulo: "Los vig\xEDas"
+    primera: "Desde aqu\xED se vigilaba el paso. Lo valioso quedaba en lo alto, tras
+      un hielo que no romp\xEDa ning\xFAn golpe. Solo el calor de las brasas lo hac\xEDa
+      llorar."
+    segunda: "Arriba hay un bloque de hielo con resplandor de brasa. Tu hoja tendr\xE1
+      que arder como \xE9l."
+  - escena: Nivel Nieve
+    id: estatua_6
+    voz: Una voz infantil grabada en la roca
+    titulo: "La grieta sombr\xEDa"
+    primera: "\xA1Otra sombra que respira! Es como la del claro de la ladera. Esa
+      se fue cuando alguien trajo luz."
+    segunda: Si abriste la grieta del claro, ya sabes la respuesta. Las dos brillan
+      con el mismo oro.
+  - escena: Nivel Nieve
+    id: estatua_4
+    voz: Una pescadora
+    titulo: El lago helado
+    primera: "El agua tiembla, como si quisiera dormirse y no pudiera. Una caricia
+      fr\xEDa bastar\xEDa para que se quedara quieta, y entonces se podr\xEDa caminar
+      encima."
+    segunda: "El agua brilla azul p\xE1lido, el color de la escarcha. Golp\xE9ala
+      con una hoja igual de fr\xEDa y podr\xE1s cruzar."
+  - escena: Nivel Nieve
+    id: estatua_5
+    voz: Un herrero
+    titulo: El muro de hielo
+    primera: "Ning\xFAn martillo dobla este hielo. Pero mira la roca: est\xE1 negra,
+      chamuscada. Alguien ya pas\xF3, y no lo hizo a golpes."
+    segunda: El muro brilla anaranjado, como metal al rojo. Lleva esa misma brasa
+      en tu hoja.
+  - escena: Nivel Nieve
+    id: estatua_7
+    voz: "Un caballero ca\xEDdo"
+    titulo: El guerrero congelado
+    primera: "No pas\xE9 de aqu\xED. Lo que vive tras esa niebla pelea mejor que
+      yo. Que tu hoguera est\xE9 cerca."
+    segunda: "Al otro lado no hay salida hasta que uno de los dos caiga. Elige bien
+      cu\xE1ndo entrar."
+  - escena: Nivel Cueva
+    id: estatua_cueva_2
+    voz: "Alguien que cay\xF3"
+    titulo: "Marcas de u\xF1as"
+    primera: "No pises... lo que cruje. No te f\xEDes de la roca rajada. Y si una
+      pared suena distinta... quiz\xE1 se pueda atravesar."
+    segunda: 'Suelo que cruje: no te detengas. Pared que suena hueca: prueba a cruzarla.'
+  - escena: Nivel Cueva
+    id: estatua_1
+    voz: "Un minero que huy\xF3"
+    titulo: "Ara\xF1azos en la roca"
+    primera: "Excavamos demasiado hondo. Algo despert\xF3 ah\xED abajo. Yo corr\xED.
+      Los dem\xE1s no."
+    segunda: "El fondo de la cueva guarda algo peligroso. Prep\xE1rate antes de entrar:
+      despu\xE9s no podr\xE1s salir."

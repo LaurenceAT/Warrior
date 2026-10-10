@@ -85,8 +85,14 @@ public class CuadroPista : MonoBehaviour
 
         if (Escribiendo)
         {
-            letras += velocidad * Time.unscaledDeltaTime;
-            int visibles = Mathf.Min(total, Mathf.FloorToInt(letras));
+            // Velocidad algo irregular y pausas tras comas y puntos (AjustesInterfaz).
+            letras -= Time.unscaledDeltaTime;
+            int visibles = texto.maxVisibleCharacters;
+            while (letras <= 0f && visibles < total)
+            {
+                visibles++;
+                letras += AjustesInterfaz.Get().Retraso(Letra(visibles - 1), Letra(visibles), velocidad);
+            }
             if (visibles > texto.maxVisibleCharacters)
             {
                 texto.maxVisibleCharacters = visibles;
@@ -112,6 +118,8 @@ public class CuadroPista : MonoBehaviour
             else Cerrar();
         }
     }
+
+    private char Letra(int i) => i >= 0 && i < texto.textInfo.characterCount ? texto.textInfo.characterInfo[i].character : ' ';
 
     private bool EsEspacio(int i)
     {

@@ -81,8 +81,14 @@ public class DialogoCazadora : MonoBehaviour
             bool pulso = Pulsado();
             if (texto.maxVisibleCharacters < total)
             {
-                letras += letrasPorSegundo * dt;
-                int visibles = Mathf.Min(total, Mathf.FloorToInt(letras));
+                // Velocidad algo irregular y pausas tras comas y puntos (AjustesInterfaz).
+                letras -= dt;
+                int visibles = texto.maxVisibleCharacters;
+                while (letras <= 0f && visibles < total)
+                {
+                    visibles++;
+                    letras += AjustesInterfaz.Get().Retraso(Letra(visibles - 1), Letra(visibles), letrasPorSegundo);
+                }
                 if (visibles > texto.maxVisibleCharacters)
                 {
                     texto.maxVisibleCharacters = visibles;
@@ -170,6 +176,8 @@ public class DialogoCazadora : MonoBehaviour
         if (mantenido >= necesario && necesario > 0f) { Saltado = true; return true; }
         return false;
     }
+
+    private char Letra(int i) => i >= 0 && i < texto.textInfo.characterCount ? texto.textInfo.characterInfo[i].character : ' ';
 
     private bool EsEspacio(int i)
     {

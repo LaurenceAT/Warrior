@@ -28,13 +28,15 @@ MonoBehaviour:
     sonido.\n<b>Fase 3</b>: oscuridad, Danza de la Cacer\xEDa y Cacer\xEDa de Espejos.\nTres
     barras. Con poca vida se cura en un escudo de luz: r\xF3mpelo. Un ataque mortal
     por fase, siempre avisado: Ejecuci\xF3n, Sentencia y El Silencio."
-  historia: "Nadie recuerda cu\xE1ndo se qued\xF3 ciega ni qui\xE9n la dej\xF3 as\xED.
-    Lo que se sabe es que el bosque muri\xF3 primero: las hojas cayeron una noche
-    y no volvieron a brotar. Ella se qued\xF3. Aprendi\xF3 a cazar con los o\xEDdos,
-    a leer el miedo en un latido, a distinguir el paso de un ladr\xF3n del de un
-    hijo que vuelve a casa. Muchos vinieron a matar a la cazadora ciega. Ninguno
-    la sorprendi\xF3. En el bosque sin hojas todo se oye, y ella escucha desde hace
-    tanto que ya no recuerda otra cosa que el sonido de quien viene a morir."
+  historia: "Nadie recuerda cu\xE1ndo se qued\xF3 ciega. Ella dice que fue el d\xEDa
+    que se cans\xF3 de ver caras tan feas. Lo que s\xED se sabe es que el bosque
+    muri\xF3 primero: las hojas cayeron una noche y no volvieron a brotar. Ella se
+    qued\xF3, porque alguien ten\xEDa que aguantar tanto silencio. Aprendi\xF3 a
+    cazar con los o\xEDdos, a leer el miedo en un latido y a distinguir el paso de
+    un ladr\xF3n del de un hijo que vuelve a casa. Muchos vinieron a matar a la cazadora
+    ciega. Ninguno la sorprendi\xF3, y de todos se acuerda por c\xF3mo sonaban al
+    caer. En el bosque sin hojas todo se oye. Ella escucha desde hace tanto que se
+    r\xEDe antes de que llegues: ya sabe c\xF3mo vas a caer."
   ataques:
   - id: tajo_dialogo
     nombre: "Tajo del desaf\xEDo"
@@ -42,22 +44,22 @@ MonoBehaviour:
     instakill: 0
     descripcion: "Si aceptas su desaf\xEDo al llegar, abre con un tajo horizontal
       muy r\xE1pido."
-    consejo: "Tiene un aviso m\xEDnimo: ten el parry listo en cuanto termine de hablar.
-      Si lo paras, empieza aturdida."
+    consejo: 'Apenas avisa: ten el parry listo en cuanto termine de hablar. Si lo
+      paras, empieza aturdida.'
   - id: tresLunas
     nombre: Tres Lunas
     fase: 1
     instakill: 0
-    descripcion: Barrido, luna y estocada seguidos.
-    consejo: 'Esquiva los tres o para la estocada final: al terminar deja un hueco
-      para castigarla.'
+    descripcion: "Barrido, luna y estocada, uno detr\xE1s de otro."
+    consejo: Esquiva los tres o para la estocada final. Al terminar deja un hueco
+      para castigarla.
   - id: cruce
     nombre: Cruce
     fase: 1
     instakill: 0
-    descripcion: "Un dash largo que te atraviesa y un tajo hacia atr\xE1s al pasar."
-    consejo: "Rueda a trav\xE9s de ella en el dash y al\xE9jate: el tajo de vuelta
-      sale donde estabas."
+    descripcion: "Un dash largo que te atraviesa, y un tajo hacia atr\xE1s al pasar."
+    consejo: "Rueda a trav\xE9s de ella durante el dash y ap\xE1rtate: el tajo de
+      vuelta cae donde estabas."
   - id: ola
     nombre: Ola de luz
     fase: 1
@@ -70,44 +72,43 @@ MonoBehaviour:
     nombre: Tajo ascendente
     fase: 1
     instakill: 0
-    descripcion: Castiga al que salta encima de ella.
-    consejo: 'No saltes sobre ella para pasar al otro lado: rueda por debajo de sus
-      ataques.'
+    descripcion: Castiga a quien salta por encima de ella.
+    consejo: Para pasar al otro lado, mejor rodar por debajo de sus ataques que saltarla.
   - id: salto
     nombre: Salto descendente
     fase: 1
     instakill: 0
     descripcion: Salta hacia ti y cae cortando.
-    consejo: Rueda hacia delante, por debajo del salto, en cuanto despegue.
+    consejo: En cuanto despegue, rueda hacia delante, por debajo del salto.
   - id: guardia
     nombre: Guardia
     fase: 1
     instakill: 0
-    descripcion: 'Si le pegas sin parar, adopta la guardia: si la golpeas, te para,
-      te aturde y te atraviesa con una estocada que quita media vida.'
-    consejo: Cuenta tus golpes. Si ves un brillo fino en su espada, deja de atacar,
-      retrocede o rueda hasta que se apague.
+    descripcion: 'Si le pegas sin parar, se pone en guardia: el siguiente golpe lo
+      para, te aturde y te atraviesa con una estocada que quita media vida.'
+    consejo: 'Cuenta tus golpes. Si ves un brillo fino en su espada, deja de atacar:
+      retrocede o rueda hasta que se apague.'
   - id: escudo
     nombre: Rugido y escudo
     fase: 1
     instakill: 0
-    descripcion: 'Una vez por barra, con poca vida: ruge, se aleja y se cura dentro
-      de un escudo de luz.'
+    descripcion: Una vez por barra, con poca vida, ruge, se aleja y se cura dentro
+      de un escudo de luz.
     consejo: 'Rompe el escudo a golpes (10, o 5 con la espada imbuida de oscuridad):
-      cancela la cura y la deja aturdida.'
+      cancelas la cura y la dejas aturdida.'
   - id: ejecucion
     nombre: "Ejecuci\xF3n"
     fase: 1
     instakill: 1
     descripcion: "Una l\xEDnea roja cruza el suelo de punta a punta y ella la recorre
-      con un dash imparable. Mata."
-    consejo: "Salta o rueda cuando empiece el dash. Despu\xE9s queda expuesta."
+      con un dash imparable. Es mortal."
+    consejo: "Salta o rueda justo cuando empiece el dash. Despu\xE9s queda expuesta."
   - id: flanqueo
     nombre: Flanqueo
     fase: 2
     instakill: 0
-    descripcion: "Ella a un lado y una ilusi\xF3n al otro, y cortan a la vez; a veces
-      una a ras de suelo y otra en el aire."
+    descripcion: "Ella a un lado y una ilusi\xF3n al otro, cortando a la vez; a veces
+      una a ras de suelo y la otra en el aire."
     consejo: "F\xEDjate en la altura de cada corte: salta el bajo y rueda bajo el
       alto. Golpear a la ilusi\xF3n la deshace."
   - id: caen
@@ -116,28 +117,28 @@ MonoBehaviour:
     instakill: 0
     descripcion: Si te acercas corriendo, caen ilusiones del cielo con un tajo descendente;
       una marca en el suelo avisa del impacto.
-    consejo: "No corras hacia ella: ac\xE9rcate andando, y sal de las marcas."
+    consejo: "Ac\xE9rcate andando, no corriendo, y sal de las marcas."
   - id: espejismo
     nombre: Espejismo
     fase: 2
     instakill: 0
     descripcion: "Deja un se\xF1uelo quieto donde estaba y reaparece en otro sitio.
       Si golpeas el se\xF1uelo, explota."
-    consejo: "Desconf\xEDa de la figura que se queda quieta de repente: busca a la
-      que se mueve."
+    consejo: "Desconf\xEDa de la figura que se queda quieta de repente: la real es
+      la que se mueve."
   - id: fantasma
     nombre: Cuchillada fantasma
     fase: 2
     instakill: 0
     descripcion: Un tajo aparece donde estabas hace un segundo, con una marca antes.
-    consejo: "No te detengas: la cuchillada llega a donde estabas, no a donde est\xE1s."
+    consejo: "No te quedes quieto: la cuchillada cae donde estabas, no donde est\xE1s."
   - id: trampas
     nombre: Trampas de sonido
     fase: 2
     instakill: 0
-    descripcion: "S\xEDmbolos tenues en el suelo; si pisas uno, te ataca al instante
+    descripcion: "S\xEDmbolos tenues en el suelo. Si pisas uno, te ataca al instante
       desde arriba."
-    consejo: "Mira el suelo y rodea o salta los s\xEDmbolos."
+    consejo: "Mira d\xF3nde pisas y rodea o salta los s\xEDmbolos."
   - id: lluvia
     nombre: Lluvia de tajos
     fase: 2
@@ -150,8 +151,8 @@ MonoBehaviour:
     fase: 2
     instakill: 0
     descripcion: "Ella cruza hacia un lado y una ilusi\xF3n hacia el otro."
-    consejo: "Rueda a trav\xE9s de los cruces en el momento justo; no huyas en su
-      direcci\xF3n."
+    consejo: "Rueda a trav\xE9s de cada cruce en el momento justo; huir en su misma
+      direcci\xF3n no sirve."
   - id: contra
     nombre: Contraataque elemental
     fase: 2
@@ -163,7 +164,7 @@ MonoBehaviour:
     fase: 2
     instakill: 1
     descripcion: Una marca roja te sigue, se fija con un sonido y un tajo gigante
-      cae del cielo sobre ella. Mata.
+      cae del cielo sobre ella. Es mortal.
     consejo: 'Cuando la marca se fije, sal de ella. Las ilusiones de alrededor no
       importan: la marca siempre se ve encima.'
   - id: danza
@@ -172,8 +173,8 @@ MonoBehaviour:
     instakill: 0
     descripcion: "De ocho a doce golpes con dashes y un ritmo enga\xF1oso, cada uno
       con su aviso; termina con un golpe pesado."
-    consejo: "Esquiva golpe a golpe sin prisa: el ritmo cambia a prop\xF3sito. Tras
-      el golpe final, su recuperaci\xF3n es larga."
+    consejo: "Esquiva golpe a golpe, sin prisa: el ritmo cambia a prop\xF3sito. Tras
+      el golpe final tarda en recuperarse."
   - id: espejos
     nombre: "Cacer\xEDa de Espejos"
     fase: 3
@@ -185,41 +186,44 @@ MonoBehaviour:
     fase: 3
     instakill: 1
     descripcion: "Durante unos segundos, cualquier ruido (atacar, rodar, beber, cambiar
-      de imbuici\xF3n o correr) te delata y te ejecuta."
+      de imbuici\xF3n o correr) te delata, y te ejecuta."
     consejo: "Qu\xE9date quieto o camina despacio. Si no oye nada, pierde tu rastro
       y queda vulnerable."
   fases:
   - numero: 1
     nombre: La cazadora
     descripcion: "Es ciega: de lejos ataca a donde oy\xF3 tu \xFAltimo ruido (atacar,
-      rodar, aterrizar, beber, imbuir, correr). Si fallas donde golpea, queda confundida;
-      de cerca te siente siempre. Tiene super armadura: solo el parry, lo sagrado
-      o romperle el escudo la interrumpen."
+      rodar, aterrizar, beber, imbuir, correr). Si falla, se queda confundida un
+      momento; de cerca te siente siempre. Tiene s\xFAper armadura: solo el parry,
+      lo sagrado o romperle el escudo la interrumpen."
   - numero: 2
     nombre: Las ilusiones
-    descripcion: Imbuye su espada (fuego, hielo, luz y sangre), copia tu elemento
-      para resistirlo y se apoya en ilusiones que golpean como ella.
+    descripcion: Su espada toma fuego, hielo, luz y sangre, copia tu elemento para
+      resistirlo un rato y se rodea de ilusiones que golpean igual que ella.
   - numero: 3
     nombre: La oscuridad
-    descripcion: "La luz se apaga y solo ves a tu alrededor. Llegan sus cacer\xEDas
-      m\xE1s largas: la Danza de la Cacer\xEDa y la Cacer\xEDa de Espejos."
+    descripcion: "Apaga la luz y solo ves lo que tienes alrededor. Aqu\xED llegan
+      sus cacer\xEDas largas: la Danza de la Cacer\xEDa y la Cacer\xEDa de Espejos."
   fragmentosHistoria:
   - id: h1
     cuando: 0
-    texto: "Nadie recuerda cu\xE1ndo se qued\xF3 ciega ni qui\xE9n la dej\xF3 as\xED."
+    texto: "Nadie recuerda cu\xE1ndo se qued\xF3 ciega. Ella dice que fue el d\xEDa
+      que se cans\xF3 de ver caras tan feas."
   - id: h2
     cuando: 2
-    texto: "Lo que se sabe es que el bosque muri\xF3 primero: las hojas cayeron una
-      noche y no volvieron a brotar. Ella se qued\xF3."
+    texto: "Lo que s\xED se sabe es que el bosque muri\xF3 primero: las hojas cayeron
+      una noche y no volvieron a brotar. Ella se qued\xF3, porque alguien ten\xEDa
+      que aguantar tanto silencio."
   - id: h3
     cuando: 3
-    texto: "Aprendi\xF3 a cazar con los o\xEDdos, a leer el miedo en un latido, a
-      distinguir el paso de un ladr\xF3n del de un hijo que vuelve a casa. Muchos
-      vinieron a matar a la cazadora ciega. Ninguno la sorprendi\xF3."
+    texto: "Aprendi\xF3 a cazar con los o\xEDdos, a leer el miedo en un latido y
+      a distinguir el paso de un ladr\xF3n del de un hijo que vuelve a casa. Muchos
+      vinieron a matar a la cazadora ciega. Ninguno la sorprendi\xF3, y de todos
+      se acuerda por c\xF3mo sonaban al caer."
   - id: h4
     cuando: 4
-    texto: En el bosque sin hojas todo se oye, y ella escucha desde hace tanto que
-      ya no recuerda otra cosa que el sonido de quien viene a morir.
+    texto: "En el bosque sin hojas todo se oye. Ella escucha desde hace tanto que
+      se r\xEDe antes de que llegues: ya sabe c\xF3mo vas a caer."
   dialogoAlReiniciar: 0
   almasCofre: 4500
   multPrecios: 1

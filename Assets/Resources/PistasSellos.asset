@@ -18,22 +18,22 @@ MonoBehaviour:
     runa: {fileID: 1674804629613845060, guid: ce71eeb16f4a5e042940c724d7911c65, type: 3}
     sonidoReaccion: sombra_rebote
     sonidoAbrir: sello_roto
-    textoPista: Las sombras absorben el golpe. Solo la luz sagrada las disipa
-    textoAbrir: La luz disipa las sombras
+    textoPista: La sombra se traga el golpe. Hace falta algo que brille.
+    textoAbrir: La sombra se deshace en la luz.
   - elemento: 0
     color: {r: 1, g: 0.55, b: 0.2, a: 1}
     runa: {fileID: 4673908504923276263, guid: 1f11297410252ba4280b98d58ed237e7, type: 3}
     sonidoReaccion: hielo_rebote
     sonidoAbrir: hielo_romper
-    textoPista: "El hielo es demasiado duro. Quiz\xE1 el fuego..."
-    textoAbrir: "\xA1El hielo se derrite!"
+    textoPista: El hielo ni se inmuta. Necesita calor, no fuerza.
+    textoAbrir: El hielo cede y se derrite.
   - elemento: 1
     color: {r: 0.6, g: 0.85, b: 1, a: 1}
     runa: {fileID: -9065347158251605998, guid: dc8b6c4aa2006bd43a5940fbd24ca60c, type: 3}
     sonidoReaccion: agua_chapoteo
     sonidoAbrir: hielo_congelar_lago
-    textoPista: "El agua est\xE1 helada... casi a punto de congelarse"
-    textoAbrir: Se congela
+    textoPista: "El agua tiembla... le falta poco fr\xEDo para quedarse quieta."
+    textoAbrir: El agua se detiene, helada.
   - elemento: 2
     color: {r: 0.62, g: 0.42, b: 0.95, a: 1}
     runa: {fileID: 0}

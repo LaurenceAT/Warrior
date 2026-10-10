@@ -13,92 +13,92 @@ MonoBehaviour:
   m_Name: TextosMuerte
   m_EditorClassIdentifier: 
   generales:
-  - "Otra vez muerto. Qu\xE9 sorpresa tan poco sorprendente."
-  - "Cada muerte ense\xF1a algo. T\xFA a\xFAn no has aprendido nada."
-  - "Si morir fuera un deporte, ser\xEDas campe\xF3n."
-  - "El suelo te extra\xF1aba."
-  - "Hasta los esqueletos se est\xE1n riendo."
-  - "Qu\xE9 espect\xE1culo. L\xE1stima que nadie aplauda."
-  - "Te falt\xF3 poco. Bueno, te falt\xF3 mucho."
-  - "Eso fue valiente. Est\xFApido, pero valiente."
-  - "Tu espada estaba de adorno, \xBFverdad?"
-  - La hoguera ya ni se sorprende de verte.
-  - "Esquivar tambi\xE9n es una opci\xF3n. Por si no lo sab\xEDas."
-  - Atacar sin pensar tiene un precio. Hoy lo pagaste entero.
+  - Otra vez al suelo. El suelo, al menos, es constante.
+  - "Atacaste primero. Pensaste despu\xE9s. Ese orden sale caro."
+  - La hoguera te esperaba. No tan pronto, pero te esperaba.
+  - "Hoy no. Ma\xF1ana, quiz\xE1. O dentro de cinco minutos."
+  - "Caer tambi\xE9n es una forma de aprender. Lenta, pero lo es."
+  - "La espada segu\xEDa en tu mano. Eso cuenta para algo."
+  - Ni la nieve se sorprende ya.
+  - "Falt\xF3 poco. O falt\xF3 bastante. Desde aqu\xED no se ve bien."
+  - Un mal paso. Solo hace falta uno.
+  - Vuelta a empezar. El camino sigue donde lo dejaste.
   enemigoComun:
-  - "Perdiste contra un enemigo com\xFAn. Que no te lo cuenten."
-  - "Era el enemigo m\xE1s f\xE1cil de la zona. Era."
-  - "Eso no era un jefe. Rep\xEDtelo hasta cre\xE9rtelo."
-  - "Cay\xF3 un caballero. Lo mat\xF3 algo que cabe en una bota."
-  - "Hasta las ratas tienen mejor t\xE9cnica que t\xFA."
-  - "Ni siquiera ten\xEDa nombre propio. Y aun as\xED gan\xF3."
+  - "No era la gran amenaza del camino. Bast\xF3 igual."
+  - Subestimar cuesta lo mismo que cualquier otro error.
+  - "No ten\xEDa nombre propio. Tampoco le hizo falta."
+  - "Lo peque\xF1o tambi\xE9n muerde."
+  - "No saldr\xE1 en ninguna leyenda. Aun as\xED, gan\xF3."
+  - "Lo viste venir. Lleg\xF3 de todos modos."
   jefe:
-  - Los jefes no necesitan esforzarse contigo.
-  - "El jefe ni sud\xF3."
-  - "El jefe dice gracias por la pr\xE1ctica."
-  - "Le diste un buen calentamiento. \xC9l te dio un final."
-  - "Cada intento tuyo es su momento favorito del d\xEDa."
+  - "Sigue ah\xED, esperando. No tiene otra cosa que hacer."
+  - "Cada ca\xEDda te ense\xF1a uno de sus pasos."
+  - "Ya conoces un poco m\xE1s su ritmo. A tu costa."
+  - "La arena recuerda cada intento. Este tambi\xE9n."
+  - "Esta vez aguantaste un poco m\xE1s. \xBFO no?"
   porJefe:
   - jefe: shadowed_wetlands
     frases:
-    - "La sombra ni se molest\xF3 en sacar la escarcha."
-    - Los humedales se tragan a los que dudan. Dudaste.
-    - Saltaste el barrido. El tajo alzado te esperaba arriba.
-    - "Otro cuerpo para la ci\xE9naga. Ni siquiera flota."
+    - "La ci\xE9naga no tiene prisa. T\xFA s\xED la ten\xEDas."
+    - El agua negra se cierra igual sobre todos.
+    - "La sombra golpe\xF3 dos veces. T\xFA contaste una."
+    - Otro abrigo para la escarcha de los humedales.
   - jefe: crimson_wraith
     frases:
-    - "El Espectro bebe tu sangre y a\xFAn tiene sed."
-    - "Tu sangre ya le pertenec\xEDa. \xC9l solo vino a cobrarla."
-    - La cueva sigue creciendo. Gracias por tu aporte.
-    - "Ni viste su verdadera forma. Mejor as\xED."
+    - "La cueva bebi\xF3 un poco m\xE1s."
+    - "Tu sangre ya corr\xEDa hacia \xE9l antes de que entraras."
+    - "Algo ah\xED abajo est\xE1 un poco m\xE1s contento."
+    - Lo rojo del suelo no era todo suyo.
   - jefe: blind_huntress
     frases:
-    - "Te oy\xF3 respirar. Siempre se oye."
-    - "Ella no ve. T\xFA tampoco, por lo visto."
-    - "Corriste. Ella escuch\xF3. Fin de la historia."
-    - "Los \xE1rboles del bosque ya tienen un hueso m\xE1s."
+    - "Ella no necesit\xF3 verte."
+    - "En el bosque, hasta el silencio tiene o\xEDdos."
+    - "Un sonido de m\xE1s. Eso fue todo."
+    - "Los \xE1rboles sin hojas lo escucharon todo."
   caida:
-  - "El suelo exist\xEDa. T\xFA decidiste ignorarlo."
-  - "Volar no era una opci\xF3n. Ahora lo sabes."
-  - "El abismo no te empuj\xF3. Fuiste t\xFA solito."
-  - "Mirar d\xF3nde pisas: ese gran misterio sin resolver."
-  - "Bonito salto. L\xE1stima que no hubiera nada al otro lado."
+  - "El borde estaba ah\xED desde el principio."
+  - "Saltaste con ganas. Falt\xF3 suelo."
+  - "El vac\xEDo no empuja. Solo espera."
+  - "Un paso m\xE1s largo de lo que daba el camino."
+  - "Abajo no hab\xEDa nada. Ahora ya lo sabes."
   letal:
-  - "La se\xF1al roja estaba ah\xED. Hermosa, \xBFno? Y no le hiciste caso."
-  - Te pidieron silencio. Ni eso.
-  - "Un aviso enorme, brillante y rojo. Y aun as\xED, sorpresa."
-  - Golpeaste a quien estaba en guardia. Brillante idea.
-  - Te avisaron. Con luces. Y te quedaste mirando.
+  - El rojo nunca es un adorno.
+  - Golpeaste una defensa que esperaba justo eso.
+  - Hubo aviso. Uno bien grande.
+  - Hay golpes que se aguantan y golpes que no. Este era de los segundos.
+  - "La se\xF1al lleg\xF3 a tiempo. T\xFA, no tanto."
   rapida:
-  - "\xBFYa? Ni siquiera calentaste."
-  - "R\xE9cord personal... de lo r\xE1pido que se muere."
-  - Entraste, miraste, moriste. Muy eficiente.
-  - "Eso dur\xF3 menos que la pantalla de carga."
+  - Ni siquiera llegaste a entrar en calor.
+  - "R\xE1pido. Demasiado r\xE1pido."
+  - Unos pasos, y otra vez la hoguera.
+  - Eso no fue una pelea. Fue un saludo.
   racha5:
-  - "Quinta vez. La esperanza es lo \xFAltimo que se pierde, y t\xFA vas por buen
-    camino."
-  - Cinco muertes seguidas. Ya tienes una rutina.
+  - Cinco. La hoguera ya conoce tu cara.
+  - Cinco seguidas. La terquedad es un buen comienzo.
   racha10:
-  - "Diez muertes. \xBFSeguro que no prefieres un juego m\xE1s tranquilo?"
-  - Diez veces. El jefe ya te guarda sitio en la arena.
+  - "Diez veces. La terquedad tambi\xE9n es una virtud."
+  - Diez. A estas alturas conoces cada piedra del camino.
   racha20:
-  - Llevas tantas muertes que el juego ya te conoce por tu nombre.
-  - "Veinte y subiendo. Esto ya no es un desaf\xEDo, es una costumbre."
-  - A estas alturas, morir es tu estilo de juego.
+  - "Veinte veces. Ni la monta\xF1a es tan terca."
+  - "Veinte. Esto ya es una conversaci\xF3n larga con la muerte."
+  - "Has ca\xEDdo veinte veces. Te has levantado veinte."
   almas:
-  - "Todas esas almas y no pudiste con ellas. Qu\xE9 desperdicio."
-  - "Tus almas ahora son de otro. Cu\xEDdalas mejor, si las recuperas."
-  - Cargabas una fortuna. Ahora la carga el suelo.
-  - "Tanto esfuerzo juntando almas para regalarlas as\xED."
+  - "Una fortuna tirada en el suelo. Todav\xEDa es tuya, si llegas."
+  - "Llevabas demasiado encima. A\xFAn puedes recuperarlo."
+  - "Tus almas te esperan donde ca\xEDste. Sin moverse, por suerte."
+  - Mucho que perder. Y lo perdiste. Por ahora.
   sangrado:
-  - Te desangraste. Elegante forma de fracasar.
-  - "Gota a gota. Y t\xFA pusiste todas las gotas."
+  - "Gota a gota, sin que nadie m\xE1s te tocara."
+  - "Una herida peque\xF1a con mucha paciencia."
+  - "Algo segu\xEDa sangrando cuando te cre\xEDas a salvo."
   frio:
-  - "Te congelaste. Fr\xEDa actitud, para ser sinceros."
-  - "Quieto como una estatua. Y casi igual de \xFAtil."
+  - "Te quedaste quieto. El fr\xEDo no."
+  - "La escarcha subi\xF3 despacio. No la sentiste llegar."
+  - "Al final, ni los dedos respond\xEDan."
   fuego:
-  - "Fuego, hielo, sangre... y t\xFA sigues sin esquivar."
-  - Ardiste. Al menos diste un poco de luz.
+  - "Ardiste. La nieve, alrededor, ni se enter\xF3."
+  - Las llamas no te soltaron.
+  - "Te quem\xF3 despacio, y t\xFA segu\xEDas peleando."
   segundosRapida: 12
   almasMuchas: 1000
   cadaRacha: 5

@@ -17,7 +17,7 @@ MonoBehaviour:
     retrato: {fileID: 21300000, guid: bf45c39b77523f949ba74976cfe2feac, type: 3}
     relacionado: {fileID: 0}
     descripcion: "Ratas que el fr\xEDo no mat\xF3: les hel\xF3 la sangre y las dej\xF3
-      con hambre. Nunca van solas. La que te ve primero chilla, y las dem\xE1s acuden."
+      con hambre. Nunca van solas. La primera que te ve chilla, y las dem\xE1s acuden."
     patrones: "Mordisco: pegada a ti, un aviso muy corto y una dentellada.\nSalto:
       a media distancia se agacha y salta encima de ti.\nGolpea y huye: tras atacar
       se aparta. Esp\xE9rala con un parry o cast\xEDgala al aterrizar."
@@ -37,8 +37,8 @@ MonoBehaviour:
   - enemigo: {fileID: 11400000, guid: 2f8ec874924e5b14fb8ffc24512dc734, type: 2}
     retrato: {fileID: 21300000, guid: 8ec24ef0f07fd7a46b5b4761895e432f, type: 3}
     relacionado: {fileID: 0}
-    descripcion: "Un ojo sin p\xE1rpado que flota sobre el paso nevado. Vigila para
-      algo que dej\xF3 de mirar hace mucho tiempo."
+    descripcion: "Un ojo sin p\xE1rpado que flota sobre el paso nevado. Sigue vigilando
+      para alguien que dej\xF3 de mirar hace mucho."
     patrones: "Se mantiene lejos y alto, y se aparta si te acercas.\nEscupitajo:
       uno apuntado o una r\xE1faga de tres en abanico. Un parry lo devuelve.\nEmbestida
       giratoria: si est\xE1s cerca, gira y embiste."
@@ -58,8 +58,8 @@ MonoBehaviour:
   - enemigo: {fileID: 11400000, guid: 20987edba0f1c894190632eb496574a4, type: 2}
     retrato: {fileID: 21300000, guid: cc51022fb4dc58e4c924a6c76cb529fd, type: 3}
     relacionado: {fileID: 0}
-    descripcion: "Busc\xF3 en la sombra un poder que lo protegiera del fr\xEDo. La
-      sombra lo encontr\xF3 primero. Lento, pesado, y nada lo detiene cuando ataca."
+    descripcion: "Busc\xF3 en la sombra algo que lo protegiera del fr\xEDo. La sombra
+      lo encontr\xF3 primero. Es lento y pesado, y cuando ataca nada lo detiene."
     patrones: "Armadura: mientras ataca, tus golpes le quitan vida pero no lo paran.
       Un parry s\xED.\nGarras de sombra: proyecta una sombra hacia delante, a media
       distancia.\nGolpe de b\xE1culo: un barrido de cerca que a veces encadena con
@@ -114,16 +114,16 @@ MonoBehaviour:
     descripcion: "Un cofre que espera. La cueva ense\xF1a pronto que no todo lo que
       brilla guarda un tesoro: a veces guarda dientes."
     patrones: "Disfrazado no se mueve. Se abre al acercarte o al golpearlo.\nMordisco:
-      se alza con la boca abierta (aviso largo) y se lanza con un saltito. Mucho
-      da\xF1o.\nLatigazo: echa el cuerpo atr\xE1s (aviso corto) y barre hacia delante
-      con m\xE1s alcance. No te quedes a media distancia."
+      se alza con la boca abierta (aviso largo) y se lanza con un saltito. Duele
+      de verdad.\nLatigazo: echa el cuerpo atr\xE1s (aviso corto) y barre hacia delante
+      con m\xE1s alcance. La media distancia es justo donde llega."
     derrotasParaPatrones: 5
     mostrar: 1
   - enemigo: {fileID: 11400000, guid: 82c9573dcae53fe4aba64c7791858ca1, type: 2}
     retrato: {fileID: 21300000, guid: c71547e941231934098a384e9ad5ff3c, type: 3}
     relacionado: {fileID: 11400000, guid: 9351d3bdd92b365468215548268630a4, type: 2}
     descripcion: Las que bajaron a la cueva buscando calor, y lo encontraron. Ahora
-      arden por dentro y ya no temen al fuego.
+      algo les arde por dentro y no deja de arder.
     patrones: "Como la rata de escarcha: mordisco r\xE1pido, salto desde media distancia
       y huida tras atacar. Caza en manada."
     derrotasParaPatrones: 5
@@ -131,8 +131,8 @@ MonoBehaviour:
   - enemigo: {fileID: 11400000, guid: 92006f98cdf513c4dbd9958e650e20a8, type: 2}
     retrato: {fileID: 21300000, guid: e5fe06a39bdf2a0408c0b3ae29aeae27, type: 3}
     relacionado: {fileID: 11400000, guid: 79ee099826b9fed4bac16ae6679b6453, type: 2}
-    descripcion: "Nunca han visto el cielo. Nacen, cazan y mueren en la oscuridad
-      de la cueva, y la oscuridad no les hace da\xF1o."
+    descripcion: Nunca han visto el cielo. Nacen, cazan y mueren en el fondo de la
+      cueva, sin echar de menos la luz.
     patrones: "Como el murci\xE9lago de las cumbres: vuelo err\xE1tico, picado en
       arco (a veces dos seguidos) y un chillido que empuja si te acercas."
     derrotasParaPatrones: 5
@@ -141,7 +141,7 @@ MonoBehaviour:
     retrato: {fileID: 21300000, guid: f783c144d4e68214e9d29ab35a25cf87, type: 3}
     relacionado: {fileID: 11400000, guid: b34bf56ba5802174983024b42ff3ee51, type: 2}
     descripcion: "Otra centinela que baj\xF3 a la cueva. La sangre que empapa la
-      roca le ti\xF1\xF3 el arco, y ya no sangra cuando la hieres."
+      roca le ti\xF1\xF3 el arco, y algo m\xE1s: ya casi no le queda sangre propia."
     patrones: "Como la arquera arcana: disparo recto, lluvia de flechas con marcas
       en el suelo, voltereta hacia atr\xE1s y destello si la arrinconas."
     derrotasParaPatrones: 5
@@ -159,7 +159,7 @@ MonoBehaviour:
     retrato: {fileID: 21300000, guid: 4a30a92d38b8e27429adb0e21c81f770, type: 3}
     relacionado: {fileID: 11400000, guid: 3a6d6319a63f89d41a792b0cb503ddbb, type: 2}
     descripcion: "Dicen que de su boca nacieron todos los cacodemonios de la cueva.
-      El fuego que la engendr\xF3 ya no le hace da\xF1o."
+      Lo que la engendr\xF3 sigue ardiendo dentro de ella."
     patrones: "Como el cacodemonio, pero m\xE1s dura: rugido que derrumba las estalactitas
       y picado con armadura. Un parry la para en seco."
     derrotasParaPatrones: 3
@@ -177,7 +177,7 @@ MonoBehaviour:
     retrato: {fileID: 21300000, guid: 24779bab65955c247a0282ed57330633, type: 3}
     relacionado: {fileID: 11400000, guid: beecde23aac11724f9f7e0c9f12f7e96, type: 2}
     descripcion: "M\xE1s hondo, donde la cueva ya no tiene nombre, los slimes se
-      vuelven oscuros y el fuego resbala sobre ellos."
+      vuelven oscuros y espesos, como si se hubieran tragado la noche."
     patrones: "Como el slime: se encoge y embiste, queda expuesto despu\xE9s y, si
       falla, a veces repite la embestida."
     derrotasParaPatrones: 5

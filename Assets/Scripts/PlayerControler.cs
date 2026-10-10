@@ -247,6 +247,7 @@ public class PlayerControler : MonoBehaviour
     public bool Atacando => isAttacking || isPlunging;
     public bool Esquivando => isDodging;
     public bool Corriendo => isSprinting;
+    public bool Bloqueando => isBlocking;
     public Vector2 Velocidad => m_rigitbody2D != null ? m_rigitbody2D.linearVelocity : Vector2.zero;
     // Nada le hace dano mientras sea true (las transiciones de fase de un jefe).
     public bool InvulnerableExterno { get; set; }

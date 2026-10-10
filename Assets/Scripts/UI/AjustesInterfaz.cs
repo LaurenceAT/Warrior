@@ -56,6 +56,31 @@ public class AjustesInterfaz : ScriptableObject
     public float puntosPorSegundo = 5f;
     [Range(1, 12)] public int maximoPuntos = 7;
 
+    [Header("Maquina de escribir (estatuas y dialogo de la Cazadora)")]
+    [Tooltip("Segundos de pausa extra tras una coma, punto y coma o dos puntos.")]
+    public float pausaComa = 0.12f;
+    [Tooltip("Segundos de pausa extra tras un punto, interrogacion, exclamacion o puntos suspensivos.")]
+    public float pausaPunto = 0.32f;
+    [Tooltip("Cuanto varia la velocidad de letra a letra (0 = todas iguales, 0.3 = hasta un 30 % mas rapida o lenta).")]
+    [Range(0f, 0.6f)] public float variacionEscritura = 0.25f;
+
+    [Header("Subtitulos de la Cazadora")]
+    [Tooltip("Separacion entre la barra del jefe y sus frases (para no tapar la barra ni las marcas I II III).")]
+    public float separacionSubtitulo = 95f;
+
+    // Segundos de espera tras mostrar la letra c (la maquina de escribir). La
+    // pausa de puntuacion va solo al final del grupo: "..." pausa una vez.
+    public float Retraso(char c, char siguiente, float letrasPorSegundo)
+    {
+        float r = 1f / Mathf.Max(1f, letrasPorSegundo) * Random.Range(1f - variacionEscritura, 1f + variacionEscritura);
+        if (EsPuntuacion(siguiente)) return r;
+        if (c == ',' || c == ';' || c == ':') r += pausaComa;
+        else if (c == '.' || c == '?' || c == '!' || c == '…') r += pausaPunto;
+        return r;
+    }
+
+    private static bool EsPuntuacion(char c) => c == '.' || c == ',' || c == ';' || c == ':' || c == '?' || c == '!' || c == '…' || c == '»' || c == '"';
+
     private static AjustesInterfaz instancia;
 
     public static AjustesInterfaz Get()

@@ -393,6 +393,85 @@ public class AjustesCazadora : ScriptableObject
     public string finBarra1 = "¿Eso fue todo el ruido que sabes hacer?";
     public string finBarra2 = "Ya casi puedo oír tu final.";
     public string muerteFinal = "...Por fin... silencio.";
+    [Tooltip("En la ultima barra, con esta vida o menos (0.2 = 20 %), dice una frase de 'casi vencida' (una vez por intento).")]
+    [Range(0f, 1f)] public float casiVencida = 0.2f;
+    [TextArea(1, 3)] public string[] frasesCasiVencida = { "Espera, espera... ¿de verdad me estás ganando?" };
+
+    // ------------------------------------------------------------------ Reintento
+
+    [System.Serializable]
+    public class ReintentoCausa
+    {
+        [Tooltip("Solo para reconocerla en el Inspector.")]
+        public string nombre;
+        [Tooltip("Ids de ataques de su ficha (Resources/Desafios/Jefe_BlindHuntress) que cuentan como esta causa.")]
+        public string[] ataques = new string[0];
+        [Tooltip("Cuenta tambien morir por un estado alterado (sangrado, frio o quemadura) durante su combate.")]
+        public bool estadoAlterado;
+        [TextArea(1, 3)] public string[] frases = new string[0];
+    }
+
+    [Header("Reintento (subtitulo al volver a entrar, sin dialogo)")]
+    [Tooltip("Lo que dice al volver si no se sabe como moriste (o no encaja con ninguna causa).")]
+    [TextArea(1, 3)] public string[] reintentoGeneral = { "¿Otra vez tú? Reconozco esos pasos torpes." };
+    [Tooltip("Segun de que moriste la ultima vez contra ella.")]
+    public ReintentoCausa[] reintentoPorCausa = new ReintentoCausa[0];
+    [Tooltip("Con tantas muertes seguidas o mas, a veces (ver probabilidad) rompe la cuarta pared.")]
+    public int rachaCuartaPared = 5;
+    [Range(0f, 1f)] public float probabilidadCuartaPared = 0.5f;
+    [TextArea(1, 3)] public string[] reintentoRacha = new string[0];
+    [Tooltip("Segundos que se ve la frase del reintento.")]
+    public float segundosReintento = 4f;
+
+    // ------------------------------------------------------------------ Reacciones
+
+    [Header("Reacciones a lo que haces (subtitulos en combate)")]
+    [Tooltip("Segundos minimos entre una reaccion y la siguiente.")]
+    public float reaccionIntervalo = 14f;
+    [Tooltip("Reacciones como mucho por pelea (por intento).")]
+    public int reaccionTope = 5;
+    [Tooltip("Segundos que se ve cada reaccion.")]
+    public float segundosReaccion = 3.2f;
+    [Tooltip("Bloqueos seguidos (sin atacar entre medias) para comentarlo.")]
+    public int bloqueosSeguidos = 4;
+    [Tooltip("Golpes seguidos con el mismo elemento para comentarlo.")]
+    public int golpesMismoElemento = 5;
+    [Tooltip("Correr a menos de esta distancia de ella para comentarlo.")]
+    public float distanciaCorrer = 7f;
+    [Tooltip("Segundos sin hacer ruido ni moverte (y lejos de ella) para comentarlo.")]
+    public float segundosQuieto = 4f;
+    [TextArea(1, 3)] public string[] reaccionBloqueo = new string[0];
+    [TextArea(1, 3)] public string[] reaccionCorrer = new string[0];
+    [TextArea(1, 3)] public string[] reaccionFrasco = new string[0];
+    [TextArea(1, 3)] public string[] reaccionQuieto = new string[0];
+    [TextArea(1, 3)] public string[] reaccionFuego = new string[0];
+    [TextArea(1, 3)] public string[] reaccionHielo = new string[0];
+    [TextArea(1, 3)] public string[] reaccionOscuro = new string[0];
+    [TextArea(1, 3)] public string[] reaccionSagrado = new string[0];
+    [TextArea(1, 3)] public string[] reaccionSangrado = new string[0];
+
+    public string[] ReaccionElemento(Elemento e) => e switch
+    {
+        Elemento.Fuego => reaccionFuego,
+        Elemento.Hielo => reaccionHielo,
+        Elemento.Oscuro => reaccionOscuro,
+        Elemento.Sagrado => reaccionSagrado,
+        Elemento.Sangrado => reaccionSangrado,
+        _ => null,
+    };
+
+    // Una frase al azar de la lista, sin repetir la ultima dicha (si hay mas).
+    private static string ultimaFrase;
+    public static string Una(string[] lista)
+    {
+        if (lista == null) return null;
+        var v = new System.Collections.Generic.List<string>();
+        foreach (string s in lista) if (!string.IsNullOrWhiteSpace(s)) v.Add(s);
+        if (v.Count == 0) return null;
+        if (v.Count > 1) v.Remove(ultimaFrase);
+        ultimaFrase = v[UnityEngine.Random.Range(0, v.Count)];
+        return ultimaFrase;
+    }
 
     [Header("Colores de sus efectos (el blanco se tine)")]
     public Color colorNormal = new Color(0.93f, 0.97f, 1f, 1f);

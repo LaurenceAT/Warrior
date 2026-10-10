@@ -4,11 +4,14 @@ using UnityEngine;
 // abre el cuadro de texto (CuadroPista). Mientras no se haya leido, brilla un
 // poco: un contorno de un pixel que late despacio y alguna chispa suelta.
 // Lo leido se recuerda (en la partida guardada) y aparece en el libro de pistas
-// del menu de pausa.
+// del menu de pausa. Los textos salen de la ficha PistasEstatuas (dos lecturas:
+// la primera y, al volver a leerla, una mas clara); si la estatua no esta en la
+// ficha, se usa el texto de abajo.
 public class EstatuaPista : MonoBehaviour, IInteractuable
 {
-    [Tooltip("Nombre que sale arriba del cuadro y en el libro de pistas.")]
+    [Tooltip("Nombre que sale arriba del cuadro y en el libro de pistas (si no esta en la ficha PistasEstatuas).")]
     public string titulo = "Inscripción";
+    [Tooltip("Respaldo: el texto de verdad se edita en Resources/PistasEstatuas.")]
     [TextArea(3, 8)] public string texto;
     [Tooltip("Identificador unico en el nivel (no cambiarlo si ya hay partidas: se usa para saber si esta leida).")]
     public string id;
@@ -33,7 +36,7 @@ public class EstatuaPista : MonoBehaviour, IInteractuable
 
     public Vector2 PuntoInteraccion => sr != null ? new Vector2(sr.bounds.center.x, sr.bounds.min.y + 0.5f) : (Vector2)transform.position;
     public float RadioInteraccion => radio;
-    public bool PuedeInteractuar => !string.IsNullOrEmpty(texto) && !CuadroPista.Abierto;
+    public bool PuedeInteractuar => !string.IsNullOrEmpty(TextoDe(1)) && !CuadroPista.Abierto;
     public string TextoInteraccion => "Presiona F para leer";
     public bool Leida => Partida.PistaLeidaYa(Escena, Id);
 
@@ -64,11 +67,25 @@ public class EstatuaPista : MonoBehaviour, IInteractuable
         AvisoInteraccion.Crear(transform, this, (alto + alturaAviso) / Mathf.Max(0.01f, Mathf.Abs(transform.lossyScale.y)));
     }
 
+    // Si ya estaba leida (tambien en partidas viejas), sale la segunda lectura.
     public void Interactuar(PlayerControler p)
     {
-        Partida.LeerPista(Escena, Id, titulo, texto);
-        CuadroPista.Mostrar(titulo, texto, velocidadEscritura, p);
+        int lectura = Leida ? 2 : 1;
+        string t = TextoDe(lectura);
+        Partida.LeerPista(Escena, Id, Titulo, t, lectura);
+        CuadroPista.Mostrar(Titulo, t, velocidadEscritura, p);
     }
+
+    private string Titulo
+    {
+        get
+        {
+            PistasEstatuas.Pista f = PistasEstatuas.Buscar(Escena, Id);
+            return f != null && !string.IsNullOrEmpty(f.titulo) ? f.titulo : titulo;
+        }
+    }
+
+    private string TextoDe(int lectura) => PistasEstatuas.Texto(Escena, Id, lectura) ?? texto;
 
     private void LateUpdate()
     {

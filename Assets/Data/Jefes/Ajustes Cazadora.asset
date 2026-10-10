@@ -114,6 +114,8 @@ MonoBehaviour:
   ventanaGolpes: 2.6
   duracionPose: 1.1
   enfriamientoParry: 12
+  graciaGuardia: 0.3
+  danoOlaDevuelta: 0.03
   hitStopParry: 0.08
   aturdimientoJugador: 1.4
   retrocesoParry: 1.2
@@ -288,20 +290,19 @@ MonoBehaviour:
   volumenViento: 0.5
   nombreDialogo: La Cazadora Ciega
   frasesEntrada:
-  - "Ah. Otro paso en mi bosque. Lo o\xED desde lejos."
-  - "No necesito ojos para saber lo que eres: una respiraci\xF3n nerviosa, un metal
-    que tiembla."
-  - "Hazme un favor, cazador. Da la vuelta. Los \xE1rboles ya tienen suficientes
-    huesos."
+  - Otra persona que se atreve a perturbar mi tranquilidad...
+  - "Espero que no vengas a interrumpir mi siesta. Me cost\xF3 mucho que el bosque
+    se callara."
+  - "As\xED que dime, peque\xF1o... \xBFqu\xE9 vas a hacer ahora?"
   opcionRetirarse: Retirarme
   opcionDesafiar: Voy a derrotarte
   respuestaRetirarse:
-  - "Qu\xE9 dulce. \xBFDe verdad cre\xEDste que te dejar\xEDa salir?"
-  - "La presa nunca decide cu\xE1ndo termina la cacer\xEDa."
+  - "Jaja... \xBFen serio cre\xEDste que dejar\xEDa escapar a una presa?"
+  - "Qu\xE9 tierno."
   respuestaDesafiar:
-  - "...Ja. Qu\xE9 valiente suena el miedo."
-  - "Veamos si tus o\xEDdos son tan r\xE1pidos como tu lengua."
-  trasParryDialogo: ...Interesante.
+  - "Espero que dures m\xE1s de lo que aparentas."
+  - "Aunque, por c\xF3mo respiras... no mucho."
+  trasParryDialogo: "...Vaya. Tienes buen o\xEDdo, peque\xF1o."
   sonidoEscritura: {fileID: 8300000, guid: b4a3603068902fa478170c13c57af01e, type: 3}
   volumenEscritura: 0.35
   letrasPorSegundo: 34
@@ -309,9 +310,139 @@ MonoBehaviour:
   avisoTajoDialogo: 0.32
   danoTajoDialogo: 0.3
   ventanaParryDialogo: 0.14
-  finBarra1: "\xBFEso fue todo lo que sabes hacer?"
-  finBarra2: No. No. No. Aun no.
-  muerteFinal: ...Por fin... silencio.
+  finBarra1: "\xBFEso fue todo? Esperaba algo m\xE1s ruidoso."
+  finBarra2: "No. No. A\xFAn no. Apaguemos la luz, \xBFte parece?"
+  muerteFinal: ...Bah. Por fin... un poco de silencio.
+  casiVencida: 0.2
+  frasesCasiVencida:
+  - "Espera, espera... \xBFde verdad me est\xE1s ganando?"
+  - Mmm. Esto no estaba en mis planes.
+  - Vale. Lo admito. Eres un poco molesto.
+  reintentoGeneral:
+  - "\xBFOtra vez t\xFA? Reconozco esos pasos torpes."
+  - Has vuelto. Empiezo a pensar que te gusto.
+  - Bienvenido de nuevo. La hoguera ya debe de odiarte.
+  reintentoPorCausa:
+  - nombre: Estocada tras su guardia
+    ataques:
+    - guardia
+    estadoAlterado: 0
+    frases:
+    - "Uno, dos, tres golpes contra mi guardia... \xBFno se te ocurri\xF3 parar?"
+    - "Golpeaste mi guardia como quien llama a la puerta. Y yo abr\xED."
+    - Te encanta pegarle a mi espada. A ella no tanto.
+  - nombre: Instakill con aviso rojo
+    ataques:
+    - ejecucion
+    - sentencia
+    estadoAlterado: 0
+    frases:
+    - "Brillaba en rojo, cari\xF1o. Hasta yo lo s\xE9, y estoy ciega."
+    - "\xBFViste la l\xEDnea roja? Ah, perdona. T\xFA s\xED pod\xEDas verla."
+    - "Te avis\xE9 con un sonido precioso, y te quedaste ah\xED, escuchando."
+  - nombre: El Silencio
+    ataques:
+    - silencio
+    estadoAlterado: 0
+    frases:
+    - "Te ped\xED silencio. Uno solo. Y lo rompiste."
+    - "Shhh... \xBFlo oyes? Era tu \xFAltima respiraci\xF3n."
+    - En el silencio, hasta un suspiro grita. El tuyo, sobre todo.
+  - nombre: Ilusiones
+    ataques:
+    - flanqueo
+    - caen
+    - espejismo
+    - espejos
+    - cruceDoble
+    estadoAlterado: 0
+    frases:
+    - "\xBFCu\xE1l era la de verdad? Ni yo me acuerdo ya."
+    - Le pegaste a mi copia. Te manda saludos.
+    - Peleaste contra un reflejo. Muy valiente. Contra el reflejo.
+  - nombre: Olas y trampas
+    ataques:
+    - ola
+    - lluvia
+    - trampas
+    estadoAlterado: 0
+    frases:
+    - "Saltar no es tan dif\xEDcil. Te lo dice alguien que no ve."
+    - "Pisaste justo donde dej\xE9 mi trampita. Gracias."
+    - "La ola iba por el suelo. T\xFA tambi\xE9n, al final."
+  - nombre: Cuerpo a cuerpo
+    ataques:
+    - tresLunas
+    - cruce
+    - ascendente
+    - salto
+    - danza
+    - fantasma
+    - tajo_dialogo
+    - contra
+    - escudo
+    estadoAlterado: 0
+    frases:
+    - Bailas fatal. Pero gracias por la pieza.
+    - "Te pusiste tan cerca que te o\xED pensar. Mal."
+    - "Te quedaste a mi alcance. Qu\xE9 detalle."
+  - nombre: Estado alterado
+    ataques: []
+    estadoAlterado: 1
+    frases:
+    - "Moriste a cachitos. Qu\xE9 falta de prisa."
+    - "No te mat\xE9 yo. Te mat\xF3 esa herida tan pesada."
+    - Te fuiste apagando solito. Yo solo escuchaba.
+  rachaCuartaPared: 5
+  probabilidadCuartaPared: 0.5
+  reintentoRacha:
+  - Si quieres, te bajo la dificultad. Ah, no. No puedo.
+  - "\xBFOtra vez cargando? Ya me s\xE9 tu partida de memoria."
+  - "Llevas tantas muertes que deber\xEDas pagarme alquiler."
+  segundosReintento: 4
+  reaccionIntervalo: 14
+  reaccionTope: 5
+  segundosReaccion: 3.2
+  bloqueosSeguidos: 4
+  golpesMismoElemento: 5
+  distanciaCorrer: 7
+  segundosQuieto: 4
+  reaccionBloqueo:
+  - "\xBFVas a esconderte detr\xE1s de eso toda la noche?"
+  - "Toc, toc. \xBFHay alguien detr\xE1s de esa espada?"
+  - "Bloquear no es pelear, peque\xF1o. Es esperar."
+  reaccionCorrer:
+  - Corres como un caballo con campanas.
+  - Te oigo llegar desde el otro lado del bosque.
+  - "Tanta prisa... \xBFtienes alg\xFAn sitio mejor donde estar?"
+  reaccionFrasco:
+  - "Glup, glup. \xBFMejor?"
+  - "Ese frasco suena casi vac\xEDo."
+  - Bebe tranquilo. Te espero.
+  reaccionQuieto:
+  - "\xBFTe escondes? Respiras como un fuelle."
+  - Muy quieto. Muy valiente. Muy aburrido.
+  - "El silencio te queda bien. L\xE1stima que tu coraz\xF3n no se calle."
+  reaccionFuego:
+  - "\xBFFuego? \xBFEn un bosque seco? Qu\xE9 gran idea."
+  - "Calentito. Sigue, que ten\xEDa fr\xEDo."
+  - Huele a chamuscado. Tus cejas, supongo.
+  reaccionHielo:
+  - "Jaja. \xBFDe verdad crees que ralentiz\xE1ndome vas a bloquear mejor mis ataques?"
+  - "Fr\xEDo. Qu\xE9 original. Me tiemblan... de la risa."
+  - "\xBFHielo? Llevo a\xF1os en este bosque helado, peque\xF1o."
+  reaccionOscuro:
+  - "\xBFOscuridad? \xBFContra una ciega? Precioso."
+  - "Me ofreces oscuridad a m\xED. Qu\xE9 amable."
+  - Vivo a oscuras. Esto es como volver a casa.
+  reaccionSagrado:
+  - "Luz. Qu\xE9 bonita debe de ser. Yo no la veo."
+  - Sagrado... huele a templo. Y a miedo.
+  - "\xBFMe vas a bendecir hasta la muerte?"
+  reaccionSangrado:
+  - "\xBFOtra vez sangrado? Parece tu imbuici\xF3n favorita... pero no te va a servir."
+  - "Huele a sangre otra vez. \xBFSabes hacer algo m\xE1s?"
+  - "Sangre, sangre, sangre... qu\xE9 mon\xF3tono."
   colorNormal: {r: 0.93, g: 0.97, b: 1, a: 1}
   colorFuego: {r: 1, g: 0.55, b: 0.16, a: 1}
   colorHielo: {r: 0.55, g: 0.86, b: 1, a: 1}
