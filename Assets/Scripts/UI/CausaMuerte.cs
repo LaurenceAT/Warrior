@@ -19,6 +19,7 @@ public static class CausaMuerte
     {
         public Tipo tipo;
         public string jefe;          // id de la ficha del jefe (o null)
+        public string ataque;        // id del ataque de su ficha que dio el golpe (o null)
         public int seguidas;         // muertes seguidas, contando esta
         public int almasPerdidas;
         public float segundosVivo;
@@ -106,6 +107,7 @@ public static class CausaMuerte
     {
         tipo = tipo,
         jefe = jefe,
+        ataque = ataque,
         seguidas = seguidas,
         almasPerdidas = Progreso.AlmasPerdidas,
         segundosVivo = Time.time - inicioVida,

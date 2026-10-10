@@ -368,6 +368,22 @@ public class EnemyHealth : MonoBehaviour
         AlCambiarVida?.Invoke(currentHealth, maxHealth);
     }
 
+    // Quita vida tal cual: sin modificador, elementos, estados ni mejoras de la
+    // espada, y sin avisar de un golpe (premios fijos, como el parry perfecto al
+    // cerco de la Cazadora). Nunca la deja por debajo de "minimo": no mata.
+    public int QuitarVidaFija(int cantidad, int minimo = 1)
+    {
+        if (muerto || agotado || cantidad <= 0) return 0;
+        int nueva = Mathf.Max(Mathf.Max(0, minimo), currentHealth - cantidad);
+        if (nueva >= currentHealth) return 0;
+        int quitada = currentHealth - nueva;
+        currentHealth = nueva;
+        if (barra != null) barra.Mostrar(currentHealth, maxHealth);
+        AlCambiarVida?.Invoke(currentHealth, maxHealth);
+        if (hitFlash != null) hitFlash.Flash();
+        return quitada;
+    }
+
     // Recupera vida sin pasar del maximo (la Cazadora al curarse o robar vida).
     public void Curar(int cantidad)
     {

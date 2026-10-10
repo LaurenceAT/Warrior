@@ -38,14 +38,17 @@ MonoBehaviour:
     caer. En el bosque sin hojas todo se oye. Ella escucha desde hace tanto que se
     r\xEDe antes de que llegues: ya sabe c\xF3mo vas a caer."
   ataques:
-  - id: tajo_dialogo
-    nombre: "Tajo del desaf\xEDo"
+  - id: cerco
+    nombre: Cerco de ilusiones
     fase: 1
     instakill: 0
-    descripcion: "Si aceptas su desaf\xEDo al llegar, abre con un tajo horizontal
-      muy r\xE1pido."
-    consejo: 'Apenas avisa: ten el parry listo en cuanto termine de hablar. Si lo
-      paras, empieza aturdida.'
+    descripcion: "Te rodea con sus ecos y ella misma cierra el c\xEDrculo. Uno por
+      uno, cada atacante brilla, te apunta con una l\xEDnea roja y se lanza. Ella
+      siempre va la \xFAltima."
+    consejo: "F\xEDjate en qui\xE9n brilla: ese va ahora. Los de arriba se paran
+      mires donde mires; a los de los lados hay que darles la cara."
+    consejoSecreto: Si paras a cada copia del cerco sin que ninguna te toque, el
+      cerco se deshace y ella se queda aturdida y herida.
   - id: tresLunas
     nombre: Tres Lunas
     fase: 1
@@ -53,6 +56,7 @@ MonoBehaviour:
     descripcion: "Barrido, luna y estocada, uno detr\xE1s de otro."
     consejo: Esquiva los tres o para la estocada final. Al terminar deja un hueco
       para castigarla.
+    consejoSecreto: 
   - id: cruce
     nombre: Cruce
     fase: 1
@@ -60,6 +64,7 @@ MonoBehaviour:
     descripcion: "Un dash largo que te atraviesa, y un tajo hacia atr\xE1s al pasar."
     consejo: "Rueda a trav\xE9s de ella durante el dash y ap\xE1rtate: el tajo de
       vuelta cae donde estabas."
+    consejoSecreto: 
   - id: ola
     nombre: Ola de luz
     fase: 1
@@ -68,18 +73,21 @@ MonoBehaviour:
       est\xE1s, la lanza a ciegas."
     consejo: "Salta la ola. Si no te oye, qu\xE9date quieto: la lanza hacia donde
       mira, no hacia ti."
+    consejoSecreto: 
   - id: ascendente
     nombre: Tajo ascendente
     fase: 1
     instakill: 0
     descripcion: Castiga a quien salta por encima de ella.
     consejo: Para pasar al otro lado, mejor rodar por debajo de sus ataques que saltarla.
+    consejoSecreto: 
   - id: salto
     nombre: Salto descendente
     fase: 1
     instakill: 0
     descripcion: Salta hacia ti y cae cortando.
     consejo: En cuanto despegue, rueda hacia delante, por debajo del salto.
+    consejoSecreto: 
   - id: guardia
     nombre: Guardia
     fase: 1
@@ -88,6 +96,7 @@ MonoBehaviour:
       para, te aturde y te atraviesa con una estocada que quita media vida.'
     consejo: 'Cuenta tus golpes. Si ves un brillo fino en su espada, deja de atacar:
       retrocede o rueda hasta que se apague.'
+    consejoSecreto: 
   - id: escudo
     nombre: Rugido y escudo
     fase: 1
@@ -96,13 +105,16 @@ MonoBehaviour:
       de un escudo de luz.
     consejo: 'Rompe el escudo a golpes (10, o 5 con la espada imbuida de oscuridad):
       cancelas la cura y la dejas aturdida.'
+    consejoSecreto: 
   - id: ejecucion
     nombre: "Ejecuci\xF3n"
     fase: 1
     instakill: 1
     descripcion: "Una l\xEDnea roja cruza el suelo de punta a punta y ella la recorre
-      con un dash imparable. Es mortal."
-    consejo: "Salta o rueda justo cuando empiece el dash. Despu\xE9s queda expuesta."
+      en un dash imparable. A veces vuelve. Es mortal."
+    consejo: "Salta o rueda cuando la l\xEDnea se quede quieta y suene el chasquido.
+      Puede volver por el otro lado con otro ritmo; despu\xE9s queda expuesta."
+    consejoSecreto: 
   - id: flanqueo
     nombre: Flanqueo
     fase: 2
@@ -111,6 +123,7 @@ MonoBehaviour:
       una a ras de suelo y la otra en el aire."
     consejo: "F\xEDjate en la altura de cada corte: salta el bajo y rueda bajo el
       alto. Golpear a la ilusi\xF3n la deshace."
+    consejoSecreto: 
   - id: caen
     nombre: Ilusiones que caen
     fase: 2
@@ -118,6 +131,7 @@ MonoBehaviour:
     descripcion: Si te acercas corriendo, caen ilusiones del cielo con un tajo descendente;
       una marca en el suelo avisa del impacto.
     consejo: "Ac\xE9rcate andando, no corriendo, y sal de las marcas."
+    consejoSecreto: 
   - id: espejismo
     nombre: Espejismo
     fase: 2
@@ -126,12 +140,14 @@ MonoBehaviour:
       Si golpeas el se\xF1uelo, explota."
     consejo: "Desconf\xEDa de la figura que se queda quieta de repente: la real es
       la que se mueve."
+    consejoSecreto: 
   - id: fantasma
     nombre: Cuchillada fantasma
     fase: 2
     instakill: 0
     descripcion: Un tajo aparece donde estabas hace un segundo, con una marca antes.
     consejo: "No te quedes quieto: la cuchillada cae donde estabas, no donde est\xE1s."
+    consejoSecreto: 
   - id: trampas
     nombre: Trampas de sonido
     fase: 2
@@ -139,6 +155,7 @@ MonoBehaviour:
     descripcion: "S\xEDmbolos tenues en el suelo. Si pisas uno, te ataca al instante
       desde arriba."
     consejo: "Mira d\xF3nde pisas y rodea o salta los s\xEDmbolos."
+    consejoSecreto: 
   - id: lluvia
     nombre: Lluvia de tajos
     fase: 2
@@ -146,6 +163,7 @@ MonoBehaviour:
     descripcion: Salta fuera de la vista y cae con un tajo descendente, soltando
       olas de luz a los dos lados.
     consejo: "Al\xE9jate de donde vaya a caer y salta las olas."
+    consejoSecreto: 
   - id: cruceDoble
     nombre: Cruce doble
     fase: 2
@@ -153,12 +171,14 @@ MonoBehaviour:
     descripcion: "Ella cruza hacia un lado y una ilusi\xF3n hacia el otro."
     consejo: "Rueda a trav\xE9s de cada cruce en el momento justo; huir en su misma
       direcci\xF3n no sirve."
+    consejoSecreto: 
   - id: contra
     nombre: Contraataque elemental
     fase: 2
     instakill: 0
     descripcion: "Copia la imbuici\xF3n de tu espada y la resiste unos segundos."
     consejo: "Cuando copie tu elemento, c\xE1mbialo o espera a que se le pase."
+    consejoSecreto: 
   - id: sentencia
     nombre: Sentencia del Cazador
     fase: 2
@@ -167,6 +187,7 @@ MonoBehaviour:
       cae del cielo sobre ella. Es mortal.
     consejo: 'Cuando la marca se fije, sal de ella. Las ilusiones de alrededor no
       importan: la marca siempre se ve encima.'
+    consejoSecreto: 
   - id: danza
     nombre: "Danza de la Cacer\xEDa"
     fase: 3
@@ -175,12 +196,14 @@ MonoBehaviour:
       con su aviso; termina con un golpe pesado."
     consejo: "Esquiva golpe a golpe, sin prisa: el ritmo cambia a prop\xF3sito. Tras
       el golpe final tarda en recuperarse."
+    consejoSecreto: 
   - id: espejos
     nombre: "Cacer\xEDa de Espejos"
     fase: 3
     instakill: 0
     descripcion: Tres o cuatro figuras, solo una real, que cruzan una tras otra.
     consejo: "Esquiva cada cruce por separado y no ataques hasta que pase el \xFAltimo."
+    consejoSecreto: 
   - id: silencio
     nombre: El Silencio
     fase: 3
@@ -189,6 +212,7 @@ MonoBehaviour:
       de imbuici\xF3n o correr) te delata, y te ejecuta."
     consejo: "Qu\xE9date quieto o camina despacio. Si no oye nada, pierde tu rastro
       y queda vulnerable."
+    consejoSecreto: 
   fases:
   - numero: 1
     nombre: La cazadora

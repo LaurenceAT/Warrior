@@ -20,11 +20,23 @@ public class TextosMuerte : ScriptableObject
         [TextArea(1, 2)] public List<string> frases = new List<string>();
     }
 
+    [Serializable]
+    public class FrasesAtaque
+    {
+        [Tooltip("Id de la ficha del jefe (blind_huntress...).")]
+        public string jefe;
+        [Tooltip("Id del ataque en su ficha (ejecucion, cerco...).")]
+        public string ataque;
+        [TextArea(1, 2)] public List<string> frases = new List<string>();
+    }
+
     [TextArea(1, 2)] public List<string> generales = new List<string>();
     [TextArea(1, 2)] public List<string> enemigoComun = new List<string>();
     [Tooltip("Contra cualquier jefe (se mezclan con las de su jefe).")]
     [TextArea(1, 2)] public List<string> jefe = new List<string>();
     public List<FrasesJefe> porJefe = new List<FrasesJefe>();
+    [Tooltip("Morir por un ataque concreto de un jefe: van antes que las demas (salvo las rachas).")]
+    public List<FrasesAtaque> porAtaque = new List<FrasesAtaque>();
     [TextArea(1, 2)] public List<string> caida = new List<string>();
     [Tooltip("Instakill avisado o el castigo de un parry/agarre.")]
     [TextArea(1, 2)] public List<string> letal = new List<string>();
@@ -69,6 +81,11 @@ public class TextosMuerte : ScriptableObject
     {
         int c = Mathf.Max(1, cadaRacha);
         if (r.seguidas >= 5 && r.seguidas % c == 0) yield return r.seguidas >= 20 ? racha20 : r.seguidas >= 10 ? racha10 : racha5;
+        if (r.jefe != null && r.ataque != null)
+        {
+            FrasesAtaque pa = porAtaque.FirstOrDefault(x => x.jefe == r.jefe && x.ataque == r.ataque);
+            if (pa != null) yield return pa.frases;
+        }
         if (r.tipo == CausaMuerte.Tipo.Letal) yield return letal;
         if (r.tipo == CausaMuerte.Tipo.Caida) yield return caida;
         if (r.tipo == CausaMuerte.Tipo.Sangrado) yield return sangrado;
@@ -99,6 +116,6 @@ public class TextosMuerte : ScriptableObject
         return f;
     }
 
-    public int Total => generales.Count + enemigoComun.Count + jefe.Count + porJefe.Sum(p => p.frases.Count) + caida.Count + letal.Count + rapida.Count
+    public int Total => porAtaque.Sum(p => p.frases.Count) + generales.Count + enemigoComun.Count + jefe.Count + porJefe.Sum(p => p.frases.Count) + caida.Count + letal.Count + rapida.Count
                         + racha5.Count + racha10.Count + racha20.Count + almas.Count + sangrado.Count + frio.Count + fuego.Count;
 }

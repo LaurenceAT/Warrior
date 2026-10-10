@@ -55,6 +55,19 @@ MonoBehaviour:
     - "En el bosque, hasta el silencio tiene o\xEDdos."
     - "Un sonido de m\xE1s. Eso fue todo."
     - "Los \xE1rboles sin hojas lo escucharon todo."
+  porAtaque:
+  - jefe: blind_huntress
+    ataque: cerco
+    frases:
+    - Te rodearon. Todas eran ella, o casi.
+    - Cuatro direcciones y una sola guardia.
+    - "El cerco se cerr\xF3. Contigo dentro."
+  - jefe: blind_huntress
+    ataque: ejecucion
+    frases:
+    - "La l\xEDnea cruzaba todo. T\xFA tambi\xE9n estabas en todo."
+    - El rojo iba de pared a pared.
+    - De pared a pared, sin un hueco.
   caida:
   - "El borde estaba ah\xED desde el principio."
   - "Saltaste con ganas. Falt\xF3 suelo."

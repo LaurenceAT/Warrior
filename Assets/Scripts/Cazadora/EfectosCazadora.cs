@@ -485,6 +485,7 @@ public class MarcaSuelo : MonoBehaviour
     private bool siguiendo;
     private Forma forma;
     private Vector2 tamano;
+    private bool solida;
 
     public bool Activa => gameObject.activeSelf;
 
@@ -513,11 +514,14 @@ public class MarcaSuelo : MonoBehaviour
         m.fin = segundos > 0f ? Time.time + segundos : float.MaxValue;
         m.seguir = null;
         m.siguiendo = false;
+        m.solida = false;
         return m;
     }
 
     // La marca sigue a algo (el player) hasta que se fije.
     public void Seguir(Transform t) { seguir = t; siguiendo = t != null; }
+    // Deja de latir y brilla entera (Ejecucion: la senal de que ya va).
+    public void Solida() { solida = true; }
     public void Fijar() { siguiendo = false; inicio = Time.time; }
     public Vector2 Posicion => transform.position;
     public void Quitar() => PoolCazadora.Devolver(this);
@@ -533,7 +537,7 @@ public class MarcaSuelo : MonoBehaviour
         float t = Time.time - inicio;
         // Late: mas rapido cuanto mas cerca del final.
         float queda = fin == float.MaxValue ? 1f : Mathf.Clamp01((fin - Time.time) / Mathf.Max(0.01f, fin - inicio));
-        float pulso = 0.55f + 0.45f * Mathf.Sin(t * Mathf.Lerp(26f, 9f, queda));
+        float pulso = solida ? 1.15f : 0.55f + 0.45f * Mathf.Sin(t * Mathf.Lerp(26f, 9f, queda));
         Color c = color;
         c.a = color.a * pulso * (siguiendo ? 0.75f : 1f);
         sr.color = c;
@@ -545,6 +549,73 @@ public class MarcaSuelo : MonoBehaviour
             columna.color = cc;
         }
         if (Time.time >= fin) PoolCazadora.Devolver(this);
+    }
+}
+
+// ------------------------------------------------------------------ Linea de apuntado
+
+// Linea roja fina desde un atacante hasta ti (Cerco de ilusiones). Mientras
+// apunta te sigue y late; fijada, deja de seguirte y brilla entera: es el
+// momento de bloquear. Sale de la reserva (PoolCazadora).
+public class LineaApunte : MonoBehaviour
+{
+    private SpriteRenderer sr;
+    private Color color;
+    private Vector2 desde, hasta;
+    private bool fija;
+    private float inicio;
+
+    public Vector2 Desde => desde;
+    public Vector2 Hasta => hasta;
+    public bool Fija => fija;
+
+    public static LineaApunte Poner(Vector2 desde, Vector2 hasta, Color color)
+    {
+        LineaApunte l = PoolCazadora.Sacar(go =>
+        {
+            LineaApunte x = go.AddComponent<LineaApunte>();
+            // El trazo va en un hijo: el padre da el largo y el giro; el hijo, el grosor.
+            GameObject trazo = new GameObject("Trazo");
+            trazo.transform.SetParent(go.transform, false);
+            x.sr = DibujosCazadora.Renderer(trazo, "VFX", 61);
+            x.sr.sprite = DibujosCazadora.Pixel();
+            return x;
+        });
+        l.color = color;
+        l.fija = false;
+        l.inicio = Time.time;
+        l.Mover(desde, hasta);
+        return l;
+    }
+
+    // Mientras no este fija, sigue los extremos que le den.
+    public void Mover(Vector2 a, Vector2 b)
+    {
+        if (fija) return;
+        desde = a;
+        hasta = b;
+        Colocar();
+    }
+
+    public void Fijar() => fija = true;
+    public void Quitar() => PoolCazadora.Devolver(this);
+
+    private void Colocar()
+    {
+        Vector2 d = hasta - desde;
+        transform.position = (Vector3)((desde + hasta) * 0.5f);
+        transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(d.y, d.x) * Mathf.Rad2Deg);
+        transform.localScale = new Vector3(Mathf.Max(0.05f, d.magnitude), 1f, 1f);
+    }
+
+    private void Update()
+    {
+        float t = Time.time - inicio;
+        Color c = color;
+        c.a = color.a * (fija ? 1f : 0.45f + 0.3f * Mathf.Sin(t * 24f));
+        sr.color = c;
+        // Mas gruesa al fijarse: se nota sin mirar la linea con lupa.
+        sr.transform.localScale = new Vector3(1f, fija ? 0.12f : 0.06f, 1f);
     }
 }
 

@@ -156,7 +156,7 @@ public class ArenaCazadora : MonoBehaviour, IArenaJefe
         dichoCasiVencida = false;
         salud.AlCambiarVida += CasiVencida;
         barra.PonerEstados(salud);
-        UICazadora.MontarEnBarra(barra);
+        UICazadora.MontarEnBarra(barra, ajustes.mostrarMarcasFases);
         UICazadora.FaseActual(0);
 
         FichaJefe ficha = FichaJefe.DeEscena(gameObject.scene.name);
@@ -202,8 +202,9 @@ public class ArenaCazadora : MonoBehaviour, IArenaJefe
         // Ahora si: la niebla se cierra detras (tambien si eligio "Retirarme").
         if (ZonaEntrada != null) ZonaEntrada.Cerrar();
 
-        // "Voy a derrotarte": un tajo rapido. Si lo paras, empieza aturdida.
-        if (eleccion == 1) yield return jefe.TajoDialogo();
+        // "Voy a derrotarte": el cerco de ilusiones abre la pelea (el tajo rapido
+        // de antes, TajoDialogo, ya no se usa).
+        if (eleccion == 1) yield return jefe.CercoApertura();
         jefe.Activar();
         // Comenta lo que oye (frases sueltas, con tope y pausa entre ellas).
         jefe.gameObject.AddComponent<ReaccionesCazadora>().Configurar(ajustes);

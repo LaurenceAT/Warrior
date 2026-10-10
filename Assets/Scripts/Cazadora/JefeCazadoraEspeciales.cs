@@ -560,7 +560,10 @@ public partial class JefeCazadora
     }
 
     // INSTAKILL 1, Ejecucion: una linea roja cruza el suelo de punta a punta y
-    // ella la recorre con el dash especial. Se esquiva saltando o rodando.
+    // ella la recorre con el dash especial. Luego frena, se gira y vuelve con
+    // otra linea tras una espera al azar (no se puede memorizar el ritmo). Se
+    // esquiva saltando o rodando; al final de cada aviso la linea se queda fija
+    // y suena un chasquido (la senal). Avisos mas cortos en Dificil, con minimo.
     private IEnumerator Ejecucion()
     {
         instakillUsado[0] = true;
@@ -568,29 +571,57 @@ public partial class JefeCazadora
         float lado = Pos.x < arena.center.x ? cuerpo.XMin : cuerpo.XMax;
         MirarA(lado);
         cuerpoAnim.Pose("cruce", 1);
-        yield return Dash(lado, 0.35f);
+        yield return Dash(lado, ajustes.colocarEjecucion);
         int dir = lado < arena.center.x ? 1 : -1;
         Mirar(dir);
-        float otro = dir > 0 ? cuerpo.XMax : cuerpo.XMin;
 
         AlAvisoInstakill?.Invoke(true);
         AnunciarAtaque("ejecucion");
-        MarcaSuelo linea = MarcaSuelo.Poner(MarcaSuelo.Forma.Franja, new Vector2((cuerpo.XMin + cuerpo.XMax) * 0.5f, suelo + 0.07f),
-                                            new Vector2(cuerpo.XMax - cuerpo.XMin + 1.6f, 0.15f), ajustes.colorInstakill, ajustes.avisoEjecucion + 0.3f);
-        Sonar("aviso_ejecucion", 1f);
-        CamaraCazadora.Acercar(ajustes.zoomInstakill, ajustes.avisoEjecucion * 0.7f);
-        cuerpoAnim.Pose("cruce", 0);
-        // El aviso no cambia nunca (ni en Dificil ni por fase).
-        for (float t = 0f; t < ajustes.avisoEjecucion; t += Time.deltaTime)
+        bool dificil = Desafio.Activo && Desafio.Dificil;
+        float aviso = Mathf.Max(ajustes.avisoMinimoEjecucion, dificil ? ajustes.avisoEjecucionDificil : ajustes.avisoEjecucion);
+        CamaraCazadora.Acercar(ajustes.zoomInstakill, aviso * 0.7f);
+        yield return PasadaEjecucion(dir, aviso, true);
+        PlayerControler p = PC;
+        if (p != null && p.VidaActual > 0 && !muertaDelTodo)
         {
-            cuerpoAnim.Destello(ajustes.colorInstakill, 0.4f + 0.3f * Mathf.Sin(t * 22f), 0.05f);
-            yield return null;
+            // Frena (no para en seco), se gira y vuelve.
+            cuerpo.Parar(ajustes.frenada);
+            cuerpoAnim.Reproducir("cruce", 1f, 2);
+            Vector2 hueco = dificil ? ajustes.huecoEjecucionDificil : ajustes.huecoEjecucion;
+            float espera = Mathf.Max(ajustes.huecoMinimoEjecucion, Random.Range(hueco.x, hueco.y));
+            yield return PasadaEjecucion(-dir, espera, false);
         }
         CamaraCazadora.Abrir(1.2f);
-        yield return CruceCuerpo(otro, Mathf.Abs(otro - Pos.x) / Mathf.Max(5f, ajustes.velocidadEjecucion), 99999, true, true, true);
-        if (linea != null && linea.Activa) linea.Quitar();
         AlAvisoInstakill?.Invoke(false);
         yield return Expuesta();
+    }
+
+    // Una pasada: linea roja, aviso (la ultima parte, fija y con chasquido) y dash.
+    private IEnumerator PasadaEjecucion(int dir, float aviso, bool primera)
+    {
+        Mirar(dir);
+        float otro = dir > 0 ? cuerpo.XMax : cuerpo.XMin;
+        MarcaSuelo linea = MarcaSuelo.Poner(MarcaSuelo.Forma.Franja, new Vector2((cuerpo.XMin + cuerpo.XMax) * 0.5f, suelo + 0.07f),
+                                            new Vector2(cuerpo.XMax - cuerpo.XMin + 1.6f, 0.15f), ajustes.colorInstakill, aviso + 0.3f);
+        Sonar("aviso_ejecucion", primera ? 1f : 0.85f, primera ? 1f : 1.08f);
+        // Anticipacion: agachada, con el destello cada vez mas rapido.
+        cuerpoAnim.Pose("cruce", 0);
+        float fijar = Mathf.Min(ajustes.fijarEjecucion, aviso * 0.5f);
+        bool fijada = false;
+        for (float t = 0f; t < aviso; t += Time.deltaTime)
+        {
+            if (!fijada && t >= aviso - fijar)
+            {
+                fijada = true;
+                if (linea != null && linea.Activa) linea.Solida();
+                Sonar("sentencia_fija", 0.9f);
+            }
+            float ritmo = Mathf.Lerp(16f, 30f, t / aviso);
+            cuerpoAnim.Destello(ajustes.colorInstakill, 0.4f + 0.3f * Mathf.Sin(t * ritmo), 0.05f);
+            yield return null;
+        }
+        yield return CruceCuerpo(otro, Mathf.Abs(otro - Pos.x) / Mathf.Max(5f, ajustes.velocidadEjecucion), 99999, true, true, true);
+        if (linea != null && linea.Activa) linea.Quitar();
     }
 
     // INSTAKILL 2, Sentencia del Cazador: una marca roja te sigue, se fija con un

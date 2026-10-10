@@ -56,6 +56,9 @@ public class FichaJefe : ScriptableObject
         [TextArea(2, 5)] public string descripcion;
         [Tooltip("Como esquivarlo o contrarrestarlo. Se desbloquea al morir por el, o al derrotar al jefe.")]
         [TextArea(2, 5)] public string consejo;
+        [Tooltip("Consejo secreto (opcional): solo se desbloquea al conseguir algo concreto en la pelea (el parry perfecto al cerco). " +
+                 "Ni vencer al jefe ni la migracion antigua lo dan. Mientras no se tenga, no se ve ni deja hueco.")]
+        [TextArea(2, 5)] public string consejoSecreto;
     }
 
     [Serializable]
@@ -143,6 +146,19 @@ public class FichaJefe : ScriptableObject
             if (Globales.Marca("forzar_" + id)) return true;
             // Desbloqueado con un codigo secreto (menu de Desafios).
             if (Globales.Marca(CodigosSecretos.Marca(id))) return true;
+            return requisitos != null && requisitos.All(r => Globales.Completado(r, false));
+        }
+    }
+
+    // Desbloqueado por cumplir sus requisitos (o forzado en las pruebas), no por
+    // un codigo secreto: lo que da logros o informacion lo mira.
+    public bool DesbloqueadoDeVerdad
+    {
+        get
+        {
+            if (!secreto) return true;
+            if (Globales.Marca("bloqueo_" + id)) return false;
+            if (Globales.Marca("forzar_" + id)) return true;
             return requisitos != null && requisitos.All(r => Globales.Completado(r, false));
         }
     }

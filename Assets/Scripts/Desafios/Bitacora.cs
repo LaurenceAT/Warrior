@@ -27,6 +27,10 @@ public static class Bitacora
     public static string ClaveFase(FichaJefe f, int fase) => $"j:{f.id}:f:{fase}";
     public static string ClaveElemento(FichaJefe f, Elemento e) => $"j:{f.id}:e:{(int)e}";
     public static string ClaveHistoria(FichaJefe f, string fragmento) => $"j:{f.id}:h:{fragmento}";
+    // Consejo secreto de un ataque (FichaJefe.Ataque.consejoSecreto). Va con los
+    // consejos ("c:") en el resumen, pero ni la victoria ni la migracion antigua
+    // (bitacora_v1, DesbloquearTodo) lo dan: solo ConsejoSecreto.
+    public static string ClaveSecreto(FichaJefe f, string ataque) => $"j:{f.id}:c:{ataque}+secreto";
 
     public const string PrefijoBestiario = "b:";
     public static string ClaveVisto(string enemigo) => $"b:{enemigo}:v";
@@ -76,6 +80,16 @@ public static class Bitacora
         jefeActual = f;
         ataqueActual = ataque;
         if (f.BuscarAtaque(ataque) != null) Anotar(ClaveAtaque(f, ataque));
+    }
+
+    // Algo concreto conseguido en la pelea (el parry perfecto al cerco): su consejo
+    // secreto. Sin avisos en combate: sale en el resumen al morir o al completar.
+    public static void ConsejoSecreto(FichaJefe f, string ataque)
+    {
+        if (f == null) return;
+        FichaJefe.Ataque a = f.BuscarAtaque(ataque);
+        if (a == null || string.IsNullOrEmpty(a.consejoSecreto)) return;
+        Anotar(ClaveSecreto(f, ataque));
     }
 
     // Llega a una fase (1, 2 o 3).
@@ -201,6 +215,8 @@ public static class Bitacora
                     yield return ka;
                     string kc = ClaveConsejo(f, a.id);
                     if (Tiene(kc)) yield return kc;
+                    string ks = ClaveSecreto(f, a.id);
+                    if (Tiene(ks)) yield return ks;
                 }
                 break;
             case Seccion.Debilidades:

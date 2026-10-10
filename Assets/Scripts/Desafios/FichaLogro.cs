@@ -14,7 +14,8 @@ public class FichaLogro : ScriptableObject
         DerrotarJefeEnPartida,  // parametro: escena del jefe
         PrimeraMuerte,          // en la partida normal
         CompletarDesafio,       // parametro: id de la ficha del jefe
-        CompletarDesafioDificil // parametro: id de la ficha del jefe
+        CompletarDesafioDificil,// parametro: id de la ficha del jefe
+        Especial                // parametro: id de la hazana (cerco_perfecto...): la avisa el codigo que la detecta
     }
 
     [Tooltip("Identificador (no cambiarlo: los logros se guardan con el).")]

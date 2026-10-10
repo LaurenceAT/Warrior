@@ -236,7 +236,14 @@ MonoBehaviour:
   radioLuz: 4.2
   opacidadOscuridad: 0.92
   umbralInstakill: 0.65
-  avisoEjecucion: 1.35
+  avisoEjecucion: 0.8
+  avisoEjecucionDificil: 0.65
+  avisoMinimoEjecucion: 0.5
+  fijarEjecucion: 0.25
+  huecoEjecucion: {x: 0.5, y: 0.8}
+  huecoEjecucionDificil: {x: 0.45, y: 0.65}
+  huecoMinimoEjecucion: 0.45
+  colocarEjecucion: 0.22
   velocidadEjecucion: 40
   seguimientoSentencia: 1.5
   fijoSentencia: 0.6
@@ -244,6 +251,37 @@ MonoBehaviour:
   duracionSilencio: 4
   expuestaTrasInstakill: 2.2
   esperaTrasReaparecer: 5
+  copiasCerco: 3
+  copiaExtraFase2: 1
+  distanciaCerco: 4.5
+  cercoArriba: {x: 3.2, y: 3.2}
+  alturaCopiaExtra: 3.8
+  seguirCerco: 9
+  destelloCerco: 0.25
+  apuntarCerco: 0.55
+  apuntarCercoDificil: 0.45
+  fijoCerco: 0.3
+  fijoCercoDificil: 0.25
+  avisoMinimoCerco: 0.25
+  golpeCerco: 0.18
+  pausaCerco: {x: 0.75, y: 1.05}
+  pausaCercoDificil: {x: 0.62, y: 0.85}
+  pausaMinimaCerco: 0.6
+  danoCerco: 0.33333334
+  enfriamientoCerco: 30
+  tonosCerco:
+  - 0.92
+  - 1
+  - 1.08
+  - 1.16
+  tonoOriginalCerco: 0.85
+  premioCerco: 0.1
+  aturdidaPremioCerco: 1.5
+  tonosParryCerco:
+  - 1
+  - 1.06
+  - 1.12
+  - 1.18
   rangoCercano: 4.5
   alcanceOido: 20
   olvido: 4
@@ -313,6 +351,14 @@ MonoBehaviour:
   finBarra1: "\xBFEso fue todo? Esperaba algo m\xE1s ruidoso."
   finBarra2: "No. No. A\xFAn no. Apaguemos la luz, \xBFte parece?"
   muerteFinal: ...Bah. Por fin... un poco de silencio.
+  frasesCerco:
+  - "Cuatro respiraciones a tu alrededor... y solo una es m\xEDa."
+  - "Escucha. As\xED suena un bosque lleno de m\xED."
+  - Mis ecos ya te rodean. Yo los oigo a todos.
+  frasesPremioCerco:
+  - "...Eso no lo o\xED venir."
+  - "Tus pasos no dudaron ni una vez. Hac\xEDa tiempo que no o\xEDa algo as\xED."
+  - Mis ecos... callados. Todos.
   casiVencida: 0.2
   frasesCasiVencida:
   - "Espera, espera... \xBFde verdad me est\xE1s ganando?"
@@ -323,6 +369,22 @@ MonoBehaviour:
   - Has vuelto. Empiezo a pensar que te gusto.
   - Bienvenido de nuevo. La hoguera ya debe de odiarte.
   reintentoPorCausa:
+  - nombre: "Ejecuci\xF3n"
+    ataques:
+    - ejecucion
+    estadoAlterado: 0
+    frases:
+    - "Una l\xEDnea roja de lado a lado. \xBFQu\xE9 m\xE1s quer\xEDas, un cartel?"
+    - Te quedaste en el suelo. Yo no.
+    - "Ni la o\xEDste venir, \xBFverdad? Yo s\xED te o\xED a ti."
+  - nombre: Cerco de ilusiones
+    ataques:
+    - cerco
+    estadoAlterado: 0
+    frases:
+    - "Cuatro de m\xED y t\xFA con solo dos manos. Mala cuenta."
+    - "Te giraste hacia el eco equivocado. Lo o\xED clar\xEDsimo."
+    - Mis ecos te dieron la vuelta. Literalmente.
   - nombre: Estocada tras su guardia
     ataques:
     - guardia
@@ -331,15 +393,14 @@ MonoBehaviour:
     - "Uno, dos, tres golpes contra mi guardia... \xBFno se te ocurri\xF3 parar?"
     - "Golpeaste mi guardia como quien llama a la puerta. Y yo abr\xED."
     - Te encanta pegarle a mi espada. A ella no tanto.
-  - nombre: Instakill con aviso rojo
+  - nombre: Sentencia
     ataques:
-    - ejecucion
     - sentencia
     estadoAlterado: 0
     frases:
     - "Brillaba en rojo, cari\xF1o. Hasta yo lo s\xE9, y estoy ciega."
-    - "\xBFViste la l\xEDnea roja? Ah, perdona. T\xFA s\xED pod\xEDas verla."
     - "Te avis\xE9 con un sonido precioso, y te quedaste ah\xED, escuchando."
+    - "Te marqu\xE9, y te quedaste donde te marqu\xE9."
   - nombre: El Silencio
     ataques:
     - silencio
@@ -378,7 +439,6 @@ MonoBehaviour:
     - salto
     - danza
     - fantasma
-    - tajo_dialogo
     - contra
     - escudo
     estadoAlterado: 0

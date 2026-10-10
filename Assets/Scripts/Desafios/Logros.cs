@@ -11,12 +11,19 @@ using UnityEngine.UI;
 // pequeno en una esquina.
 //   - Llegar a un nivel y derrotar a un jefe cuentan solo en la partida normal.
 //   - Completar desafios, solo dentro de un desafio.
+//   - Las hazanas (Especial, como el parry perfecto al cerco) se guardan al
+//     momento, pero su aviso espera a que acabe la pelea (al morir, al vencer o
+//     al cambiar de escena): nada de avisos en pleno combate.
 public static class Logros
 {
+    private static readonly List<FichaLogro> avisosPendientes = new List<FichaLogro>();
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Iniciar()
     {
-        SceneManager.sceneLoaded += (s, m) => AlCargarEscena(s.name);
+        SceneManager.sceneLoaded += (s, m) => { AvisarPendientes(); AlCargarEscena(s.name); };
+        ArenaJefe.AlVencer += AvisarPendientes;
+        PlayerControler.AlMorir += AvisarPendientes;
         ArenaJefe.AlVencer += () => { if (!Desafio.Activo) Comprobar(FichaLogro.Condicion.DerrotarJefeEnPartida, SceneManager.GetActiveScene().name); };
         PlayerControler.AlMorir += () => { if (!Desafio.Activo) Comprobar(FichaLogro.Condicion.PrimeraMuerte, null); };
         AlCargarEscena(SceneManager.GetActiveScene().name);
@@ -37,8 +44,15 @@ public static class Logros
 
     public static void Desbloquear(FichaLogro l)
     {
-        if (l == null || !Globales.DarLogro(l.id)) return;
-        AvisoLogro.Mostrar(l);
+        if (l == null || (l.condicion == FichaLogro.Condicion.Especial && !l.Visible) || !Globales.DarLogro(l.id)) return;
+        if (l.condicion == FichaLogro.Condicion.Especial && ArenaJefe.EnCombate) avisosPendientes.Add(l);
+        else AvisoLogro.Mostrar(l);
+    }
+
+    private static void AvisarPendientes()
+    {
+        foreach (FichaLogro l in avisosPendientes) AvisoLogro.Mostrar(l);
+        avisosPendientes.Clear();
     }
 
     public static int Desbloqueados(FichaLogro.Seccion? s = null) =>

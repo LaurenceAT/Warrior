@@ -248,6 +248,10 @@ public class PlayerControler : MonoBehaviour
     public bool Esquivando => isDodging;
     public bool Corriendo => isSprinting;
     public bool Bloqueando => isBlocking;
+    // Tono del sonido del proximo parry (1 = normal). Se vuelve a 1 al usarse.
+    public static float TonoSiguienteParry = 1f;
+    // El tono con el que sono el ultimo parry (para las pruebas).
+    public static float UltimoTonoParry { get; private set; } = 1f;
     public Vector2 Velocidad => m_rigitbody2D != null ? m_rigitbody2D.linearVelocity : Vector2.zero;
     // Nada le hace dano mientras sea true (las transiciones de fase de un jefe).
     public bool InvulnerableExterno { get; set; }
@@ -3094,8 +3098,12 @@ public class PlayerControler : MonoBehaviour
         estamina.Recuperar(parryStaminaGain);
         // Choque metalico fuerte y, encima, el anillo de la hoja: el parry tiene
         // que sonar distinto (y mas fuerte) que un golpe normal.
-        Sonido.ReproducirCanal("espada", "parry");
-        Sonido.Reproducir("parry_brillo", 0.8f);
+        // El tono lo puede subir quien ataca (parrys seguidos al cerco de la Cazadora).
+        float tono = TonoSiguienteParry;
+        TonoSiguienteParry = 1f;
+        UltimoTonoParry = tono;
+        Sonido.ReproducirCanal("espada", "parry", 1f, tono);
+        Sonido.Reproducir("parry_brillo", 0.8f, tono);
         StartCoroutine(HitStop(parryHitStop));
         Sacudir(parryShake);
         ScreenFlash.Destello(parryFlashColor, parryFlashTime);

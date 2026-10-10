@@ -7,7 +7,7 @@ using UnityEngine.UI;
 //   - Subtitulos cortos sobre la barra del jefe (sin pausar el juego).
 //   - Vineta: pulso rojo del latido y bordes oscuros de El Silencio.
 //   - Icono de oido arriba en El Silencio.
-//   - Bajo la barra del jefe: las marcas I, II, III (barras que quedan), la
+//   - Bajo la barra del jefe: las marcas I, II, III (barras que quedan; solo si Ajustes Cazadora lo pide), la
 //     barra del escudo y el aviso "Resistente a X".
 public class UICazadora : MonoBehaviour
 {
@@ -77,10 +77,10 @@ public class UICazadora : MonoBehaviour
     public static void IconoOido(bool mostrar) { if (inst != null) inst.iconoOido = mostrar; }
 
     // Las marcas I-II-III, el escudo y la resistencia van bajo la barra del jefe.
-    public static void MontarEnBarra(BarraJefe barra)
+    public static void MontarEnBarra(BarraJefe barra, bool marcasFases = false)
     {
         if (inst == null || barra == null || barra.Marco == null) return;
-        inst.MontarBarra(barra.Marco);
+        inst.MontarBarra(barra.Marco, marcasFases);
     }
 
     public static void FaseActual(int f)
@@ -208,11 +208,12 @@ public class UICazadora : MonoBehaviour
         return r;
     }
 
-    private void MontarBarra(RectTransform marco)
+    private void MontarBarra(RectTransform marco, bool marcasFases)
     {
         // Marcas I II III encima de la barra, en su extremo derecho (el nombre va
         // encima a la izquierda): asi la barra puede ser larga (AjustesInterfaz).
-        for (int i = 0; i < 3; i++)
+        // Solo si Ajustes Cazadora lo pide (por defecto no: las fases son sorpresa).
+        for (int i = 0; i < 3 && marcasFases; i++)
         {
             TextMeshProUGUI t = EstiloMenu.Texto(Romano(i), marco, 26, Color.white);
             t.outlineWidth = 0.2f;

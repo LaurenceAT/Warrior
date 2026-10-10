@@ -269,6 +269,10 @@ public class MenuDesafios : MonoBehaviour
             string consejo = Bitacora.Tiene(kc)
                 ? $"<color={Verde}>Consejo:</color> {a.consejo}{MarcaNuevo(kc)}"
                 : $"<color={Gris}>Consejo: ???</color>";
+            // El consejo secreto solo se ve si se tiene (sin hueco ni ??? que lo delate).
+            string ks = Bitacora.ClaveSecreto(f, a.id);
+            if (!string.IsNullOrEmpty(a.consejoSecreto) && Bitacora.Tiene(ks))
+                consejo += $"\n<color={Verde}>Consejo:</color> {a.consejoSecreto}{MarcaNuevo(ks)}";
             Linea($"<b><color={Oro}>{a.nombre}</color></b>  <size=75%><color={Gris}>{etiqueta}</color></size>{MarcaNuevo(ka)}\n" +
                   $"<size=92%>{a.descripcion}</size>\n<size=88%>{consejo}</size>", null, 22, false);
         }

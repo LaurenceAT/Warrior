@@ -348,6 +348,7 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
             op.Add(("lluvia", lejos ? 1.8f : 1f));
             op.Add(("cruceDoble", 1.4f));
             op.Add(("espejismo", Time.time - tEspejismo > 14f ? 1.1f : 0f));
+            op.Add(("cerco", CercoDisponible ? 1.6f : 0f));
             ArmaImbuida arma = PC != null ? PC.GetComponent<ArmaImbuida>() : null;
             if (arma != null && arma.Activo != Elemento.Ninguno && Time.time >= siguienteResistencia && Resistencia != arma.Activo)
                 op.Add(("contra", 3f));
@@ -392,6 +393,7 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
             case "danza": return DanzaDeLaCaceria();
             case "espejos": return CaceriaDeEspejos();
             case "silencio": return ElSilencio();
+            case "cerco": return CercoDeIlusiones();
             default: return Pausa(0.3f);
         }
     }
@@ -763,6 +765,9 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
         cuerpo.CortarTrayecto();
         cuerpo.Detener();
         if (PC != null) PlayerControler.TopeVentanaParry = -1f;
+        PlayerControler.TonoSiguienteParry = 1f;
+        EnCerco = CercoLineaFija = false;
+        CercoAtacante = null;
     }
 
     private void Update()

@@ -152,7 +152,7 @@ public static class PruebaRonda17
             Comprobar(ind.CercaDeHoguera, "cerca de la hoguera con objetos pendientes: el aviso late");
             yield return Captura("r17_h01_latido", 1280, 720);
 
-            // Al jefe: la barra, el nombre y las marcas I II III.
+            // Al jefe: la barra y el nombre (las marcas I II III estan apagadas: fases sorpresa).
             // La entrada de su arena (la misma que usa PruebaNieve.CazadoraPrueba).
             Teletransportar(new Vector3(8f, 0.8f, 0f));
             yield return new WaitForSeconds(1f);
@@ -175,7 +175,8 @@ public static class PruebaRonda17
                         if (Grupo(zonas[i].Item1) != Grupo(zonas[j].Item1) && zonas[i].Item2.Overlaps(zonas[j].Item2))
                             solapes.Add(zonas[i].Item1 + "/" + zonas[j].Item1);
                 Debug.Log($"[R17] {res.x}x{res.y}: " + string.Join("  ", zonas.Select(z => $"{z.Item1}=({z.Item2.xMin:0},{z.Item2.yMin:0})-({z.Item2.xMax:0},{z.Item2.yMax:0})")));
-                Comprobar(zonas.Count >= 9 && solapes.Count == 0, $"{res.x}x{res.y}: sin solapes {(solapes.Count > 0 ? string.Join(", ", solapes) : "")}");
+                // 6 zonas: las marcas I II III de la Cazadora ya no salen (fases sorpresa).
+                Comprobar(zonas.Count >= 6 && solapes.Count == 0, $"{res.x}x{res.y}: sin solapes {(solapes.Count > 0 ? string.Join(", ", solapes) : "")}");
                 Rect Z(string n) => zonas.First(z => z.Item1 == n).Item2;
                 Comprobar(Z("almas").yMax <= Z("frasco_sangre").yMin && Z("frasco_mana").yMax <= Z("aviso").yMin && Z("frasco_mana").xMax > res.x * 0.85f,
                           $"{res.x}x{res.y}: abajo a la derecha, de abajo arriba: almas, pociones y aviso");

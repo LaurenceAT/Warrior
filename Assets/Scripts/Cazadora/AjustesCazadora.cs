@@ -252,8 +252,22 @@ public class AjustesCazadora : ScriptableObject
     [Header("Instakills (uno por fase; los avisos no cambian en Dificil)")]
     [Tooltip("Vida que le tiene que quedar a la barra (o menos) para que pueda lanzarlo.")]
     [Range(0f, 1f)] public float umbralInstakill = 0.65f;
-    [Tooltip("Ejecucion: aviso de la linea roja.")]
-    public float avisoEjecucion = 1.35f;
+    [Tooltip("Ejecucion: aviso de la linea roja (Normal).")]
+    public float avisoEjecucion = 0.8f;
+    [Tooltip("Ejecucion: aviso de la linea roja en Dificil.")]
+    public float avisoEjecucionDificil = 0.65f;
+    [Tooltip("Ejecucion: el aviso nunca baja de esto (tampoco en Dificil).")]
+    public float avisoMinimoEjecucion = 0.5f;
+    [Tooltip("Ejecucion: al final del aviso la linea se queda fija y suena un chasquido (la senal de saltar o rodar).")]
+    public float fijarEjecucion = 0.25f;
+    [Tooltip("Ejecucion: espera al azar antes de la segunda pasada (Normal, minimo y maximo).")]
+    public Vector2 huecoEjecucion = new Vector2(0.5f, 0.8f);
+    [Tooltip("Ejecucion: espera al azar antes de la segunda pasada en Dificil.")]
+    public Vector2 huecoEjecucionDificil = new Vector2(0.45f, 0.65f);
+    [Tooltip("Ejecucion: la espera de la segunda pasada nunca baja de esto.")]
+    public float huecoMinimoEjecucion = 0.45f;
+    [Tooltip("Ejecucion: segundos del paso rapido para colocarse en un lado de la arena.")]
+    public float colocarEjecucion = 0.22f;
     public float velocidadEjecucion = 40f;
     [Tooltip("Sentencia: la marca te sigue este tiempo...")]
     public float seguimientoSentencia = 1.5f;
@@ -266,6 +280,60 @@ public class AjustesCazadora : ScriptableObject
     public float expuestaTrasInstakill = 2.2f;
     [Tooltip("Nunca lanza un instakill hasta este tiempo despues de que reaparezcas.")]
     public float esperaTrasReaparecer = 5f;
+
+    // ------------------------------------------------------------------ Cerco de ilusiones
+
+    [Header("Barra del jefe")]
+    [Tooltip("Marcas I II III encima de la barra (cuantas barras le quedan). Apagado: sus fases son una sorpresa.")]
+    public bool mostrarMarcasFases = false;
+
+    [Header("Cerco de ilusiones (tras 'Voy a derrotarte' y, desde la barra 2, en la pelea)")]
+    [Tooltip("Copias a tu alrededor en la barra 1 (y en la apertura).")]
+    [Range(1, 3)] public int copiasCerco = 3;
+    [Tooltip("Desde la barra 2 suma una copia justo encima de ti.")]
+    public bool copiaExtraFase2 = true;
+    [Tooltip("Distancia a los lados (la copia de la izquierda y ella).")]
+    public float distanciaCerco = 4.5f;
+    [Tooltip("Copias de arriba: separacion a cada lado y altura.")]
+    public Vector2 cercoArriba = new Vector2(3.2f, 3.2f);
+    [Tooltip("La copia extra de la barra 2: altura sobre ti.")]
+    public float alturaCopiaExtra = 3.8f;
+    [Tooltip("Mientras te apuntan, el cerco te sigue con esta rapidez (mas = mas pegado).")]
+    public float seguirCerco = 9f;
+    [Tooltip("Destello en el atacante justo antes de su linea (quien va ahora).")]
+    public float destelloCerco = 0.25f;
+    [Tooltip("La linea te sigue este tiempo (Normal / Dificil)...")]
+    public float apuntarCerco = 0.55f;
+    public float apuntarCercoDificil = 0.45f;
+    [Tooltip("...y despues se queda fija este tiempo antes del golpe (Normal / Dificil): el momento de bloquear.")]
+    public float fijoCerco = 0.3f;
+    public float fijoCercoDificil = 0.25f;
+    [Tooltip("Ningun aviso del cerco (apuntar o fijo) baja de esto, tampoco en Dificil.")]
+    public float avisoMinimoCerco = 0.25f;
+    [Tooltip("Lo que dura cada embestida.")]
+    public float golpeCerco = 0.18f;
+    [Tooltip("Pausa al azar entre un atacante y el siguiente (Normal / Dificil).")]
+    public Vector2 pausaCerco = new Vector2(0.75f, 1.05f);
+    public Vector2 pausaCercoDificil = new Vector2(0.62f, 0.85f);
+    [Tooltip("La pausa nunca baja de esto (deja tiempo para girarse; menos de 0,5 s castiga el machacar la guardia).")]
+    public float pausaMinimaCerco = 0.6f;
+    [Tooltip("Dano de cada golpe en fraccion de TU vida maxima (1/3 = 0.333). Si empiezas el cerco con la vida llena, no te mata.")]
+    public float danoCerco = 1f / 3f;
+    [Tooltip("Segundos minimos entre dos cercos en la pelea (desde la barra 2).")]
+    public float enfriamientoCerco = 30f;
+    [Tooltip("Tono del aviso de cada copia y de ella (para seguir la secuencia de oido).")]
+    public float[] tonosCerco = { 0.92f, 1f, 1.08f, 1.16f };
+    public float tonoOriginalCerco = 0.85f;
+
+    [Header("Recompensa por parar todas las copias del cerco")]
+    [Tooltip("Vida que pierde, en fraccion de la barra que tenga en ese momento (0.1 = 10 %). Nunca la mata ni le vacia la barra.")]
+    [Range(0f, 1f)] public float premioCerco = 0.1f;
+    [Tooltip("Segundos aturdida (el aturdimiento del parry; no se suma a otro).")]
+    public float aturdidaPremioCerco = 1.5f;
+    [Tooltip("Tono del parry a cada copia seguida: el primero, el segundo, el tercero... (sube poco: nada chillon).")]
+    public float[] tonosParryCerco = { 1f, 1.06f, 1.12f, 1.18f };
+    // Su frase al perder la vida se ve 3,5 s (como sus otras frases): mas que el
+    // aturdimiento, para poder leerla.
 
     // ------------------------------------------------------------------ Oido
 
@@ -393,6 +461,10 @@ public class AjustesCazadora : ScriptableObject
     public string finBarra1 = "¿Eso fue todo el ruido que sabes hacer?";
     public string finBarra2 = "Ya casi puedo oír tu final.";
     public string muerteFinal = "...Por fin... silencio.";
+    [Tooltip("Al empezar el cerco de ilusiones (una, sin repetir la anterior).")]
+    [TextArea(1, 3)] public string[] frasesCerco = new string[0];
+    [Tooltip("Al perder vida por parar todas las copias del cerco.")]
+    [TextArea(1, 3)] public string[] frasesPremioCerco = new string[0];
     [Tooltip("En la ultima barra, con esta vida o menos (0.2 = 20 %), dice una frase de 'casi vencida' (una vez por intento).")]
     [Range(0f, 1f)] public float casiVencida = 0.2f;
     [TextArea(1, 3)] public string[] frasesCasiVencida = { "Espera, espera... ¿de verdad me estás ganando?" };
@@ -460,16 +532,22 @@ public class AjustesCazadora : ScriptableObject
         _ => null,
     };
 
-    // Una frase al azar de la lista, sin repetir la ultima dicha (si hay mas).
+    // Una frase al azar de la lista, sin repetir la ultima que salio DE ESA
+    // lista (aunque entre medias haya dicho otras cosas) ni la ultima dicha.
     private static string ultimaFrase;
+    private static readonly System.Collections.Generic.Dictionary<string[], string> ultimaDeLista =
+        new System.Collections.Generic.Dictionary<string[], string>();
     public static string Una(string[] lista)
     {
         if (lista == null) return null;
         var v = new System.Collections.Generic.List<string>();
         foreach (string s in lista) if (!string.IsNullOrWhiteSpace(s)) v.Add(s);
         if (v.Count == 0) return null;
+        ultimaDeLista.TryGetValue(lista, out string previa);
+        if (v.Count > 1) v.Remove(previa);
         if (v.Count > 1) v.Remove(ultimaFrase);
         ultimaFrase = v[UnityEngine.Random.Range(0, v.Count)];
+        ultimaDeLista[lista] = ultimaFrase;
         return ultimaFrase;
     }
 

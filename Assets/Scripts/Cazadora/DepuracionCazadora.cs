@@ -23,7 +23,7 @@ public class DepuracionCazadora : MonoBehaviour
     {
         "tresLunas", "cruce", "ola", "ascendente", "salto", "guardia", "escudo", "ejecucion",
         "contra", "flanqueo", "caen", "espejismo", "fantasma", "trampas", "lluvia", "cruceDoble", "sentencia",
-        "danza", "espejos", "silencio",
+        "danza", "espejos", "silencio", "cerco",
     };
 
     private void Update()
