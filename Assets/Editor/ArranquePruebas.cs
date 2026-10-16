@@ -13,5 +13,7 @@ public static class ArranquePruebas
         if (Directory.Exists(c)) Directory.Delete(c, true);
         Directory.CreateDirectory(c);
         SessionState.SetString(Partida.ClaveCarpetaArranque, c);
+        // La guia del primer desafio pararia las pruebas viejas: solo la ve PruebaControles.
+        SessionState.SetBool(GuiaDesafio.ClaveSinGuia, true);
     }
 }

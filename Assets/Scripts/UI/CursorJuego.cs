@@ -26,7 +26,7 @@ public class CursorJuego : MonoBehaviour
         var gm = GameManager.Instance;
         if (gm == null) return true;
         if (PantallaCarga.Cargando || Cinematica.Activa || PantallaMuerte.Activa) return false;
-        return gm.IsPaused || MenuPausa.LibroAbierto || MenuHoguera.Abierto || TiendaTotem.Abierta
+        return gm.IsPaused || GuiaDesafio.Abierta || MenuPausa.LibroAbierto || MenuHoguera.Abierto || TiendaTotem.Abierta
             || PantallaDesafio.Abierta || RuedaImbuir.Abierta || RuedaPociones.Abierta;
     }
 }

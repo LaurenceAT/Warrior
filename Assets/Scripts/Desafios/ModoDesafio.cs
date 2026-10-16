@@ -90,8 +90,7 @@ public class ModoDesafio : MonoBehaviour
     {
         // El player aparece en la hoguera (y la camara con el, sin barrido).
         yield return null;
-        if (hoguera == null) yield break;
-        PlayerControler p = FindFirstObjectByType<PlayerControler>();
+        PlayerControler p = hoguera != null ? FindFirstObjectByType<PlayerControler>() : null;
         if (p != null)
         {
             Vector2 pos = hoguera.PuntoReaparicion;
@@ -101,6 +100,10 @@ public class ModoDesafio : MonoBehaviour
             CinemachineCamera cam = FindFirstObjectByType<CinemachineCamera>();
             if (cam != null) cam.PreviousStateIsValid = false;
         }
+
+        // La primera vez en un desafio: la guia de controles, ya sin pantalla de carga.
+        while (PantallaCarga.Cargando) yield return null;
+        GuiaDesafio.MostrarSiToca();
     }
 
     private void OnEnable()

@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -43,15 +44,20 @@ public class MenuPausa : MonoBehaviour
     private GameObject confirmacion;
     private MenuBestiario bestiario;
     private bool bestiarioAbierto;
+    // "Controles y guia": la misma pantalla que en el menu principal.
+    private PantallaControles controles;
+    private Button botonControles;
+    private bool controlesAbierto;
 
     // El Esc que cierra un submenu (libro, Bestiario, confirmacion) no debe
     // cerrar tambien la pausa (GameManager lo mira).
-    public static bool LibroAbierto => instancia != null && (instancia.libroAbierto || instancia.bestiarioAbierto
+    public static bool LibroAbierto => instancia != null && (instancia.libroAbierto || instancia.bestiarioAbierto || instancia.controlesAbierto
                                                               || (instancia.confirmacion != null && instancia.confirmacion.activeSelf)
                                                               || instancia.libroCerradoEnFrame == Time.frameCount);
     public static bool Existe => instancia != null;
     private const string AyudaPrincipal = "Enter / clic: elegir      ← →: ajustar      Esc / Tab / clic derecho: volver al juego";
     private const string AyudaLibro = "↑ ↓: elegir pista      Enter / clic: leer      Esc / clic derecho: volver";
+    private const string AyudaControles = "↑ ↓: elegir      Enter / clic: abrir      Esc / Tab / clic derecho: volver";
     private const string AyudaSubmenu = "Enter / clic: elegir      Esc / clic derecho: volver";
 
     public static MenuPausa Get()
@@ -66,8 +72,11 @@ public class MenuPausa : MonoBehaviour
         confirmarSalir = false;
         if (libroAbierto) CerrarLibro(false);
         if (bestiarioAbierto) CerrarBestiario(false);
+        if (controlesAbierto) CerrarControles(false);
         if (confirmacion != null && confirmacion.activeSelf) CerrarConfirmacion(false);
         if (mostrar) Globales.GuardarPendiente();
+        // Lo pulsado en la pausa (o en Controles) no cuenta al volver al juego.
+        else GuiaDesafio.LimpiarEntradas();
         // En un desafio: reiniciarlo. En la partida normal: el Bestiario.
         if (botonReiniciarDesafio != null) botonReiniciarDesafio.gameObject.SetActive(Desafio.Activo);
         if (botonBestiario != null) botonBestiario.gameObject.SetActive(!Desafio.Activo);
@@ -102,6 +111,14 @@ public class MenuPausa : MonoBehaviour
         if (grupo == null || !grupo.interactable) return;
         // Atras un paso (Esc, clic derecho o el boton este).
         bool atras = CapasMenu.PulsadoAtras(true);
+        if (controlesAbierto)
+        {
+            // Esc, Tab o clic derecho: de vuelta a la pausa (sin cerrarla).
+            if (atras || (Keyboard.current != null && Keyboard.current.tabKey.wasPressedThisFrame)) CerrarControles(true);
+            else if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject == null)
+                EventSystem.current.SetSelectedGameObject(controles.Primero());
+            return;
+        }
         if (confirmacion.activeSelf)
         {
             if (atras) CerrarConfirmacion(true);
@@ -148,6 +165,28 @@ public class MenuPausa : MonoBehaviour
     {
         confirmacion.SetActive(false);
         Desafio.Reiniciar();
+    }
+
+    // ------------------------------------------------------------------ Controles y guia
+
+    private void AbrirControles()
+    {
+        controlesAbierto = true;
+        principal.SetActive(false);
+        ayuda.text = AyudaControles;
+        controles.Abrir();
+    }
+
+    private void CerrarControles(bool sonido)
+    {
+        controlesAbierto = false;
+        libroCerradoEnFrame = Time.frameCount;
+        controles.Cerrar();
+        principal.SetActive(true);
+        ayuda.text = AyudaPrincipal;
+        if (sonido) SonidoMenu.Atras();
+        SonidoMenu.Silenciar();
+        EventSystem.current?.SetSelectedGameObject(botonControles.gameObject);
     }
 
     // ------------------------------------------------------------------ Bestiario
@@ -346,6 +385,7 @@ public class MenuPausa : MonoBehaviour
         Cabecera(izq, "PARTIDA");
         VerticalLayoutGroup ci = EstiloMenu.Columna(izq, 0f, 0f, 56f, 0f, 6f);
         m.primero = EstiloMenu.Opcion(ci.transform, "Reanudar", m.Reanudar, 60f, 30f, null, TextAlignmentOptions.Left);
+        m.botonControles = EstiloMenu.Opcion(ci.transform, "Controles y guía", m.AbrirControles, 60f, 30f, null, TextAlignmentOptions.Left);
         EstiloMenu.Opcion(ci.transform, "Destrabar", m.Destrabar, 60f, 30f, null, TextAlignmentOptions.Left);
         EstiloMenu.Opcion(ci.transform, "Reiniciar desde el último punto de control", m.ReiniciarDesdeCheckpoint, 60f, 26f, null, TextAlignmentOptions.Left);
         m.botonLibro = EstiloMenu.Opcion(ci.transform, "Libro de pistas", m.AbrirLibro, 60f, 30f, null, TextAlignmentOptions.Left);
@@ -376,6 +416,7 @@ public class MenuPausa : MonoBehaviour
         m.CrearConfirmacion(go.transform);
         m.bestiario = MenuBestiario.Construir(go.transform, () => m.CerrarBestiario(false), false);
         m.bestiario.gameObject.SetActive(false);
+        m.controles = PantallaControles.Construir(go.transform);
 
         TextMeshProUGUI ayuda = EstiloMenu.Texto(AyudaPrincipal, go.transform, 22, new Color(0.8f, 0.78f, 0.75f, 0.6f));
         ayuda.rectTransform.anchorMin = ayuda.rectTransform.anchorMax = new Vector2(0.5f, 0.08f);

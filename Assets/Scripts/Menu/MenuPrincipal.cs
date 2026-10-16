@@ -12,7 +12,7 @@ using UnityEngine.UI;
 //   Cargar Partida -> las partidas guardadas, con nivel, hoguera y tiempo jugado.
 //   Desafios, Logros y Bestiario (no necesitan partida).
 //   Opciones       -> volumen general, de musica y de efectos, y brillo.
-//   Controles      -> todos los controles y mecanicas, con iconos.
+//   Controles y guia -> la pantalla de dos paneles (PantallaControles), la misma que en la pausa.
 //   Salir
 // Se maneja con raton, teclado (flechas / WASD, Enter, Esc) o mando.
 // Todo lo de aspecto y sonido se cambia en el Inspector.
@@ -51,6 +51,7 @@ public class MenuPrincipal : MonoBehaviour
     private Image resplandor, brilloSuelo;
     private CanvasGroup grupo;
     private GameObject panelPrincipal, panelCargar, panelOpciones, panelControles, panelDesafios, panelLogros, panelBestiario, panelAdios;
+    private PantallaControles pantallaControles;
     private MenuDesafios menuDesafios;
     private MenuLogros menuLogros;
     private MenuBestiario menuBestiario;
@@ -115,24 +116,13 @@ public class MenuPrincipal : MonoBehaviour
         Mouse m = Mouse.current;
         Gamepad g = Gamepad.current;
         bool atras = (k != null && k.escapeKey.wasPressedThisFrame) || (m != null && m.rightButton.wasPressedThisFrame)
-                     || (g != null && g.buttonEast.wasPressedThisFrame);
+                     || (g != null && g.buttonEast.wasPressedThisFrame)
+                     || (k != null && k.tabKey.wasPressedThisFrame && panelControles.activeSelf);
         // (En Desafios y el Bestiario, atras vuelve un paso: de la ficha a la lista.)
         if (atras && !panelPrincipal.activeSelf && !saliendo && !(panelDesafios.activeSelf && menuDesafios.Atras()) && !(panelBestiario.activeSelf && menuBestiario.Atras()))
         {
             SonidoMenu.Cancelar();
             Mostrar(panelPrincipal);
-        }
-
-        // Las listas largas (controles) bajan con las flechas, W/S o el stick.
-        if (!panelPrincipal.activeSelf)
-        {
-            ScrollRect sr = (panelControles.activeSelf ? panelControles : panelCargar.activeSelf ? panelCargar : panelOpciones).GetComponentInChildren<ScrollRect>();
-            float eje = 0f;
-            if (k != null && (k.downArrowKey.isPressed || k.sKey.isPressed)) eje -= 1f;
-            if (k != null && (k.upArrowKey.isPressed || k.wKey.isPressed)) eje += 1f;
-            if (g != null) eje += g.leftStick.ReadValue().y;
-            if (sr != null && panelControles.activeSelf && Mathf.Abs(eje) > 0.2f && sr.content.rect.height > sr.viewport.rect.height)
-                sr.verticalNormalizedPosition = Mathf.Clamp01(sr.verticalNormalizedPosition + eje * dt * 600f / sr.content.rect.height);
         }
 
         // Si nada esta seleccionado (clic en el fondo), el teclado vuelve al menu.
@@ -258,6 +248,7 @@ public class MenuPrincipal : MonoBehaviour
         if (panel == panelDesafios) menuDesafios.Abrir();
         if (panel == panelLogros) menuLogros.Abrir();
         if (panel == panelBestiario) menuBestiario.Abrir();
+        if (panel == panelControles) pantallaControles.Abrir();
         SonidoMenu.Silenciar();
         SeleccionarPrimero();
     }
@@ -269,6 +260,7 @@ public class MenuPrincipal : MonoBehaviour
                      : panelDesafios.activeSelf ? menuDesafios.Primero()
                      : panelLogros.activeSelf ? menuLogros.Primero()
                      : panelBestiario.activeSelf ? menuBestiario.Primero()
+                     : panelControles.activeSelf ? pantallaControles.Primero()
                      : PrimerBoton(panelCargar.activeSelf ? panelCargar : panelOpciones.activeSelf ? panelOpciones
                                    : panelAdios.activeSelf ? panelAdios : panelControles);
         EventSystem.current.SetSelectedGameObject(g);
@@ -342,7 +334,7 @@ public class MenuPrincipal : MonoBehaviour
         Opcion("Logros", vl.transform, () => Mostrar(panelLogros), 50f);
         Opcion("Bestiario", vl.transform, () => Mostrar(panelBestiario), 50f);
         Opcion("Opciones", vl.transform, () => Mostrar(panelOpciones), 50f);
-        Opcion("Controles", vl.transform, () => Mostrar(panelControles), 50f);
+        Opcion("Controles y guía", vl.transform, () => Mostrar(panelControles), 50f);
         Opcion("Salir", vl.transform, Salir, 50f);
 
         TextMeshProUGUI pie = Texto("Enter / Clic: aceptar     Esc / Clic derecho: volver", lienzo, 20f, new Color(0.45f, 0.42f, 0.4f));
@@ -550,114 +542,12 @@ public class MenuPrincipal : MonoBehaviour
 
     // ------------------------------------------------------------------ Controles
 
-    private struct Fila { public string icono, tecla, texto; }
 
-    private static Fila F(string icono, string tecla, string texto) => new Fila { icono = icono, tecla = tecla, texto = texto };
-
-    // Lo que hay en el juego ahora mismo (revisado en PlayerControler, GatherInput,
-    // AgarreCornisa, ArmaImbuida, ReservaPociones, Hoguera y EstadosEnemigo).
-    private static readonly (string categoria, Fila[] filas)[] Controles =
-    {
-        ("MOVIMIENTO", new[]
-        {
-            F("ctrl_mover", "A / D", "Moverse"),
-            F("ctrl_correr", "Shift (mantener)", "Correr. Gasta estamina mientras corres"),
-            F("ctrl_saltar", "Espacio", "Saltar"),
-            F("ctrl_doble", "Espacio en el aire", "Doble salto (uno por salto; se recarga al tocar suelo o pared)"),
-            F("ctrl_pared", "Contra una pared, en el aire", "Deslizarse por la pared (S: bajar más rápido)  ·  Espacio: salto de pared"),
-            F("ctrl_correr_pared", "Shift contra una pared", "Correr por la pared: subes un tramo. Gasta estamina"),
-            F("ctrl_cornisa", "Saltar hacia un borde alto", "Agarre de cornisa: te enganchas al borde y subes de un tirón"),
-            F("ctrl_esquiva", "C", "Barrido: esquiva con un instante de invulnerabilidad. Gasta estamina"),
-        }),
-        ("COMBATE", new[]
-        {
-            F("ctrl_espada", "Clic izquierdo", "Combo de espada (hasta 3 golpes seguidos). Cada golpe gasta estamina"),
-            F("ctrl_aereo", "Clic izquierdo en el aire", "Golpes aéreos. Si aciertas, te quedas suspendido y puedes encadenar"),
-            F("ctrl_lanzador", "W + clic izquierdo", "Lanzador: manda al enemigo hacia arriba"),
-            F("ctrl_estocada", "S + clic izquierdo en el aire", "Estocada hacia abajo: caes con fuerza y rebotas en los enemigos. Gasta estamina"),
-            F("ctrl_bloqueo", "Clic derecho (mantener)", "Bloquear: recibes solo una parte del daño, a cambio de estamina"),
-            F("ctrl_parry", "Clic derecho justo antes del golpe", "Parry: anula el golpe y aturde al enemigo. Si lo pulsas sin parar, la ventana se acorta"),
-            F("elemento_0", "E", "Rueda de imbuir: elige un elemento para la espada (25 de maná, dura 75 s)"),
-        }),
-        ("OBJETOS", new[]
-        {
-            F("pocion", "Q", "Frasco de sangre: cura vida. Tiene varias cargas y se recargan al descansar en la hoguera"),
-            F("pocion_mana", "R", "Frasco de maná: una carga (1/1). Es la única forma de recuperar maná; se recarga en la hoguera"),
-            F("ctrl_interactuar", "F", "Interactuar: usar hogueras y abrir cofres"),
-            F("objeto_piedra", "—", "Piedra de forja: mejora la espada en la hoguera. Sale de cofres escondidos y de los jefes"),
-            F("objeto_lagrima", "—", "Lágrima sagrada: mejora los dos frascos en la hoguera. Sale de cofres escondidos y de los jefes"),
-            F("cofre_especial", "—", "Los cofres con un brillo dorado suave guardan objetos de mejora"),
-            F("almas", "—", "Almas: las sueltan los enemigos. Se gastan en la hoguera para subir de nivel"),
-            F("ctrl_mancha", "—", "Al morir, tus almas se quedan donde caíste. Recógelas antes de volver a morir"),
-        }),
-        ("HOGUERAS Y MENÚS", new[]
-        {
-            F("ctrl_hoguera", "F junto a una hoguera", "Abre su menú: Descansar (cura, rellena los frascos y guarda), Subir de nivel y estadísticas, y Mejorar equipamiento"),
-            F("stat_resgolpes", "Resistencias", "Resistencia a golpes: reduce el daño físico. Resistencia a hechizos: reduce el mágico. Nunca más de un 55 %"),
-            F("ctrl_rueda", "En la rueda de imbuir", "Ratón, WASD o 1-5: elegir  ·  Clic o E: imbuir  ·  Clic derecho o Esc: cancelar"),
-            F("ctrl_pausa", "Esc / Tab","Pausa: opciones, destrabar al personaje, volver a la última hoguera o salir al menú"),
-        }),
-        ("BARRAS Y ESTADOS", new[]
-        {
-            F("ctrl_vida", "Barra roja", "Vida. Las barras se alargan al subir su estadística"),
-            F("stat_estamina", "Barra verde", "Estamina: la gastan correr, atacar, esquivar y bloquear. Se recupera sola"),
-            F("stat_mana", "Barra azul", "Maná: lo gasta imbuir la espada. Solo vuelve con el frasco de maná"),
-            F("elemento_3", "Anillo del rombo", "Con la espada imbuida, el anillo se vacía con el tiempo que le queda"),
-            F("jugador_sangrado", "Bajo tus barras", "Sangrado, congelación y quemadura: los ataques especiales de los jefes llenan su barra. Si se llena, te afecta; si dejas de recibirlos, baja sola"),
-            F("estado_quemado", "Fuego", "Quemado: el enemigo pierde vida un rato"),
-            F("estado_lento", "Hielo", "Lento: se mueve más despacio. Varios golpes seguidos lo congelan"),
-            F("estado_aturdido", "Sagrado", "Aturdido: a veces lo deja quieto un momento"),
-            F("estado_sangrado", "Sangrado", "Cada golpe acumula sangrado; al llenarse, el enemigo pierde de golpe parte de su vida"),
-            F("estado_drenado", "Oscuridad", "Drenado: te curas con parte del daño que haces"),
-            F("ctrl_estados", "Bajo su barra de vida", "Los iconos muestran los estados del enemigo. Parpadean cuando están por acabar"),
-        }),
-    };
-
+    // "Controles y guia": la misma pantalla que en la pausa (ficha Resources/GuiaControles).
     private void ConstruirControles()
     {
-        panelControles = Panel("Controles");
-        TextMeshProUGUI cab = Texto("CONTROLES", panelControles.transform, 44f, new Color(0.75f, 0.7f, 0.65f));
-        cab.characterSpacing = 12f;
-        cab.rectTransform.anchoredPosition = new Vector2(0f, 60f);
-        RectTransform lista = Desplazable(panelControles.transform, new Vector2(0f, 20f), new Vector2(1500f, 440f));
-        RecursosRPG rec = RecursosRPG.Get();
-        foreach (var (categoria, filas) in Controles)
-        {
-            TextMeshProUGUI tc = Texto(categoria, lista, 26f, new Color(0.85f, 0.55f, 0.3f));
-            tc.characterSpacing = 8f;
-            tc.alignment = TextAlignmentOptions.BottomLeft;
-            tc.rectTransform.sizeDelta = new Vector2(0f, 56f);
-            foreach (Fila f in filas)
-            {
-                RectTransform r = new GameObject("Fila").AddComponent<RectTransform>();
-                r.SetParent(lista, false);
-                r.sizeDelta = new Vector2(0f, 52f);
-                Image ico = Caja("Icono", r, Color.white);
-                ico.sprite = rec.Icono(f.icono);
-                ico.enabled = ico.sprite != null;
-                ico.preserveAspect = true;
-                RectTransform ri = ico.rectTransform;
-                ri.anchorMin = ri.anchorMax = new Vector2(0f, 0.5f);
-                ri.pivot = new Vector2(0f, 0.5f);
-                ri.sizeDelta = new Vector2(44f, 44f);
-                ri.anchoredPosition = new Vector2(8f, 0f);
-                TextMeshProUGUI tt = Texto(f.tecla, r, 22f, new Color(0.9f, 0.84f, 0.76f));
-                tt.fontStyle = FontStyles.Bold;
-                tt.alignment = TextAlignmentOptions.MidlineLeft;
-                tt.rectTransform.anchorMin = tt.rectTransform.anchorMax = new Vector2(0f, 0.5f);
-                tt.rectTransform.pivot = new Vector2(0f, 0.5f);
-                tt.rectTransform.sizeDelta = new Vector2(360f, 50f);
-                tt.rectTransform.anchoredPosition = new Vector2(66f, 0f);
-                TextMeshProUGUI td = Texto(f.texto, r, 22f, new Color(0.68f, 0.64f, 0.6f));
-                td.alignment = TextAlignmentOptions.MidlineLeft;
-                td.enableWordWrapping = true;
-                RectTransform rd = td.rectTransform;
-                rd.anchorMin = new Vector2(0f, 0f); rd.anchorMax = new Vector2(1f, 1f);
-                rd.offsetMin = new Vector2(440f, 0f); rd.offsetMax = new Vector2(-10f, 0f);
-            }
-        }
-        VerticalLayoutGroup pie = Columna(panelControles.transform, new Vector2(0f, -420f), 360f, 0f);
-        Volver(pie.transform);
+        pantallaControles = PantallaControles.Construir(lienzo);
+        panelControles = pantallaControles.gameObject;
     }
 
     // Lista con barra de desplazamiento (rueda del raton o arrastrando).

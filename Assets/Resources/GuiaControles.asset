@@ -1,0 +1,499 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5aaaccd79a0f2445b58659860335983, type: 3}
+  m_Name: GuiaControles
+  m_EditorClassIdentifier: 
+  titulo: "CONTROLES Y GU\xCDA"
+  categorias:
+  - nombre: Moverse
+    tarjetas:
+    - id: caminar
+      titulo: Caminar
+      texto: Pulsa {Move/left} o {Move/right} para moverte a la izquierda o a la
+        derecha.
+      esencial: 1
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: a509b3c005a8e3a4dbebec68fc346f29, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 3f2967bb3cbf2454c849db26997a5de2, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 9a074089fd881ea47a6d4206db5f5e16, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: saltar
+      titulo: Saltar
+      texto: Pulsa {Jump} para saltar.
+      esencial: 1
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 838ff551ff7a5c646bf9c7301d1b15c3, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: b42271f34b76ed341a436db2c1b9f6b3, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 32323229935b8a64c9939405d642b2f8, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: correr
+      titulo: Correr
+      texto: "Mant\xE9n {Sprint} mientras te mueves para correr. Correr gasta estamina."
+      esencial: 1
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 2782f969de5a8574aa62f63d40021b46, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 2fb83f1c692ccfa46b5423477e231f55, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 101d7fc636eeaf4459011dc659a7e181, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: doble_salto
+      titulo: Doble salto
+      texto: Pulsa {Jump} otra vez en el aire para saltar de nuevo. Se recarga al
+        tocar el suelo o una pared.
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: e5842b803624f934cb516d93ebb0af0a, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 0f156f1c196520548a3734ec8e86e2fa, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: ca4888b5fb9fd294b8c6021fb7431a70, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: pared
+      titulo: Pared
+      texto: "En el aire, p\xE9gate a una pared para deslizarte. Pulsa {Move/down}
+        para bajar m\xE1s r\xE1pido y {Jump} para saltar desde la pared."
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: c8d4f52fc476eb445a85a4424f20e5e7, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 0c7ade6fd19b13f42bcda2751ed9388b, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: correr_pared
+      titulo: Correr por la pared
+      texto: "Mant\xE9n {Sprint} contra una pared para subir un tramo corriendo.
+        Gasta estamina."
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: ffd2f0ed3fd088549850348f8cbbf44f, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 8f49a7b089b193849a063125f840a5cc, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: b58475148b55c574e876d3d27d9b76c0, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: cornisa
+      titulo: Agarre de cornisa
+      texto: 'Salta hacia un borde alto: el personaje se agarra y sube solo.'
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 1988c5154f3e2ca48b0e1e0d638165e7, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: a7177eb9ce7e459499d33588430ef2cd, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 3735cae1ea7095a4e81ff252e3ce715c, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+  - nombre: Combate
+    tarjetas:
+    - id: atacar
+      titulo: Atacar
+      texto: "Para realizar los ataques, presiona el {Attack}. Esto tambi\xE9n funciona
+        si est\xE1s en el aire. Cada golpe gasta estamina."
+      esencial: 1
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 00309649d5376264bbf7963fc4c2da3d, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 2cb24332525984a46b4d454fdabcd460, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: cf3b40d78bad83d4db59977b9b7e06f9, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: ataque_aereo
+      titulo: "Ataque a\xE9reo"
+      texto: Pulsa {Attack} en el aire. Si aciertas, te quedas suspendido un momento
+        y puedes seguir golpeando.
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 7fa3e5d04047aa148adb55b6453f02c4, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: aa0ebbf3262759c4e8042058e627fcb8, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: ab9d93643fc40e245a6d7d74a653913c, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: lanzador
+      titulo: Lanzador
+      texto: "Mant\xE9n {Move/up} y pulsa {Attack} para lanzar al enemigo hacia arriba."
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 2cb24332525984a46b4d454fdabcd460, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: a726d0ee4543c124198cdb709dbdc343, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: cf3b40d78bad83d4db59977b9b7e06f9, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: estocada
+      titulo: Estocada hacia abajo
+      texto: "En el aire, mant\xE9n {Move/down} y pulsa {Attack}. Caes con fuerza
+        y rebotas en los enemigos. Gasta estamina."
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: bf31a61c541d8424a9cfa3b575edeae7, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 757d451cdc7db3240bef736089161a9f, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 63d96870eade6bc4b8b397b97637da82, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: bloquear
+      titulo: Bloquear y parry
+      texto: "Mant\xE9n {Kick} para bloquear: recibes menos da\xF1o a cambio de estamina.
+        Pulsa justo antes del golpe para hacer parry y aturdir al enemigo."
+      esencial: 1
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 64298ffd18e07134da27eede53817458, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 6e7f4684bbd7885479257ab37e6f3772, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 01c88a0b3add3fd44bc2a269a4c534bc, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: esquivar
+      titulo: Esquivar
+      texto: "Pulsa {Dodge} para hacer un barrido. Durante un instante nada te hace
+        da\xF1o. Gasta estamina."
+      esencial: 1
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 39904724890323548ae6c875faec76ab, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 40df6eb24f9b18c4f9e30fa44818caba, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+  - nombre: Frascos y objetos
+    tarjetas:
+    - id: frasco_sangre
+      titulo: Frasco de sangre
+      texto: Pulsa [Q] para beber y curarte. Sus cargas se rellenan al descansar
+        en la hoguera.
+      esencial: 1
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 420d27594a9b2bf44af103a28759e7a7, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 6519985498421da44b2316b3ff9b337c, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: b878f1d36828f2648b711f8c87228347, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 21300000, guid: 5ea972842403c8f46b62c0f89e181c5b, type: 3}
+      teclas: []
+    - id: frasco_mana
+      titulo: "Frasco de man\xE1"
+      texto: "Pulsa [R] para recuperar man\xE1. El man\xE1 tambi\xE9n se llena al
+        descansar en la hoguera."
+      esencial: 1
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 420d27594a9b2bf44af103a28759e7a7, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 6519985498421da44b2316b3ff9b337c, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: b878f1d36828f2648b711f8c87228347, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 21300000, guid: d9b6f23dae3dc7e48b5ff93a60b3b612, type: 3}
+      teclas: []
+    - id: imbuiciones
+      titulo: Imbuiciones
+      texto: "Para elegir una imbuici\xF3n, pulsa la tecla {ToggleWeapon}. Cada imbuici\xF3n
+        gasta man\xE1 y algunas gastan otra cosa."
+      esencial: 1
+      tipo: 1
+      cuadros: []
+      icono: {fileID: 0}
+      teclas: []
+    - id: usar_rueda
+      titulo: Usar la rueda
+      texto: "Elige con el rat\xF3n, con [W][A][S][D] o con [1] a [5]. Confirma con
+        [clic izquierdo] o [E]. Cancela con [clic derecho] o [Esc]."
+      esencial: 0
+      tipo: 1
+      cuadros: []
+      icono: {fileID: 0}
+      teclas: []
+    - id: piedra
+      titulo: Piedra de forja
+      texto: Mejora la espada. Se usa en la hoguera, en "Mejorar equipamiento".
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 8dac833ac04a0ae45996d84fd74ebfba, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: lagrimas
+      titulo: "L\xE1grimas"
+      texto: "La L\xE1grima carmes\xED mejora el frasco de sangre y la L\xE1grima
+        celeste, el de man\xE1. Se usan en la hoguera."
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: -2267271922981028345, guid: 29680fa37bcb2cd4cb44f224576cf015, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: -3344190670405398769, guid: dbb55b02021e5dd48b1064563c124282, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: cofres
+      titulo: Cofres con brillo
+      texto: Los cofres con un brillo dorado suave guardan objetos de mejora.
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 04b07fd7fca3bf1428ba27a114564b96, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+  - nombre: Interactuar
+    tarjetas:
+    - id: interactuar
+      titulo: Interactuar
+      texto: "Pulsa [F] cerca de hogueras, cofres, estatuas, antorchas y el t\xF3tem."
+      esencial: 1
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: -4227435001158437254, guid: 433e1887a7fe82c4eae7caa6a5b86d99, type: 3}
+        color: {r: 0.65, g: 0.6, b: 0.65, a: 1}
+      - sprite: {fileID: -4227435001158437254, guid: 433e1887a7fe82c4eae7caa6a5b86d99, type: 3}
+        color: {r: 1, g: 0.82, b: 0.82, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: menu_hoguera
+      titulo: "Men\xFA de la hoguera"
+      texto: Pulsa [F] junto a una hoguera. Puedes descansar (te cura, rellena los
+        frascos y guarda), subir de nivel y mejorar el equipo.
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: d82e21449a384834e9bdcb8fd920a444, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+  - nombre: Progreso
+    tarjetas:
+    - id: almas
+      titulo: Almas
+      texto: Los enemigos sueltan almas al morir. Se gastan en la hoguera para subir
+        de nivel.
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 50dbb3b8974268c44b3d29c86f1d05e9, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: al_morir
+      titulo: Al morir
+      texto: "Tus almas se quedan donde ca\xEDste. Rec\xF3gelas antes de volver a
+        morir o se pierden."
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 904ae483f41e9824197e952c4ed862ac, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: resistencias
+      titulo: Resistencias
+      texto: "La resistencia a golpes reduce el da\xF1o f\xEDsico y la resistencia
+        a hechizos, el m\xE1gico. Las dos tienen un tope."
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 04831990176411b4083122535e570f18, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      - sprite: {fileID: 21300000, guid: 394d293cfa1e17246b9b983b25df39ff, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+  - nombre: Barras y estados
+    tarjetas:
+    - id: vida
+      titulo: Vida
+      texto: "La barra roja es tu vida. Se alarga al subir su estad\xEDstica."
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 872bbc6eedcdd9a40820b55023d46138, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: estamina
+      titulo: Estamina
+      texto: La barra verde es tu estamina. La gastan correr, atacar, esquivar y
+        bloquear, y se recupera sola.
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: f024420a0a8ab8041a5c7158194ced9c, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: mana
+      titulo: "Man\xE1"
+      texto: "La barra azul es tu man\xE1. Lo gastan las imbuiciones."
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 8d5c228eebb0b3642947a30c20fb7258, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: anillo
+      titulo: "Anillo de imbuici\xF3n"
+      texto: "Con la espada imbuida, el anillo se vac\xEDa seg\xFAn el tiempo que
+        le queda."
+      esencial: 0
+      tipo: 2
+      cuadros: []
+      icono: {fileID: 0}
+      teclas: []
+    - id: tus_estados
+      titulo: Tus estados
+      texto: "Algunos ataques de los jefes llenan una barra de sangrado, congelaci\xF3n
+        o quemadura. Si se llena, te afecta. Si dejas de recibirlos, baja sola."
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 260f8a2c4dd1fec418f02ef95ec23b1d, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: quemado
+      titulo: Quemado
+      texto: El enemigo pierde vida durante un rato.
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: f222915a8e86f2945843a7dd2453810a, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: lento
+      titulo: Lento
+      texto: "El enemigo se mueve m\xE1s despacio. Si lo golpeas varias veces seguidas,
+        se congela."
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 965f9119d42d2f548a10c58feff1f763, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: aturdido
+      titulo: Aturdido
+      texto: A veces el enemigo se queda quieto un momento.
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 6bd1ca7161b4de747a0568bda9fcddb4, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: sangrado
+      titulo: Sangrado
+      texto: Cada golpe acumula sangrado. Al llenarse, el enemigo pierde de golpe
+        parte de su vida.
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: bbf17d9c5ddbd844f9bcfbff83e6348f, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: drenado
+      titulo: Drenado
+      texto: "Te curas con parte del da\xF1o que haces."
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 51d1c94baf3d4a449aa36fe23dffffc5, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+    - id: estados_enemigo
+      titulo: Estados del enemigo
+      texto: "Los iconos bajo su barra de vida muestran sus estados. Parpadean cuando
+        est\xE1n por acabar."
+      esencial: 0
+      tipo: 0
+      cuadros:
+      - sprite: {fileID: 21300000, guid: 33d93eb458e207842b779942de33c528, type: 3}
+        color: {r: 1, g: 1, b: 1, a: 1}
+      icono: {fileID: 0}
+      teclas: []
+  - nombre: Sistema
+    tarjetas:
+    - id: pausa
+      titulo: Pausa
+      texto: "Pulsa [Esc] o [Tab] para abrir la pausa. Desde ah\xED entras en \"Controles
+        y gu\xEDa\"."
+      esencial: 1
+      tipo: 3
+      cuadros: []
+      icono: {fileID: 0}
+      teclas:
+      - Esc
+      - Tab
+  nombresTeclas:
+  - original: Space
+    espanol: Espacio
+  - original: Shift
+    espanol: "May\xFAs"
+  - original: Left Shift
+    espanol: "May\xFAs"
+  - original: Right Shift
+    espanol: "May\xFAs"
+  - original: Left Button
+    espanol: clic izquierdo
+  - original: Right Button
+    espanol: clic derecho
+  - original: Escape
+    espanol: Esc
+  cuadrosPorSegundo: 3
+  tamanoPequena: {x: 760, y: 600}
+  posicionPequena: {x: 0, y: 30}

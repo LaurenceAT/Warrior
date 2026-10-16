@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
         if (isPaused && Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame) tecla = true;
         if (tecla && !PantallaMuerte.Activa
             && !RuedaImbuir.Abierta && !MenuHoguera.Abierto && !CuadroPista.Abierto && !MenuPausa.LibroAbierto
-            && !TiendaTotem.Abierta && !PantallaDesafio.Abierta && !Cinematica.Activa && !PantallaCarga.Cargando)
+            && !TiendaTotem.Abierta && !PantallaDesafio.Abierta && !Cinematica.Activa && !PantallaCarga.Cargando && !GuiaDesafio.Abierta)
         {
             if (isPaused)
                 ResumeGame();

@@ -66,7 +66,7 @@ public static class RegistroGuardado
             P("rpg_nivel_3", Tipo.Int), P("rpg_nivel_4", Tipo.Int), P("rpg_mancha", Tipo.Int), P("rpg_mancha_x", Tipo.Float),
             P("rpg_mancha_y", Tipo.Float), P("rpg_mancha_escena", Tipo.String),
         }),
-        new Dato(CategoriaGuardado.Desafios, "Desafíos completados, tiempos, estadísticas, fichas de jefe (con los consejos secretos, como el del parry perfecto al cerco de la Cazadora: clave j:<jefe>:c:<ataque>+secreto), jefe secreto y códigos", archivos: ArchivoGlobales, enGlobales: true),
+        new Dato(CategoriaGuardado.Desafios, "Desafíos completados, tiempos, estadísticas, fichas de jefe (con los consejos secretos, como el del parry perfecto al cerco de la Cazadora: clave j:<jefe>:c:<ataque>+secreto), jefe secreto, códigos y la guía de controles del primer desafío ya vista (marca guia_controles_vista)", archivos: ArchivoGlobales, enGlobales: true),
         new Dato(CategoriaGuardado.Logros, "Logros (también las hazañas ocultas, como el parry perfecto al cerco de la Cazadora: logro cerco_perfecto)", archivos: ArchivoGlobales, enGlobales: true),
         new Dato(CategoriaGuardado.Bestiario, "Bestiario", archivos: ArchivoGlobales, enGlobales: true),
         new Dato(CategoriaGuardado.Opciones, "Volumen y brillo", new[]
