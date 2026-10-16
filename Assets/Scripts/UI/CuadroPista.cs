@@ -110,7 +110,8 @@ public class CuadroPista : MonoBehaviour
         Keyboard k = Keyboard.current;
         Gamepad g = Gamepad.current;
         bool f = (k != null && k.fKey.wasPressedThisFrame) || (g != null && g.buttonSouth.wasPressedThisFrame);
-        bool esc = (k != null && k.escapeKey.wasPressedThisFrame) || (g != null && g.buttonEast.wasPressedThisFrame);
+        bool esc = (k != null && k.escapeKey.wasPressedThisFrame) || (g != null && g.buttonEast.wasPressedThisFrame)
+                   || (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame);
         if (esc) { Cerrar(); return; }
         if (f)
         {

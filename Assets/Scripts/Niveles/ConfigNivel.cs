@@ -86,6 +86,10 @@ public class ConfigNivel : ScriptableObject
     public float pixelesPorUnidadFondo;
     [Tooltip("Cuanto sigue el fondo a la camara en vertical.")]
     [Range(0f, 1f)] public float seguimientoVertical = 0.92f;
+    [Tooltip("Multiplica la diferencia de velocidad entre capas (1 = normal, mas = parallax mas notorio).")]
+    [Range(0f, 2f)] public float intensidadParallax = 1f;
+    [Tooltip("Parallax vertical por capa: al saltar o caer, las cercanas se quedan mas atras (0 = todas igual).")]
+    [Range(0f, 1f)] public float profundidadVertical;
     [Tooltip("De la capa mas lejana a la mas cercana.")]
     public List<CapaFondo> capasFondo = new List<CapaFondo>();
 

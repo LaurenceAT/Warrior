@@ -180,7 +180,7 @@ public static class Partida
     public static void Borrar(Datos d)
     {
         string f = Archivo(d.ranura);
-        if (File.Exists(f)) File.Delete(f);
+        if (File.Exists(f)) { File.Delete(f); RegistroGuardado.GuardarDisco(); }
         if (Actual != null && Actual.ranura == d.ranura) Actual = null;
     }
 

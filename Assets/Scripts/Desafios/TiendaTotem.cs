@@ -109,7 +109,8 @@ public class TiendaTotem : MonoBehaviour
         if (Time.frameCount == abiertaEnFrame) return;
         Keyboard k = Keyboard.current;
         Gamepad g = Gamepad.current;
-        if ((k != null && (k.escapeKey.wasPressedThisFrame || k.fKey.wasPressedThisFrame)) || (g != null && g.buttonEast.wasPressedThisFrame)) { Cerrar(); return; }
+        if ((k != null && (k.escapeKey.wasPressedThisFrame || k.fKey.wasPressedThisFrame)) || (g != null && g.buttonEast.wasPressedThisFrame)
+            || (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame)) { Cerrar(); return; }
         if ((k != null && k.mKey.wasPressedThisFrame) || (g != null && g.buttonNorth.wasPressedThisFrame)) Marcar();
     }
 

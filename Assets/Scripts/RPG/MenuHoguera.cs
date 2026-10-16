@@ -143,7 +143,8 @@ public class MenuHoguera : MonoBehaviour
         if (Time.unscaledTime - abiertoDesde < 0.2f) return;
         Keyboard k = Keyboard.current;
         Gamepad g = Gamepad.current;
-        bool atras = (k != null && k.escapeKey.wasPressedThisFrame) || (g != null && g.buttonEast.wasPressedThisFrame);
+        bool atras = (k != null && k.escapeKey.wasPressedThisFrame) || (g != null && g.buttonEast.wasPressedThisFrame)
+                     || (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame);
         bool f = k != null && k.fKey.wasPressedThisFrame;
         if (atras || (f && pagina == Pagina.Principal))
         {

@@ -215,11 +215,12 @@ public static class CrearCuevaNueva
             EditorUtility.SetDirty(t);
             tiles[s.name] = t;
         }
-        // La colision: una casilla entera, sin dibujo.
+        // La colision: una casilla entera. Su capa no se dibuja, pero la casilla
+        // necesita un dibujo: en la build (web) una casilla sin dibujo no crea colision.
         string rc = $"{CarpetaTiles}/colision.asset";
         Tile col = AssetDatabase.LoadAssetAtPath<Tile>(rc);
         if (col == null) { col = ScriptableObject.CreateInstance<Tile>(); AssetDatabase.CreateAsset(col, rc); }
-        col.sprite = null;
+        col.sprite = piezas["relleno_0"];
         col.colliderType = Tile.ColliderType.Grid;
         EditorUtility.SetDirty(col);
         tiles["colision"] = col;

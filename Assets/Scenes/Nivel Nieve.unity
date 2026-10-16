@@ -13217,49 +13217,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   capas:
   - raiz: {fileID: 1716128439}
-    seguimiento: 0.985
+    seguimiento: 0.97
     ancho: 13.142858
     deriva: 0
     rellenarArriba: 1
     rellenarAbajo: 1
   - raiz: {fileID: 494578431}
-    seguimiento: 0.95
+    seguimiento: 0.88
     ancho: 13.142858
     deriva: 0
     rellenarArriba: 0
     rellenarAbajo: 1
   - raiz: {fileID: 1157580043}
-    seguimiento: 0.92
+    seguimiento: 0.8
     ancho: 13.142858
     deriva: 0
     rellenarArriba: 0
     rellenarAbajo: 1
   - raiz: {fileID: 2048444450}
-    seguimiento: 0.89
+    seguimiento: 0.72
     ancho: 13.035714
     deriva: 0.12
     rellenarArriba: 0
     rellenarAbajo: 0
   - raiz: {fileID: 1112976237}
-    seguimiento: 0.84
+    seguimiento: 0.62
     ancho: 13.142858
     deriva: 0
     rellenarArriba: 0
     rellenarAbajo: 1
   - raiz: {fileID: 351270878}
-    seguimiento: 0.8
+    seguimiento: 0.55
     ancho: 13.035714
     deriva: -0.08
     rellenarArriba: 0
     rellenarAbajo: 0
   - raiz: {fileID: 97117190}
-    seguimiento: 0.76
+    seguimiento: 0.45
     ancho: 13.142858
     deriva: 0
     rellenarArriba: 0
     rellenarAbajo: 1
   seguimientoVertical: 0.95
   largoRelleno: 30
+  intensidad: 1.15
+  profundidadVertical: 0.35
 --- !u!1 &760087409
 GameObject:
   m_ObjectHideFlags: 0
@@ -100964,7 +100966,7 @@ MonoBehaviour:
   - {fileID: -5347860931785312161, guid: 2dd1e32b499bfff4fab33e57e1c0ccbe, type: 3}
   - {fileID: -6791975913575690700, guid: 8120cd0b7593e7148b7c3119588fb6f9, type: 3}
   densidad: 0.45
-  velocidadParallax: 1.45
+  velocidadParallax: 1.7
   oscuridad: 0.93
   colorSilueta: {r: 0.03, g: 0.05, b: 0.09, a: 1}
   opacidad: 0.95

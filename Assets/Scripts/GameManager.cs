@@ -103,8 +103,13 @@ public class GameManager : MonoBehaviour
     // Escucha la tecla Escape para pausar/reanudar el juego.
     private void Update()
     {
+        // Esc o Tab abren y cierran la pausa (en la web Esc tambien saca de pantalla
+        // completa); con la pausa abierta, el clic derecho tambien la cierra.
         // Con la pantalla de muerte, Escape es "cualquier boton" para continuar.
-        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame && !PantallaMuerte.Activa
+        Keyboard k = Keyboard.current;
+        bool tecla = k != null && (k.escapeKey.wasPressedThisFrame || k.tabKey.wasPressedThisFrame);
+        if (isPaused && Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame) tecla = true;
+        if (tecla && !PantallaMuerte.Activa
             && !RuedaImbuir.Abierta && !MenuHoguera.Abierto && !CuadroPista.Abierto && !MenuPausa.LibroAbierto
             && !TiendaTotem.Abierta && !PantallaDesafio.Abierta && !Cinematica.Activa && !PantallaCarga.Cargando)
         {

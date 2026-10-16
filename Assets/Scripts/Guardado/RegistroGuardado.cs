@@ -100,7 +100,52 @@ public static class RegistroGuardado
     // Carpeta del perfil activo (las pruebas automaticas usan la suya: Partida.CarpetaPruebas).
     public static string Carpeta => Partida.CarpetaPruebas ?? CarpetaDe(PerfilPruebas);
 
-    public static string CarpetaDe(bool perfilPruebas) => Path.Combine(Application.persistentDataPath, perfilPruebas ? CarpetaPerfil : CarpetaReal);
+    public static string CarpetaDe(bool perfilPruebas) => Path.Combine(Base, perfilPruebas ? CarpetaPerfil : CarpetaReal);
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+    // Web: persistentDataPath depende de la direccion de la pagina, y itch.io la
+    // cambia con cada subida (las partidas "desaparecian"). Se usa una carpeta fija
+    // dentro del almacenamiento del navegador (/idbfs), con nombre propio del juego.
+    private const string BaseWeb = "/idbfs/Warrior_LaurenceAT";
+    private static string Base => BaseWeb;
+
+    // Primera vez con la carpeta fija: se copian las partidas mas recientes de las
+    // subidas anteriores (las carpetas /idbfs/<codigo>/Partidas).
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void RecuperarDeSubidasAnteriores()
+    {
+        try
+        {
+            string destino = Path.Combine(BaseWeb, CarpetaReal);
+            if (Directory.Exists(destino) && Directory.GetFiles(destino).Length > 0) return;
+            string mejor = null;
+            System.DateTime fecha = System.DateTime.MinValue;
+            foreach (string d in Directory.GetDirectories("/idbfs"))
+            {
+                if (Path.GetFileName(d) == Path.GetFileName(BaseWeb)) continue;
+                string c = Path.Combine(d, CarpetaReal);
+                if (!Directory.Exists(c)) continue;
+                string[] nuestros = Directory.GetFiles(c).Where(f =>
+                {
+                    string n = Path.GetFileName(f);
+                    return n == ArchivoGlobales || (n.StartsWith("partida_") && n.EndsWith(".json"));
+                }).ToArray();
+                if (nuestros.Length == 0) continue;
+                System.DateTime t = nuestros.Max(f => File.GetLastWriteTimeUtc(f));
+                if (t > fecha) { fecha = t; mejor = c; }
+            }
+            if (mejor == null) return;
+            Directory.CreateDirectory(destino);
+            foreach (string f in Directory.GetFiles(mejor))
+                if (!f.EndsWith(".tmp")) File.Copy(f, Path.Combine(destino, Path.GetFileName(f)), true);
+            GuardarDisco();
+            Debug.Log("[Guardado] Partidas recuperadas de una version anterior: " + mejor);
+        }
+        catch (System.Exception e) { Debug.LogWarning("[Guardado] No se pudieron recuperar las partidas: " + e.Message); }
+    }
+#else
+    private static string Base => Application.persistentDataPath;
+#endif
 
     // Nombre real de una clave de PlayerPrefs (con el prefijo del perfil de pruebas).
     public static string Clave(string nombre) => ClaveDe(nombre, PerfilPruebas);
@@ -126,9 +171,28 @@ public static class RegistroGuardado
     public static void EscribirSeguro(string ruta, string texto)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(ruta));
+#if UNITY_WEBGL && !UNITY_EDITOR
+        // Web: se escribe directo y se pasa al almacenamiento del navegador.
+        File.WriteAllText(ruta, texto);
+        GuardarDisco();
+#else
         string tmp = ruta + ".tmp";
         File.WriteAllText(tmp, texto);
         if (File.Exists(ruta)) File.Replace(tmp, ruta, null);
         else File.Move(tmp, ruta);
+#endif
+    }
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+    [System.Runtime.InteropServices.DllImport("__Internal")] private static extern void WarriorGuardarDisco();
+#endif
+
+    // Version web: los archivos escritos solo se conservan al cerrar la pestana si
+    // se pasan al IndexedDB del navegador (ver Plugins/WebGL/WarriorWeb.jslib).
+    public static void GuardarDisco()
+    {
+#if UNITY_WEBGL && !UNITY_EDITOR
+        WarriorGuardarDisco();
+#endif
     }
 }

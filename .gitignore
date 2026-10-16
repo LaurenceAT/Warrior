@@ -123,3 +123,5 @@ InitTestScene*.unity*
 
 # Respaldos del progreso (Herramientas > Progreso del juego)
 /_RespaldoProgreso/
+
+graphify-out/

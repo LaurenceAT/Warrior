@@ -50,9 +50,9 @@ public class MenuPausa : MonoBehaviour
                                                               || (instancia.confirmacion != null && instancia.confirmacion.activeSelf)
                                                               || instancia.libroCerradoEnFrame == Time.frameCount);
     public static bool Existe => instancia != null;
-    private const string AyudaPrincipal = "Enter / clic: elegir      ← →: ajustar      Esc: volver al juego";
-    private const string AyudaLibro = "↑ ↓: elegir pista      Enter / clic: leer      Esc: volver";
-    private const string AyudaSubmenu = "Enter / clic: elegir      Esc: volver";
+    private const string AyudaPrincipal = "Enter / clic: elegir      ← →: ajustar      Esc / Tab / clic derecho: volver al juego";
+    private const string AyudaLibro = "↑ ↓: elegir pista      Enter / clic: leer      Esc / clic derecho: volver";
+    private const string AyudaSubmenu = "Enter / clic: elegir      Esc / clic derecho: volver";
 
     public static MenuPausa Get()
     {
@@ -100,8 +100,8 @@ public class MenuPausa : MonoBehaviour
     private void Update()
     {
         if (grupo == null || !grupo.interactable) return;
-        // Atras un paso (Esc o el boton este; el clic derecho es el bloqueo del juego).
-        bool atras = CapasMenu.PulsadoAtras(false);
+        // Atras un paso (Esc, clic derecho o el boton este).
+        bool atras = CapasMenu.PulsadoAtras(true);
         if (confirmacion.activeSelf)
         {
             if (atras) CerrarConfirmacion(true);

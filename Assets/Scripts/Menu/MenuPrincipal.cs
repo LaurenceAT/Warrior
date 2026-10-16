@@ -50,7 +50,7 @@ public class MenuPrincipal : MonoBehaviour
     private TextMeshProUGUI textoTitulo;
     private Image resplandor, brilloSuelo;
     private CanvasGroup grupo;
-    private GameObject panelPrincipal, panelCargar, panelOpciones, panelControles, panelDesafios, panelLogros, panelBestiario;
+    private GameObject panelPrincipal, panelCargar, panelOpciones, panelControles, panelDesafios, panelLogros, panelBestiario, panelAdios;
     private MenuDesafios menuDesafios;
     private MenuLogros menuLogros;
     private MenuBestiario menuBestiario;
@@ -234,6 +234,11 @@ public class MenuPrincipal : MonoBehaviour
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
+#elif UNITY_WEBGL
+        // En el navegador no se puede cerrar la pestana desde el juego
+        // (Application.Quit lo deja congelado): se despide y deja volver.
+        Screen.fullScreen = false;
+        Mostrar(panelAdios);
 #else
         Application.Quit();
 #endif
@@ -248,6 +253,7 @@ public class MenuPrincipal : MonoBehaviour
         panelDesafios.SetActive(panel == panelDesafios);
         panelLogros.SetActive(panel == panelLogros);
         panelBestiario.SetActive(panel == panelBestiario);
+        panelAdios.SetActive(panel == panelAdios);
         if (panel == panelCargar) RellenarPartidas();
         if (panel == panelDesafios) menuDesafios.Abrir();
         if (panel == panelLogros) menuLogros.Abrir();
@@ -263,7 +269,8 @@ public class MenuPrincipal : MonoBehaviour
                      : panelDesafios.activeSelf ? menuDesafios.Primero()
                      : panelLogros.activeSelf ? menuLogros.Primero()
                      : panelBestiario.activeSelf ? menuBestiario.Primero()
-                     : PrimerBoton(panelCargar.activeSelf ? panelCargar : panelOpciones.activeSelf ? panelOpciones : panelControles);
+                     : PrimerBoton(panelCargar.activeSelf ? panelCargar : panelOpciones.activeSelf ? panelOpciones
+                                   : panelAdios.activeSelf ? panelAdios : panelControles);
         EventSystem.current.SetSelectedGameObject(g);
     }
 
@@ -351,6 +358,20 @@ public class MenuPrincipal : MonoBehaviour
         panelLogros = menuLogros.gameObject;
         menuBestiario = MenuBestiario.Construir(lienzo, () => Mostrar(panelPrincipal));
         panelBestiario = menuBestiario.gameObject;
+        ConstruirAdios();
+    }
+
+    // Despedida de la version web (ver Salir).
+    private void ConstruirAdios()
+    {
+        panelAdios = Panel("Adios");
+        TextMeshProUGUI cab = Texto("GRACIAS POR JUGAR", panelAdios.transform, 44f, new Color(0.75f, 0.7f, 0.65f));
+        cab.characterSpacing = 12f;
+        cab.rectTransform.anchoredPosition = new Vector2(0f, 10f);
+        TextMeshProUGUI sub = Texto("Ya puedes cerrar esta pestaña", panelAdios.transform, 28f, new Color(0.55f, 0.52f, 0.5f));
+        sub.rectTransform.anchoredPosition = new Vector2(0f, -50f);
+        VerticalLayoutGroup pie = Columna(panelAdios.transform, new Vector2(0f, -120f), 360f, 0f);
+        Volver(pie.transform);
     }
 
     private GameObject Panel(string nombre)
@@ -574,7 +595,7 @@ public class MenuPrincipal : MonoBehaviour
             F("ctrl_hoguera", "F junto a una hoguera", "Abre su menú: Descansar (cura, rellena los frascos y guarda), Subir de nivel y estadísticas, y Mejorar equipamiento"),
             F("stat_resgolpes", "Resistencias", "Resistencia a golpes: reduce el daño físico. Resistencia a hechizos: reduce el mágico. Nunca más de un 55 %"),
             F("ctrl_rueda", "En la rueda de imbuir", "Ratón, WASD o 1-5: elegir  ·  Clic o E: imbuir  ·  Clic derecho o Esc: cancelar"),
-            F("ctrl_pausa", "Esc", "Pausa: opciones, destrabar al personaje, volver a la última hoguera o salir al menú"),
+            F("ctrl_pausa", "Esc / Tab","Pausa: opciones, destrabar al personaje, volver a la última hoguera o salir al menú"),
         }),
         ("BARRAS Y ESTADOS", new[]
         {

@@ -33,6 +33,8 @@ MonoBehaviour:
   altoFondo: 18
   pixelesPorUnidadFondo: 0
   seguimientoVertical: 0.97
+  intensidadParallax: 1
+  profundidadVertical: 0
   capasFondo:
   - nombre: 7
     imagen: {fileID: 7028616704906629411, guid: e92f658467a6f5843941203594487c20, type: 3}
@@ -102,15 +104,15 @@ MonoBehaviour:
   ambiente: {fileID: 8300000, guid: 9c7ddc6cf102efb43847ca58e25fa198, type: 3}
   volumenAmbiente: 0.35
   jefeFase1:
-    pista: {fileID: 8300000, guid: 30d52bd5df01da54b8aa072e4cef7312, type: 3}
-    volumen: 0.6
+    pista: {fileID: 8300000, guid: e9bf1b55bbf577d4b879a901972e333f, type: 3}
+    volumen: 0.869
     inicio: 0
     bucle: {x: 8, y: 156}
   jefeFase2:
-    pista: {fileID: 8300000, guid: 30d52bd5df01da54b8aa072e4cef7312, type: 3}
-    volumen: 0.7
-    inicio: 328
-    bucle: {x: 336, y: 410}
+    pista: {fileID: 8300000, guid: 6733cba535175d947b0068e2f7cf4297, type: 3}
+    volumen: 0.89
+    inicio: 0
+    bucle: {x: 0, y: 410}
   sonidos: []
   frasesMuerte: []
   frasesJefe: []

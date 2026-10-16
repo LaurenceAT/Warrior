@@ -173,6 +173,8 @@ public class ConfigNivelEditor : Editor
         Undo.RecordObject(parallax, "Fondo");
         parallax.capas = capas.ToArray();
         parallax.seguimientoVertical = c.seguimientoVertical;
+        parallax.intensidad = c.intensidadParallax;
+        parallax.profundidadVertical = c.profundidadVertical;
         EditorUtility.SetDirty(parallax);
     }
 
@@ -268,6 +270,8 @@ public class ConfigNivelEditor : Editor
         if (p != null)
         {
             c.seguimientoVertical = p.seguimientoVertical;
+            c.intensidadParallax = p.intensidad;
+            c.profundidadVertical = p.profundidadVertical;
             foreach (ParallaxCueva.Capa capa in p.capas)
             {
                 if (capa.raiz == null || capa.raiz.childCount == 0) continue;
