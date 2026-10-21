@@ -110,6 +110,7 @@ public class MenuPrincipal : MonoBehaviour
 
         ActualizarBrasas(dt);
         ActualizarLuz();
+        if (estadoCopia != null && borrarEstadoCopia > 0f && Time.unscaledTime > borrarEstadoCopia) { estadoCopia.text = ""; borrarEstadoCopia = 0f; }
 
         // Atras: Esc, clic derecho o el boton este del mando.
         Keyboard k = Keyboard.current;
@@ -336,6 +337,7 @@ public class MenuPrincipal : MonoBehaviour
         Opcion("Opciones", vl.transform, () => Mostrar(panelOpciones), 50f);
         Opcion("Controles y guía", vl.transform, () => Mostrar(panelControles), 50f);
         Opcion("Salir", vl.transform, Salir, 50f);
+        if (CopiaProgreso.Disponible) ConstruirCopia(panelPrincipal.transform);
 
         TextMeshProUGUI pie = Texto("Enter / Clic: aceptar     Esc / Clic derecho: volver", lienzo, 20f, new Color(0.45f, 0.42f, 0.4f));
         pie.rectTransform.anchorMin = pie.rectTransform.anchorMax = new Vector2(0.5f, 0f);
@@ -493,6 +495,95 @@ public class MenuPrincipal : MonoBehaviour
         Deslizador("Volumen de los efectos", vl.transform, 0f, 1f, ControlVolumen.Efectos, v => ControlVolumen.Efectos = v);
         Deslizador("Brillo", vl.transform, 0.5f, 1.5f, ControlBrillo.Brillo, v => ControlBrillo.Brillo = v);
         Volver(vl.transform);
+    }
+
+    // Copia del progreso (web), en la esquina inferior derecha del menu principal:
+    // letra pequena y apagada (se aclara al pasar el raton). "Cargar" hay que
+    // pulsarlo dos veces: sustituye el progreso actual. El aviso se borra solo.
+    private TextMeshProUGUI estadoCopia;
+    private float borrarEstadoCopia;
+
+    private void ConstruirCopia(Transform padre)
+    {
+        Color apagado = new Color(0.55f, 0.51f, 0.48f, 0.75f);
+        RectTransform esquina = new GameObject("CopiaProgreso").AddComponent<RectTransform>();
+        esquina.SetParent(padre, false);
+        esquina.anchorMin = esquina.anchorMax = new Vector2(1f, 0f);
+        esquina.pivot = new Vector2(1f, 0f);
+        esquina.anchoredPosition = new Vector2(-36f, 26f);
+        esquina.sizeDelta = new Vector2(330f, 0f);
+        VerticalLayoutGroup v = esquina.gameObject.AddComponent<VerticalLayoutGroup>();
+        v.spacing = 0f;
+        v.childAlignment = TextAnchor.LowerRight;
+        v.childControlWidth = true; v.childControlHeight = false;
+        v.childForceExpandHeight = false;
+        ContentSizeFitter f = esquina.gameObject.AddComponent<ContentSizeFitter>();
+        f.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+        // El aviso va encima de los botones, a la derecha.
+        estadoCopia = Texto("", panelPrincipal.transform, 19f, new Color(0.72f, 0.66f, 0.6f));
+        estadoCopia.alignment = TextAlignmentOptions.BottomRight;
+        RectTransform re = estadoCopia.rectTransform;
+        re.anchorMin = re.anchorMax = new Vector2(1f, 0f);
+        re.pivot = new Vector2(1f, 0f);
+        re.sizeDelta = new Vector2(620f, 28f);
+        re.anchoredPosition = new Vector2(-48f, 26f + 2f * 38f + 4f);
+
+        // Brave puede borrar lo guardado al cerrar: un aviso discreto encima.
+        if (CopiaProgreso.EsBrave)
+        {
+            TextMeshProUGUI aviso = Texto("Brave puede borrar tu progreso al cerrar. Permite las cookies de itch.io o guarda una copia.",
+                                          panelPrincipal.transform, 19f, new Color(0.85f, 0.6f, 0.4f));
+            aviso.name = "AvisoBrave";
+            aviso.alignment = TextAlignmentOptions.BottomRight;
+            aviso.enableWordWrapping = true;
+            RectTransform ra = aviso.rectTransform;
+            ra.anchorMin = ra.anchorMax = new Vector2(1f, 0f);
+            ra.pivot = new Vector2(1f, 0f);
+            ra.sizeDelta = new Vector2(470f, 52f);
+            ra.anchoredPosition = new Vector2(-48f, re.anchoredPosition.y + 32f);
+        }
+
+        GameObject bajar = Opcion("Descargar mi progreso", esquina, () =>
+        {
+            bool bien = CopiaProgreso.Descargar();
+            AvisoCopia(bien ? "Copia guardada en tu carpeta de descargas." : "No se pudo descargar la copia.");
+        }, 38f, 21f);
+        bool confirmar = false;
+        TextMeshProUGUI textoCargar = null;
+        GameObject cargar = Opcion("Cargar mi progreso", esquina, () =>
+        {
+            if (!confirmar)
+            {
+                confirmar = true;
+                textoCargar.text = "¿Seguro? Pulsa otra vez";
+                AvisoCopia("Se reemplazará tu progreso actual por el de la copia.");
+                return;
+            }
+            confirmar = false;
+            textoCargar.text = "Cargar mi progreso";
+            CopiaProgreso.Elegir(texto =>
+            {
+                string error = CopiaProgreso.Cargar(texto);
+                AvisoCopia(error ?? "Progreso cargado.");
+            });
+        }, 38f, 21f);
+        textoCargar = cargar.GetComponentInChildren<TextMeshProUGUI>();
+        foreach (GameObject b in new[] { bajar, cargar })
+        {
+            TextMeshProUGUI t = b.GetComponentInChildren<TextMeshProUGUI>();
+            t.color = apagado;
+            t.characterSpacing = 1f;
+            t.alignment = TextAlignmentOptions.MidlineRight;
+            t.rectTransform.offsetMax = new Vector2(-12f, 0f);
+        }
+    }
+
+    private void AvisoCopia(string texto)
+    {
+        if (estadoCopia == null) return;
+        estadoCopia.text = texto;
+        borrarEstadoCopia = Time.unscaledTime + 5f;
     }
 
     private void Deslizador(string etiqueta, Transform padre, float min, float max, float valor, System.Action<float> alCambiar)
