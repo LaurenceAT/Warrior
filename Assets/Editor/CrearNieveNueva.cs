@@ -31,18 +31,21 @@ public static class CrearNieveNueva
     [MenuItem("Warrior/Nieve/Generar nieve nueva")]
     public static void Generar()
     {
+        // La nieve antigua se borro (respaldo en ../Respaldo_NivelesAntiguos_2026-10-20).
+        // Sin ella no se genera: copiar la nieve actual como "antigua" montaria el nivel dos veces.
+        if (!File.Exists(RutaAntigua))
+        {
+            string aviso = "Falta la escena base (" + RutaAntigua + "). Restaurala del respaldo para volver a generar la nieve.";
+            Debug.LogWarning("[NieveNueva] " + aviso);
+            if (!Application.isBatchMode) EditorUtility.DisplayDialog("Nieve nueva", aviso, "Vale");
+            return;
+        }
         if (!Application.isBatchMode && !EditorUtility.DisplayDialog("Nieve nueva",
                 "Se rehace la escena \"Nivel Nieve\" a partir de la copia de la nieve antigua (Nieve_Antigua). " +
                 "Lo que hayas cambiado a mano en la nieve nueva se pierde.", "Generar", "Cancelar"))
             return;
         if (!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
         if (File.Exists(RutaNuevaGuardada)) { Debug.LogWarning("[NieveNueva] Ahora se juega la antigua: usa primero \"Usar la nieve nueva\"."); return; }
-        // La primera vez: la nieve de siempre pasa a ser la copia de seguridad.
-        if (!File.Exists(RutaAntigua))
-        {
-            if (!AssetDatabase.CopyAsset(RutaActiva, RutaAntigua)) { Debug.LogError("[NieveNueva] No se pudo copiar la nieve antigua"); return; }
-            AssetDatabase.Refresh();
-        }
         Montar();
     }
 

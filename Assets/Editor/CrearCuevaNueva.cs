@@ -96,18 +96,20 @@ public static class CrearCuevaNueva
     [MenuItem("Warrior/Cueva/Generar cueva nueva")]
     public static void Generar()
     {
+        // La cueva antigua se borro (respaldo en ../Respaldo_NivelesAntiguos_2026-10-20).
+        // Sin ella no se genera: copiar la cueva actual como "antigua" montaria el nivel dos veces.
+        if (!File.Exists(RutaAntigua))
+        {
+            string aviso = "Falta la escena base (" + RutaAntigua + "). Restaurala del respaldo para volver a generar la cueva.";
+            Debug.LogWarning("[CuevaNueva] " + aviso);
+            if (!Application.isBatchMode) EditorUtility.DisplayDialog("Cueva nueva", aviso, "Vale");
+            return;
+        }
         if (!Application.isBatchMode && !EditorUtility.DisplayDialog("Cueva nueva",
                 "Se rehace la escena \"Nivel Cueva\" a partir de la copia de la cueva antigua (Cueva_Antigua). " +
                 "Lo que hayas cambiado a mano en la cueva nueva se pierde.", "Generar", "Cancelar"))
             return;
         if (!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
-
-        // La primera vez: la cueva de siempre pasa a ser la copia de seguridad.
-        if (!File.Exists(RutaAntigua))
-        {
-            if (!AssetDatabase.CopyAsset(RutaActiva, RutaAntigua)) { Debug.LogError("[CuevaNueva] No se pudo copiar la cueva antigua"); return; }
-            AssetDatabase.Refresh();
-        }
         Preparar();
         Montar();
     }
