@@ -1,0 +1,458 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6164168bec6716743b2f53fc7f130977, type: 3}
+  m_Name: Catalogo Pruebas
+  m_EditorClassIdentifier: 
+  entradas:
+  - nombre: Sombra de los Humedales
+    prefab: {fileID: 5833552481054790273, guid: 600cc38e3d7bee041962796af658f42e, type: 3}
+    arena: 1
+    titulo: La que duerme bajo el hielo
+    config: {fileID: 11400000, guid: 62e275c49ee3b744eab376d25bf2e481, type: 2}
+    marcaFase: 0
+    barraPorFase: 1
+    colorBarraFase2: {r: 0.25, g: 0.62, b: 0.95, a: 1}
+    nombreFase2: "Sombra de los Humedales \u2014 Escarcha"
+    luzFase2: {r: 0.62, g: 0.8, b: 1, a: 1}
+    textoFase2: La sombra se alza de nuevo, envuelta en escarcha...
+    particulasFase2A: {r: 1, g: 1, b: 1, a: 0.9}
+    particulasFase2B: {r: 0.7, g: 0.9, b: 1, a: 0.7}
+    particulasCaen: 1
+    bannerVictoria: SOMBRA DISIPADA
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 11400000, guid: bf7dd0b4b84bfd643924181a18529ff5, type: 2}
+    asumeSueloPlano: 1
+    avisoTerreno: 'La Sombra supone suelo plano: sus lanzas, estacas y escarcha salen
+      a ras del suelo y no alcanzan las plataformas.'
+  - nombre: Crimson Wraith
+    prefab: {fileID: 967357416833526698, guid: 92b9f17e49b3e034cabc81eb13612faa, type: 3}
+    arena: 1
+    titulo: "El Espectro Carmes\xED"
+    config: {fileID: 11400000, guid: 5b42d9d98b6b3c64fa7a36b06e8ce2c6, type: 2}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: "El Espectro Carmes\xED revela su verdadera forma..."
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0.49
+    fichaDesafio: {fileID: 11400000, guid: 11024292f5ea01f43a4f7fb2e810152d, type: 2}
+    asumeSueloPlano: 1
+    avisoTerreno: "El Wraith supone suelo plano: sus pilares, ra\xEDces y ondas salen
+      a ras del suelo y no alcanzan las plataformas."
+  - nombre: The Blind Huntress
+    prefab: {fileID: 910213742887964051, guid: 4d0ade483ddca1a4c9ce448680ac6017, type: 3}
+    arena: 2
+    titulo: La Cazadora Ciega
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 11400000, guid: 6279ce7575d5cdc4cbeecac110663f00, type: 2}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 11400000, guid: a881f9b7f1be3cd4cabfa76b79baf79c, type: 2}
+    asumeSueloPlano: 1
+    avisoTerreno: 'La Cazadora se mueve pegada al suelo de la arena: atraviesa las
+      plataformas.'
+  - nombre: Arquera arcana
+    prefab: {fileID: 2482317867513900617, guid: 0e389abb73a982942b13c6e2b7f687ad, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: "Hechicero sombr\xEDo"
+    prefab: {fileID: 8565064618766451490, guid: 12bc4e3aaea8788489c660f7fa059079, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: "Murci\xE9lago de las cumbres"
+    prefab: {fileID: 9186599615335011928, guid: 522907f267b461f459b9089995f51e25, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: "Ojo vig\xEDa"
+    prefab: {fileID: 1285642816110325367, guid: f9af545827193ff429d2ffec51a142e9, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: Rata de escarcha
+    prefab: {fileID: 2360041106664235734, guid: 1bd7e66eaf7cf114e83e9a61cca13c48, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: Cacodemonio
+    prefab: {fileID: 2448275938263088717, guid: 14d9dcc312b353342bd80e6c2e92b9dd, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: Mago
+    prefab: {fileID: 4031670181715074089, guid: 55a9f84d5def84847977a42177763a77, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: Mimic
+    prefab: {fileID: 8414426505987831688, guid: 76a6ae1a2aebe76448738c1db8a5a45a, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: Slime
+    prefab: {fileID: 4586117283242663229, guid: ea5403bb4fe36e6488d13c4a5f7db563, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: Aldren, Hueso Roto
+    prefab: {fileID: 2536748397257329103, guid: 5445f0afe2e698b4a92cff0d3bc86814, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: "La Madre Carmes\xED"
+    prefab: {fileID: 1427963340594990224, guid: a888400e4e51bcc4db34cfea1b44166e, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: Morgath Sin Ojos
+    prefab: {fileID: 6941262521532028083, guid: 01b572c4ad1f149418b5f21d4802ef95, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: Arquera de sangre
+    prefab: {fileID: 5209197920961657923, guid: 2a49b384185b2084099e34c3f544e574, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: Mago de hueso
+    prefab: {fileID: 2501545543454800628, guid: 602ccc744b5df1545a271d9fdde6ddd6, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: "Murci\xE9lago de cripta"
+    prefab: {fileID: 5142319397173829876, guid: c478a2387a236d84e9f60f0e623d6361, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: Ojo del abismo
+    prefab: {fileID: 1828645977015664637, guid: 4eb319aaa48acd340814fdd24a3519c4, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: Rata de ceniza
+    prefab: {fileID: 7802388730630044142, guid: 8d40b40191b7dab47b4ec72952b66c1a, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: Slime abisal
+    prefab: {fileID: 174739826024460125, guid: db142595fbe88ce45ac01b16fd6550e1, type: 3}
+    arena: 0
+    titulo: 
+    config: {fileID: 0}
+    marcaFase: 0.5
+    barraPorFase: 0
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 
+  - nombre: Impaler
+    prefab: {fileID: 8185594828787185139, guid: 8a4f172d2e0a53f429f365cad183841c, type: 3}
+    arena: 1
+    titulo: Jefe de prueba
+    config: {fileID: 0}
+    marcaFase: 0
+    barraPorFase: 1
+    colorBarraFase2: {r: 0.25, g: 0.6, b: 0.95, a: 1}
+    nombreFase2: "Impaler \u2014 Renacido"
+    luzFase2: {r: 1, g: 0.55, b: 0.55, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 

@@ -797,7 +797,7 @@ public partial class JefeWraith : JefeBase, IModificadorDano, IAfinidadElemental
 
     private IEnumerator Pausa(float segundos)
     {
-        segundos = PausaDesafio(segundos);
+        segundos = PausaPrueba(PausaDesafio(segundos));
         FrenarSuave(30f);
         anim.Reproducir(fase2 ? "grande_guardia" : "guardia");
         float t = 0f;

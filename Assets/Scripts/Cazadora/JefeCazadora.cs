@@ -418,7 +418,7 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
     // estatua). Se acorta en Dificil.
     private IEnumerator Pausa(float segundos)
     {
-        segundos = PausaDesafio(segundos);
+        segundos = PausaPrueba(PausaDesafio(segundos));
         bool pasea = Random.value < 0.35f && segundos > 0.3f;
         int dir = Random.value < 0.5f ? -1 : 1;
         float t = 0f;
@@ -859,7 +859,13 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
 
     // ------------------------------------------------------------------ Depuracion
 
-    public void ForzarAtaque(string ataque) => ataqueForzado = ataque;
+    public override void ForzarAtaque(string ataque) => ataqueForzado = ataque;
+    public override string[] AtaquesPrueba => new[]
+    {
+        "tresLunas", "cruce", "ola", "ascendente", "salto", "guardia", "escudo", "ejecucion",
+        "contra", "flanqueo", "caen", "espejismo", "fantasma", "trampas", "lluvia", "cruceDoble", "sentencia",
+        "danza", "espejos", "silencio", "cerco",
+    };
 
     public void SaltarAFase(int nueva)
     {

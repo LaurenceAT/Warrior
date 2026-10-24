@@ -32,9 +32,16 @@ public static class Desafio
     public static string Deseado { get; set; }
 
     // Modo Dificil: numeros del jefe (1 = normal).
-    public static float MultVida => Activo && Dificil && Ficha != null ? Mathf.Max(0.1f, Ficha.multVida) : 1f;
-    public static float MultDano => Activo && Dificil && Ficha != null ? Mathf.Max(0.1f, Ficha.multDano) : 1f;
-    public static float MultVelocidad => Activo && Dificil && Ficha != null ? Mathf.Max(0.1f, Ficha.multVelocidad) : 1f;
+    // En la sala de pruebas (solo Editor) tambien, con la ficha que ponga la sala.
+    public static float MultVida => FichaDificil != null ? Mathf.Max(0.1f, FichaDificil.multVida) : 1f;
+    public static float MultDano => FichaDificil != null ? Mathf.Max(0.1f, FichaDificil.multDano) : 1f;
+    public static float MultVelocidad => FichaDificil != null ? Mathf.Max(0.1f, FichaDificil.multVelocidad) : 1f;
+    private static FichaJefe FichaDificil => Activo && Dificil && Ficha != null ? Ficha : FichaSala;
+#if UNITY_EDITOR
+    public static FichaJefe FichaSala { get; set; }
+#else
+    private static FichaJefe FichaSala => null;
+#endif
 
     // Precio de un objeto del totem en este desafio (multiplicador de la ficha del jefe).
     public static int Precio(FichaTienda.Articulo a) =>

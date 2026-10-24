@@ -41,7 +41,33 @@ public abstract class JefeBase : EnemigoBase
     private FichaJefe fichaBitacora;
     private int faseBitacora = 1;
     protected FichaJefe FichaBitacora => fichaBitacora != null ? fichaBitacora : fichaBitacora = FichaJefe.DeEscena(gameObject.scene.name);
-    protected void AnunciarAtaque(string ataque) => Bitacora.Ataque(FichaBitacora, ataque);
+    protected void AnunciarAtaque(string ataque)
+    {
+        UltimoAtaque = ataque;
+        HoraUltimoAtaque = Time.time;
+        ProximoAtaque = -1f;
+        Bitacora.Ataque(FichaBitacora, ataque);
+    }
+
+    // ------------------------------------------------------------------ Sala de pruebas (menu F1, solo Editor)
+
+    // La sala lanza ataques sueltos y muestra que hace el jefe. Fuera de ella nadie
+    // fuerza ataques ni pone pausa extra: el jefe hace lo de siempre.
+    public virtual string[] AtaquesPrueba => System.Array.Empty<string>();
+    public virtual void ForzarAtaque(string ataque) { }
+    public string UltimoAtaque { get; private set; }
+    public float HoraUltimoAtaque { get; private set; } = -1f;
+    // Cuando acaba la pausa en curso (-1: no esta en pausa).
+    public float ProximoAtaque { get; private set; } = -1f;
+    public float PausaExtraPrueba { get; set; }
+
+    // Cada jefe la llama al empezar su pausa entre ataques.
+    protected float PausaPrueba(float segundos)
+    {
+        segundos += PausaExtraPrueba;
+        ProximoAtaque = Time.time + segundos;
+        return segundos;
+    }
 
     protected void AvisarCambioFase()
     {

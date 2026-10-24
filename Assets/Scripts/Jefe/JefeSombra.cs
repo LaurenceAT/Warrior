@@ -102,6 +102,13 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
     }
     private float tAgarre = -99f, tLanzas = -99f, tVentisca = -99f, tEstacas = -99f;
     private string ultimoAtaque = "";
+    // Forzado desde la sala de pruebas (el siguiente que haga).
+    private string ataqueForzado;
+    public override void ForzarAtaque(string ataque) => ataqueForzado = ataque;
+    public override string[] AtaquesPrueba => new[]
+    {
+        "barrido", "barrido_alzado", "triple", "reves", "paso", "medialunas", "caida", "agarre", "lanzas", "estacas", "ventisca",
+    };
     private int parrysSeguidos, parrysCombo, golpesCombo;
     private bool parado;
     private CinemachineImpulseSource impulso;
@@ -206,6 +213,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
 
     private string Elegir()
     {
+        if (!string.IsNullOrEmpty(ataqueForzado)) { string f = ataqueForzado; ataqueForzado = null; return f; }
         float dx = DxPlayer;
         float d = Mathf.Abs(dx);
         bool detras = Mathf.Sign(dx) != mirada && d < 3.5f;
@@ -1007,7 +1015,7 @@ public class JefeSombra : JefeBase, IModificadorDano, IAfinidadElemental, IAturd
 
     private IEnumerator Pausa(float segundos)
     {
-        segundos = PausaDesafio(segundos);
+        segundos = PausaPrueba(PausaDesafio(segundos));
         anim.Reproducir("quieto");
         for (float t = 0f; t < segundos; t += Time.deltaTime)
         {

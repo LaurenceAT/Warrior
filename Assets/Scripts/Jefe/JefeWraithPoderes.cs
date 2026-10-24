@@ -52,7 +52,12 @@ public partial class JefeWraith
 
     // Pruebas: el siguiente ataque que haga.
     private string ataqueForzado;
-    public void ForzarAtaque(string ataque) => ataqueForzado = ataque;
+    public override void ForzarAtaque(string ataque) => ataqueForzado = ataque;
+    public override string[] AtaquesPrueba => new[]
+    {
+        "tajos", "embestida", "onda", "pilares", "orbes", "zarpazo", "lluvia", "teletransporte", "cadena", "salto",
+        "medialuna", "vortice", "nova", "guadana", "cosecha", "transfusion", "raices", "semillas", "zigzag", "frenesi",
+    };
     public bool Fase2 => fase2;
     public bool EnFrenesi => enFrenesi;
     public bool CorazonVisible => CorazonExpuesto;

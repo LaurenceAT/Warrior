@@ -450,7 +450,7 @@ public class VorticeSangre : MonoBehaviour
                     float dx = Mathf.Sign(c.x - p.x) * fuerza * k * Time.deltaTime;
                     rb.position += new Vector2(dx, 0f);
                 }
-                if (d < 1.4f && Time.time >= siguienteGolpe)
+                if (dano > 0 && d < 1.4f && Time.time >= siguienteGolpe)
                 {
                     siguienteGolpe = Time.time + 0.8f;
                     PeligrosJefe.GolpearCaja(c, new Vector2(2.2f, 2.6f), dano, this, out _,

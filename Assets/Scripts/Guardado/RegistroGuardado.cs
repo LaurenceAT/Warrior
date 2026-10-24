@@ -97,8 +97,17 @@ public static class RegistroGuardado
         }
     }
 
+    // Sala de pruebas (solo Editor): carpeta temporal y claves "sala_". Asi nada de
+    // lo que pase en la sala toca el progreso (partida, globales.json ni PlayerPrefs).
+#if UNITY_EDITOR
+    public static string CarpetaSala { get; set; }
+#else
+    public static string CarpetaSala => null;
+#endif
+    public const string PrefijoSala = "sala_";
+
     // Carpeta del perfil activo (las pruebas automaticas usan la suya: Partida.CarpetaPruebas).
-    public static string Carpeta => Partida.CarpetaPruebas ?? CarpetaDe(PerfilPruebas);
+    public static string Carpeta => CarpetaSala ?? Partida.CarpetaPruebas ?? CarpetaDe(PerfilPruebas);
 
     public static string CarpetaDe(bool perfilPruebas) => Path.Combine(Base, perfilPruebas ? CarpetaPerfil : CarpetaReal);
 
@@ -148,7 +157,7 @@ public static class RegistroGuardado
 #endif
 
     // Nombre real de una clave de PlayerPrefs (con el prefijo del perfil de pruebas).
-    public static string Clave(string nombre) => ClaveDe(nombre, PerfilPruebas);
+    public static string Clave(string nombre) => CarpetaSala != null ? PrefijoSala + ClaveDe(nombre, false) : ClaveDe(nombre, PerfilPruebas);
 
     private static Dictionary<string, Dato> porClave;
 

@@ -1,0 +1,578 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34abcfb44b5574f42ab5b8483a381099, type: 3}
+  m_Name: Ajustes Impaler
+  m_EditorClassIdentifier: 
+  vidaFase1: 1600
+  vidaFase2: 1800
+  velocidadAndar: 2.2
+  tiempoMaxAndar: 2.5
+  margenArena: 1
+  pausaFase1: {x: 0.9, y: 1.5}
+  pausaFase2: {x: 0.5, y: 0.9}
+  multVelocidadFase2: 1.25
+  avisoMinLigero: 0.35
+  avisoMinPesado: 0.5
+  avisoMinFinal: 0.6
+  pausaMinEntreGolpes: 0.55
+  colorLigero: {r: 1, g: 0.55, b: 0.1, a: 1}
+  colorPesado: {r: 1, g: 0.12, b: 0.08, a: 1}
+  colorContraataque: {r: 1, g: 1, b: 1, a: 1}
+  intensidadAviso: 0.6
+  parpadeoLigero: 9
+  parpadeoPesado: 2.5
+  duracionGuardia: 2
+  retrasoContraataque: 0.45
+  avisoMinContraataque: 0.4
+  danoEnGuardia: 0.4
+  aturdidoParryContraataque: 3.2
+  brilloGuardia: 0.15
+  probabilidadCombo: 0.55
+  maxGolpesSeguidos: 3
+  pausaRecuperacion: 0.8
+  topeDanoCombo: 0.7
+  combos:
+  - id: apertura
+    nombre: Apertura
+    soloFase2: 0
+    frecuencia: 1
+    eslabones:
+    - ataque: lanzazo_largo
+      hastaGolpe: 0
+    - ataque: tajo_pausa
+      hastaGolpe: -1
+    extraDificil:
+    - ataque: combo_relampago
+      hastaGolpe: 0
+  - id: cadena
+    nombre: Cadena
+    soloFase2: 0
+    frecuencia: 1
+    eslabones:
+    - ataque: tajo_pausa
+      hastaGolpe: -1
+    - ataque: combo_relampago
+      hastaGolpe: -1
+    extraDificil:
+    - ataque: lanzazo_largo
+      hastaGolpe: 0
+  - id: persecucion
+    nombre: "Persecuci\xF3n"
+    soloFase2: 0
+    frecuencia: 0.8
+    eslabones:
+    - ataque: embestida_medialuna
+      hastaGolpe: -1
+    - ataque: salto_estela
+      hastaGolpe: -1
+    extraDificil: []
+  - id: pinza
+    nombre: Pinza
+    soloFase2: 1
+    frecuencia: 1
+    eslabones:
+    - ataque: cruce_sangre
+      hastaGolpe: -1
+    - ataque: lanzazo_largo
+      hastaGolpe: -1
+    extraDificil:
+    - ataque: tajo_pausa
+      hastaGolpe: 0
+  - id: tormenta
+    nombre: Tormenta
+    soloFase2: 1
+    frecuencia: 0.8
+    eslabones:
+    - ataque: tajo_pausa
+      hastaGolpe: -1
+    - ataque: combo_relampago
+      hastaGolpe: -1
+    - ataque: lanzazo_largo
+      hastaGolpe: -1
+    extraDificil: []
+  adaptacionActiva: 1
+  combosObservados: 4
+  umbralParrys: 0.6
+  topeRetraso: 0.3
+  pasoRetraso: 0.05
+  umbralGolpesGuardia: 2
+  topePesoContraataque: 3
+  pasoPesoContraataque: 0.4
+  aturdidoComboPerfecto: 2.2
+  parrysParaRomper: 5
+  aturdidoPostura: 2.6
+  paradaImagen: 0
+  colorChispas: {r: 1, g: 0.85, b: 0.45, a: 1}
+  colorChispas2: {r: 1, g: 0.45, b: 0.15, a: 1}
+  chispas: 14
+  textoAturdido: Aturdido
+  textoPostura: "\xA1Postura rota!"
+  colorTextoAturdido: {r: 1, g: 0.85, b: 0.45, a: 1}
+  temblorAturdido: 0.05
+  tonoInicial: 1
+  subidaTono: 0.06
+  tonoMaximo: 1.5
+  tonoReiniciaAlFallar: 1
+  tonoReiniciaSegundos: 4
+  fuego: 0.6
+  hielo: 0.6
+  sagrado: 1
+  sangrado: 1
+  oscuridad: 1.5
+  tinteFase2: {r: 1, g: 0.86, b: 0.86, a: 1}
+  colorLanzaFase2: {r: 1, g: 0.3, b: 0.12, a: 1}
+  brilloLanza: 0.7
+  lanza1: {r: 0.54509807, g: 0.3647059, b: 0.3647059, a: 1}
+  lanza2: {r: 0.4117647, g: 0.24313726, b: 0.24313726, a: 1}
+  lanza3: {r: 0.7058824, g: 0.5411765, b: 0.5411765, a: 1}
+  toleranciaLanza: 0.06
+  shaderBrillo: {fileID: 4800000, guid: 5b7e2c9d1a4f4e8b9c3d6a1f2e7b8c90, type: 3}
+  colorHechizos: {r: 1, g: 0.18, b: 0.22, a: 1}
+  colorOnda: {r: 1, g: 0.45, b: 0.55, a: 1}
+  colorMeteoro: {r: 1, g: 0.45, b: 0.2, a: 1}
+  quemaduraVidaMinima: 0.4
+  textoTregua: "ENEMIGO CA\xCDDO"
+  colorTregua: {r: 1, g: 0.85, b: 0.45, a: 1}
+  esperaCartel: 1.5
+  duracionCartel: 4
+  frascoGratis: 1
+  frascosGratis: 1
+  textoFrasco: Frasco de sangre
+  descripcionFrasco: "Una carga m\xE1s para el frasco de sangre"
+  colorFlor: {r: 1, g: 0.4, b: 0.5, a: 1}
+  brilloFlor: 0.35
+  latidoFlor: 0.8
+  latidoFlorRapido: 2.5
+  segundosLatidoRapido: 3
+  distanciaRenacer: 9
+  tiempoLejos: 1
+  tiempoMaxRenacer: 12
+  velocidadRenacer: 1
+  pausaInicialFase2: 1.2
+  ataques:
+  - id: lanzazo_largo
+    nombre: Lanzazo largo
+    clip: attack4
+    alcance: 3.5
+    frecuencia: 1
+    golpes:
+    - nombre: Estocada corta
+      peso: 0
+      senal: 0
+      activoDesde: 4
+      activoHasta: 10
+      cuadroPausa: 3
+      pausaVariable: {x: 0, y: 0}
+      aviso: 0.4
+      dano: 22
+      cajaCentro: {x: 1.9, y: 1.1}
+      cajaTamano: {x: 3, y: 0.9}
+      origenX: 0
+      parryCancelaFase1: 0
+      quemadura: 0
+    - nombre: Estocada larga
+      peso: 1
+      senal: 11
+      activoDesde: 17
+      activoHasta: 21
+      cuadroPausa: -1
+      pausaVariable: {x: 0, y: 0}
+      aviso: 0.6
+      dano: 32
+      cajaCentro: {x: 2.6, y: 1.1}
+      cajaTamano: {x: 4.4, y: 1.1}
+      origenX: 0
+      parryCancelaFase1: 0
+      quemadura: 30
+    recuperacion: 0.3
+    moverDesde: -1
+    moverHasta: -1
+    pararAntes: 1
+    distanciaMax: 6
+    salto: 0
+    contraataque: 0
+    admiteRetraso: 1
+    hechizosFase2:
+    - tipo: 0
+      activo: 1
+      golpe: 1
+      momento: 0
+      retraso: 0
+      soloSiEsElUltimo: 0
+      desdeElEco: 0
+      dano: 0
+      aviso: 0.9
+      cantidad: 1
+      separacion: 2
+      distancia: 3.2
+      velocidad: 9
+      duracion: 0.8
+      radio: 5
+      fuerza: 3
+      sangrado: 20
+    - tipo: 1
+      activo: 1
+      golpe: 1
+      momento: 2
+      retraso: 0.55
+      soloSiEsElUltimo: 1
+      desdeElEco: 0
+      dano: 18
+      aviso: 0.9
+      cantidad: 1
+      separacion: 2
+      distancia: 1.2
+      velocidad: 9
+      duracion: 1
+      radio: 5
+      fuerza: 3
+      sangrado: 20
+    cuadroCastigo: -1
+    castigoMinimo: 0
+  - id: tajo_pausa
+    nombre: Tajo con pausa
+    clip: attack3
+    alcance: 2.6
+    frecuencia: 1
+    golpes:
+    - nombre: Tajo vertical
+      peso: 0
+      senal: 0
+      activoDesde: 5
+      activoHasta: 7
+      cuadroPausa: 4
+      pausaVariable: {x: 0, y: 0}
+      aviso: 0.5
+      dano: 22
+      cajaCentro: {x: 1.6, y: 2.2}
+      cajaTamano: {x: 2.6, y: 3.8}
+      origenX: 0
+      parryCancelaFase1: 1
+      quemadura: 0
+    - nombre: Giro
+      peso: 1
+      senal: 8
+      activoDesde: 12
+      activoHasta: 17
+      cuadroPausa: 11
+      pausaVariable: {x: 0.2, y: 0.5}
+      aviso: 0.6
+      dano: 32
+      cajaCentro: {x: 0.6, y: 1.4}
+      cajaTamano: {x: 4.2, y: 2.6}
+      origenX: 0
+      parryCancelaFase1: 0
+      quemadura: 30
+    recuperacion: 0.4
+    moverDesde: -1
+    moverHasta: -1
+    pararAntes: 1
+    distanciaMax: 6
+    salto: 0
+    contraataque: 0
+    admiteRetraso: 1
+    hechizosFase2:
+    - tipo: 2
+      activo: 1
+      golpe: 0
+      momento: 1
+      retraso: 0
+      soloSiEsElUltimo: 0
+      desdeElEco: 0
+      dano: 18
+      aviso: 0.9
+      cantidad: 1
+      separacion: 2
+      distancia: 1
+      velocidad: 10
+      duracion: 1
+      radio: 5
+      fuerza: 3
+      sangrado: 25
+    cuadroCastigo: -1
+    castigoMinimo: 0
+  - id: combo_relampago
+    nombre: "Combo rel\xE1mpago"
+    clip: attack2
+    alcance: 2.6
+    frecuencia: 0.4
+    golpes:
+    - nombre: "Tajo r\xE1pido"
+      peso: 0
+      senal: 0
+      activoDesde: 1
+      activoHasta: 2
+      cuadroPausa: 0
+      pausaVariable: {x: 0, y: 0}
+      aviso: 0.35
+      dano: 20
+      cajaCentro: {x: 1.6, y: 2.2}
+      cajaTamano: {x: 2.6, y: 3.8}
+      origenX: 0
+      parryCancelaFase1: 0
+      quemadura: 0
+    - nombre: "Giro r\xE1pido"
+      peso: 0
+      senal: 3
+      activoDesde: 4
+      activoHasta: 6
+      cuadroPausa: 3
+      pausaVariable: {x: 0, y: 0}
+      aviso: 0.6
+      dano: 24
+      cajaCentro: {x: 0.6, y: 1.4}
+      cajaTamano: {x: 4.2, y: 2.6}
+      origenX: 0
+      parryCancelaFase1: 0
+      quemadura: 0
+    recuperacion: 0.4
+    moverDesde: -1
+    moverHasta: -1
+    pararAntes: 1
+    distanciaMax: 6
+    salto: 0
+    contraataque: 0
+    admiteRetraso: 1
+    hechizosFase2: []
+    cuadroCastigo: -1
+    castigoMinimo: 0
+  - id: embestida_medialuna
+    nombre: Embestida y media luna
+    clip: attack1
+    alcance: 7
+    frecuencia: 0.8
+    golpes:
+    - nombre: Media luna y estocada
+      peso: 0
+      senal: 0
+      activoDesde: 2
+      activoHasta: 11
+      cuadroPausa: 0
+      pausaVariable: {x: 0, y: 0}
+      aviso: 0.4
+      dano: 22
+      cajaCentro: {x: 2.2, y: 1.8}
+      cajaTamano: {x: 3.6, y: 2.8}
+      origenX: 0
+      parryCancelaFase1: 0
+      quemadura: 0
+    - nombre: Aterrizaje
+      peso: 1
+      senal: 12
+      activoDesde: 18
+      activoHasta: 21
+      cuadroPausa: -1
+      pausaVariable: {x: 0, y: 0}
+      aviso: 0.6
+      dano: 34
+      cajaCentro: {x: 1.4, y: 0.9}
+      cajaTamano: {x: 3.4, y: 1.8}
+      origenX: 0
+      parryCancelaFase1: 0
+      quemadura: 30
+    recuperacion: 0.4
+    moverDesde: 4
+    moverHasta: 17
+    pararAntes: 1.2
+    distanciaMax: 7
+    salto: 1
+    contraataque: 0
+    admiteRetraso: 0
+    hechizosFase2:
+    - tipo: 4
+      activo: 1
+      golpe: 1
+      momento: 0
+      retraso: 0
+      soloSiEsElUltimo: 1
+      desdeElEco: 0
+      dano: 20
+      aviso: 1.2
+      cantidad: 2
+      separacion: 5
+      distancia: 0
+      velocidad: 9
+      duracion: 1
+      radio: 5
+      fuerza: 3
+      sangrado: 0
+    cuadroCastigo: -1
+    castigoMinimo: 0
+  - id: salto_estela
+    nombre: Salto y estela
+    clip: attack6
+    alcance: 8
+    frecuencia: 0.7
+    golpes:
+    - nombre: Tajo desde arriba
+      peso: 1
+      senal: 0
+      activoDesde: 6
+      activoHasta: 6
+      cuadroPausa: 1
+      pausaVariable: {x: 0, y: 0}
+      aviso: 0.6
+      dano: 34
+      cajaCentro: {x: 0.8, y: 1.2}
+      cajaTamano: {x: 3, y: 2.4}
+      origenX: 0
+      parryCancelaFase1: 0
+      quemadura: 30
+    - nombre: Ola baja
+      peso: 0
+      senal: 7
+      activoDesde: 13
+      activoHasta: 13
+      cuadroPausa: -1
+      pausaVariable: {x: 0, y: 0}
+      aviso: 0.6
+      dano: 24
+      cajaCentro: {x: -3.2, y: 0.6}
+      cajaTamano: {x: 5, y: 1.2}
+      origenX: 0
+      parryCancelaFase1: 0
+      quemadura: 0
+    recuperacion: 0.2
+    moverDesde: 2
+    moverHasta: 6
+    pararAntes: 0.8
+    distanciaMax: 8
+    salto: 1
+    contraataque: 0
+    admiteRetraso: 0
+    hechizosFase2:
+    - tipo: 5
+      activo: 1
+      golpe: 0
+      momento: 1
+      retraso: 0
+      soloSiEsElUltimo: 0
+      desdeElEco: 0
+      dano: 20
+      aviso: 1.25
+      cantidad: 3
+      separacion: 1.6
+      distancia: -1.6
+      velocidad: 9
+      duracion: 1
+      radio: 5
+      fuerza: 3
+      sangrado: 30
+    cuadroCastigo: 14
+    castigoMinimo: 1.4
+  - id: cruce_sangre
+    nombre: Cruce de sangre
+    clip: attack5
+    alcance: 8
+    frecuencia: 0.8
+    golpes:
+    - nombre: Embestida
+      peso: 0
+      senal: 0
+      activoDesde: 8
+      activoHasta: 11
+      cuadroPausa: 0
+      pausaVariable: {x: 0, y: 0}
+      aviso: 0.8
+      dano: 22
+      cajaCentro: {x: 1.4, y: 1.1}
+      cajaTamano: {x: 2.6, y: 1.2}
+      origenX: 0
+      parryCancelaFase1: 0
+      quemadura: 0
+    - nombre: Tajo del eco
+      peso: 0
+      senal: 16
+      activoDesde: 20
+      activoHasta: 20
+      cuadroPausa: -1
+      pausaVariable: {x: 0, y: 0}
+      aviso: 0.4
+      dano: 22
+      cajaCentro: {x: 3.2, y: 1.6}
+      cajaTamano: {x: 4.4, y: 3}
+      origenX: 4.6
+      parryCancelaFase1: 0
+      quemadura: 0
+    - nombre: Tajo del Impaler
+      peso: 1
+      senal: 21
+      activoDesde: 22
+      activoHasta: 23
+      cuadroPausa: 21
+      pausaVariable: {x: 0, y: 0}
+      aviso: 0.6
+      dano: 32
+      cajaCentro: {x: 1.6, y: 1.6}
+      cajaTamano: {x: 2.6, y: 3}
+      origenX: 0
+      parryCancelaFase1: 0
+      quemadura: 30
+    recuperacion: 0.3
+    moverDesde: 4
+    moverHasta: 11
+    pararAntes: 2.6
+    distanciaMax: 6
+    salto: 0
+    contraataque: 0
+    admiteRetraso: 1
+    hechizosFase2:
+    - tipo: 2
+      activo: 1
+      golpe: 2
+      momento: 2
+      retraso: 0.3
+      soloSiEsElUltimo: 1
+      desdeElEco: 1
+      dano: 18
+      aviso: 0.9
+      cantidad: 1
+      separacion: 2
+      distancia: 0.5
+      velocidad: 7
+      duracion: 1
+      radio: 5
+      fuerza: 3
+      sangrado: 25
+    cuadroCastigo: -1
+    castigoMinimo: 0
+  - id: contraataque
+    nombre: Contraataque blanco
+    clip: counter
+    alcance: 2.5
+    frecuencia: 0.5
+    golpes:
+    - nombre: Tajo blanco
+      peso: 2
+      senal: 0
+      activoDesde: 1
+      activoHasta: 3
+      cuadroPausa: 0
+      pausaVariable: {x: 0, y: 0}
+      aviso: 0.45
+      dano: 34
+      cajaCentro: {x: 1, y: 1.7}
+      cajaTamano: {x: 2.8, y: 3.2}
+      origenX: 0
+      parryCancelaFase1: 0
+      quemadura: 0
+    recuperacion: 0.4
+    moverDesde: -1
+    moverHasta: -1
+    pararAntes: 1
+    distanciaMax: 6
+    salto: 0
+    contraataque: 1
+    admiteRetraso: 0
+    hechizosFase2: []
+    cuadroCastigo: -1
+    castigoMinimo: 0
