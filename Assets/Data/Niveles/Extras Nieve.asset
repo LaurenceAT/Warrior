@@ -1,0 +1,661 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6b380b6b42a841429fe166c63d8a825, type: 3}
+  m_Name: Extras Nieve
+  m_EditorClassIdentifier: 
+  rutaDiagrama: Assets/SPRITES PARA NUEVOS NIVELES/nivel nieve.drawio
+  dibujoPorCasillaX: 30
+  dibujoPorCasillaY: 50
+  anclaDibujo: {x: 9220, y: -80}
+  anclaMundo: {x: 362, y: 3}
+  huecos:
+  - _KMwPsTR1U-Knyks7b6p-10
+  bajanAlFondo: []
+  noBajanAlFondo: []
+  rocasExtra:
+  - nombre: Pared del principio
+    dibujo:
+      serializedVersion: 2
+      x: -460
+      y: -800
+      width: 60
+      height: 2510
+    motivo: Cierra el nivel por la izquierda (como en la nieve de siempre).
+  - nombre: "Suelo del \xE9lite alargado"
+    dibujo:
+      serializedVersion: 2
+      x: 7510
+      y: 560
+      width: 97
+      height: 240
+    motivo: "D1: el salto del \xFAltimo escal\xF3n al suelo del \xE9lite med\xEDa
+      7,9 u con viento en contra; ahora 5 u."
+  - nombre: Repisa 1 (pared de la hoguera 3)
+    dibujo:
+      serializedVersion: 2
+      x: 8560
+      y: 470
+      width: 60
+      height: 50
+    motivo: 'D1: el bloque de la hoguera 3 sube 11 u; se escala por repisas de 2
+      u.'
+  - nombre: Repisa 2
+    dibujo:
+      serializedVersion: 2
+      x: 8650
+      y: 370
+      width: 60
+      height: 50
+    motivo: 'D1: escalera de repisas.'
+  - nombre: Repisa 3
+    dibujo:
+      serializedVersion: 2
+      x: 8560
+      y: 270
+      width: 60
+      height: 50
+    motivo: 'D1: escalera de repisas.'
+  - nombre: Repisa 4
+    dibujo:
+      serializedVersion: 2
+      x: 8650
+      y: 170
+      width: 60
+      height: 50
+    motivo: 'D1: escalera de repisas.'
+  - nombre: Repisa 5
+    dibujo:
+      serializedVersion: 2
+      x: 8560
+      y: 70
+      width: 60
+      height: 50
+    motivo: "D1: escalera de repisas; desde aqu\xED se sube al bloque y a la plataforma
+      del \xE9lite."
+  - nombre: Plataforma 15 alargada
+    dibujo:
+      serializedVersion: 2
+      x: 8313
+      y: 220
+      width: 157
+      height: 140
+    motivo: 'D1: repisa delante de la pared falsa del escondite 17 (se llega desde
+      la repisa 3).'
+  - nombre: Plataforma 14 alargada
+    dibujo:
+      serializedVersion: 2
+      x: 8455
+      y: -120
+      width: 75
+      height: 140
+    motivo: "D1: acerca la plataforma del \xE9lite a la repisa 5."
+  interiores:
+  - nombre: Escondite 4
+    dibujo:
+      serializedVersion: 2
+      x: 520
+      y: 540
+      width: 310
+      height: 230
+    motivo: 
+  - nombre: Pasillo del atajo (7)
+    dibujo:
+      serializedVersion: 2
+      x: 2001
+      y: -40
+      width: 369
+      height: 280
+    motivo: 
+  - nombre: Pasillo y arena del minijefe
+    dibujo:
+      serializedVersion: 2
+      x: 3160
+      y: 740
+      width: 1440
+      height: 440
+    motivo: 
+  - nombre: Escondite 17
+    dibujo:
+      serializedVersion: 2
+      x: 7960
+      y: 20
+      width: 353
+      height: 200
+    motivo: 
+  - nombre: "Cueva del \xE9lite"
+    dibujo:
+      serializedVersion: 2
+      x: 7960
+      y: -420
+      width: 750
+      height: 980
+    motivo: 
+  paredFondoBajoY: 320
+  inicioX: -340
+  hogueras:
+  - id: zw7YbKTSLgx7DL8a7zN3-28
+    nombreLugar: Paso de la Zanja
+  - id: zw7YbKTSLgx7DL8a7zN3-50
+    nombreLugar: Bajo el Viento
+  - id: zw7YbKTSLgx7DL8a7zN3-53
+    nombreLugar: Antesala de la Sombra
+  saltos:
+  - nombre: Zanja (zona inicial)
+    desde: {x: 440, y: 310}
+    hasta: {x: 520, y: 310}
+    principal: 1
+    soloCon: 
+  - nombre: "Escal\xF3n a la hoguera 1"
+    desde: {x: 570, y: 310}
+    hasta: {x: 570, y: 270}
+    principal: 1
+    soloCon: 
+  - nombre: "Plataforma alta \u2192 bloque de x 3320"
+    desde: {x: 3320, y: 360}
+    hasta: {x: 3320, y: 320}
+    principal: 1
+    soloCon: 
+  - nombre: "Bloque de x 3320 \u2192 hoguera 2"
+    desde: {x: 4080, y: 320}
+    hasta: {x: 4080, y: 210}
+    principal: 1
+    soloCon: 
+  - nombre: Agua (13)
+    desde: {x: 5360, y: 210}
+    hasta: {x: 5880, y: 210}
+    principal: 1
+    soloCon: el puente de hielo (paso 5)
+  - nombre: "Orilla \u2192 escal\xF3n 1"
+    desde: {x: 6270, y: 210}
+    hasta: {x: 6366, y: 200}
+    principal: 1
+    soloCon: 
+  - nombre: "Escal\xF3n 1 \u2192 escal\xF3n 2"
+    desde: {x: 6616, y: 200}
+    hasta: {x: 6760, y: 320}
+    principal: 1
+    soloCon: 
+  - nombre: "Escal\xF3n 2 \u2192 escal\xF3n 3"
+    desde: {x: 7010, y: 320}
+    hasta: {x: 7120, y: 480}
+    principal: 1
+    soloCon: 
+  - nombre: "Escal\xF3n 3 \u2192 suelo del \xE9lite"
+    desde: {x: 7370, y: 480}
+    hasta: {x: 7510, y: 560}
+    principal: 1
+    soloCon: 
+  - nombre: "Suelo del \xE9lite \u2192 repisa 1"
+    desde: {x: 8560, y: 560}
+    hasta: {x: 8560, y: 470}
+    principal: 1
+    soloCon: 
+  - nombre: "Repisa 1 \u2192 repisa 2"
+    desde: {x: 8620, y: 470}
+    hasta: {x: 8650, y: 370}
+    principal: 1
+    soloCon: 
+  - nombre: "Repisa 2 \u2192 repisa 3"
+    desde: {x: 8650, y: 370}
+    hasta: {x: 8620, y: 270}
+    principal: 1
+    soloCon: 
+  - nombre: "Repisa 3 \u2192 repisa 4"
+    desde: {x: 8620, y: 270}
+    hasta: {x: 8650, y: 170}
+    principal: 1
+    soloCon: 
+  - nombre: "Repisa 4 \u2192 repisa 5"
+    desde: {x: 8650, y: 170}
+    hasta: {x: 8620, y: 70}
+    principal: 1
+    soloCon: 
+  - nombre: "Repisa 5 \u2192 bloque de la hoguera 3"
+    desde: {x: 8620, y: 70}
+    hasta: {x: 8710, y: 40}
+    principal: 1
+    soloCon: 
+  - nombre: "Bloque de la hoguera 3 \u2192 arena de la Sombra"
+    desde: {x: 9220, y: 40}
+    hasta: {x: 9220, y: -80}
+    principal: 1
+    soloCon: 
+  - nombre: "Camino bajo \u2192 plataformas (viento)"
+    desde: {x: 2440, y: 960}
+    hasta: {x: 2730, y: 550}
+    principal: 1
+    soloCon: la corriente de viento (paso 5)
+  - nombre: "Hoguera 1 \u2192 camino alto"
+    desde: {x: 1030, y: 270}
+    hasta: {x: 1200, y: 360}
+    principal: 0
+    soloCon: 
+  - nombre: "Camino alto \u2192 escal\xF3n de la arquera"
+    desde: {x: 1680, y: 360}
+    hasta: {x: 1680, y: 240}
+    principal: 0
+    soloCon: 
+  - nombre: Camino alto de vuelta a la hoguera 1
+    desde: {x: 1200, y: 360}
+    hasta: {x: 1030, y: 270}
+    principal: 0
+    soloCon: 
+  - nombre: "Camino bajo \u2192 escondite 4 (sobre la ca\xEDda)"
+    desde: {x: 1160, y: 840}
+    hasta: {x: 1040, y: 770}
+    principal: 0
+    soloCon: 
+  - nombre: "Hielo \u2192 plataforma de x 2835"
+    desde: {x: 2440, y: 960}
+    hasta: {x: 2835, y: 1080}
+    principal: 0
+    soloCon: 
+  - nombre: "Repisa 3 \u2192 escondite 17"
+    desde: {x: 8560, y: 270}
+    hasta: {x: 8470, y: 220}
+    principal: 0
+    soloCon: 
+  - nombre: "Repisa 5 \u2192 plataforma del \xE9lite"
+    desde: {x: 8560, y: 70}
+    hasta: {x: 8530, y: -120}
+    principal: 0
+    soloCon: 
+  - nombre: "Bloque de la hoguera 3 \u2192 plataforma del \xE9lite"
+    desde: {x: 8710, y: 40}
+    hasta: {x: 8530, y: -120}
+    principal: 0
+    soloCon: 
+  zonasOcultas:
+  - nombre: Escondite 4 (tras la pared falsa de x 830)
+    dibujo:
+      serializedVersion: 2
+      x: 520
+      y: 540
+      width: 310
+      height: 230
+    motivo: 
+  - nombre: Arena del minijefe (tras la pared falsa de x 3400)
+    dibujo:
+      serializedVersion: 2
+      x: 3430
+      y: 740
+      width: 1170
+      height: 440
+    motivo: 
+  - nombre: Escondite 17 (tras la pared falsa de x 8283)
+    dibujo:
+      serializedVersion: 2
+      x: 7960
+      y: 20
+      width: 323
+      height: 200
+    motivo: 
+  refugios:
+  - 4950
+  - 5320
+  - 6230
+  - 7300
+  corrientes:
+  - nombre: "Corriente del vac\xEDo (9)"
+    dibujo:
+      serializedVersion: 2
+      x: 2440
+      y: -40
+      width: 470
+      height: 1800
+    motivo: "D3: del techo al fondo del vac\xEDo. Sube a las plataformas, al bloque
+      de x 3320 y al lado derecho de la pared (7)."
+  alturaVentisca: {x: -640, y: 700}
+  cofres:
+  - id: _KMwPsTR1U-Knyks7b6p-13
+    mejora: 0
+    almas: 300
+    objeto: 2
+    extra: 
+  - id: -DoK03zRAVoyxfRnJ7wk-3
+    mejora: 0
+    almas: 500
+    objeto: 2
+    extra: 
+  - id: -DoK03zRAVoyxfRnJ7wk-9
+    mejora: 1
+    almas: 300
+    objeto: 2
+    extra: 
+  - id: -DoK03zRAVoyxfRnJ7wk-5
+    mejora: 1
+    almas: 300
+    objeto: 4
+    extra: 
+  enemigos:
+  - id: zw7YbKTSLgx7DL8a7zN3-40
+    prefab: RataEscarcha
+    emboscada: 0
+    flanquear: 0
+    retirarse: 0
+    avisar: 0
+    porque: "La primera, sola, en la zona tranquila: ense\xF1a a pelear."
+  - id: zw7YbKTSLgx7DL8a7zN3-39
+    prefab: RataEscarcha
+    emboscada: 1
+    flanquear: 0
+    retirarse: 0
+    avisar: 0
+    porque: "Escondida en un mont\xEDculo: ense\xF1a la emboscada antes de la zanja."
+  - id: zw7YbKTSLgx7DL8a7zN3-36
+    prefab: RataEscarcha
+    emboscada: 0
+    flanquear: 1
+    retirarse: 0
+    avisar: 0
+    porque: "Cuerpo a cuerpo abajo mientras la arquera dispara desde el escal\xF3n
+      (flanquea)."
+  - id: zw7YbKTSLgx7DL8a7zN3-37
+    prefab: ArqueraArcana
+    emboscada: 0
+    flanquear: 0
+    retirarse: 0
+    avisar: 0
+    porque: "En el escal\xF3n alto: combinaci\xF3n con la rata."
+  - id: zw7YbKTSLgx7DL8a7zN3-41
+    prefab: RataEscarcha
+    emboscada: 1
+    flanquear: 0
+    retirarse: 0
+    avisar: 0
+    porque: "Sale de un mont\xEDculo al caer al camino bajo."
+  - id: zw7YbKTSLgx7DL8a7zN3-42
+    prefab: HechiceroSombrio
+    emboscada: 0
+    flanquear: 0
+    retirarse: 0
+    avisar: 0
+    porque: 'El duro del tramo: con armadura y sobre el hielo, antes del viento.'
+  - id: zw7YbKTSLgx7DL8a7zN3-43
+    prefab: OjoVigia
+    emboscada: 0
+    flanquear: 0
+    retirarse: 0
+    avisar: 0
+    porque: Dispara de lejos mientras esperas el viento.
+  - id: zw7YbKTSLgx7DL8a7zN3-44
+    prefab: MurcielagoCumbres
+    emboscada: 0
+    flanquear: 0
+    retirarse: 0
+    avisar: 0
+    porque: Picado en arco entre las plataformas.
+  - id: zw7YbKTSLgx7DL8a7zN3-45
+    prefab: MurcielagoCumbres
+    emboscada: 0
+    flanquear: 0
+    retirarse: 0
+    avisar: 0
+    porque: Acosa al entrar en la ventisca.
+  - id: zw7YbKTSLgx7DL8a7zN3-46
+    prefab: OjoVigia
+    emboscada: 0
+    flanquear: 0
+    retirarse: 0
+    avisar: 2
+    porque: 'Sobre el lago: dispara mientras lo congelas y avisa a los cercanos.'
+  - id: zw7YbKTSLgx7DL8a7zN3-47
+    prefab: MurcielagoCumbres
+    emboscada: 0
+    flanquear: 0
+    retirarse: 0
+    avisar: 0
+    porque: Entre los escalones.
+  - id: zw7YbKTSLgx7DL8a7zN3-48
+    prefab: OjoVigia
+    emboscada: 0
+    flanquear: 0
+    retirarse: 0
+    avisar: 0
+    porque: "Antes del \xFAltimo salto, con viento en contra."
+  - id: zw7YbKTSLgx7DL8a7zN3-21
+    prefab: EliteMorgath
+    emboscada: 0
+    flanquear: 0
+    retirarse: 0
+    avisar: 0
+    porque: "El \xE9lite de la nieve, sobre la plataforma del cofre."
+  sellos:
+  - nombre: ensenanza
+    plantilla: claro
+    elemento: 3
+    ensenanza: 1
+    pos: {x: 700, y: 770}
+    runa: {x: 650, y: 770}
+  - nombre: muro
+    plantilla: muro
+    elemento: 0
+    ensenanza: 0
+    pos: {x: 4000, y: 320}
+    runa: {x: 3930, y: 320}
+  - nombre: bloque
+    plantilla: atalaya
+    elemento: 0
+    ensenanza: 0
+    pos: {x: 8090, y: -120}
+    runa: {x: 8160, y: -120}
+  - nombre: cripta
+    plantilla: cripta
+    elemento: 3
+    ensenanza: 0
+    pos: {x: 3650, y: 1080}
+    runa: {x: 3600, y: 1080}
+  runaLago: {x: 5300, y: 210}
+  estatuas:
+  - id: estatua_1
+    pos: {x: -300, y: 310}
+  - id: estatua_cripta
+    pos: {x: 250, y: 310}
+  - id: estatua_claro
+    pos: {x: 900, y: 270}
+  - id: estatua_2
+    pos: {x: 1600, y: 840}
+  - id: estatua_picadores
+    pos: {x: 2150, y: 240}
+  - id: estatua_6
+    pos: {x: 3550, y: 1080}
+  - id: estatua_5
+    pos: {x: 3880, y: 320}
+  - id: estatua_3
+    pos: {x: 4250, y: 210}
+  - id: estatua_ermitano
+    pos: {x: 4700, y: 210}
+  - id: estatua_4
+    pos: {x: 5250, y: 210}
+  - id: estatua_vigias
+    pos: {x: 7700, y: 560}
+  - id: estatua_7
+    pos: {x: 9100, y: 40}
+  decoracion:
+  - nombre: Zona inicial (campamento)
+    dibujo:
+      serializedVersion: 2
+      x: -400
+      y: 200
+      width: 840
+      height: 200
+    piezas:
+    - nombre: Tienda
+      cantidad: 1
+    - nombre: Pino
+      cantidad: 3
+    - nombre: PinoFondo
+      cantidad: 2
+    - nombre: Mata
+      cantidad: 2
+    - nombre: Roca
+      cantidad: 2
+    - nombre: hierba helada
+      cantidad: 2
+  - nombre: Hoguera 1
+    dibujo:
+      serializedVersion: 2
+      x: 570
+      y: 200
+      width: 460
+      height: 100
+    piezas:
+    - nombre: Pino
+      cantidad: 1
+    - nombre: Mata
+      cantidad: 1
+    - nombre: piedrecillas
+      cantidad: 1
+  - nombre: Escondite 4
+    dibujo:
+      serializedVersion: 2
+      x: 520
+      y: 700
+      width: 310
+      height: 100
+    piezas:
+    - nombre: roca nevada
+      cantidad: 1
+  - nombre: Camino alto (bosque)
+    dibujo:
+      serializedVersion: 2
+      x: 1200
+      y: 150
+      width: 830
+      height: 250
+    piezas:
+    - nombre: Pino
+      cantidad: 2
+    - nombre: PinoFondo
+      cantidad: 2
+    - nombre: arbusto nevado
+      cantidad: 1
+    - nombre: Mata
+      cantidad: 1
+  - nombre: Pasillo del atajo
+    dibujo:
+      serializedVersion: 2
+      x: 2090
+      y: 180
+      width: 280
+      height: 100
+    piezas:
+    - nombre: piedrecillas
+      cantidad: 1
+    - nombre: roca nevada
+      cantidad: 1
+  - nombre: Camino bajo helado (cueva)
+    dibujo:
+      serializedVersion: 2
+      x: 1160
+      y: 780
+      width: 1280
+      height: 220
+    piezas:
+    - nombre: Roca
+      cantidad: 2
+    - nombre: roca nevada
+      cantidad: 2
+    - nombre: hierba helada
+      cantidad: 1
+    - nombre: piedrecillas
+      cantidad: 1
+  - nombre: Pasillo y arena del minijefe (cripta)
+    dibujo:
+      serializedVersion: 2
+      x: 3160
+      y: 1030
+      width: 1440
+      height: 200
+    piezas:
+    - nombre: Roca
+      cantidad: 2
+    - nombre: lapida vieja
+      cantidad: 1
+    - nombre: piedrecillas
+      cantidad: 2
+  - nombre: Hoguera 2 (bajo el viento)
+    dibujo:
+      serializedVersion: 2
+      x: 3320
+      y: 150
+      width: 1280
+      height: 230
+    piezas:
+    - nombre: Pino
+      cantidad: 2
+    - nombre: PinoFondo
+      cantidad: 2
+    - nombre: Mata
+      cantidad: 2
+    - nombre: RocaGrande
+      cantidad: 1
+    - nombre: arbusto nevado
+      cantidad: 1
+  - nombre: Ventisca (arboles secos)
+    dibujo:
+      serializedVersion: 2
+      x: 4600
+      y: 150
+      width: 2870
+      height: 360
+    piezas:
+    - nombre: arbol seco
+      cantidad: 3
+    - nombre: roca nevada
+      cantidad: 2
+    - nombre: arbusto nevado
+      cantidad: 1
+    - nombre: hierba helada
+      cantidad: 1
+  - nombre: "Zona del \xE9lite"
+    dibujo:
+      serializedVersion: 2
+      x: 7607
+      y: 500
+      width: 1103
+      height: 100
+    piezas:
+    - nombre: Roca
+      cantidad: 2
+    - nombre: arbol seco
+      cantidad: 1
+    - nombre: piedrecillas
+      cantidad: 2
+  - nombre: Antesala de la Sombra
+    dibujo:
+      serializedVersion: 2
+      x: 8710
+      y: -20
+      width: 510
+      height: 100
+    piezas:
+    - nombre: PinoFondo
+      cantidad: 2
+    - nombre: lapida vieja
+      cantidad: 1
+    - nombre: arbol seco
+      cantidad: 1
+    - nombre: Mata
+      cantidad: 1
+  semillaDeco: 1919
+  minijefes:
+  - nombre: Martial Hero
+    prefab: {fileID: 8067038883554369995, guid: 8acdd8d21dc7f004790ebffb30b2795e, type: 3}
+    clave: martial
+    arena:
+      serializedVersion: 2
+      x: 3722
+      y: 740
+      width: 878
+      height: 440
+    musicaDelNivel: 1

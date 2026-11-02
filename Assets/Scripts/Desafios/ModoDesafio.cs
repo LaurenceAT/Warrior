@@ -33,7 +33,9 @@ public class ModoDesafio : MonoBehaviour
         Desafio.Reiniciando = false;
         IndicadorInventario.Asegurar();
         IndicadorDeseo.Asegurar();
-        arena = FindFirstObjectByType<ArenaJefe>();
+        // El jefe del nivel (no un minijefe opcional de la misma escena).
+        foreach (ArenaJefe a in FindObjectsByType<ArenaJefe>(FindObjectsSortMode.None))
+            if (a.EsPrincipal) { arena = a; break; }
         if (arena == null) arena = FindFirstObjectByType<ArenaCazadora>();
         if (arena == null) { Debug.LogWarning("[Desafio] La escena no tiene ArenaJefe"); return; }
         Bounds zona = LimitesArena();

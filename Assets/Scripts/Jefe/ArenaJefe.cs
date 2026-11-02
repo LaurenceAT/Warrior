@@ -62,6 +62,15 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
     [SerializeField] private Color colorBarraFase2 = new Color(0.25f, 0.6f, 0.95f, 1f);
     [SerializeField] private string nombreFase2 = "";
 
+    [Header("Jefe principal o minijefe")]
+    [Tooltip("Marcado: el jefe del nivel (su victoria cuenta para la partida, la Bitacora, los logros y el desafio). " +
+             "Desmarcado: un minijefe opcional, que solo guarda su propia bandera y no avisa a nadie mas.")]
+    [SerializeField] private bool jefePrincipal = true;
+    [Tooltip("Solo minijefes: nombre de su bandera de vencido (minijefe_<escena>_<clave>).")]
+    [SerializeField] private string claveMinijefe = "minijefe";
+    public bool EsPrincipal => jefePrincipal;
+    private string BanderaVencido => jefePrincipal ? "jefe_" + gameObject.scene.name : "minijefe_" + gameObject.scene.name + "_" + claveMinijefe;
+
     [Header("Recompensa")]
     [Tooltip("Objetos de mejora que da el jefe al caer (uno por entrada). El player los levanta, como en los Souls. Solo la primera vez.")]
     [SerializeField] private Equipo.Objeto[] recompensa = new Equipo.Objeto[0];
@@ -142,7 +151,7 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
         if (salida != null) salida.SetActive(false);
 
         // Jefe ya vencido en esta partida: la arena queda abierta y la salida puesta.
-        if (Partida.Bandera("jefe_" + gameObject.scene.name))
+        if (Partida.Bandera(BanderaVencido))
         {
             estado = Estado.Vencido;
             if (salida != null) salida.SetActive(true);
@@ -220,7 +229,7 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
         pocionUsada = false;
         PantallaMuerte.BurlasJefe = burlas != null && burlas.Length > 0 ? burlas : null;
         AlEmpezarCombate?.Invoke();
-        Bitacora.Intento(FichaJefe.DeEscena(gameObject.scene.name));
+        if (jefePrincipal) Bitacora.Intento(FichaJefe.DeEscena(gameObject.scene.name));
 
         if (musica != null) Sonar(audioSrc, musica, inicioFase1, bucleFase1, volumen, 2f);
 
@@ -298,7 +307,9 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
         if (salida != null) salida.SetActive(true);
         StartCoroutine(TenirLuz(luzOriginal, intensidadOriginal, 3f));
         if (brasas != null) brasas.Stop();
-        AlVencer?.Invoke();
+        // El jefe del nivel avisa a todos (partida, Bitacora, logros, desafio); un minijefe solo apunta lo suyo.
+        if (jefePrincipal) AlVencer?.Invoke();
+        else Partida.PonerBandera(BanderaVencido);
         StartCoroutine(DarRecompensa());
 
         // Reconocimientos del reto, despues del cartel.
@@ -316,7 +327,7 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
     // por partida).
     private IEnumerator DarRecompensa()
     {
-        string clave = "recompensa_" + gameObject.scene.name;
+        string clave = jefePrincipal ? "recompensa_" + gameObject.scene.name : "recompensa_" + gameObject.scene.name + "_" + claveMinijefe;
         if (recompensa == null || recompensa.Length == 0 || Partida.Bandera(clave)) yield break;
         Partida.PonerBandera(clave);
         yield return new WaitForSeconds(2.5f);

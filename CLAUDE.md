@@ -140,6 +140,7 @@ Jefe secreto (solo en Desafíos): The Blind Huntress, en la escena `Bosque Cazad
 - El progreso también se guarda en PlayerPrefs; al probar escenas sueltas en el editor pueden quedar niveles de otra prueba.
 - Para las pruebas en batchmode, Unity tiene que estar cerrado.
 - Toda prueba automática nueva debe llamar a `ArranquePruebas.Proteger()` justo antes de `EditorApplication.EnterPlaymode()`: así desde el primer fotograma se guarda en `PruebaNieve/PartidasArranque` y nunca en el progreso real (`Partida.CarpetaPruebas` lo toma de ahí en batchmode).
+- Las pruebas automáticas van EN SILENCIO: toda prueba pone `AudioListener.volume = 0` desde que empieza, salvo que necesite oír el sonido para comprobarlo (comprobar que una pista "suena" con `isPlaying` no necesita volumen). Antes de lanzar una prueba antigua que todavía suene, avisar al usuario.
 
 ## Reglas para trabajar conmigo
 - No soy experto: explícame las cosas de forma sencilla.
