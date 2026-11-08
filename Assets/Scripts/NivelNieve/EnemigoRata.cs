@@ -46,7 +46,7 @@ public class EnemigoRata : EnemigoBase
     {
         if (player == null) return Elemento.Ninguno;
         ArmaImbuida a = player.GetComponent<ArmaImbuida>();
-        return a != null ? a.Activo : Elemento.Ninguno;
+        return a != null ? a.ElementoDano : Elemento.Ninguno;
     }
 
     // Escarcha: se crece (ataca antes y no se retira). Fuego: cauta.

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 // Rueda radial para imbuir la espada (tecla E). Mientras esta abierta el juego va
 // a camara lenta. Se elige apuntando con el raton, con la direccion (WASD /
-// flechas / stick) o con las teclas 1-5; se confirma con clic, E, Enter o el
+// flechas / stick) o con las teclas 1-6; se confirma con clic, E, Enter o el
 // boton sur del mando, y se cancela con clic derecho, Escape o el boton este.
 public class RuedaImbuir : MonoBehaviour
 {
@@ -20,9 +20,9 @@ public class RuedaImbuir : MonoBehaviour
 
     private CanvasGroup grupo;
     private RectTransform centro;
-    private readonly Image[] fondos = new Image[Elementos.Cantidad];
-    private readonly Image[] iconos = new Image[Elementos.Cantidad];
-    private readonly RectTransform[] ranuras = new RectTransform[Elementos.Cantidad];
+    private readonly Image[] fondos = new Image[Elementos.CantidadRueda];
+    private readonly Image[] iconos = new Image[Elementos.CantidadRueda];
+    private readonly RectTransform[] ranuras = new RectTransform[Elementos.CantidadRueda];
     private TextMeshProUGUI nombre, efecto, coste, aviso;
     private Image anilloActivo;
 
@@ -34,7 +34,7 @@ public class RuedaImbuir : MonoBehaviour
     private Func<Elemento, string> impedimento;
     private Elemento actual;
 
-    private Elemento Seleccionado => elegido >= 0 ? Elementos.Todos[elegido] : Elemento.Ninguno;
+    private Elemento Seleccionado => elegido >= 0 ? Elementos.Rueda[elegido] : Elemento.Ninguno;
 
     // Abre la rueda. "impedimento" dice por que no se puede imbuir ahora (o null).
     public static void Abrir(Elemento actual, Func<Elemento, string> impedimento, Action<Elemento> alElegir)
@@ -110,7 +110,7 @@ public class RuedaImbuir : MonoBehaviour
             SonidoMenu.Error();
             return;
         }
-        Elemento e = Elementos.Todos[elegido];
+        Elemento e = Elementos.Rueda[elegido];
         CerrarInterno();
         alElegir?.Invoke(e);
     }
@@ -125,6 +125,7 @@ public class RuedaImbuir : MonoBehaviour
             if (k.digit3Key.wasPressedThisFrame) { elegido = 2; return; }
             if (k.digit4Key.wasPressedThisFrame) { elegido = 3; return; }
             if (k.digit5Key.wasPressedThisFrame) { elegido = 4; return; }
+            if (k.digit6Key.wasPressedThisFrame) { elegido = 5; return; }
         }
 
         Vector2 dir = Vector2.zero;
@@ -149,7 +150,7 @@ public class RuedaImbuir : MonoBehaviour
 
         // La ranura mas cercana a esa direccion.
         float mejor = -2f;
-        for (int i = 0; i < Elementos.Cantidad; i++)
+        for (int i = 0; i < Elementos.CantidadRueda; i++)
         {
             float p = Vector2.Dot(dir.normalized, Direccion(i));
             if (p > mejor) { mejor = p; elegido = i; }
@@ -159,15 +160,15 @@ public class RuedaImbuir : MonoBehaviour
     private static Vector2 Direccion(int i)
     {
         // La primera arriba y en el sentido de las agujas del reloj.
-        float a = (90f - i * 360f / Elementos.Cantidad) * Mathf.Deg2Rad;
+        float a = (90f - i * 360f / Elementos.CantidadRueda) * Mathf.Deg2Rad;
         return new Vector2(Mathf.Cos(a), Mathf.Sin(a));
     }
 
     private void Refrescar()
     {
-        for (int i = 0; i < Elementos.Cantidad; i++)
+        for (int i = 0; i < Elementos.CantidadRueda; i++)
         {
-            Elemento e = Elementos.Todos[i];
+            Elemento e = Elementos.Rueda[i];
             bool sel = i == elegido;
             Color c = Elementos.Color(e);
             fondos[i].color = sel ? new Color(c.r * 0.55f, c.g * 0.55f, c.b * 0.55f, 0.95f) : new Color(0.08f, 0.07f, 0.09f, 0.85f);
@@ -189,7 +190,7 @@ public class RuedaImbuir : MonoBehaviour
         }
         else
         {
-            Elemento e = Elementos.Todos[elegido];
+            Elemento e = Elementos.Rueda[elegido];
             nombre.text = Elementos.Nombre(e);
             nombre.color = Color.Lerp(Elementos.Color(e), Color.white, 0.35f);
             efecto.text = Elementos.Efecto(e);
@@ -205,6 +206,8 @@ public class RuedaImbuir : MonoBehaviour
                 PlayerMana mana = FindFirstObjectByType<PlayerMana>();
                 float cuesta = FindFirstObjectByType<ArmaImbuida>() is ArmaImbuida a ? a.CosteMana : 25f;
                 coste.text = $"<color=#6fa8ff>{cuesta:0} maná</color>" + (mana != null ? $"  <size=80%><color=#999>({mana.Actual:0}/{mana.Maximo:0})</color></size>" : "");
+                // Natura ademas se lleva toda la estamina.
+                if (e == Elemento.Natura) coste.text += "  <color=#7cdc58>+ toda la estamina</color>";
             }
         }
         string motivo = impedimento != null ? impedimento(Seleccionado) : null;
@@ -247,10 +250,9 @@ public class RuedaImbuir : MonoBehaviour
         r.anilloActivo.sprite = Anillo();
         r.anilloActivo.rectTransform.sizeDelta = new Vector2(150f, 150f);
 
-        RecursosRPG rec = RecursosRPG.Get();
-        for (int i = 0; i < Elementos.Cantidad; i++)
+        for (int i = 0; i < Elementos.CantidadRueda; i++)
         {
-            Elemento e = Elementos.Todos[i];
+            Elemento e = Elementos.Rueda[i];
             Image f = Caja("Ranura_" + e, r.centro, Color.black);
             f.sprite = Circulo();
             f.rectTransform.sizeDelta = new Vector2(122f, 122f);
@@ -265,7 +267,7 @@ public class RuedaImbuir : MonoBehaviour
             borde.rectTransform.offsetMin = borde.rectTransform.offsetMax = Vector2.zero;
 
             Image ico = Caja("Icono", f.transform, Color.white);
-            ico.sprite = rec.Icono("elemento_" + (int)e);
+            ico.sprite = Elementos.Icono(e);
             ico.preserveAspect = true;
             ico.enabled = ico.sprite != null;
             ico.rectTransform.sizeDelta = new Vector2(72f, 72f);

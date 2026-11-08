@@ -350,7 +350,7 @@ public partial class JefeCazadora : JefeBase, IModificadorDano, IAfinidadElement
             op.Add(("espejismo", Time.time - tEspejismo > 14f ? 1.1f : 0f));
             op.Add(("cerco", CercoDisponible ? 1.6f : 0f));
             ArmaImbuida arma = PC != null ? PC.GetComponent<ArmaImbuida>() : null;
-            if (arma != null && arma.Activo != Elemento.Ninguno && Time.time >= siguienteResistencia && Resistencia != arma.Activo)
+            if (arma != null && arma.ElementoDano != Elemento.Ninguno && Time.time >= siguienteResistencia && Resistencia != arma.ElementoDano)
                 op.Add(("contra", 3f));
         }
         if (fase >= 2)

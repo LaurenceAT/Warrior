@@ -1531,7 +1531,7 @@ public class PlayerControler : MonoBehaviour
             // aereos anteriores, sale directa.
             if (!isGrounded && !canWallSlide && !isWallRunning && m_gatherInput.Value.y < -0.5f)
             {
-                estamina.Spend(estamina.PlungeCost);
+                estamina.Spend(CosteAtaque(estamina.PlungeCost));
                 IniciarEstocada();
                 return;
             }
@@ -1599,7 +1599,7 @@ public class PlayerControler : MonoBehaviour
             AttackProfile perfil = PerfilDeAtaque(golpe);
 
             // Cada golpe gasta lo de su perfil: combo de suelo, pared y aereos.
-            if (perfil != null) estamina.Spend(perfil.costeEstamina);
+            if (perfil != null) estamina.Spend(CosteAtaque(perfil.costeEstamina));
             float duracion = (perfil != null && perfil.duracion > 0f) ? perfil.duracion : attackCooldown;
             float encadenar = (perfil != null) ? perfil.encadenarDesde : duracion;
 
@@ -2769,7 +2769,7 @@ public class PlayerControler : MonoBehaviour
         isImbuing = true;
         isSprinting = false;
         ReproducirEstado(estadoImbuir);
-        Sonido.Reproducir("imbuir_" + (int)e);
+        Sonido.Reproducir(Elementos.ClaveSonido("imbuir_", e));
         Color c = Elementos.Color(e);
         float dur = armaImbuida.TiempoGesto;
         float t = 0f;
@@ -2789,11 +2789,13 @@ public class PlayerControler : MonoBehaviour
         }
 
         armaImbuida.Activar(e);
+        // Natura se paga ademas con toda la estamina.
+        if (e == Elemento.Natura) estamina.Vaciar();
         ScreenFlash.Destello(new Color(c.r, c.g, c.b, 0.18f), 0.2f);
         ParticulasFx.Rafaga(m_transform.position, 26, c, Color.Lerp(c, Color.white, 0.6f), new Vector2(1.5f, 4f), -0.2f,
                             new Vector2(0.05f, 0.11f), new Vector2(0.4f, 0.8f));
         TextoFlotante.Mostrar(Elementos.Nombre(e), (Vector2)m_transform.position + Vector2.up * 1.2f, c, 0.9f);
-        Sonido.Reproducir("golpe_" + (int)e, 0.8f);
+        Sonido.Reproducir(Elementos.ClaveSonido("golpe_", e), 0.8f);
         yield return new WaitForSeconds(0.15f);
 
         isImbuing = false;
@@ -2809,7 +2811,16 @@ public class PlayerControler : MonoBehaviour
         isImbuing = false;
     }
 
-    public Elemento ElementoActivo => armaImbuida != null ? armaImbuida.Activo : Elemento.Ninguno;
+    // El elemento con el que golpea la espada. Natura no es de dano: con ella los
+    // golpes son fisicos (sin estado, tajo normal).
+    public Elemento ElementoActivo => armaImbuida != null ? armaImbuida.ElementoDano : Elemento.Ninguno;
+
+    // Lo que cuesta un ataque: con Natura, menos (AjustesProgreso.naturaCosteAtaque).
+    private float CosteAtaque(float coste)
+    {
+        if (armaImbuida != null && armaImbuida.Activo == Elemento.Natura) coste *= AjustesProgreso.Get().naturaCosteAtaque;
+        return coste;
+    }
 
     // El cambio de postura antiguo (enfundar con la E). Se conserva por si se
     // recupera el combate sin arma, pero ya no se llama.
@@ -3394,7 +3405,7 @@ public class PlayerControler : MonoBehaviour
         isAttacking = true;
         attackAnimationTimer = g.duracion;
 
-        estamina.Spend(g.costeEstamina);
+        estamina.Spend(CosteAtaque(g.costeEstamina));
         ReproducirEstado(g.estadoAnimator);
 
         switch (g.tipo)

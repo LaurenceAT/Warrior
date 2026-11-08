@@ -413,7 +413,7 @@ public class PlayerHud : MonoBehaviour
             if (icono.sprite != iconoBase) { icono.sprite = iconoBase; icono.enabled = iconoBase != null; }
             return;
         }
-        Sprite s = RecursosRPG.Get().Icono("elemento_" + (int)e);
+        Sprite s = Elementos.Icono(e);
         if (s != null && icono.sprite != s) { icono.sprite = s; icono.enabled = true; }
 
         Color c = Elementos.Color(e);

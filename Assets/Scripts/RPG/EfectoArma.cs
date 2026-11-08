@@ -7,6 +7,7 @@ using UnityEngine;
 //   - Escarcha: cristalitos claros que se desprenden.
 //   - Sagrado: destellos amarillos y blancos alrededor.
 //   - Oscuridad: jirones violetas que suben despacio.
+//   - Natura: hojitas verdes que caen meciendose.
 // Salen de un punto de la hoja en el fotograma actual (MapaHoja), asi siguen al
 // arma en los ataques y se voltean con el player. Un solo sistema de particulas
 // para todo, con muy pocas a la vez. Se apagan al acabar la imbuicion y al morir.
@@ -55,6 +56,12 @@ public class EfectoArma : MonoBehaviour
         velocidad = new Vector2(0.1f, 0.3f), gravedad = -0.05f, vida = new Vector2(0.4f, 0.7f),
     };
 
+    public Ajuste natura = new Ajuste
+    {
+        cantidad = 5f, tamano = new Vector2(0.035f, 0.06f), colorA = new Color(0.42f, 0.86f, 0.3f), colorB = new Color(0.75f, 0.95f, 0.45f),
+        velocidad = new Vector2(0.35f, 0.05f), gravedad = 0.08f, vida = new Vector2(0.5f, 0.9f),
+    };
+
     private ArmaImbuida arma;
     private PlayerControler player;
     private SpriteRenderer sr;
@@ -78,6 +85,7 @@ public class EfectoArma : MonoBehaviour
             case Elemento.Hielo: return hielo;
             case Elemento.Sagrado: return sagrado;
             case Elemento.Oscuro: return oscuro;
+            case Elemento.Natura: return natura;
             default: return null;
         }
     }

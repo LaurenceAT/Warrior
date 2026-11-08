@@ -318,8 +318,8 @@ public partial class JefeCazadora
     private IEnumerator ContraElemental()
     {
         ArmaImbuida arma = PC != null ? PC.GetComponent<ArmaImbuida>() : null;
-        if (arma == null || arma.Activo == Elemento.Ninguno) yield break;
-        Elemento e = arma.Activo;
+        if (arma == null || arma.ElementoDano == Elemento.Ninguno) yield break;
+        Elemento e = arma.ElementoDano;
         Color c = ColorElemento(e);
         cuerpo.Parar(ajustes.frenada);
         cuerpoAnim.Reproducir("quieto");

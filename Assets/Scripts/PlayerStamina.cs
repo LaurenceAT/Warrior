@@ -61,6 +61,20 @@ public class PlayerStamina : MonoBehaviour
         return estados != null ? estados.MultiplicadorRegenEstamina : 1f;
     }
 
+    // La imbuicion de Natura: mientras dura, se recupera antes y mas rapido
+    // (numeros en AjustesProgreso).
+    private ArmaImbuida arma;
+    private bool Natura
+    {
+        get
+        {
+            if (arma == null) arma = GetComponent<ArmaImbuida>();
+            return arma != null && arma.Activo == Elemento.Natura;
+        }
+    }
+    private float RitmoNatura() => Natura ? AjustesProgreso.Get().naturaRecuperacion : 1f;
+    private float EsperaNatura() => Natura ? AjustesProgreso.Get().naturaEspera : 1f;
+
     private void Awake()
     {
         maxStamina = Progreso.EstaminaMax;
@@ -108,6 +122,15 @@ public class PlayerStamina : MonoBehaviour
         return true;
     }
 
+    // Imbuir con Natura: toda la estamina fuera, pero sin quedar agotado ni
+    // esperar: empieza a recuperarse al momento (y ya con el ritmo de Natura).
+    public void Vaciar()
+    {
+        currentStamina = 0f;
+        exhausted = false;
+        esperaRegen = 0f;
+    }
+
     // Devuelve estamina de golpe (el parry).
     public void Recuperar(float cantidad)
     {
@@ -119,7 +142,7 @@ public class PlayerStamina : MonoBehaviour
         currentStamina = Mathf.Max(0f, currentStamina - Mathf.Max(0f, cantidad));
 
         // Cada gasto reinicia la espera: mientras se gasta sin parar, no regenera.
-        esperaRegen = regenDelay;
+        esperaRegen = regenDelay * EsperaNatura();
 
         if (currentStamina <= 0f) exhausted = true;
     }
@@ -133,7 +156,7 @@ public class PlayerStamina : MonoBehaviour
         }
 
         if (currentStamina < maxStamina)
-            currentStamina = Mathf.Min(maxStamina, currentStamina + regenRate * RitmoEstados() * Time.deltaTime);
+            currentStamina = Mathf.Min(maxStamina, currentStamina + regenRate * RitmoEstados() * RitmoNatura() * Time.deltaTime);
 
         if (exhausted && currentStamina >= maxStamina * exhaustedRecoverFraction)
             exhausted = false;

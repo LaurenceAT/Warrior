@@ -78,7 +78,7 @@ public class ReaccionesCazadora : MonoBehaviour
     private void Golpeada()
     {
         if (aj == null || player == null || !player.Atacando) return;
-        Elemento e = arma != null ? arma.Activo : Elemento.Ninguno;
+        Elemento e = arma != null ? arma.ElementoDano : Elemento.Ninguno;
         if (e == Elemento.Ninguno) { ultimoElemento = e; golpesElemento = 0; return; }
         golpesElemento = e == ultimoElemento ? golpesElemento + 1 : 1;
         ultimoElemento = e;

@@ -66,7 +66,7 @@ public class SelloElemental : MonoBehaviour, IGolpeable
             player = p != null ? p.transform : null;
         }
         ArmaImbuida a = player != null ? player.GetComponent<ArmaImbuida>() : null;
-        return a != null ? a.Activo : Elemento.Ninguno;
+        return a != null ? a.ElementoDano : Elemento.Ninguno;
     }
 
     private void Update()

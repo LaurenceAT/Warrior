@@ -101,6 +101,14 @@ public class AjustesProgreso : ScriptableObject
     [Tooltip("Segundos que duran los fragmentos.")]
     public float hieloDuracion = 0.6f;
 
+    [Header("Imbuir: Natura (estamina)")]
+    [Tooltip("Al imbuir se gasta toda la estamina (sin quedar agotado). Mientras dura, la estamina se recupera esta vez mas rapido (1.6 = un 60 % mas).")]
+    public float naturaRecuperacion = 1.6f;
+    [Tooltip("Espera tras gastar estamina antes de recuperarla, multiplicada por esto (0.5 = la mitad).")]
+    [Range(0f, 1f)] public float naturaEspera = 0.5f;
+    [Tooltip("Lo que cuestan los ataques mientras dura (0.6 = un 40 % menos).")]
+    [Range(0f, 1f)] public float naturaCosteAtaque = 0.6f;
+
     private static AjustesProgreso instancia;
 
     public static AjustesProgreso Get()

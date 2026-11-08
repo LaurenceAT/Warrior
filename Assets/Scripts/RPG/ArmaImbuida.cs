@@ -30,6 +30,9 @@ public class ArmaImbuida : MonoBehaviour
     public event System.Action AlCambiar;
 
     public Elemento Activo => activo;
+    // El elemento que hace algo al golpear: Natura (solo estamina) cuenta como
+    // golpe fisico para enemigos, jefes y sellos.
+    public Elemento ElementoDano => Elementos.EsDeDano(activo) ? activo : Elemento.Ninguno;
     public float CosteMana => costeMana;
     public float TiempoGesto => tiempoGesto;
     public float Restante => activo == Elemento.Ninguno ? 0f : Mathf.Max(0f, fin - Time.time);

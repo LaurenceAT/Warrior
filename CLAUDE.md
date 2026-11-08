@@ -45,6 +45,7 @@ Jefe secreto (solo en Desafíos): The Blind Huntress, en la escena `Bosque Cazad
 - El daño de los jefes es físico o mágico; cada resistencia reduce solo su tipo, con un tope del 55 %.
 - Solo los ataques especiales de los jefes aplican estados; los básicos solo hacen daño.
 - El sangrado sustituyó al ácido (mismo número de elemento, 4, para no romper datos guardados).
+- Imbuición de Natura (número 5, sexto hueco de la rueda, tecla 6): cuesta 25 de maná y vacía toda la estamina (sin quedar agotado). Mientras dura, la estamina se recupera más rápido (x1,6, y espera la mitad tras gastar) y los ataques gastan menos (x0,6); números en AjustesProgreso ("Imbuir: Natura"). No es elemento de daño: golpes físicos, no está en `Elementos.Todos` (fichas, resistencias, Bitácora siguen con 5), solo en `Elementos.Rueda`; fuera del player se lee `ArmaImbuida.ElementoDano`. Prueba: `PruebaNatura.Todo`.
 - Mejoras de frasco separadas: Lágrima carmesí (curación) y Lágrima celeste (maná), que se gastan en la hoguera; Frasco de sangre/maná (+1 carga) al momento. La vieja Lágrima sagrada cuenta como una de cada; las partidas viejas se migran al cargar (versión 2).
 - Los desafíos no usan partida: personaje nuevo, nada se guarda salvo logros, tiempos, estadísticas y lo descubierto.
 - Objetos de mejora (piedra, lágrimas, frascos de sangre/maná) en TODOS los niveles: van al inventario "por aplicar" (`Inventario`) y se aplican en la hoguera ("Aplicar mejoras"). Partida normal: piedras y lágrimas sin gastar + `frascosSangrePendientes`/`frascosManaPendientes` en la partida; desafíos: inventario del desafío (se conserva al morir, se pierde al reiniciar). Lo ya aplicado en partidas viejas se respeta.
@@ -125,6 +126,7 @@ Jefe secreto (solo en Desafíos): The Blind Huntress, en la escena `Bosque Cazad
 - Probar a mano la cueva nueva (recorrido, oscuridad, suelos falsos) y ajustar tintes, bruma y radios de luz; decidir si se borra `Cueva_Antigua` cuando ya no haga falta.
 - Probar a mano el Wraith renovado y la nueva dificultad de los enemigos (la Cueva es más dura) y ajustar números.
 - Faltan sprites de cristales, huesos, agua o lava para la cueva y un sonido de goteo (la cueva nueva no los usa), y un sonido propio de máquina de escribir (se usa el "tic" de los menús).
+- Natura: falta icono propio (`elemento_5` en RecursosRPG; mientras tanto se dibuja una hoja por código) y sonidos `imbuir_5`/`golpe_5` (usa los del sagrado). Al añadirlos en RecursosRPG se usan solos.
 - Faltan sonidos propios de compra, de logro y de "volver atrás" en los menús (se usan `mejorar_equipo`, `objeto_obtenido` y `menu_cancelar`). El candado ya es el del pack (`14-dungeon-objects/icon_12`).
 - Variantes de color de enemigos: siguen sin colocar (Morgath ya está en la Nieve y Aldren en la Cueva).
 - Nieve nueva: probarla a mano (ritmo, ventisca con refugios, emboscadas) y decidir si se borra `Nieve_Antigua`. Faltan sonidos propios de hielo que cruje/se rompe (se usan `hielo_rebote`/`hielo_romper`) y de montículo (se usa `cueva_crujido`).
