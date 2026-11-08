@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3766be17089aba648aedb68108a2ae8a, type: 3}
+  m_Name: Ajustes Bringer of Death
+  m_EditorClassIdentifier: 
+  nombreMostrado: Bringer of Death
+  vida: 3200
+  marcaFase: 0.5
+  transicion: 2.4
+  multVelocidadFase2: 1.25
+  cuerpo: {x: 1.3, y: 2.4}
+  velocidadAndar: 3.4
+  tiempoMaxAndar: 2.2
+  margenArena: 1.2
+  pausaFase1: {x: 0.7, y: 1.2}
+  pausaFase2: {x: 0.35, y: 0.75}
+  pausaInicialFase2: 0.6
+  enfriamientoArena: 9
+  fase1:
+    guadana: 3
+    mano: 1.6
+    mediaLuna: 1.4
+    ola: 1.2
+    desvanecer: 1.1
+    cosecha: 1
+    circulo: 0
+    espiritus: 0
+    cometas: 0
+    esfera: 0
+    juicio: 0
+    marea: 0
+  fase2:
+    guadana: 2.4
+    mano: 1.4
+    mediaLuna: 1
+    ola: 0.8
+    desvanecer: 1.2
+    cosecha: 1
+    circulo: 1.3
+    espiritus: 1.1
+    cometas: 1
+    esfera: 0.8
+    juicio: 0.9
+    marea: 0.9
+  colorAviso: {r: 0.75, g: 0.25, b: 1, a: 1}
+  colorHechizo: {r: 0.45, g: 1, b: 0.7, a: 1}
+  intensidadAviso: 0.6
+  danoGuadana: 38
+  avisoGuadana: 0.55
+  cajaGuadanaCentro: {x: 1.9, y: 1.2}
+  cajaGuadanaTamano: {x: 3.8, y: 2.4}
+  alcanceGuadana: 3
+  dobleFase1: 0.35
+  dobleFase2: 0.6
+  retrasoSegundo: {x: 0.15, y: 0.65}
+  recuperacionGuadana: 0.45
+  tambaleoParry: 0.55
+  aturdidoDobleParry: 1.6
+  danoMano: 30
+  seguirMano: 0.85
+  fijoMano: 0.4
+  cajaMano: {x: 1.3, y: 2.6}
+  manosFase2: 3
+  intervaloManos: 0.55
+  danoMediaLuna: 26
+  velocidadMediaLuna: 11
+  alcanceMediaLuna: 24
+  alturaBaja: 0.6
+  alturaAlta: 2.2
+  cajaMediaLuna: {x: 1.2, y: 1.1}
+  mediasLunasFase1: 1
+  mediasLunasFase2: 2
+  intervaloMediaLuna: 0.45
+  danoOla: 28
+  pasoOla: 1.9
+  intervaloOla: 0.12
+  avisoOla: 0.5
+  cajaOla: {x: 1.7, y: 1.7}
+  tiempoOculto: 0.55
+  distanciaEspalda: 1.7
+  avisoEspalda: 0.42
+  separacionCosecha: 2
+  huecosFase1: 2
+  huecosFase2: 1
+  avisoCosecha: 1.1
+  barridoCosecha: 0.05
+  danoCirculo: 32
+  circulos: 3
+  avisoCirculo: 0.8
+  intervaloCirculo: 0.5
+  cajaCirculo: {x: 2.6, y: 2.8}
+  danoEspiritu: 20
+  espiritus: 3
+  velocidadEspiritu: 4.2
+  giroEspiritu: 110
+  vidaEspiritu: 6
+  danoCometa: 24
+  cometas: 16
+  duracionLluvia: 2.8
+  avisoCometa: 0.75
+  velocidadCometa: 18
+  cajaCometa: {x: 1.6, y: 1.4}
+  cometaApuntado: 4
+  danoEsfera: 45
+  atraccion: 2.3
+  fuerzaAtraccion: 5.5
+  radioAtraccion: 14
+  cajaEsfera: {x: 3.4, y: 3.4}
+  congelacionEsfera: 60
+  danoJuicio: 34
+  tramoJuicio: 2.8
+  pasadasJuicio: 3
+  avisoJuicio: 0.9
+  entrePasadas: 0.35
+  retrasoMarea: 0.35
+  afinidadFuego: 1.1
+  afinidadHielo: 1
+  afinidadOscuro: 0.5
+  afinidadSagrado: 1.5
+  afinidadSangrado: 0.8
+  afinidadSagradoFase2: 1.8
+  fps: 10
+  fpsHechizo: 12
+  colorNecro: {r: 1, g: 1, b: 1, a: 1}
+  colorEstrellas: {r: 1, g: 1, b: 1, a: 1}
+  colorMano: {r: 1, g: 1, b: 1, a: 1}
