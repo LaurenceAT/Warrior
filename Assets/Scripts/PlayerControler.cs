@@ -982,7 +982,22 @@ public class PlayerControler : MonoBehaviour
         }
 
         if (!canMove) return;
-        if (isKnocked) return;
+        if (isKnocked)
+        {
+            // Empujado por un golpe (en el suelo): se puede levantar la guardia
+            // para hacer parry al siguiente, y eso corta el empujon. Derribado en
+            // el aire, no: primero cae y se levanta.
+            if (!isKnockedDown && estadoArma != EstadoArma.Enfundada)
+            {
+                Bloqueo();
+                if (isBlocking)
+                {
+                    isKnocked = false;
+                    m_animator.SetBool("isKnockback", false);
+                }
+            }
+            return;
+        }
 
         // Colgado de una cornisa o subiendo: manda el agarre.
         if (agarreCornisa == null) agarreCornisa = GetComponent<AgarreCornisa>();
@@ -4077,10 +4092,13 @@ public class PlayerControler : MonoBehaviour
         damage = Mathf.Max(1, Mathf.RoundToInt(damage * EfectosAmuletos.MultDanoRecibido(tipo == TipoDano.Magico, ElementoActivo)));
         if (InvulnerableExterno || invulnerableDerribado) return ResultadoDano.Ignorado;
 
-        if (atacante != null && isBlocking && !isInvincible && (desdeArriba || GolpeDeFrente(atacante.transform, origenX)))
+        if (atacante != null && isBlocking && (desdeArriba || GolpeDeFrente(atacante.transform, origenX)))
         {
             float ventana = TopeVentanaParry > 0f ? Mathf.Min(ventanaParryActual, TopeVentanaParry) : ventanaParryActual;
+            // El parry vale tambien en la invulnerabilidad de despues de un golpe.
             if (tBloqueo <= ventana) { Parry(atacante); return ResultadoDano.Parry; }
+            // Invulnerable y fuera de la ventana: el golpe no entra ni gasta estamina.
+            if (isInvincible) return ResultadoDano.Ignorado;
             if (estamina.CanSpend())
             {
                 // Bloqueo normal: gasta estamina y entra una parte del dano.
