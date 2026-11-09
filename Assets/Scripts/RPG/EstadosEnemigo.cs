@@ -121,7 +121,8 @@ public class EstadosEnemigo : MonoBehaviour
         switch (e)
         {
             case Elemento.Fuego:
-                danoQuemadura = Mathf.Max(2, Mathf.RoundToInt(dano * quemaduraFraccion));
+                // Anillo de la brasa: quemadura mas fuerte.
+                danoQuemadura = Mathf.Max(2, Mathf.RoundToInt(dano * quemaduraFraccion * EfectosAmuletos.MultQuemadura));
                 if (ahora >= finQuemadura) siguienteTick = ahora + quemaduraIntervalo;
                 finQuemadura = ahora + quemaduraDuracion;
                 break;
@@ -130,11 +131,11 @@ public class EstadosEnemigo : MonoBehaviour
                 finLento = ahora + lentoDuracion;
                 if (ahora - ultimaEscarcha > 3f) cargasEscarcha = 0;
                 ultimaEscarcha = ahora;
-                if (ahora >= finInmuneCongelar && ++cargasEscarcha >= Mathf.CeilToInt(cargasParaCongelar / acum - 0.001f)) Congelar();
+                if (ahora >= finInmuneCongelar && ++cargasEscarcha >= Mathf.CeilToInt(cargasParaCongelar / (acum * EfectosAmuletos.MultCongelar) - 0.001f)) Congelar();
                 break;
 
             case Elemento.Sagrado:
-                if (ahora >= siguienteAturdir && Random.value < A.sagradoProbabilidad * acum)
+                if (ahora >= siguienteAturdir && Random.value < A.sagradoProbabilidad * acum * EfectosAmuletos.MultSagrado)
                 {
                     float dur = A.sagradoDuracion;
                     // Los jefes deciden cuando (despues de su ataque) y si pueden.
@@ -143,6 +144,7 @@ public class EstadosEnemigo : MonoBehaviour
                     if (jefe == null) salud.Stagger(dur);
                     siguienteAturdir = ahora + A.sagradoEspera + dur;
                     finAturdido = ahora + dur;
+                    EfectosAmuletos.AlAturdirConSagrado();
                     if (jefe == null) TextoFlotante.Mostrar("Aturdido", Encima(0.5f), Elementos.Color(e), 0.85f);
                     ParticulasFx.Rafaga(Encima(0f), 10, new Color(1f, 0.97f, 0.75f), Elementos.Color(e),
                                         new Vector2(1.2f, 2.5f), 0f, new Vector2(0.04f, 0.08f), new Vector2(0.3f, 0.5f));
@@ -151,7 +153,7 @@ public class EstadosEnemigo : MonoBehaviour
 
             case Elemento.Sangrado:
                 if (SangradoAgotado) break;
-                sangrado += A.sangradoPorGolpe * acum;
+                sangrado += A.sangradoPorGolpe * acum * EfectosAmuletos.MultSangradoEnemigo;
                 ultimoSangrado = ahora;
                 if (sangrado >= maximoSangrado) Desangrar();
                 break;

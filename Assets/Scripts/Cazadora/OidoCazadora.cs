@@ -111,7 +111,8 @@ public class OidoCazadora : MonoBehaviour
         PlayerControler p = Player;
         if (p == null || aj == null || Sordo) return;
         Vector2 donde = p.transform.position;
-        if (!Atento && Vector2.Distance(transform.position, donde) > volumen * aj.alcanceOido) return;
+        // Mandibula del mudo: haces menos ruido.
+        if (!Atento && Vector2.Distance(transform.position, donde) > volumen * aj.alcanceOido * EfectosAmuletos.MultRuido) return;
         UltimaPosicion = donde;
         UltimoRuido = Time.time;
         if (aj.anilloRuido) AnilloRuido.Mostrar(donde + Vector2.down * 0.45f, volumen);

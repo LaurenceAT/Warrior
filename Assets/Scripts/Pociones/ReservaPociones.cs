@@ -36,7 +36,7 @@ public class ReservaPociones : MonoBehaviour
     private static ReservaPociones instancia;
 
     public int Cargas => cargas;
-    public int Maximo => maximo + Equipo.FrascosSangreExtra;
+    public int Maximo => maximo + Equipo.FrascosSangreExtra + EfectosAmuletos.CargasSangreExtra;
     public int Curacion => curacion;
     public float FraccionCuracion => Equipo.CuraFrasco;
     public bool RecompensaCogida => recompensaCogida;

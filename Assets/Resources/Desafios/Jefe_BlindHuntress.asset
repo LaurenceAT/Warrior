@@ -249,7 +249,7 @@ MonoBehaviour:
     texto: "En el bosque sin hojas todo se oye. Ella escucha desde hace tanto que
       se r\xEDe antes de que llegues: ya sabe c\xF3mo vas a caer."
   dialogoAlReiniciar: 0
-  almasCofre: 4500
+  almasCofre: 6500
   multPrecios: 1
   objetosCofre: 0000000002000000030000000500000004000000
   multVida: 1.5

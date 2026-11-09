@@ -253,7 +253,7 @@ MonoBehaviour:
     cuando: 4
     texto: Quienes lo vieron no saben describirlo. Solo dicen que sigue creciendo.
   dialogoAlReiniciar: 0
-  almasCofre: 2500
+  almasCofre: 4500
   objetosCofre: 000000000200000004000000
   multVida: 1.5
   multDano: 1.3

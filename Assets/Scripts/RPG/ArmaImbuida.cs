@@ -20,7 +20,7 @@ public class ArmaImbuida : MonoBehaviour
     [SerializeField] private float tiempoGesto = 0.8f;
 
     private Elemento activo = Elemento.Ninguno;
-    private float fin;
+    private float fin, duracionActual = 1f;
     private float siguienteCambio;
 
     private SpriteRenderer origen;
@@ -33,10 +33,11 @@ public class ArmaImbuida : MonoBehaviour
     // El elemento que hace algo al golpear: Natura (solo estamina) cuenta como
     // golpe fisico para enemigos, jefes y sellos.
     public Elemento ElementoDano => Elementos.EsDeDano(activo) ? activo : Elemento.Ninguno;
-    public float CosteMana => costeMana;
+    // Seso marchito: imbuir cuesta menos mana.
+    public float CosteMana => costeMana * EfectosAmuletos.MultCosteImbuir;
     public float TiempoGesto => tiempoGesto;
     public float Restante => activo == Elemento.Ninguno ? 0f : Mathf.Max(0f, fin - Time.time);
-    public float FraccionRestante => duracion > 0f ? Restante / duracion : 0f;
+    public float FraccionRestante => duracionActual > 0f ? Restante / duracionActual : 0f;
     public float RecargaRestante => Mathf.Max(0f, siguienteCambio - Time.time);
 
     // Vida que cuesta el sangrado ahora (con la vida inicial, la de Ajustes; con
@@ -46,7 +47,8 @@ public class ArmaImbuida : MonoBehaviour
         get
         {
             AjustesProgreso a = AjustesProgreso.Get();
-            return Mathf.Max(1, Mathf.RoundToInt(a.sangradoCosteVida * Progreso.VidaMax / Mathf.Max(1f, a.vidaBase)));
+            // Rosario de dientes: el sangrado cuesta menos vida.
+            return Mathf.Max(1, Mathf.RoundToInt(a.sangradoCosteVida * Progreso.VidaMax / Mathf.Max(1f, a.vidaBase) * EfectosAmuletos.MultCosteVidaSangrado));
         }
     }
 
@@ -73,7 +75,9 @@ public class ArmaImbuida : MonoBehaviour
     public void Activar(Elemento e)
     {
         activo = e;
-        fin = Time.time + duracion;
+        // Dedo anillado (mas) y Seso marchito (menos): lo que dura.
+        duracionActual = duracion * EfectosAmuletos.MultDuracionImbuir;
+        fin = Time.time + duracionActual;
         siguienteCambio = Time.time + recarga;
         AlCambiar?.Invoke();
     }

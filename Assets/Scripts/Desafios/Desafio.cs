@@ -67,6 +67,7 @@ public static class Desafio
         Progreso.Aislado = true;
         Progreso.Reiniciar();
         Equipo.Reiniciar();
+        Amuletos.Reiniciar();
         Comprados.Clear();
         Deseado = null;
         porAplicar.Clear();
@@ -125,6 +126,7 @@ public static class Desafio
         Progreso.Aislado = false;
         Partida.Descargar();
         Equipo.Reiniciar();
+        Amuletos.Reiniciar();
         Comprados.Clear();
         Deseado = null;
         porAplicar.Clear();
@@ -144,7 +146,7 @@ public static class Desafio
 
     // Orden en que salen en la hoguera.
     public static readonly Equipo.Objeto[] ObjetosMejora =
-        { Equipo.Objeto.PiedraForja, Equipo.Objeto.LagrimaCarmesi, Equipo.Objeto.LagrimaCeleste, Equipo.Objeto.FrascoSangre, Equipo.Objeto.FrascoMana };
+        { Equipo.Objeto.PiedraForja, Equipo.Objeto.LagrimaCarmesi, Equipo.Objeto.LagrimaCeleste, Equipo.Objeto.FrascoSangre, Equipo.Objeto.FrascoMana, Equipo.Objeto.VestigioVacio };
 
     public static int PorAplicar(Equipo.Objeto o) => porAplicar.TryGetValue(o, out int n) ? n : 0;
     public static int TotalPorAplicar => porAplicar.Values.Sum();

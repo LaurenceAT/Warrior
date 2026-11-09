@@ -704,6 +704,8 @@ MonoBehaviour:
     sprite: {fileID: -1404373347212710258, guid: f184fe614bfaa1f47bc419e61385ce6c, type: 3}
   - clave: bestiario
     sprite: {fileID: 3228096277499690683, guid: 654c69800e24baa4483d7b0bd1d045ae, type: 3}
+  - clave: objeto_vestigio
+    sprite: {fileID: 21300000, guid: 1ef4b3d26958455469ac5b6d30f95acc, type: 3}
   tajosElemento:
   - nombre: tajo_h_Fuego
     hoja: {fileID: 0}

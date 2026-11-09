@@ -53,6 +53,16 @@ MonoBehaviour:
     objeto: 5
     precio: 650
     requiere: mana_1
+  - id: vestigio_1
+    nombre: "Vestigio del Vac\xEDo I"
+    objeto: 6
+    precio: 1000
+    requiere: 
+  - id: vestigio_2
+    nombre: "Vestigio del Vac\xEDo II"
+    objeto: 6
+    precio: 1100
+    requiere: vestigio_1
   frases:
   - "Las almas no pesan. Lo que compras con ellas, s\xED."
   - Todo tiene un precio. Hasta el descanso.

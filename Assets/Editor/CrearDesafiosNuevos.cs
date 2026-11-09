@@ -326,7 +326,7 @@ public static class CrearDesafiosNuevos
                 new FichaJefe.Fragmento { id = "h3", cuando = FichaJefe.Cuando.PrimeraVictoria, texto = "Cuando se deshace en humo deja un ojo rojo flotando. Mira un momento. Luego se apaga, como si hubiera visto lo que necesitaba." },
                 new FichaJefe.Fragmento { id = "h4", cuando = FichaJefe.Cuando.VictoriaDificil, texto = "Volverá. Siempre vuelve. Pero esta vez se fue con las manos vacías." },
             };
-            f.almasCofre = 3000;
+            f.almasCofre = 5000;
             f.objetosCofre = new[] { Equipo.Objeto.PiedraForja, Equipo.Objeto.LagrimaCarmesi, Equipo.Objeto.FrascoSangre };
             AssetDatabase.CreateAsset(f, FichaBringer);
         }
@@ -355,7 +355,7 @@ public static class CrearDesafiosNuevos
                 new FichaJefe.Fragmento { id = "h2", cuando = FichaJefe.Cuando.PrimeraVictoria, texto = "El de rojo llegó al bosque cuando el otro ya llevaba años esperando a alguien digno. Desde entonces esperan los dos." },
                 new FichaJefe.Fragmento { id = "h3", cuando = FichaJefe.Cuando.VictoriaDificil, texto = "Cayeron a la vez, como habían vivido. Ninguno soltó la espada." },
             };
-            f.almasCofre = 2500;
+            f.almasCofre = 4500;
             f.objetosCofre = new[] { Equipo.Objeto.PiedraForja, Equipo.Objeto.LagrimaCeleste, Equipo.Objeto.FrascoSangre };
             AssetDatabase.CreateAsset(f, FichaDuo);
         }

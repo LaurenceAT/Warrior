@@ -1,0 +1,228 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b014c554e2212dd469ac864afba65338, type: 3}
+  m_Name: Amuletos
+  m_EditorClassIdentifier: 
+  amuletos:
+  - id: amuleto_00
+    nombre: Anillo de la brasa
+    icono: {fileID: 21300000, guid: c4bfdad822cf03a41aaf4e5224254130, type: 3}
+    descripcion: "Con fuego imbuido: +12 % de da\xF1o y la quemadura es m\xE1s fuerte.\n<color=#e0776c>Mientras
+      el arma arde, recibes un 10 % m\xE1s de da\xF1o m\xE1gico.</color>"
+    precio: 1100
+  - id: amuleto_01
+    nombre: Anillo de la marea
+    icono: {fileID: 21300000, guid: bee871181f68d4f42acc7dacc2b0935b, type: 3}
+    descripcion: "El man\xE1 vuelve solo, muy despacio."
+    precio: 1400
+  - id: amuleto_u01
+    nombre: "Cr\xE1neo del guardi\xE1n"
+    icono: {fileID: 21300000, guid: c711978d044f93d40aeb1e3f1a2d17e6, type: 3}
+    descripcion: "Recibes un 15 % menos de da\xF1o f\xEDsico."
+    precio: 1500
+  - id: amuleto_u03
+    nombre: "Mand\xEDbula del mudo"
+    icono: {fileID: 21300000, guid: 3a78067fe2eaf37408fe5ff52ffcfaef, type: 3}
+    descripcion: "Haces menos ruido: los enemigos tardan m\xE1s en verte y la Cazadora
+      te oye peor."
+    precio: 900
+  - id: amuleto_u04
+    nombre: Hueso nudoso
+    icono: {fileID: 21300000, guid: a49850fe769652f4dab6cd8f0d8375cf, type: 3}
+    descripcion: "Una carga m\xE1s del frasco de sangre."
+    precio: 2200
+  - id: amuleto_u05
+    nombre: Mano del osario
+    icono: {fileID: 21300000, guid: e52737bee01c54646b93d270661be738, type: 3}
+    descripcion: "Los ataques en el aire y la estocada en picado hacen un 25 % m\xE1s."
+    precio: 900
+  - id: amuleto_u07
+    nombre: Costillar hueco
+    icono: {fileID: 21300000, guid: ff43414d4c9d01b4f9a358f68e69dbed, type: 3}
+    descripcion: "Un 20 % m\xE1s de estamina m\xE1xima."
+    precio: 1100
+  - id: amuleto_u08
+    nombre: "Muelas del glot\xF3n"
+    icono: {fileID: 21300000, guid: 17ebd1a8aab0b554c826f4db81650cb9, type: 3}
+    descripcion: "El frasco de sangre cura un 25 % m\xE1s."
+    precio: 1500
+  - id: amuleto_u09
+    nombre: Colmillo curvo
+    icono: {fileID: 21300000, guid: e1b507dbe1c305f46b9af0c2ebf8693c, type: 3}
+    descripcion: "El golpe justo despu\xE9s de un parry hace un 30 % m\xE1s."
+    precio: 1300
+  - id: amuleto_u10
+    nombre: "Cr\xE1neo de cuervo"
+    icono: {fileID: 21300000, guid: 5b52f8e2cc0f0e24790d3cb4d7cf237e, type: 3}
+    descripcion: "Su poder a\xFAn duerme."
+    precio: 1000
+  - id: amuleto_u11
+    nombre: "Cr\xE1neo de bestia"
+    icono: {fileID: 21300000, guid: a39d01751c925bd4fb731da57f1aa82e, type: 3}
+    descripcion: "El \xFAltimo golpe de cada combo hace un 20 % m\xE1s."
+    precio: 1200
+  - id: amuleto_u12
+    nombre: "Coraz\xF3n que late"
+    icono: {fileID: 21300000, guid: 019835a02636da545a420f67181a0485, type: 3}
+    descripcion: "Un 15 % m\xE1s de vida m\xE1xima."
+    precio: 1800
+  - id: amuleto_u13
+    nombre: "Ojos del vig\xEDa"
+    icono: {fileID: 21300000, guid: 1f8f88dfed6d1ca46bc25da6d1ed2082, type: 3}
+    descripcion: "La ventana de parry es un 40 % m\xE1s amplia."
+    precio: 2000
+  - id: amuleto_u14
+    nombre: Seso marchito
+    icono: {fileID: 21300000, guid: 9dfb1a6e8ddaacf41be93ecf47163cbb, type: 3}
+    descripcion: "Imbuir cuesta la mitad de man\xE1.\n<color=#e0776c>La imbuici\xF3n
+      dura un 30 % menos.</color>"
+    precio: 1000
+  - id: amuleto_u15
+    nombre: Brazo seco
+    icono: {fileID: 21300000, guid: 16bab9a989eeeb7409da218e64e875cc, type: 3}
+    descripcion: Bloquear gasta un 30 % menos de estamina.
+    precio: 900
+  - id: amuleto_u16
+    nombre: Pie del peregrino
+    icono: {fileID: 21300000, guid: f1854ffcf0c3f3942a880b3f85452c6d, type: 3}
+    descripcion: "Correr gasta un 30 % menos y vas un 10 % m\xE1s r\xE1pido."
+    precio: 800
+  - id: amuleto_u17
+    nombre: Dedo anillado
+    icono: {fileID: 21300000, guid: 97faae33b8f1acb40b0076869032250f, type: 3}
+    descripcion: "Las imbuciones duran un 50 % m\xE1s."
+    precio: 900
+  - id: amuleto_u18
+    nombre: Lazo nocturno
+    icono: {fileID: 21300000, guid: 73ee439b7337ee74fbe0b671e4dc35b2, type: 3}
+    descripcion: "Con oscuridad imbuida, drenas un 25 % m\xE1s de vida.\n<color=#e0776c>El
+      frasco de sangre cura un 15 % menos.</color>"
+    precio: 1100
+  - id: amuleto_u19
+    nombre: Anillo de amatista hueca
+    icono: {fileID: 21300000, guid: 9c90a406d70f07d42ba31f5f5a94333a, type: 3}
+    descripcion: "Recibes un 15 % menos de da\xF1o m\xE1gico."
+    precio: 1500
+  - id: amuleto_u20
+    nombre: Corona rota
+    icono: {fileID: 21300000, guid: 181d6f9c68dd3154f9bce8ed6c6ceee4, type: 3}
+    descripcion: "Con la vida al m\xE1ximo, +15 % de da\xF1o."
+    precio: 1500
+  - id: amuleto_u23
+    nombre: Rama de hueso
+    icono: {fileID: 21300000, guid: a13bf0802930d7e459e8319243348981, type: 3}
+    descripcion: "Justo despu\xE9s de esquivar, +20 % de da\xF1o."
+    precio: 1100
+  - id: amuleto_u24
+    nombre: Garra amarilla
+    icono: {fileID: 21300000, guid: 60df7d48f190061428554fd950b9eebd, type: 3}
+    descripcion: "Con sagrado imbuido, aturdes un 25 % m\xE1s a menudo.\n<color=#e0776c>Tras
+      aturdir, tu estamina tarda 1 s m\xE1s en volver.</color>"
+    precio: 1000
+  - id: amuleto_u26
+    nombre: Rosario de dientes
+    icono: {fileID: 21300000, guid: a9feae973c74b6e43a7bc86ec3c22be5, type: 3}
+    descripcion: "Con sangrado imbuido: +18 % de sangrado al enemigo e imbuirlo cuesta
+      un 25 % menos de vida.\n<color=#e0776c>El sangrado que te pones t\xFA mismo
+      sube un 25 % m\xE1s.</color>"
+    precio: 1200
+  - id: amuleto_u27
+    nombre: Garra de sombra
+    icono: {fileID: 21300000, guid: 375297b1ff147c446b279ff60c3e9caa, type: 3}
+    descripcion: "Con menos de un cuarto de vida, +25 % de da\xF1o."
+    precio: 1400
+  - id: amuleto_u28
+    nombre: Cristal de escarcha
+    icono: {fileID: 21300000, guid: 89d792c50f4abf14db9de5233ad35231, type: 3}
+    descripcion: "Con escarcha imbuida, congelas un 18 % antes.\n<color=#e0776c>Cada
+      golpe con escarcha gasta 8 de estamina m\xE1s.</color>"
+    precio: 1000
+  - id: amuleto_u29
+    nombre: Gema de sangre
+    icono: {fileID: 21300000, guid: 0a0c3a9a5c6c3144f8181bed1c80760e, type: 3}
+    descripcion: Cada golpe que das te cura un poco (como mucho una vez por segundo).
+    precio: 1800
+  - id: amuleto_u30
+    nombre: Collar de luto
+    icono: {fileID: 21300000, guid: 22565ac5d45062649be8fa8034770d37, type: 3}
+    descripcion: "Su poder a\xFAn duerme."
+    precio: 1000
+  - id: amuleto_u33
+    nombre: Calavera votiva
+    icono: {fileID: 21300000, guid: 73a7132950101274ca523c289afe311d, type: 3}
+    descripcion: Una vez por cada descanso en la hoguera, un golpe mortal te deja
+      con 1 de vida.
+    precio: 2500
+  - id: amuleto_u34
+    nombre: "Vela del r\xE9quiem"
+    icono: {fileID: 21300000, guid: e38d93c491fd8034a97d79b4848de3c6, type: 3}
+    descripcion: "Sangrado, congelaci\xF3n y quemadura se te llenan un 40 % m\xE1s
+      despacio."
+    precio: 1300
+  - id: amuleto_u37
+    nombre: "Pluma de f\xE9nix"
+    icono: {fileID: 21300000, guid: f32e6e412201ada4e80d65df4e5bc8e2, type: 3}
+    descripcion: "La esquiva te protege durante m\xE1s tiempo (+30 %)."
+    precio: 1600
+  - id: amuleto_u38
+    nombre: "Mu\xF1eco de trapo"
+    icono: {fileID: 21300000, guid: 46dfa3e5b3f727d48a9faeba4398cdbc, type: 3}
+    descripcion: "El 20 % del da\xF1o que recibes vuelve a quien te golpea."
+    precio: 1400
+  - id: amuleto_u39
+    nombre: Ojos gemelos
+    icono: {fileID: 21300000, guid: b319bdbb973fe27499cff95b4ad453f4, type: 3}
+    descripcion: "Su poder a\xFAn duerme."
+    precio: 600
+  - id: amuleto_u40
+    nombre: "Cuenco del fest\xEDn"
+    icono: {fileID: 21300000, guid: 3cda174869fc7634dab42da4612f04e3, type: 3}
+    descripcion: "El frasco de man\xE1 devuelve un 30 % m\xE1s."
+    precio: 1000
+  - id: amuleto_u41
+    nombre: Llave del osario
+    icono: {fileID: 21300000, guid: 14f703458c0c66341af4e3ff89f82c3d, type: 3}
+    descripcion: "El t\xF3tem te cobra un 10 % menos."
+    precio: 800
+  - id: amuleto_u44
+    nombre: Yelmo abollado
+    icono: {fileID: 21300000, guid: e28a8d24fee89e647a4181aceb10c8b0, type: 3}
+    descripcion: Los golpes leves no te empujan.
+    precio: 1500
+  - id: amuleto_u45
+    nombre: Guante de cuero
+    icono: {fileID: 21300000, guid: 65e3ba2eaf5200142b457641f4104a5f, type: 3}
+    descripcion: Correr por la pared gasta un 40 % menos de estamina.
+    precio: 600
+  - id: amuleto_u46
+    nombre: Bota del caminante
+    icono: {fileID: 21300000, guid: d643ec69b94ad254bb4e6be5cb8fd543, type: 3}
+    descripcion: La estocada en picado suelta una onda a los dos lados al tocar el
+      suelo.
+    precio: 1000
+  - id: amuleto_u48
+    nombre: "T\xF3tem de ciervo"
+    icono: {fileID: 21300000, guid: 949b2906a035e164caa29df8496d9ad7, type: 3}
+    descripcion: "Cada parry justo te devuelve 10 de man\xE1."
+    precio: 1600
+  - id: amuleto_u49
+    nombre: "Ra\xEDz retorcida"
+    icono: {fileID: 21300000, guid: 0f50225408767e849a9d31f97cda5e81, type: 3}
+    descripcion: "La estamina se recupera un 25 % m\xE1s r\xE1pido."
+    precio: 1300
+  - id: amuleto_u50
+    nombre: Colmillo colgante
+    icono: {fileID: 21300000, guid: f5dc93156cb7860458031142270843c1, type: 3}
+    descripcion: "Con la espada sin imbuir, +12 % de da\xF1o."
+    precio: 1000
+  huecosIniciales: 2
+  huecosMaximos: 4

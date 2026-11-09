@@ -7,27 +7,38 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 // La tienda del totem (desafios). Arriba la frase del totem (letra a letra);
-// a la izquierda una cuadricula con lo que vende; a la derecha lo que hace el
-// elegido y el boton de comprar. Todo se paga con almas y va al inventario
-// del desafio: se aplica en la hoguera (MenuHoguera, "Aplicar mejoras").
+// debajo de las almas, dos pestanas:
+//   - Objetos: mejoras (FichaTienda). Van al inventario del desafio y se aplican
+//     en la hoguera (MenuHoguera, "Aplicar mejoras").
+//   - Amuletos: la coleccion (FichaAmuletos). Se tienen al momento y se equipan
+//     en la hoguera ("Amuletos").
+// A la izquierda la cuadricula de la pestana; a la derecha lo elegido y el
+// boton de comprar. Todo se paga con almas.
 //   - Sin almas suficientes: precio en rojo, boton apagado y sonido de error.
-//   - Lo comprado queda "Agotado" (dura todo el desafio, aunque mueras).
-//   - Lista de deseos: M (o el boton de la estrella) marca un objeto; se ve
+//   - Lo comprado queda "Agotado" / "Tuyo" (dura todo el desafio, aunque mueras).
+//   - Lista de deseos: M (o el boton de la estrella) marca algo; se ve
 //     destacado, el cursor empieza en el y arriba se dice cuanto falta.
-// Se maneja con teclado, raton o mando. F o Esc cierran (Esc no abre la pausa).
+// Se maneja con teclado, raton o mando. Q / E (o LB / RB) cambian de pestana.
+// F o Esc cierran (Esc no abre la pausa).
 public class TiendaTotem : MonoBehaviour
 {
     private static TiendaTotem instancia;
     public static bool Abierta => instancia != null && (instancia.abierta || instancia.cerradaEnFrame == Time.frameCount);
     public static float UltimoCierre { get; private set; } = -10f;
 
+    public enum Seccion { Objetos, Amuletos }
+
     private class Celda
     {
         public FichaTienda.Articulo art;
+        public FichaAmuletos.Amuleto amu;
         public Button boton;
         public OpcionEstilo estilo;
         public Image icono, estrella, candado, fondo;
         public TextMeshProUGUI nombre, precio, agotado;
+        public string Id => art != null ? art.id : amu.id;
+        public string Nombre => art != null ? art.nombre : amu.nombre;
+        public Seccion Seccion => amu != null ? Seccion.Amuletos : Seccion.Objetos;
     }
 
     private readonly List<Celda> celdas = new List<Celda>();
@@ -40,6 +51,14 @@ public class TiendaTotem : MonoBehaviour
     private int cerradaEnFrame = -1, abiertaEnFrame;
     private float letras;
     private int ultimaFrase = -1;
+
+    private Seccion seccion = Seccion.Objetos;
+    private RectTransform gridObjetos, gridAmuletos;
+    private Button pestanaObjetos, pestanaAmuletos;
+
+    // Lo leen las pruebas.
+    public static Seccion SeccionActual => instancia != null ? instancia.seccion : Seccion.Objetos;
+    public static string Elegido => instancia != null && instancia.actual != null ? instancia.actual.Id : null;
 
     public static void Abrir(PlayerControler p)
     {
@@ -59,6 +78,18 @@ public class TiendaTotem : MonoBehaviour
         instancia.grupo.interactable = instancia.grupo.blocksRaycasts = false;
         instancia.gameObject.SetActive(false);
         SonidoMenu.Cancelar();
+    }
+
+    // Pestana (tambien la usan las pruebas).
+    public static void IrA(Seccion s)
+    {
+        if (instancia != null && instancia.abierta) instancia.Cambiar(s, true);
+    }
+
+    // Comprar lo que este elegido (las pruebas eligen con el EventSystem).
+    public static void ComprarElegido()
+    {
+        if (instancia != null && instancia.abierta) instancia.Comprar();
     }
 
     private void AbrirInterno(FichaTienda f)
@@ -83,10 +114,10 @@ public class TiendaTotem : MonoBehaviour
         frase.maxVisibleCharacters = 0;
         letras = 0f;
 
-        Refrescar();
-        // El cursor empieza en el objeto deseado (si hay).
-        Celda inicio = celdas.FirstOrDefault(c => c.art.id == Desafio.Deseado) ?? celdas.FirstOrDefault();
-        Seleccionar(inicio);
+        // Empieza en la pestana de lo deseado (si hay) o en Objetos.
+        Celda deseada = celdas.FirstOrDefault(c => c.Id == Desafio.Deseado);
+        Cambiar(deseada != null ? deseada.Seccion : Seccion.Objetos, false);
+        if (deseada != null) Seleccionar(deseada);
     }
 
     private void Update()
@@ -112,34 +143,82 @@ public class TiendaTotem : MonoBehaviour
         if ((k != null && (k.escapeKey.wasPressedThisFrame || k.fKey.wasPressedThisFrame)) || (g != null && g.buttonEast.wasPressedThisFrame)
             || (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame)) { Cerrar(); return; }
         if ((k != null && k.mKey.wasPressedThisFrame) || (g != null && g.buttonNorth.wasPressedThisFrame)) Marcar();
+        if ((k != null && k.qKey.wasPressedThisFrame) || (g != null && g.leftShoulder.wasPressedThisFrame)) Cambiar(Seccion.Objetos, true);
+        if ((k != null && k.eKey.wasPressedThisFrame) || (g != null && g.rightShoulder.wasPressedThisFrame)) Cambiar(Seccion.Amuletos, true);
+    }
+
+    // ------------------------------------------------------------------ Pestanas
+
+    private void Cambiar(Seccion s, bool sonido)
+    {
+        bool otra = s != seccion;
+        seccion = s;
+        gridObjetos.gameObject.SetActive(s == Seccion.Objetos);
+        gridAmuletos.gameObject.SetActive(s == Seccion.Amuletos);
+        Pestana(pestanaObjetos, s == Seccion.Objetos);
+        Pestana(pestanaAmuletos, s == Seccion.Amuletos);
+        if (sonido && otra) SonidoMenu.Mover();
+        Refrescar();
+        if (actual == null || actual.Seccion != s)
+        {
+            Celda inicio = celdas.FirstOrDefault(c => c.Seccion == s && c.Id == Desafio.Deseado) ?? celdas.FirstOrDefault(c => c.Seccion == s);
+            Seleccionar(inicio);
+        }
+    }
+
+    private static void Pestana(Button b, bool activa)
+    {
+        Image fondo = b.GetComponent<Image>();
+        fondo.color = activa ? new Color(0.42f, 0.31f, 0.14f, 0.95f) : new Color(0.08f, 0.07f, 0.08f, 0.9f);
+        Image filo = b.transform.Find("Filo").GetComponent<Image>();
+        filo.color = activa ? EstiloMenu.Filo : EstiloMenu.FiloTenue;
+        b.GetComponentInChildren<TextMeshProUGUI>().color = activa ? EstiloMenu.TextoElegido : EstiloMenu.TextoNormal;
     }
 
     // ------------------------------------------------------------------ Acciones
 
-    private bool Vendido(FichaTienda.Articulo a) => Desafio.Comprados.Contains(a.id);
-    private bool Bloqueado(FichaTienda.Articulo a) => !string.IsNullOrEmpty(a.requiere) && !Desafio.Comprados.Contains(a.requiere);
+    private static bool Vendido(Celda c) => c.amu != null ? Amuletos.Tiene(c.amu.id) : Desafio.Comprados.Contains(c.art.id);
+    private static bool Bloqueado(Celda c) => c.art != null && !string.IsNullOrEmpty(c.art.requiere) && !Desafio.Comprados.Contains(c.art.requiere);
 
     // Ya al maximo, contando lo que hay sin aplicar (no tiene sentido comprarlo).
-    private static bool AlMaximo(FichaTienda.Articulo a) => Equipo.AlMaximo(a.objeto, Desafio.PorAplicar(a.objeto));
+    private static bool AlMaximo(Celda c) => c.art != null && Equipo.AlMaximo(c.art.objeto, Desafio.PorAplicar(c.art.objeto));
+
+    // Llave del osario: el totem cobra menos.
+    private static int Precio(Celda c) =>
+        Mathf.Max(0, Mathf.RoundToInt((c.art != null ? Desafio.Precio(c.art) : PrecioAmuleto(c.amu)) * EfectosAmuletos.MultPrecios));
+
+    // Precio de un amuleto en este desafio (multiplicador de la ficha del jefe).
+    public static int PrecioAmuleto(FichaAmuletos.Amuleto a) =>
+        a == null ? 0 : Mathf.Max(0, Mathf.RoundToInt(a.precio * (Desafio.Activo && Desafio.Ficha != null ? Mathf.Max(0.1f, Desafio.Ficha.multPrecios) : 1f)));
+
+    private static Sprite Icono(Celda c) => c.amu != null ? c.amu.icono : RecursosRPG.Get().Icono(Equipo.ClaveIcono(c.art.objeto));
 
     private void Comprar()
     {
         if (actual == null) return;
-        FichaTienda.Articulo a = actual.art;
-        if (Vendido(a) || Bloqueado(a) || AlMaximo(a) || Progreso.Almas < Desafio.Precio(a)) { SonidoMenu.Error(); return; }
-        if (!Progreso.Gastar(Desafio.Precio(a))) { SonidoMenu.Error(); return; }
-        Desafio.GuardarObjeto(a.objeto);
-        Desafio.Comprados.Add(a.id);
-        if (Desafio.Deseado == a.id) Desafio.Deseado = null;
+        Celda c = actual;
+        if (Vendido(c) || Bloqueado(c) || AlMaximo(c) || Progreso.Almas < Precio(c)) { SonidoMenu.Error(); return; }
+        if (!Progreso.Gastar(Precio(c))) { SonidoMenu.Error(); return; }
+        if (c.amu != null)
+        {
+            Amuletos.Dar(c.amu.id);
+            AvisoObjeto.Mostrar(c.amu.icono, c.amu.nombre, "Equípalo en la hoguera.");
+        }
+        else
+        {
+            Desafio.GuardarObjeto(c.art.objeto);
+            Desafio.Comprados.Add(c.art.id);
+            AvisoObjeto.Mostrar(Icono(c), c.art.nombre, CofreMejora.AvisoDesafio);
+        }
+        if (Desafio.Deseado == c.Id) Desafio.Deseado = null;
         Sonido.Reproducir("mejorar_equipo");
-        AvisoObjeto.Mostrar(RecursosRPG.Get().Icono(Equipo.ClaveIcono(a.objeto)), a.nombre, CofreMejora.AvisoDesafio);
         Refrescar();
     }
 
     private void Marcar()
     {
-        if (actual == null || Vendido(actual.art)) { SonidoMenu.Error(); return; }
-        Desafio.Deseado = Desafio.Deseado == actual.art.id ? null : actual.art.id;
+        if (actual == null || Vendido(actual)) { SonidoMenu.Error(); return; }
+        Desafio.Deseado = Desafio.Deseado == actual.Id ? null : actual.Id;
         SonidoMenu.Confirmar();
         Refrescar();
     }
@@ -163,25 +242,24 @@ public class TiendaTotem : MonoBehaviour
     {
         int alm = Progreso.Almas;
         almas.text = $"Almas  <b>{alm:N0}</b>";
-        FichaTienda.Articulo d = celdas.Select(c => c.art).FirstOrDefault(a => a.id == Desafio.Deseado);
-        if (d == null) deseo.text = $"<color={Gris}>Marca un objeto con M para tenerlo a la vista</color>";
-        else if (Bloqueado(d)) deseo.text = $"Deseado: <b>{d.nombre}</b> ({Desafio.Precio(d):N0})  ·  <color={Gris}>antes: {celdas.Select(c => c.art).FirstOrDefault(a => a.id == d.requiere)?.nombre}</color>";
-        else if (alm >= Desafio.Precio(d)) deseo.text = $"Deseado: <b>{d.nombre}</b>  ·  <color={Verde}>Puedes comprarlo</color>";
-        else deseo.text = $"Deseado: <b>{d.nombre}</b> ({Desafio.Precio(d):N0})  ·  <color={Rojo}>te faltan {Desafio.Precio(d) - alm:N0}</color>";
+        Celda d = celdas.FirstOrDefault(c => c.Id == Desafio.Deseado);
+        if (d == null) deseo.text = $"<color={Gris}>Marca algo con M para tenerlo a la vista</color>";
+        else if (Bloqueado(d)) deseo.text = $"Deseado: <b>{d.Nombre}</b> ({Precio(d):N0})  ·  <color={Gris}>antes: {celdas.FirstOrDefault(c => c.art != null && c.art.id == d.art.requiere)?.Nombre}</color>";
+        else if (alm >= Precio(d)) deseo.text = $"Deseado: <b>{d.Nombre}</b>  ·  <color={Verde}>Puedes comprarlo</color>";
+        else deseo.text = $"Deseado: <b>{d.Nombre}</b> ({Precio(d):N0})  ·  <color={Rojo}>te faltan {Precio(d) - alm:N0}</color>";
 
         foreach (Celda c in celdas)
         {
-            FichaTienda.Articulo a = c.art;
-            bool vendido = Vendido(a), bloq = Bloqueado(a), max = AlMaximo(a);
-            bool alcanza = alm >= Desafio.Precio(a);
+            bool vendido = Vendido(c), bloq = Bloqueado(c), max = AlMaximo(c);
+            bool alcanza = alm >= Precio(c);
             c.agotado.gameObject.SetActive(vendido || max);
-            c.agotado.text = vendido ? "AGOTADO" : "AL MÁXIMO";
+            c.agotado.text = vendido ? (c.amu != null ? "TUYO" : "AGOTADO") : "AL MÁXIMO";
             c.candado.enabled = bloq && !vendido;
-            c.estrella.enabled = Desafio.Deseado == a.id;
-            c.precio.text = vendido ? "" : $"<color={(alcanza ? "#f0d49a" : Rojo)}>{Desafio.Precio(a):N0}</color> almas";
+            c.estrella.enabled = Desafio.Deseado == c.Id;
+            c.precio.text = vendido ? "" : $"<color={(alcanza ? "#f0d49a" : Rojo)}>{Precio(c):N0}</color>{(c.amu != null ? "" : " almas")}";
             float atenuar = vendido || bloq || max ? 0.35f : 1f;
             c.icono.color = new Color(atenuar, atenuar, atenuar, 1f);
-            c.fondo.color = Desafio.Deseado == a.id ? new Color(0.35f, 0.26f, 0.1f, 0.9f) : new Color(0.08f, 0.07f, 0.08f, 0.9f);
+            c.fondo.color = Desafio.Deseado == c.Id ? new Color(0.35f, 0.26f, 0.1f, 0.9f) : new Color(0.08f, 0.07f, 0.08f, 0.9f);
             c.estilo.PonerActiva(!vendido && !bloq && !max && alcanza);
         }
         Detalle();
@@ -190,23 +268,34 @@ public class TiendaTotem : MonoBehaviour
     private void Detalle()
     {
         if (actual == null) return;
-        FichaTienda.Articulo a = actual.art;
-        detIcono.sprite = RecursosRPG.Get().Icono(Equipo.ClaveIcono(a.objeto));
+        Celda c = actual;
+        detIcono.sprite = Icono(c);
         detIcono.enabled = detIcono.sprite != null;
-        detNombre.text = a.nombre;
-        bool vendido = Vendido(a), bloq = Bloqueado(a), max = AlMaximo(a);
-        string efecto = Efecto(a);
-        if (bloq)
+        detNombre.text = c.Nombre;
+        bool vendido = Vendido(c), bloq = Bloqueado(c), max = AlMaximo(c);
+        string efecto;
+        if (c.amu != null)
         {
-            FichaTienda.Articulo req = celdas.Select(c => c.art).FirstOrDefault(x => x.id == a.requiere);
-            efecto += $"\n\n<color={Rojo}>Compra antes: {(req != null ? req.nombre : a.requiere)}</color>";
+            efecto = (string.IsNullOrEmpty(c.amu.descripcion) ? $"<color={Gris}>Amuleto.</color>" : c.amu.descripcion) +
+                     (vendido ? $"\n\n<size=85%><color=#f0d49a>Ya es tuyo: equípalo en la hoguera (Amuletos).</color></size>"
+                              : $"\n\n<size=85%><color=#f0d49a>Al comprarlo es tuyo: se equipa en la hoguera (Amuletos).</color></size>");
+        }
+        else
+        {
+            efecto = Efecto(c.art);
+            if (bloq)
+            {
+                Celda req = celdas.FirstOrDefault(x => x.art != null && x.art.id == c.art.requiere);
+                efecto += $"\n\n<color={Rojo}>Compra antes: {(req != null ? req.Nombre : c.art.requiere)}</color>";
+            }
         }
         detTexto.text = efecto;
-        bool alcanza = Progreso.Almas >= Desafio.Precio(a);
-        detPrecio.text = vendido ? "Agotado" : max ? "Ya está al máximo" : $"Precio: <color={(alcanza ? "#f0d49a" : Rojo)}><b>{Desafio.Precio(a):N0}</b></color> almas";
-        textoComprar.text = vendido ? "Agotado" : $"Comprar ({Desafio.Precio(a):N0})";
+        bool alcanza = Progreso.Almas >= Precio(c);
+        string agotado = c.amu != null ? "Ya es tuyo" : "Agotado";
+        detPrecio.text = vendido ? agotado : max ? "Ya está al máximo" : $"Precio: <color={(alcanza ? "#f0d49a" : Rojo)}><b>{Precio(c):N0}</b></color> almas";
+        textoComprar.text = vendido ? agotado : $"Comprar ({Precio(c):N0})";
         botonComprar.GetComponent<OpcionEstilo>().PonerActiva(!vendido && !bloq && !max && alcanza);
-        botonMarcar.GetComponentInChildren<TextMeshProUGUI>().text = Desafio.Deseado == a.id ? "Quitar de deseos (M)" : "Marcar como deseado (M)";
+        botonMarcar.GetComponentInChildren<TextMeshProUGUI>().text = Desafio.Deseado == c.Id ? "Quitar de deseos (M)" : "Marcar como deseado (M)";
     }
 
     // Lo que hace el objeto, con los numeros de despues de aplicar tambien lo
@@ -221,6 +310,7 @@ public class TiendaTotem : MonoBehaviour
             case Equipo.Objeto.LagrimaCeleste: que = "Cada frasco de maná devuelve más."; break;
             case Equipo.Objeto.FrascoSangre: que = "Una carga más para el frasco de sangre."; break;
             case Equipo.Objeto.FrascoMana: que = "Una carga más para el frasco de maná."; break;
+            case Equipo.Objeto.VestigioVacio: que = "Un resto de algo que ya no existe. Abre un hueco de amuleto."; break;
             default: return Equipo.Descripcion(a.objeto);
         }
         int pendientes = Desafio.PorAplicar(a.objeto);
@@ -250,18 +340,23 @@ public class TiendaTotem : MonoBehaviour
                 return $"Cargas del frasco de sangre: {r.Maximo + antes} → <color={Verde}>{r.Maximo + antes + 1}</color>";
             case Equipo.Objeto.FrascoMana:
                 return $"Cargas del frasco de maná: {r.MaximoMana + antes} → <color={Verde}>{r.MaximoMana + antes + 1}</color>";
+            case Equipo.Objeto.VestigioVacio:
+                int h = Amuletos.HuecosAbiertos + antes;
+                return $"Huecos de amuleto: {h} → <color={Verde}>{Mathf.Min(h + 1, Amuletos.HuecosMaximos)}</color>";
             default: return Equipo.Descripcion(o);
         }
     }
 
     // ------------------------------------------------------------------ Construccion
 
+    private const float ArribaCuadricula = 275f;
+
     private static TiendaTotem Crear(FichaTienda f)
     {
         GameObject go = new GameObject("TiendaTotem");
         TiendaTotem t = go.AddComponent<TiendaTotem>();
         t.grupo = EstiloMenu.Lienzo(go, 92);
-        RectTransform panel = EstiloMenu.Panel(go.transform, "TÓTEM", new Vector2(1560f, 880f));
+        RectTransform panel = EstiloMenu.Panel(go.transform, "TÓTEM", new Vector2(1560f, 960f));
 
         t.frase = EstiloMenu.Texto("", panel, 26, new Color(0.62f, 0.95f, 1f));
         t.frase.fontStyle = FontStyles.Italic;
@@ -274,19 +369,16 @@ public class TiendaTotem : MonoBehaviour
         t.deseo.alignment = TextAlignmentOptions.Right;
         EstiloMenu.Arriba(t.deseo.rectTransform, -166f, 32f, 70f);
 
-        // Izquierda: la cuadricula.
-        RectTransform izq = new GameObject("Articulos", typeof(RectTransform)).GetComponent<RectTransform>();
-        izq.SetParent(panel, false);
-        izq.anchorMin = new Vector2(0f, 0f);
-        izq.anchorMax = new Vector2(0.6f, 1f);
-        izq.offsetMin = new Vector2(60f, 90f);
-        izq.offsetMax = new Vector2(-10f, -215f);
-        GridLayoutGroup grid = izq.gameObject.AddComponent<GridLayoutGroup>();
-        grid.cellSize = new Vector2(204f, 250f);
-        grid.spacing = new Vector2(14f, 14f);
-        grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-        grid.constraintCount = 4;
-        foreach (FichaTienda.Articulo a in f.articulos) t.celdas.Add(t.NuevaCelda(izq, a));
+        // Las dos pestanas, bajo las almas.
+        t.pestanaObjetos = NuevaPestana(panel, "Objetos   <size=70%><color=#8a8580>[Q]</color></size>", 0, () => t.Cambiar(Seccion.Objetos, true));
+        t.pestanaAmuletos = NuevaPestana(panel, "Amuletos   <size=70%><color=#8a8580>[E]</color></size>", 1, () => t.Cambiar(Seccion.Amuletos, true));
+
+        // Izquierda: las dos cuadriculas (una por pestana).
+        t.gridObjetos = Cuadricula(panel, "Objetos", new Vector2(204f, 186f), 4);
+        foreach (FichaTienda.Articulo a in f.articulos) t.celdas.Add(t.NuevaCelda(t.gridObjetos, a, null));
+        t.gridAmuletos = Cuadricula(panel, "Amuletos", new Vector2(98f, 108f), 8);
+        FichaAmuletos fa = FichaAmuletos.Get();
+        if (fa != null) foreach (FichaAmuletos.Amuleto a in fa.amuletos) if (a != null) t.celdas.Add(t.NuevaCelda(t.gridAmuletos, null, a));
 
         // Derecha: el detalle.
         Image det = EstiloMenu.Caja("Detalle", panel, new Color(0f, 0f, 0f, 0.35f));
@@ -294,7 +386,7 @@ public class TiendaTotem : MonoBehaviour
         rd.anchorMin = new Vector2(0.6f, 0f);
         rd.anchorMax = new Vector2(1f, 1f);
         rd.offsetMin = new Vector2(20f, 90f);
-        rd.offsetMax = new Vector2(-60f, -215f);
+        rd.offsetMax = new Vector2(-60f, -ArribaCuadricula);
         Image filo = EstiloMenu.Caja("Filo", det.transform, EstiloMenu.FiloTenue);
         filo.rectTransform.anchorMin = new Vector2(0f, 0f); filo.rectTransform.anchorMax = new Vector2(0f, 1f);
         filo.rectTransform.sizeDelta = new Vector2(2f, 0f);
@@ -345,18 +437,61 @@ public class TiendaTotem : MonoBehaviour
         t.textoComprar = t.botonComprar.GetComponentInChildren<TextMeshProUGUI>();
         t.botonMarcar = EstiloMenu.Opcion(col.transform, "Marcar como deseado (M)", t.Marcar, 52f, 22f, RecursosRPG.Get().Icono("estrella"), TextAlignmentOptions.Left);
 
-        TextMeshProUGUI ayuda = EstiloMenu.Texto("Enter / clic: comprar (se aplica en la hoguera)      M: marcar deseado      F / Esc: salir", go.transform, 22, new Color(0.8f, 0.78f, 0.75f, 0.6f));
-        ayuda.rectTransform.anchorMin = ayuda.rectTransform.anchorMax = new Vector2(0.5f, 0.05f);
+        TextMeshProUGUI ayuda = EstiloMenu.Texto("Enter / clic: comprar      Q / E: pestaña      M: marcar deseado      F / Esc: salir", go.transform, 22, new Color(0.8f, 0.78f, 0.75f, 0.6f));
+        ayuda.rectTransform.anchorMin = ayuda.rectTransform.anchorMax = new Vector2(0.5f, 0.03f);
         ayuda.rectTransform.sizeDelta = new Vector2(1400f, 40f);
 
         go.SetActive(false);
         return t;
     }
 
-    private Celda NuevaCelda(Transform padre, FichaTienda.Articulo a)
+    // Una pestana: rectangulo con su nombre, una al lado de la otra bajo las almas.
+    private static Button NuevaPestana(RectTransform panel, string texto, int indice, UnityEngine.Events.UnityAction accion)
     {
-        Celda c = new Celda { art = a };
-        GameObject go = new GameObject("Articulo_" + a.id, typeof(RectTransform));
+        Image fondo = EstiloMenu.Caja("Pestana_" + indice, panel, new Color(0.08f, 0.07f, 0.08f, 0.9f));
+        fondo.raycastTarget = true;
+        RectTransform r = fondo.rectTransform;
+        r.anchorMin = r.anchorMax = new Vector2(0f, 1f);
+        r.pivot = new Vector2(0f, 1f);
+        r.sizeDelta = new Vector2(240f, 52f);
+        r.anchoredPosition = new Vector2(60f + indice * 254f, -208f);
+        Image filo = EstiloMenu.Caja("Filo", fondo.transform, EstiloMenu.FiloTenue);
+        filo.rectTransform.anchorMin = new Vector2(0f, 0f);
+        filo.rectTransform.anchorMax = new Vector2(1f, 0f);
+        filo.rectTransform.sizeDelta = new Vector2(0f, 3f);
+        filo.rectTransform.anchoredPosition = new Vector2(0f, 1.5f);
+        TextMeshProUGUI t = EstiloMenu.Texto(texto, fondo.transform, 26, EstiloMenu.TextoNormal);
+        EstiloMenu.Estirar(t.rectTransform);
+        Button b = fondo.gameObject.AddComponent<Button>();
+        b.transition = Selectable.Transition.None;
+        // Las pestanas se cambian con clic o Q / E: no roban la seleccion de la cuadricula.
+        b.navigation = new Navigation { mode = Navigation.Mode.None };
+        b.onClick.AddListener(accion);
+        return b;
+    }
+
+    private static RectTransform Cuadricula(RectTransform panel, string nombre, Vector2 celda, int columnas)
+    {
+        RectTransform izq = new GameObject(nombre, typeof(RectTransform)).GetComponent<RectTransform>();
+        izq.SetParent(panel, false);
+        izq.anchorMin = new Vector2(0f, 0f);
+        izq.anchorMax = new Vector2(0.6f, 1f);
+        izq.offsetMin = new Vector2(60f, 90f);
+        izq.offsetMax = new Vector2(-10f, -ArribaCuadricula);
+        GridLayoutGroup grid = izq.gameObject.AddComponent<GridLayoutGroup>();
+        grid.cellSize = celda;
+        grid.spacing = new Vector2(columnas > 4 ? 8f : 14f, columnas > 4 ? 8f : 14f);
+        grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        grid.constraintCount = columnas;
+        return izq;
+    }
+
+    // Una celda: objeto (grande, con nombre) o amuleto (pequena: imagen y precio).
+    private Celda NuevaCelda(Transform padre, FichaTienda.Articulo a, FichaAmuletos.Amuleto amu)
+    {
+        Celda c = new Celda { art = a, amu = amu };
+        bool pequena = amu != null;
+        GameObject go = new GameObject("Articulo_" + c.Id, typeof(RectTransform));
         go.transform.SetParent(padre, false);
         c.fondo = go.AddComponent<Image>();
         c.fondo.color = new Color(0.08f, 0.07f, 0.08f, 0.9f);
@@ -375,34 +510,36 @@ public class TiendaTotem : MonoBehaviour
         marca.enabled = false;
 
         c.icono = EstiloMenu.Caja("Icono", go.transform, Color.white);
-        c.icono.sprite = RecursosRPG.Get().Icono(Equipo.ClaveIcono(a.objeto));
+        c.icono.sprite = Icono(c);
         c.icono.preserveAspect = true;
         RectTransform ri = c.icono.rectTransform;
         ri.anchorMin = ri.anchorMax = new Vector2(0.5f, 1f);
         ri.pivot = new Vector2(0.5f, 1f);
-        ri.sizeDelta = new Vector2(96f, 96f);
-        ri.anchoredPosition = new Vector2(0f, -18f);
+        ri.sizeDelta = pequena ? new Vector2(62f, 62f) : new Vector2(78f, 78f);
+        ri.anchoredPosition = new Vector2(0f, pequena ? -8f : -10f);
 
-        c.nombre = EstiloMenu.Texto(a.nombre, go.transform, 21, EstiloMenu.TextoNormal);
+        // Los amuletos no llevan el nombre en la celda (sale a la derecha).
+        c.nombre = EstiloMenu.Texto(pequena ? "" : a.nombre, go.transform, 21, EstiloMenu.TextoNormal);
         c.nombre.enableWordWrapping = true;
         RectTransform rn = c.nombre.rectTransform;
         rn.anchorMin = new Vector2(0f, 0f); rn.anchorMax = new Vector2(1f, 0f);
         rn.pivot = new Vector2(0.5f, 0f);
-        rn.sizeDelta = new Vector2(-16f, 64f);
-        rn.anchoredPosition = new Vector2(0f, 44f);
+        rn.sizeDelta = new Vector2(-16f, 56f);
+        rn.anchoredPosition = new Vector2(0f, 40f);
+        c.nombre.gameObject.SetActive(!pequena);
 
-        c.precio = EstiloMenu.Texto("", go.transform, 20, EstiloMenu.TextoNormal);
+        c.precio = EstiloMenu.Texto("", go.transform, pequena ? 18 : 20, EstiloMenu.TextoNormal);
         RectTransform rp = c.precio.rectTransform;
         rp.anchorMin = new Vector2(0f, 0f); rp.anchorMax = new Vector2(1f, 0f);
         rp.pivot = new Vector2(0.5f, 0f);
-        rp.sizeDelta = new Vector2(0f, 30f);
-        rp.anchoredPosition = new Vector2(0f, 12f);
+        rp.sizeDelta = new Vector2(0f, 28f);
+        rp.anchoredPosition = new Vector2(0f, pequena ? 6f : 10f);
 
-        c.agotado = EstiloMenu.Texto("AGOTADO", go.transform, 26, new Color(0.95f, 0.85f, 0.7f));
+        c.agotado = EstiloMenu.Texto("AGOTADO", go.transform, pequena ? 18 : 26, new Color(0.95f, 0.85f, 0.7f));
         c.agotado.fontStyle = FontStyles.Bold;
-        c.agotado.characterSpacing = 6f;
-        c.agotado.rectTransform.anchoredPosition = new Vector2(0f, 60f);
-        c.agotado.rectTransform.sizeDelta = new Vector2(200f, 40f);
+        c.agotado.characterSpacing = pequena ? 2f : 6f;
+        c.agotado.rectTransform.anchoredPosition = new Vector2(0f, pequena ? -34f : 40f);
+        c.agotado.rectTransform.sizeDelta = new Vector2(pequena ? 96f : 200f, 40f);
         c.agotado.gameObject.SetActive(false);
 
         c.estrella = EstiloMenu.Caja("Estrella", go.transform, Color.white);
@@ -411,8 +548,8 @@ public class TiendaTotem : MonoBehaviour
         RectTransform re = c.estrella.rectTransform;
         re.anchorMin = re.anchorMax = new Vector2(1f, 1f);
         re.pivot = new Vector2(1f, 1f);
-        re.sizeDelta = new Vector2(40f, 40f);
-        re.anchoredPosition = new Vector2(-6f, -6f);
+        re.sizeDelta = pequena ? new Vector2(26f, 26f) : new Vector2(40f, 40f);
+        re.anchoredPosition = new Vector2(-4f, -4f);
         c.estrella.enabled = false;
 
         c.candado = EstiloMenu.Caja("Candado", go.transform, Color.white);
@@ -422,13 +559,13 @@ public class TiendaTotem : MonoBehaviour
         rcan.anchorMin = rcan.anchorMax = new Vector2(0.5f, 1f);
         rcan.pivot = new Vector2(0.5f, 1f);
         rcan.sizeDelta = new Vector2(48f, 48f);
-        rcan.anchoredPosition = new Vector2(0f, -42f);
+        rcan.anchoredPosition = new Vector2(0f, -34f);
         c.candado.enabled = false;
 
         c.estilo = go.AddComponent<OpcionEstilo>();
         c.estilo.franja = franja;
         c.estilo.marca = marca;
-        c.estilo.texto = c.nombre;
+        c.estilo.texto = pequena ? c.precio : c.nombre;
         return c;
     }
 }

@@ -73,6 +73,7 @@ public class EstadosPlayer : MonoBehaviour
     public static void Acumular(PlayerControler p, EstadoPlayer e, float cantidad)
     {
         if (p == null || e == EstadoPlayer.Ninguno || cantidad <= 0f) return;
+        cantidad *= EfectosAmuletos.MultEstadosRecibidos;
         EstadosPlayer s = p.GetComponent<EstadosPlayer>();
         if (s == null) s = p.gameObject.AddComponent<EstadosPlayer>();
         s.Sumar(e, cantidad);

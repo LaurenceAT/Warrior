@@ -75,20 +75,33 @@ public class PlayerStamina : MonoBehaviour
     private float RitmoNatura() => Natura ? AjustesProgreso.Get().naturaRecuperacion : 1f;
     private float EsperaNatura() => Natura ? AjustesProgreso.Get().naturaEspera : 1f;
 
+    // Costillar hueco: estamina maxima de mas.
+    private static float MaximoConAmuletos => Progreso.EstaminaMax * EfectosAmuletos.MultEstaminaMax;
+
     private void Awake()
     {
-        maxStamina = Progreso.EstaminaMax;
+        maxStamina = MaximoConAmuletos;
         currentStamina = maxStamina;
         exhausted = false;
     }
 
-    private void OnEnable() { Progreso.AlSubirNivel += Recalcular; Hoguera.AlDescansar += Llenar; }
-    private void OnDisable() { Progreso.AlSubirNivel -= Recalcular; Hoguera.AlDescansar -= Llenar; }
+    private void OnEnable() { Progreso.AlSubirNivel += Recalcular; Hoguera.AlDescansar += Llenar; Amuletos.AlCambiar += AmuletosCambiados; }
+    private void OnDisable() { Progreso.AlSubirNivel -= Recalcular; Hoguera.AlDescansar -= Llenar; Amuletos.AlCambiar -= AmuletosCambiados; }
+
+    // Ponerse o quitarse un amuleto: nuevo maximo, sin llenar.
+    private void AmuletosCambiados()
+    {
+        maxStamina = MaximoConAmuletos;
+        currentStamina = Mathf.Min(currentStamina, maxStamina);
+    }
+
+    // Garra amarilla (desventaja): tarda un rato mas en empezar a recuperarse.
+    public void Retrasar(float segundos) => esperaRegen = Mathf.Max(esperaRegen, 0f) + Mathf.Max(0f, segundos);
 
     // Tras subir de nivel: nuevo maximo, y llena.
     private void Recalcular()
     {
-        maxStamina = Progreso.EstaminaMax;
+        maxStamina = MaximoConAmuletos;
         Llenar();
     }
 
@@ -156,7 +169,7 @@ public class PlayerStamina : MonoBehaviour
         }
 
         if (currentStamina < maxStamina)
-            currentStamina = Mathf.Min(maxStamina, currentStamina + regenRate * RitmoEstados() * RitmoNatura() * Time.deltaTime);
+            currentStamina = Mathf.Min(maxStamina, currentStamina + regenRate * RitmoEstados() * RitmoNatura() * EfectosAmuletos.MultRegenEstamina * Time.deltaTime);
 
         if (exhausted && currentStamina >= maxStamina * exhaustedRecoverFraction)
             exhausted = false;

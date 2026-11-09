@@ -6,9 +6,10 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 // Menu de la hoguera (F junto a una hoguera). El juego se para mientras esta
-// abierto. Tres pantallas:
-//   - Principal: Descansar / Subir de nivel y estadisticas / Mejorar
-//     equipamiento / Levantarse.
+// abierto. Pantallas:
+//   - Principal: Descansar / Subir de nivel y estadisticas / Aplicar mejoras /
+//     Amuletos / Levantarse.
+//   - Amuletos: equipados y coleccion (AmuletosHoguera; de momento sin amuletos).
 //   - Nivel: una fila por estadistica (pulsarla sube un nivel si hay almas) y, a
 //     la derecha, todas las estadisticas del personaje con sus numeros exactos,
 //     como en Elden Ring.
@@ -26,10 +27,12 @@ public class MenuHoguera : MonoBehaviour
     // Momento (tiempo real) en que se cerro: la tecla que lo cierra no debe reabrirlo.
     public static float UltimoCierre { get; private set; } = -10f;
 
-    private enum Pagina { Principal, Nivel, Equipo, Aplicar }
+    private enum Pagina { Principal, Nivel, Equipo, Aplicar, Amuletos }
 
     private CanvasGroup grupo;
     private RectTransform paginaPrincipal, paginaNivel, paginaEquipo, paginaAplicar;
+    // Amuletos (por ahora solo la interfaz: AmuletosHoguera).
+    private AmuletosHoguera amuletos;
     private Pagina pagina;
     private bool abierto;
     private int cerradoEnFrame = -1;
@@ -130,6 +133,8 @@ public class MenuHoguera : MonoBehaviour
         paginaNivel.gameObject.SetActive(p == Pagina.Nivel);
         paginaEquipo.gameObject.SetActive(p == Pagina.Equipo);
         paginaAplicar.gameObject.SetActive(p == Pagina.Aplicar);
+        amuletos.Pagina.gameObject.SetActive(p == Pagina.Amuletos);
+        if (p == Pagina.Amuletos) { amuletos.Avisar(""); amuletos.Refrescar(); }
         avisoPrincipal.text = avisoNivel.text = avisoEquipo.text = avisoAplicar.text = "";
         Refrescar();
         GameObject primero = PrimeroDe(p);
@@ -217,6 +222,7 @@ public class MenuHoguera : MonoBehaviour
         {
             case Pagina.Nivel: return filas[0].boton.gameObject;
             case Pagina.Equipo: return botonEspada.gameObject;
+            case Pagina.Amuletos: return amuletos.Primero;
             case Pagina.Aplicar:
                 FilaAplicar f = filasAplicar.Find(x => x.boton.gameObject.activeSelf);
                 return f != null ? f.boton.gameObject : botonVolverAplicar.gameObject;
@@ -399,6 +405,7 @@ public class MenuHoguera : MonoBehaviour
         m.ConstruirNivel(go.transform);
         m.ConstruirEquipo(go.transform);
         m.ConstruirAplicar(go.transform);
+        m.amuletos = AmuletosHoguera.Construir(go.transform, () => m.Mostrar(Pagina.Principal));
 
         TextMeshProUGUI ayuda = EstiloMenu.Texto("Enter / clic: elegir      Esc: volver      F: levantarse", go.transform, 22, new Color(0.8f, 0.78f, 0.75f, 0.6f));
         ayuda.rectTransform.anchorMin = ayuda.rectTransform.anchorMax = new Vector2(0.5f, 0.05f);
@@ -420,7 +427,7 @@ public class MenuHoguera : MonoBehaviour
 
     private void ConstruirPrincipal(Transform raiz)
     {
-        RectTransform panel = EstiloMenu.Panel(raiz, "HOGUERA", new Vector2(720f, 600f));
+        RectTransform panel = EstiloMenu.Panel(raiz, "HOGUERA", new Vector2(720f, 680f));
         paginaPrincipal = (RectTransform)panel.parent;
         textoLugar = EstiloMenu.Texto("", panel, 26, new Color(0.85f, 0.78f, 0.68f));
         textoLugar.fontStyle = FontStyles.Italic;
@@ -433,6 +440,7 @@ public class MenuHoguera : MonoBehaviour
         // En los desafios: "Aplicar mejoras" (lo del cofre y el totem).
         botonEquipo = EstiloMenu.Opcion(col.transform, "Mejorar equipamiento", AbrirEquipo, 64f, 32f, r.Icono("ctrl_espada"), TextAlignmentOptions.Left);
         botonEquipo.GetComponentInChildren<TextMeshProUGUI>().richText = true;
+        EstiloMenu.Opcion(col.transform, "Amuletos", () => Mostrar(Pagina.Amuletos), 64f, 32f, AmuletosHoguera.IconoMenu(), TextAlignmentOptions.Left);
         EstiloMenu.Opcion(col.transform, "Levantarse", Cerrar, 64f, 32f, null, TextAlignmentOptions.Left);
         avisoPrincipal = Aviso(panel, 50f);
     }
@@ -526,7 +534,7 @@ public class MenuHoguera : MonoBehaviour
 
     private void ConstruirAplicar(Transform raiz)
     {
-        RectTransform panel = EstiloMenu.Panel(raiz, "APLICAR MEJORAS", new Vector2(1100f, 930f));
+        RectTransform panel = EstiloMenu.Panel(raiz, "APLICAR MEJORAS", new Vector2(1100f, 1000f));
         paginaAplicar = (RectTransform)panel.parent;
         destelloAplicar = EstiloMenu.Caja("Destello", panel, Color.clear);
         EstiloMenu.Estirar(destelloAplicar.rectTransform);
@@ -539,7 +547,7 @@ public class MenuHoguera : MonoBehaviour
         foreach (Equipo.Objeto o in Desafio.ObjetosMejora)
         {
             FilaAplicar f = new FilaAplicar { objeto = o };
-            f.boton = Seccion(col.transform, Equipo.Nombre(o), r.Icono(Equipo.ClaveIcono(o)), () => Aplicar(f), out f.detalle, 116f);
+            f.boton = Seccion(col.transform, Equipo.Nombre(o), r.Icono(Equipo.ClaveIcono(o)), () => Aplicar(f), out f.detalle, 104f);
             f.titulo = f.boton.GetComponentInChildren<TextMeshProUGUI>();
             f.titulo.richText = true;
             filasAplicar.Add(f);

@@ -44,6 +44,19 @@ public class PlayerMana : MonoBehaviour
         return actual - antes;
     }
 
+    // Anillo de la marea: el mana vuelve solo, muy despacio.
+    private float acumulado;
+    private void Update()
+    {
+        float porSegundo = EfectosAmuletos.ManaPorSegundo;
+        if (porSegundo <= 0f || actual >= maximo) { acumulado = 0f; return; }
+        acumulado += porSegundo * Time.deltaTime;
+        if (acumulado < 1f) return;
+        float n = Mathf.Floor(acumulado);
+        acumulado -= n;
+        Recuperar(n);
+    }
+
     // Relee el maximo por si acaba de cambiar (subir de nivel en el mismo menu).
     public void Llenar()
     {

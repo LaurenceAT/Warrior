@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bff91b2705fa61c4aaadf5dd3491881d, type: 3}
+  m_Name: AjustesAmuletos
+  m_EditorClassIdentifier: 
+  ultimoGolpeCombo: 1.2
+  aereoYPicado: 1.25
+  trasParry: 1.3
+  vidaLlena: 1.15
+  vidaBaja: 1.25
+  umbralVidaBaja: 0.25
+  trasEsquiva: 1.2
+  segundosTrasEsquiva: 0.6
+  sinImbuir: 1.12
+  ondaPicado: 0.5
+  cajaOndaPicado: {x: 6, y: 1.2}
+  brasaDano: 1.12
+  brasaQuemadura: 1.15
+  brasaDanoMagicoRecibido: 1.1
+  escarchaCongelar: 1.18
+  escarchaEstaminaGolpe: 8
+  lazoDrenaje: 1.25
+  lazoFrasco: 0.85
+  garraSagrado: 1.25
+  garraEsperaEstamina: 1
+  rosarioSangrado: 1.18
+  rosarioCosteVida: 0.75
+  rosarioSangradoPropio: 1.25
+  dedoDuracion: 1.5
+  sesoCosteMana: 0.5
+  sesoDuracion: 0.7
+  guardianFisico: 0.85
+  amatistaMagico: 0.85
+  velaEstados: 0.6
+  yelmoGolpeLeve: 0.12
+  munecoEspinas: 0.2
+  plumaEsquiva: 1.3
+  calaveraActiva: 1
+  vigiaVentanaParry: 1.4
+  brazoBloqueo: 0.7
+  ciervoManaParry: 10
+  raizRecuperacion: 1.25
+  costillarEstamina: 1.2
+  pieCosteCorrer: 0.7
+  pieVelocidad: 1.1
+  guanteParedCornisa: 0.6
+  corazonVida: 1.15
+  muelasFrasco: 1.25
+  cuencoFrascoMana: 1.3
+  huesoCargas: 1
+  mareaManaSegundo: 1
+  gemaCura: 2
+  gemaEspera: 1
+  llavePrecios: 0.9
+  mandibulaRuido: 0.7

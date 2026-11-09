@@ -17,7 +17,8 @@ using UnityEngine;
 public static class Equipo
 {
     // Los numeros se guardan en escenas y datos: no cambiar los que ya existen.
-    public enum Objeto { PiedraForja = 0, LagrimaSagrada = 1, LagrimaCarmesi = 2, LagrimaCeleste = 3, FrascoSangre = 4, FrascoMana = 5 }
+    // VestigioVacio: abre un hueco de amuleto (Amuletos) al aplicarlo en la hoguera.
+    public enum Objeto { PiedraForja = 0, LagrimaSagrada = 1, LagrimaCarmesi = 2, LagrimaCeleste = 3, FrascoSangre = 4, FrascoMana = 5, VestigioVacio = 6 }
 
     public static event Action AlCambiar;
 
@@ -72,6 +73,7 @@ public static class Equipo
             case Objeto.LagrimaCeleste: return "Lágrima celeste";
             case Objeto.FrascoSangre: return "Frasco de sangre";
             case Objeto.FrascoMana: return "Frasco de maná";
+            case Objeto.VestigioVacio: return "Vestigio del Vacío";
             default: return "Lágrima sagrada";
         }
     }
@@ -85,6 +87,7 @@ public static class Equipo
             case Objeto.LagrimaCeleste: return "Se usa en la hoguera: el frasco de maná devuelve más.";
             case Objeto.FrascoSangre: return "Una carga más para el frasco de sangre.";
             case Objeto.FrascoMana: return "Una carga más para el frasco de maná.";
+            case Objeto.VestigioVacio: return "Abre un hueco de amuleto.";
             default: return "Mejora los dos frascos.";
         }
     }
@@ -98,6 +101,7 @@ public static class Equipo
             case Objeto.LagrimaCeleste: return "objeto_lagrima_mana";
             case Objeto.FrascoSangre: return "objeto_frasco_sangre";
             case Objeto.FrascoMana: return "objeto_frasco_mana";
+            case Objeto.VestigioVacio: return "objeto_vestigio";
             default: return "objeto_lagrima";
         }
     }
@@ -161,6 +165,7 @@ public static class Equipo
             case Objeto.LagrimaCeleste: if (NivelMana >= NivelMaximoMana) return false; Sumar(o, Mathf.Max(1, CosteFrascos)); return MejorarMana();
             case Objeto.FrascoSangre:
             case Objeto.FrascoMana: Sumar(o); return true;
+            case Objeto.VestigioVacio: return Amuletos.AbrirHueco();
             default: return false;
         }
     }
@@ -242,6 +247,7 @@ public static class Equipo
             case Objeto.LagrimaCeleste: return NivelMana + pendientes >= NivelMaximoMana;
             case Objeto.FrascoSangre: return FrascosSangreExtra + pendientes >= A.frascosExtraMaximo;
             case Objeto.FrascoMana: return FrascosManaExtra + pendientes >= A.frascosExtraMaximo;
+            case Objeto.VestigioVacio: return Amuletos.HuecosAbiertos + pendientes >= Amuletos.HuecosMaximos;
             default: return false;
         }
     }

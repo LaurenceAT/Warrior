@@ -201,6 +201,9 @@ public class PlayerControler : MonoBehaviour
     private PlayerMana mana;
     // Fraccion del dano que devuelve como vida el elemento oscuro.
     [SerializeField] private float drenajeOscuro = 0.2f;
+    // Amuletos: el golpe que se esta dando (para el ultimo del combo) y cuando acabo la ultima esquiva.
+    private int indiceGolpeActual = -1;
+    private float finEsquiva = -99f;
 
     [Header("Hielo, viento y escarcha")]
     // Suelo de hielo (SueloHielo): la velocidad no cambia de golpe, se va
@@ -1348,11 +1351,11 @@ public class PlayerControler : MonoBehaviour
         }
 
         // Correr gasta estamina mientras dura. Al vaciarse, se vuelve a andar.
-        if (isSprinting && !estamina.SpendOverTime(estamina.SprintCostPerSecond, Time.fixedDeltaTime))
+        if (isSprinting && !estamina.SpendOverTime(estamina.SprintCostPerSecond * EfectosAmuletos.MultCosteCorrer, Time.fixedDeltaTime))
             isSprinting = false;
 
         // La rampa evita el tiron de pasar de golpe de una velocidad a otra.
-        float objetivo = isSprinting ? sprintSpeed : speed;
+        float objetivo = isSprinting ? sprintSpeed * EfectosAmuletos.MultVelocidadCorrer : speed;
         currentSpeed = sprintAcceleration <= 0f
             ? objetivo
             : Mathf.MoveTowards(currentSpeed, objetivo, sprintAcceleration * Time.fixedDeltaTime);
@@ -1828,7 +1831,18 @@ public class PlayerControler : MonoBehaviour
             m_rigitbody2D.linearVelocity = Vector2.zero;
             m_animator.SetInteger(IdPlungePhase, 2);
             // Los que ya salieron volando al atravesarlos no reciben otro golpe.
-            GolpearCaja(plungeLandOffset, plungeLandSize, plungeDamage, plungeKnockback, atravesados);
+            int danoPicado = Mathf.RoundToInt(plungeDamage * MultDanoAmuletos());
+            GolpearCaja(plungeLandOffset, plungeLandSize, danoPicado, plungeKnockback, atravesados);
+            // Bota del caminante: una onda a los dos lados al tocar el suelo.
+            if (EfectosAmuletos.OndaPicado)
+            {
+                AjustesAmuletos aa = AjustesAmuletos.Get();
+                GolpearCaja(new Vector2(0f, aa.cajaOndaPicado.y * 0.5f), aa.cajaOndaPicado, Mathf.Max(1, Mathf.RoundToInt(danoPicado * aa.ondaPicado)),
+                            plungeKnockback * 0.6f, atravesados);
+                Vector2 pies = m_transform.position;
+                ParticulasFx.Rafaga(pies + Vector2.right * 0.6f, 10, new Color(0.85f, 0.8f, 0.7f), Color.white, new Vector2(3f, 6f), 0.4f, new Vector2(0.05f, 0.1f), new Vector2(0.2f, 0.4f));
+                ParticulasFx.Rafaga(pies + Vector2.left * 0.6f, 10, new Color(0.85f, 0.8f, 0.7f), Color.white, new Vector2(3f, 6f), 0.4f, new Vector2(0.05f, 0.1f), new Vector2(0.2f, 0.4f));
+            }
             Sacudir(plungeLandShake);
             yield return new WaitForSeconds(plungeLandTime);
         }
@@ -1937,6 +1951,7 @@ public class PlayerControler : MonoBehaviour
     // Aplica el golpe del perfil indicado a todo lo que haya en su area.
     private int AplicarGolpe(int index)
     {
+        indiceGolpeActual = index;
         AttackProfile perfil = PerfilDeAtaque(index);
         if (perfil == null) return 0;
 
@@ -2025,14 +2040,21 @@ public class PlayerControler : MonoBehaviour
         Sonido.ReproducirCanal("espada", "espada_impacto", 0.8f);
         // El mana ya no vuelve al golpear: solo con las pociones de mana.
 
+        // Gema de sangre: cada golpe que entra cura un poco (con espera).
+        if (enemigo != null && enemigo.UltimoDano > 0)
+        {
+            int gema = EfectosAmuletos.CuraAlGolpear();
+            if (gema > 0) CurarDrenaje(gema);
+        }
+
         Elemento e = ElementoActivo;
         if (e == Elemento.Ninguno || enemigo == null) return;
         int dano = enemigo.UltimoDano;
         if (!enemigo.Muerto && dano > 0) EstadosEnemigo.Aplicar(enemigo, e, dano);
-        if (e == Elemento.Oscuro && dano > 0) CurarDrenaje(Mathf.Max(1, Mathf.RoundToInt(dano * drenajeOscuro)));
+        if (e == Elemento.Oscuro && dano > 0) CurarDrenaje(Mathf.Max(1, Mathf.RoundToInt(dano * drenajeOscuro * EfectosAmuletos.MultDrenaje)));
         // El precio del sangrado: cada golpe que da tambien le llena a el su barra.
         if (e == Elemento.Sangrado && dano > 0)
-            EstadosPlayer.Acumular(this, EstadoPlayer.Sangrado, AjustesProgreso.Get().sangradoPropioPorGolpe);
+            EstadosPlayer.Acumular(this, EstadoPlayer.Sangrado, AjustesProgreso.Get().sangradoPropioPorGolpe * EfectosAmuletos.MultSangradoPropio);
 
         Color c = Elementos.Color(e);
         RecursosRPG r = RecursosRPG.Get();
@@ -2480,8 +2502,8 @@ public class PlayerControler : MonoBehaviour
 
         // Engancharse cuesta un pico, y subir va gastando. Si se vacia, la
         // subida se corta y entra el deslizamiento.
-        if (enganchando) estamina.Spend(estamina.WallRunEntryCost);
-        if (!estamina.SpendOverTime(estamina.WallRunCostPerSecond, Time.fixedDeltaTime))
+        if (enganchando) estamina.Spend(estamina.WallRunEntryCost * EfectosAmuletos.MultCosteParedCornisa);
+        if (!estamina.SpendOverTime(estamina.WallRunCostPerSecond * EfectosAmuletos.MultCosteParedCornisa, Time.fixedDeltaTime))
         {
             TerminarWallRun(true);
             return;
@@ -2819,7 +2841,8 @@ public class PlayerControler : MonoBehaviour
     private float CosteAtaque(float coste)
     {
         if (armaImbuida != null && armaImbuida.Activo == Elemento.Natura) coste *= AjustesProgreso.Get().naturaCosteAtaque;
-        return coste;
+        // Cristal de escarcha (desventaja): con escarcha, cada golpe cansa mas.
+        return coste + EfectosAmuletos.CosteExtraGolpe(ElementoActivo);
     }
 
     // El cambio de postura antiguo (enfundar con la E). Se conserva por si se
@@ -2982,8 +3005,8 @@ public class PlayerControler : MonoBehaviour
         }
         bebiendo = tipo;
         rutinaBeber = tipo == ReservaPociones.Tipo.Vida
-            ? StartCoroutine(BeberRoutine(Mathf.RoundToInt(maxHealth * Equipo.CuraFrasco), 0f))
-            : StartCoroutine(BeberRoutine(0, mana.Maximo * Equipo.ManaFrasco));
+            ? StartCoroutine(BeberRoutine(Mathf.RoundToInt(maxHealth * Equipo.CuraFrasco * EfectosAmuletos.MultFrascoSangre), 0f))
+            : StartCoroutine(BeberRoutine(0, mana.Maximo * Equipo.ManaFrasco * EfectosAmuletos.MultFrascoMana));
     }
 
     private IEnumerator BeberRoutine(int curacion, float manaDevuelto)
@@ -3078,7 +3101,7 @@ public class PlayerControler : MonoBehaviour
         bool machacando = Time.time - ultimaPulsacionBloqueo < parrySpamTime;
         ultimaPulsacionBloqueo = Time.time;
         tBloqueo = 0f;
-        ventanaParryActual = machacando ? parryWindow * parrySpamFactor : parryWindow;
+        ventanaParryActual = (machacando ? parryWindow * parrySpamFactor : parryWindow) * EfectosAmuletos.MultVentanaParry;
     }
 
     // volverAnimacion: con un golpe recibido no, que la animacion la pone el retroceso.
@@ -3107,6 +3130,8 @@ public class PlayerControler : MonoBehaviour
 
         ventanaContra = counterWindow;
         estamina.Recuperar(parryStaminaGain);
+        // Totem de ciervo: cada parry justo devuelve algo de mana.
+        if (EfectosAmuletos.ManaPorParry > 0f && mana != null) mana.Recuperar(EfectosAmuletos.ManaPorParry);
         // Choque metalico fuerte y, encima, el anillo de la hoja: el parry tiene
         // que sonar distinto (y mas fuerte) que un golpe normal.
         // El tono lo puede subir quien ataca (parrys seguidos al cerco de la Cazadora).
@@ -3275,7 +3300,17 @@ public class PlayerControler : MonoBehaviour
     // Dano con el bonus del contraataque, si esta abierto.
     private int DanoConContra(int dano)
     {
-        return ventanaContra > 0f ? Mathf.RoundToInt(dano * counterDamageMultiplier) : dano;
+        float d = ventanaContra > 0f ? dano * counterDamageMultiplier : dano;
+        return Mathf.RoundToInt(d * MultDanoAmuletos());
+    }
+
+    // Lo que suman los amuletos al dano de este golpe (EfectosAmuletos).
+    private float MultDanoAmuletos()
+    {
+        bool ultimo = isGrounded && !isPlunging && indiceGolpeActual == comboLength - 1;
+        bool aereo = isPlunging || !isGrounded;
+        float vida = maxHealth > 0 ? (float)currentHealth / maxHealth : 1f;
+        return EfectosAmuletos.MultDano(ultimo, aereo, ventanaContra > 0f, ElementoActivo, vida, Time.time - finEsquiva);
     }
 
     // Tras conectar un golpe: si era el contraataque, cierra la ventana y lo hace
@@ -3840,7 +3875,7 @@ public class PlayerControler : MonoBehaviour
         while (t < dodgeDuration)
         {
             float k = t / dodgeDuration;
-            hasIFrames = t >= iFrameStart && t < iFrameStart + iFrameDuration;
+            hasIFrames = t >= iFrameStart && t < iFrameStart + iFrameDuration * EfectosAmuletos.MultEsquiva;
 
             // Arranca a tope y va frenando.
             float velocidad = dodgeSpeed * (1f - dodgeSlowdown * k);
@@ -3865,6 +3900,7 @@ public class PlayerControler : MonoBehaviour
 
         Agacharse(false);
         isDodging = false;
+        finEsquiva = Time.time;
         dodgeCooldownTimer = dodgeCooldown;
         currentSpeed = speed;
 
@@ -3938,6 +3974,15 @@ public class PlayerControler : MonoBehaviour
     private void OnDisable()
     {
         IgnorarEnemigos(false);
+        Amuletos.AlCambiar -= AmuletosCambiados;
+    }
+
+    private void OnEnable() => Amuletos.AlCambiar += AmuletosCambiados;
+
+    // Ponerse o quitarse un amuleto puede cambiar la vida maxima.
+    private void AmuletosCambiados()
+    {
+        if (currentHealth > 0) AplicarProgreso(false);
     }
 
     // Encoge el capsule a la altura del barrido o lo devuelve a su forma. Encoge
@@ -4028,6 +4073,8 @@ public class PlayerControler : MonoBehaviour
         // Desafio en modo Dificil: el jefe pega mas (1 fuera de el).
         damage = Mathf.RoundToInt(damage * Desafio.MultDano);
         damage = ConResistencia(damage, tipo == TipoDano.Magico);
+        // Amuletos de defensa (y la desventaja del Anillo de la brasa).
+        damage = Mathf.Max(1, Mathf.RoundToInt(damage * EfectosAmuletos.MultDanoRecibido(tipo == TipoDano.Magico, ElementoActivo)));
         if (InvulnerableExterno || invulnerableDerribado) return ResultadoDano.Ignorado;
 
         if (atacante != null && isBlocking && !isInvincible && (desdeArriba || GolpeDeFrente(atacante.transform, origenX)))
@@ -4037,7 +4084,7 @@ public class PlayerControler : MonoBehaviour
             if (estamina.CanSpend())
             {
                 // Bloqueo normal: gasta estamina y entra una parte del dano.
-                estamina.Spend(blockStaminaCost);
+                estamina.Spend(blockStaminaCost * EfectosAmuletos.MultCosteBloqueo);
                 GolpeBloqueado();
                 DanoReducido(Mathf.Max(1, Mathf.RoundToInt(damage * blockDamageFactor)));
                 EstadosPlayer.Acumular(this, estado, acumulacion * 0.3f);
@@ -4048,7 +4095,32 @@ public class PlayerControler : MonoBehaviour
 
         if (!RecibirDano(damage)) return ResultadoDano.Ignorado;
         EstadosPlayer.Acumular(this, estado, acumulacion);
+        Espinas(atacante, damage);
         return ResultadoDano.Recibido;
+    }
+
+    // Muneco de trapo: parte del dano recibido vuelve al que lo hizo.
+    private void Espinas(Component atacante, int damage)
+    {
+        float parte = EfectosAmuletos.Espinas;
+        if (parte <= 0f || atacante == null) return;
+        EnemyHealth e = atacante.GetComponent<EnemyHealth>();
+        if (e == null) e = atacante.GetComponentInParent<EnemyHealth>();
+        if (e == null || e.Muerto) return;
+        e.DanoEstado(Mathf.Max(1, Mathf.RoundToInt(damage * parte)));
+        ParticulasFx.Rafaga(e.transform.position + Vector3.up, 6, new Color(0.75f, 0.5f, 0.35f), Color.white, new Vector2(1f, 2.5f), 0.4f,
+                            new Vector2(0.04f, 0.08f), new Vector2(0.2f, 0.4f));
+    }
+
+    // Calavera votiva: un golpe que iba a matar te deja con 1 de vida (una vez por descanso).
+    private bool SalvadoPorCalavera()
+    {
+        if (currentHealth > 0 || !EfectosAmuletos.SalvarGolpeMortal()) return false;
+        currentHealth = 1;
+        PlayerHud.Get().Damage(currentHealth, maxHealth);
+        TextoFlotante.Mostrar("La calavera se quiebra", (Vector2)m_transform.position + Vector2.up * 1.3f, new Color(0.95f, 0.9f, 0.75f), 1f);
+        ScreenFlash.Destello(new Color(1f, 0.95f, 0.8f, 0.35f), 0.3f);
+        return true;
     }
 
     // Resistencias de la hoguera: quitan una parte del dano (minimo 1). La
@@ -4086,7 +4158,7 @@ public class PlayerControler : MonoBehaviour
         Bitacora.GolpeRecibido();
         currentHealth -= dano;
         PlayerHud.Get().Damage(currentHealth, maxHealth);
-        if (currentHealth > 0) return;
+        if (currentHealth > 0 || SalvadoPorCalavera()) return;
         if (isBlocking) TerminarBloqueo(false);
         Die();
         GameManager.Instance.RespawnPlayer();
@@ -4139,9 +4211,10 @@ public class PlayerControler : MonoBehaviour
         SoltarSuspensionAerea();
         CortarBebida();
 
-        Knockback();
+        // Yelmo abollado: los golpes leves no empujan.
+        if (!EfectosAmuletos.SinEmpujon(damage, maxHealth)) Knockback();
 
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && !SalvadoPorCalavera())
         {
             Die();
             GameManager.Instance.RespawnPlayer();
@@ -4234,7 +4307,8 @@ public class PlayerControler : MonoBehaviour
     public void AplicarProgreso(bool curar)
     {
         int antes = maxHealth;
-        maxHealth = Progreso.VidaMax;
+        // Corazon que late: vida maxima de mas.
+        maxHealth = Mathf.Max(1, Mathf.RoundToInt(Progreso.VidaMax * EfectosAmuletos.MultVidaMax));
         if (curar) currentHealth = maxHealth;
         else if (currentHealth > 0 && antes > 0 && antes != maxHealth)
             currentHealth = Mathf.Clamp(Mathf.RoundToInt(currentHealth * (float)maxHealth / antes), 1, maxHealth);

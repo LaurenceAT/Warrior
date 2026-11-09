@@ -353,7 +353,8 @@ public abstract class EnemigoBase : MonoBehaviour
         if (!BuscarPlayer()) return false;
         if (EsJefe) return VerPlayerJefe(ojos);
         float d = Vector2.Distance(ojos, player.position);
-        float radio = alerta ? radioOlvido : radioDeteccion;
+        // Mandibula del mudo: te ven mas tarde (los ya alertados, igual).
+        float radio = alerta ? radioOlvido : radioDeteccion * EfectosAmuletos.MultRuido;
         bool fuera = Mathf.Abs(player.position.x - origenZona.x) > radioZona + radioOlvido * 0.5f;
         if (d > radio || fuera)
         {
@@ -381,7 +382,7 @@ public abstract class EnemigoBase : MonoBehaviour
     private bool VerPlayerJefe(Vector2 ojos)
     {
         float d = Vector2.Distance(ojos, player.position);
-        float radio = alerta ? radioOlvido : radioDeteccion;
+        float radio = alerta ? radioOlvido : radioDeteccion * EfectosAmuletos.MultRuido;
         if (d > radio) { alerta = false; return false; }
         bool despejado = !Physics2D.Linecast(ojos, player.position, capaSuelo);
         if (despejado) alerta = true;

@@ -97,7 +97,7 @@ public static class PruebaRonda17
             Globales.PonerMarca(CodigosSecretos.Marca(caz.id), true);
             Globales.PonerMarca("revelado_" + caz.id, true);
             Globales.PonerMarca("dialogo_cazadora", true);
-            Comprobar(caz.almasCofre == 4500 && caz.objetosCofre.Length == 5, "ficha del cofre de la Cazadora: 4500 almas y 5 objetos");
+            Comprobar(caz.almasCofre == 6500 && caz.objetosCofre.Length == 5, "ficha del cofre de la Cazadora: 6500 almas y 5 objetos");
             yield return new WaitForSeconds(2f);
             Desafio.Empezar(caz, false);
             yield return null;
