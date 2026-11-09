@@ -70,9 +70,8 @@ public static class PruebaBringerOfDeath
         CatalogoPruebas.Entrada e = cat != null ? cat.entradas.FirstOrDefault(x => x != null && x.prefab == prefab) : null;
         Comprobar(e != null && e.arena == CatalogoPruebas.TipoArena.Generica && !e.barraPorFase && Mathf.Approximately(e.marcaFase, 0.5f),
                   "en el catalogo de la sala: una sola barra con la marca en la mitad");
-        bool enResources = AssetDatabase.FindAssets("Bringer", new[] { "Assets/Resources" }).Length > 0;
-        bool enBuild = EditorBuildSettings.scenes.Any(s => s.path.Contains("Bringer") || s.path.Contains("SalaPruebas"));
-        Comprobar(!enResources && !enBuild, "no esta en Resources ni en Build Settings");
+        // Ya esta en Desafios (su ficha y la escena Cueva Bringer); la sala sigue fuera de la build.
+        Comprobar(!EditorBuildSettings.scenes.Any(s => s.path.Contains("SalaPruebas")), "la sala de pruebas no esta en Build Settings");
 
         SessionState.SetString(Clave, "jugar");
         EditorSceneManager.OpenScene(SalaPruebas.Ruta, OpenSceneMode.Single);

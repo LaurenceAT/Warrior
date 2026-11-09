@@ -68,10 +68,16 @@ public partial class JefeBringer : JefeBase, IModificadorDano, IAfinidadElementa
     public override string[] AtaquesPrueba => Todos;
     public override void ForzarAtaque(string ataque) => ataqueForzado = ataque;
 
+    // No cae desde arriba (la arena puede tener techo): aparece ya en el suelo,
+    // en el sitio donde lo pone la arena.
     public override void Configurar(Rect zona, float alturaSuelo)
     {
         arena = zona;
         suelo = alturaSuelo;
+        float y = PeligrosJefe.SueloBajo(new Vector2(transform.position.x, alturaSuelo + 2f), alturaSuelo);
+        Vector2 p = new Vector2(transform.position.x, y + 0.05f);
+        transform.position = p;
+        if (rb != null) { rb.position = p; rb.linearVelocity = Vector2.zero; }
     }
 
     // ------------------------------------------------------------------ Vida y dano
@@ -213,14 +219,20 @@ public partial class JefeBringer : JefeBase, IModificadorDano, IAfinidadElementa
         return ultimoElegido = Guadana;
     }
 
-    // Entrada: cae en la arena; al tocar el suelo salen su nombre y su barra.
+    // Entrada: se forma desde el humo en el suelo de la arena (invulnerable
+    // mientras); entonces salen su nombre y su barra.
     private IEnumerator Entrada()
     {
         CambiarEstado(EstadoEnemigo.Alerta);
-        anim.Reproducir(ClipQuieto, true);
         BuscarPlayer();
         MirarYa();
-        while (!EnSuelo) yield return null;
+        oculto = true;
+        anim.Reproducir(ClipAparecer, true, 0.8f);
+        Sonar("teletransporte", 0.8f, 0.7f);
+        while (!anim.Terminado) yield return null;
+        anim.Reproducir(ClipQuieto, true);
+        oculto = false;
+        for (float t = 0f; t < 2f && !EnSuelo; t += Time.deltaTime) yield return null;
         entrado = true;
         Sacudir(1f);
         Sonar("jefe_aparicion");

@@ -17,6 +17,9 @@ public class BarraJefe : MonoBehaviour
     private float objetivo = 1f, valorRastro = 1f, esperaRastro;
     private float alfaObjetivo;
     private RectTransform marco, lienzo;
+    // Barras apiladas (un duo de jefes): la segunda va encima de la primera.
+    private float subida;
+    public const float AlturaPiso = 80f;
 
     // Larga, desde la izquierda hasta la columna de la derecha (AjustesInterfaz).
     private void Colocar()
@@ -24,7 +27,14 @@ public class BarraJefe : MonoBehaviour
         if (marco == null || lienzo == null) return;
         AjustesInterfaz.Get().Barra(lienzo.rect.width, out float x, out float ancho, out float altura);
         marco.sizeDelta = new Vector2(ancho, 22f);
-        marco.anchoredPosition = new Vector2(x, altura);
+        marco.anchoredPosition = new Vector2(x, altura + subida);
+    }
+
+    // Piso de la barra: 0 = la de siempre; 1 = encima (con su nombre, sin pisar el de abajo).
+    public void Apilar(int piso)
+    {
+        subida = Mathf.Max(0, piso) * AlturaPiso;
+        Colocar();
     }
 
     private void LateUpdate() => Colocar();

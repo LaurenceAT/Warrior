@@ -17,6 +17,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Nivel Cueva.unity
     guid: 5997edbd1b1fb9848a259a5530be8a53
+  - enabled: 1
+    path: Assets/Scenes/Cueva Bringer.unity
+    guid: 0a954efd8297dd24882acc8a6619a56d
+  - enabled: 1
+    path: Assets/Scenes/Bosque Duo Martial.unity
+    guid: 581a85ac835e46548ac75f1a46b77389
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

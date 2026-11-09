@@ -204,13 +204,15 @@ public class MediaLunaNecro : MonoBehaviour
     private bool acabada;
     private EfectoVisual fx;
 
-    public static void Lanzar(AnimadorHoja.Clip clip, Vector2 pos, int dir, float velocidad, float alcance, int dano, Vector2 caja, Color color)
+    // dibujoAlReves: el dibujo mira a la izquierda (se voltea al ir a la derecha).
+    public static void Lanzar(AnimadorHoja.Clip clip, Vector2 pos, int dir, float velocidad, float alcance, int dano, Vector2 caja, Color color,
+                              bool dibujoAlReves = false, string sonido = "jefe_medialuna")
     {
         GameObject go = PeligrosBringer.Nuevo("MediaLunaNecro", pos);
         MediaLunaNecro m = go.AddComponent<MediaLunaNecro>();
         m.dir = dir; m.velocidad = velocidad; m.alcance = alcance; m.dano = dano; m.caja = caja;
-        m.fx = PeligrosBringer.Efecto(go.transform, clip, pos, 1f, color, dir < 0, 12);
-        Sonido.Reproducir("jefe_medialuna", 0.6f, 0.9f);
+        m.fx = PeligrosBringer.Efecto(go.transform, clip, pos, 1f, color, dibujoAlReves ? dir > 0 : dir < 0, 12);
+        if (!string.IsNullOrEmpty(sonido)) Sonido.Reproducir(sonido, 0.6f, 0.9f);
     }
 
     private void Update()

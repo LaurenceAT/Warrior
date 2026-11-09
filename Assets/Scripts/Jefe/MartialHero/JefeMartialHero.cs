@@ -40,6 +40,10 @@ public class JefeMartialHero : JefeBase, IModificadorDano, IAturdible
                         ClipDesenvaine = "desenvaine", ClipTajo = "tajo", ClipGuardia = "guardia";
 
     [SerializeField] private AjustesMartialHero ajustes;
+    [Tooltip("Duo: la onda de tajo que lanza desde lejos (la pone Warrior > Desafios nuevos).")]
+    public AnimadorHoja.Clip fxOnda;
+    // Duo: ondas lanzadas (lo leen las pruebas).
+    public int OndasLanzadas { get; private set; }
 
     private Rect arena;
     private float suelo;
@@ -177,8 +181,17 @@ public class JefeMartialHero : JefeBase, IModificadorDano, IAturdible
     protected override IEnumerator Cerebro()
     {
         yield return Entrada();
+        if (ajustes.duo) DirectorDuo.Entrar(this);
         while (true)
         {
+            // Duo: si no le toca atacar, se aleja y lanza ondas (si te acercas o le
+            // pegas, se defiende con el combo como siempre).
+            if (ajustes.duo && DirectorDuo.RolDe(this) == DirectorDuo.Rol.Ondas)
+            {
+                yield return LanzarOndas();
+                if (guardiaRota) { yield return GuardiaRota(); continue; }
+                if (!pideContraataque && !pideRadio) continue;
+            }
             yield return Cubrirse(Random.Range(ajustes.pausa.x, ajustes.pausa.y));
             if (guardiaRota) { yield return GuardiaRota(); continue; }
             Motivo motivo;
@@ -212,7 +225,87 @@ public class JefeMartialHero : JefeBase, IModificadorDano, IAturdible
             AnunciarAtaque(v.id);
             yield return Combo(v);
             yield return TrasAccion();
+            if (ajustes.duo) DirectorDuo.FinCombo(this, ajustes.probAmbos);
         }
+    }
+
+    // ------------------------------------------------------------------ Duo: ondas desde lejos
+
+    // Se aleja de ti (si estas cerca) y, cubierto entre una y otra, lanza ondas
+    // de tajo por el suelo o altas. Para en cuanto le toca atacar, entras en su
+    // radio, le pegas o le rompen la guardia.
+    private IEnumerator LanzarOndas()
+    {
+        BuscarPlayer();
+        if (player == null) { yield return null; yield break; }
+        if (Mathf.Abs(DxPlayer) < ajustes.distanciaOndas.x)
+            yield return Alejarse(Random.Range(ajustes.distanciaOndas.x, ajustes.distanciaOndas.y));
+        for (int i = 0; i < ajustes.ondasSeguidas; i++)
+        {
+            if (DirectorDuo.RolDe(this) != DirectorDuo.Rol.Ondas || pideContraataque || pideRadio || guardiaRota) yield break;
+            PonerGuardia();
+            float pausa = PausaDesafio(Random.Range(ajustes.pausaOndas.x, ajustes.pausaOndas.y));
+            float detras = -1f;
+            for (float t = 0f; t < pausa && !pideContraataque && !pideRadio && !guardiaRota; t += Time.deltaTime)
+            {
+                BuscarPlayer();
+                Tenir();
+                Girar(ref detras);
+                rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+                if (DentroRadio) pideRadio = true;
+                yield return null;
+            }
+            if (pideContraataque || pideRadio || guardiaRota) yield break;
+            yield return Onda();
+        }
+    }
+
+    // Corre en direccion contraria a ti hasta estar lejos (o hasta el borde).
+    private IEnumerator Alejarse(float lejos)
+    {
+        Pasar(EstadoMartial.Acecho);
+        CambiarEstado(EstadoEnemigo.Reposicion);
+        enGuardia = false;
+        anim.Reproducir(ClipCorrer);
+        int dir = DxPlayer > 0f ? -1 : 1;
+        for (float t = 0f; t < ajustes.tiempoMaxCorrer && Mathf.Abs(DxPlayer) < lejos && !pideContraataque && !guardiaRota; t += Time.deltaTime)
+        {
+            Mirar(dir);
+            if (!DentroDeArena(dir)) break;
+            rb.linearVelocity = new Vector2(dir * ajustes.velocidadCorrer * Desafio.MultVelocidad, rb.linearVelocity.y);
+            yield return null;
+        }
+        rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        MirarYa();
+    }
+
+    // Una onda: el tajo de siempre con su aviso naranja (sostenido en alto) y, al
+    // cortar, la media luna sale volando. Sin guardia mientras: le entra todo.
+    private IEnumerator Onda()
+    {
+        enGuardia = false;
+        Pasar(EstadoMartial.Combo);
+        CambiarEstado(EstadoEnemigo.Anticipacion);
+        MirarYa();
+        AjustesMartialHero.Golpe g = ajustes.tajo;
+        float inicio = Time.time;
+        ritmo.Avisar(g.peso, ajustes.avisoOnda + 0.4f);
+        anim.Reproducir(ClipTajo, true, 1f);
+        while (anim.Fotograma < g.cuadroAviso && !anim.Terminado) yield return null;
+        anim.Reproducir(ClipTajo, false, 0f);
+        while (Time.time - inicio < ajustes.avisoOnda) { rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y); yield return null; }
+        anim.Reproducir(ClipTajo, false, 1f);
+        while (anim.Fotograma < g.golpeDesde && !anim.Terminado) yield return null;
+        ritmo.QuitarAviso();
+        Sonar("jefe_tajo");
+        bool alta = Random.value < ajustes.probOndaAlta;
+        Vector2 desde = (Vector2)transform.position + new Vector2(mirada * 0.9f, alta ? ajustes.alturaOndaAlta : ajustes.alturaOnda);
+        MediaLunaNecro.Lanzar(fxOnda, desde, mirada, ajustes.velocidadOnda, ajustes.alcanceOnda, ajustes.danoOnda, ajustes.cajaOnda,
+                              Color.white, true, "jefe_medialuna");
+        OndasLanzadas++;
+        while (!anim.Terminado) yield return null;
+        CambiarEstado(EstadoEnemigo.Recuperacion);
+        anim.Reproducir(ClipQuieto, true);
     }
 
     // Entrada: cae en la arena; al tocar el suelo salen su nombre y su barra.

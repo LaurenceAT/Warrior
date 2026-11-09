@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5e6457589b73384690dd3830693be56, type: 3}
+  m_Name: Ajustes Martial Hero Duo
+  m_EditorClassIdentifier: 
+  nombreMostrado: Martial Hero
+  vida: 720
+  cuerpo: {x: 0.8, y: 1.75}
+  velocidadCorrer: 5.5
+  distanciaAtaque: 1.6
+  tiempoMaxCorrer: 2.5
+  margenArena: 1
+  pausa: {x: 0.5, y: 0.9}
+  reglas:
+    avisoMinLigero: 0.3
+    avisoMinPesado: 0.5
+    avisoMinFinal: 0.3
+    pausaMinEntreGolpes: 0.3
+    colorLigero: {r: 1, g: 0.55, b: 0.1, a: 1}
+    colorPesado: {r: 1, g: 0.12, b: 0.08, a: 1}
+    intensidadAviso: 0.6
+    parpadeoLigero: 9
+    parpadeoPesado: 2.5
+    maxGolpesSeguidos: 4
+    pausaRecuperacion: 0.8
+    topeDanoCombo: 0.5
+    paradaImagen: 0.04
+    colorChispas: {r: 1, g: 0.85, b: 0.45, a: 1}
+    colorChispas2: {r: 1, g: 0.45, b: 0.15, a: 1}
+    chispas: 14
+    tonoInicial: 1
+    subidaTono: 0.06
+    tonoMaximo: 1.5
+    tonoReiniciaAlFallar: 1
+    tonoReiniciaSegundos: 4
+  desenvaine:
+    nombre: Desenvaine
+    peso: 0
+    aviso: 0.3
+    dano: 22
+    cajaCentro: {x: 1.1, y: 0.9}
+    cajaTamano: {x: 1.9, y: 1.6}
+    cuadroAviso: 3
+    golpeDesde: 4
+    golpeHasta: 5
+  tajo:
+    nombre: Tajo
+    peso: 0
+    aviso: 0.3
+    dano: 24
+    cajaCentro: {x: 1.1, y: 0.6}
+    cajaTamano: {x: 2.1, y: 1.2}
+    cuadroAviso: 3
+    golpeDesde: 4
+    golpeHasta: 5
+  variantes:
+  - id: combo_cuadruple
+    nombre: Combo cuadruple
+    frecuencia: 1
+    golpes: 00000000010000000000000001000000
+  radioEntrada: 2.8
+  retrasoContraataque: 0.25
+  danoEnGuardia: 0.1
+  giroGuardia: 0.3
+  chispasGuardia: 8
+  colorGuardia: {r: 0.45, g: 0.8, b: 1, a: 1}
+  intensidadGuardia: 0.3
+  aturdidoCombo: 2
+  multDanoAturdido: 1.5
+  inmunidadTrasAturdido: 2
+  colorChispasInmune: {r: 0.75, g: 0.75, b: 0.8, a: 1}
+  colorChispasInmune2: {r: 0.45, g: 0.45, b: 0.5, a: 1}
+  textoInmune: "\xA1Firme!"
+  colorTextoInmune: {r: 0.8, g: 0.82, b: 0.9, a: 1}
+  textoAturdido: Aturdido
+  colorTextoAturdido: {r: 1, g: 0.85, b: 0.45, a: 1}
+  temblorAturdido: 0.04
+  aturdidoRomperGuardia: 0.6
+  textoGuardiaRota: "\xA1Guardia rota!"
+  fpsEspera: 10
+  fpsCorrer: 12
+  fpsAtaque: 12
+  fpsMuerte: 8
+  fpsAturdido: 12
+  duo: 1
+  probAmbos: 0.25
+  distanciaOndas: {x: 6.5, y: 10}
+  ondasSeguidas: 2
+  pausaOndas: {x: 0.6, y: 1.1}
+  avisoOnda: 0.45
+  danoOnda: 16
+  velocidadOnda: 10
+  alcanceOnda: 22
+  cajaOnda: {x: 0.9, y: 1.1}
+  alturaOnda: 0.8
+  alturaOndaAlta: 2.1
+  probOndaAlta: 0.3

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0501a0a9ad8cb4196a4b884040fa45, type: 3}
+  m_Name: Dificil_4_cicatriz_duo
+  m_EditorClassIdentifier: 
+  id: cicatriz_duo
+  seccion: 2
+  orden: 4
+  nombre: Cicatriz doble
+  descripcion: "Derrota a Duo Martial Hero en dificultad Dif\xEDcil."
+  icono: {fileID: 1938922340795139049, guid: 4dedd0f0ce17299429d8dc9cc1fb6596, type: 3}
+  condicion: 4
+  parametro: duo_martial_hero
+  jefeSecreto: 

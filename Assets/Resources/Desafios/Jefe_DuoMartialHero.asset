@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f71912a9dcdf940876bbc943f6992b, type: 3}
+  m_Name: Jefe_DuoMartialHero
+  m_EditorClassIdentifier: 
+  id: duo_martial_hero
+  nombre: Duo Martial Hero
+  escena: Bosque Duo Martial
+  orden: 4
+  imagen: {fileID: 21300000, guid: 9df2f0998ccd24b46b610f2b8266f179, type: 3}
+  afinidades: []
+  notaAfinidades: "Ning\xFAn elemento les hace m\xE1s ni menos. De frente, en guardia,
+    apenas les entra nada; por la espalda, el golpe entero. El sagrado rompe la guardia."
+  informacion: 
+  historia: 
+  ataques:
+  - id: combo_cuadruple
+    nombre: "Combo cu\xE1druple"
+    fase: 1
+    instakill: 0
+    descripcion: "Desenvaina y corta cuatro veces seguidas: desenvaine, tajo, desenvaine,
+      tajo. Y ahora son dos haci\xE9ndolo."
+    consejo: 'Para los cuatro golpes y el que ataca queda aturdido. Mientras, el
+      otro sigue: no le des la espalda al que espera.'
+    consejoSecreto: 
+  fases:
+  - numero: 1
+    nombre: Dos filos
+    descripcion: Se cubren, esperan y atacan cuando entras en su distancia. Uno tapa
+      los huecos del otro.
+  fragmentosHistoria:
+  - id: h1
+    cuando: 0
+    texto: "Entrenaron juntos tanto tiempo que ya no recuerdan qui\xE9n ense\xF1\xF3
+      a qui\xE9n."
+  - id: h2
+    cuando: 3
+    texto: "El de rojo lleg\xF3 al bosque cuando el otro ya llevaba a\xF1os esperando
+      a alguien digno. Desde entonces esperan los dos."
+  - id: h3
+    cuando: 4
+    texto: "Cayeron a la vez, como hab\xEDan vivido. Ninguno solt\xF3 la espada."
+  dialogoAlReiniciar: 0
+  almasCofre: 2500
+  multPrecios: 1
+  objetosCofre: 000000000300000004000000
+  multVida: 1.5
+  multDano: 1.3
+  multVelocidad: 1.35
+  secreto: 0
+  requisitos: []

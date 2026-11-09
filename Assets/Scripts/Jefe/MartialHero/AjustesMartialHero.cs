@@ -135,6 +135,28 @@ public class AjustesMartialHero : ScriptableObject
     [Tooltip("Al caer aturdido y al levantarse (cuadros 2-4 de la muerte).")]
     [Min(1f)] public float fpsAturdido = 12f;
 
+    [Header("Duo (solo la ficha del desafio Duo Martial Hero)")]
+    [Tooltip("Marcado: pelea en pareja (DirectorDuo). Normalmente ataca uno y el otro lanza ondas desde lejos; a veces atacan los dos.")]
+    public bool duo;
+    [Tooltip("Tras cada combo del que ataca: probabilidad de que la siguiente vez ataquen los dos a la vez.")]
+    [Range(0f, 1f)] public float probAmbos = 0.25f;
+    [Tooltip("El que lanza ondas se queda a esta distancia de ti (min y max).")]
+    public Vector2 distanciaOndas = new Vector2(6.5f, 10f);
+    [Tooltip("Ondas que lanza seguidas antes de volver a mirar quien ataca.")]
+    [Min(1)] public int ondasSeguidas = 2;
+    [Tooltip("Guardia entre una onda y la siguiente (segundos).")]
+    public Vector2 pausaOndas = new Vector2(0.6f, 1.1f);
+    [Tooltip("Aviso de cada onda (se sostiene el tajo en alto).")]
+    [Min(0f)] public float avisoOnda = 0.45f;
+    [Min(0)] public int danoOnda = 16;
+    public float velocidadOnda = 10f;
+    public float alcanceOnda = 22f;
+    public Vector2 cajaOnda = new Vector2(0.9f, 1.1f);
+    [Tooltip("Altura de la onda: baja (se salta) o alta (pasa por encima si te quedas en el suelo).")]
+    public float alturaOnda = 0.8f;
+    public float alturaOndaAlta = 2.1f;
+    [Range(0f, 1f)] public float probOndaAlta = 0.3f;
+
     public Golpe DeTipo(TipoGolpe t) => t == TipoGolpe.Tajo ? tajo : desenvaine;
     public Variante Buscar(string id) => variantes.Find(v => v != null && v.id == id);
 }

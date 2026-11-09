@@ -55,6 +55,14 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
     // Frases del jefe para la pantalla de muerte (vacio = las de siempre).
     [SerializeField] private string[] burlas;
 
+    [Header("Segundo jefe (opcional: un duo)")]
+    [Tooltip("Vacio = un solo jefe. Con dos, cada uno tiene su barra (la segunda encima) y se gana al caer los dos.")]
+    [SerializeField] private JefeBase prefabJefe2;
+    [SerializeField] private string nombreJefe1 = "";
+    [SerializeField] private string nombreJefe2 = "";
+    [Tooltip("Distancia entre los dos al aparecer (unidades).")]
+    [SerializeField] private float separacionDuo = 6f;
+
     [Header("Barra")]
     // Marca en la barra donde cambia de fase (0 = sin marca: cada fase tiene su barra).
     [Range(0f, 1f)] [SerializeField] private float marcaFase = 0.5f;
@@ -107,8 +115,10 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
     [SerializeField] private string bannerVictoria = "ENEMIGO CAÍDO";
 
     private Estado estado;
-    private JefeBase jefe;
-    private BarraJefe barra;
+    private JefeBase jefe, jefe2;
+    private BarraJefe barra, barra2;
+    private int derrotados;
+    public bool EsDuo => prefabJefe2 != null;
     private AudioSource audioSrc, audioFase2;
     private Vector2 bucleActual;
     private AudioSource fuenteActual;
@@ -233,22 +243,47 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
 
         if (musica != null) Sonar(audioSrc, musica, inicioFase1, bucleFase1, volumen, 2f);
 
-        barra = BarraJefe.Crear(nombre, barraPorFase ? 0f : marcaFase);
-        jefe = Instantiate(prefabJefe, new Vector3(zona.center.x, zona.yMax, 0f), Quaternion.identity);
-        jefe.Configurar(zona, suelo);
-        // Desafio en Dificil: un leve contorno rojizo para distinguirlo.
-        if (Desafio.Activo && Desafio.Dificil) jefe.gameObject.AddComponent<BrilloDificil>();
-        EnemyHealth salud = jefe.GetComponent<EnemyHealth>();
-        salud.AlCambiarVida += barra.Actualizar;
-        barra.PonerEstados(salud);
-        jefe.AlAterrizar += () =>
-        {
-            MensajePantalla.Titulo(nombre.ToUpper(), titulo);
-            if (barra != null) barra.Mostrar(true);
-        };
+        derrotados = 0;
+        bool duo = EsDuo;
+        float dx = duo ? separacionDuo * 0.5f : 0f;
+        barra = BarraJefe.Crear(duo && !string.IsNullOrEmpty(nombreJefe1) ? nombreJefe1 : nombre, barraPorFase ? 0f : marcaFase);
+        jefe = Aparecer(prefabJefe, zona.center.x - dx, barra);
         jefe.AlCambiarFase += Fase2;
-        jefe.AlDerrotado += Victoria;
         jefe.AlSilencio += Silencio;
+        bool titulado = false;
+        void Titulo()
+        {
+            if (titulado) return;
+            titulado = true;
+            MensajePantalla.Titulo(nombre.ToUpper(), titulo);
+        }
+        jefe.AlAterrizar += () => { Titulo(); if (barra != null) barra.Mostrar(true); };
+        if (!duo) return;
+
+        // Duo: el segundo, al otro lado, con su barra encima de la primera.
+        barra2 = BarraJefe.Crear(string.IsNullOrEmpty(nombreJefe2) ? nombre : nombreJefe2, 0f);
+        barra2.Apilar(1);
+        jefe2 = Aparecer(prefabJefe2, zona.center.x + dx, barra2);
+        jefe2.AlAterrizar += () => { Titulo(); if (barra2 != null) barra2.Mostrar(true); };
+    }
+
+    // Un jefe de la arena con su barra. Se gana cuando caen todos.
+    private JefeBase Aparecer(JefeBase prefab, float x, BarraJefe suBarra)
+    {
+        JefeBase j = Instantiate(prefab, new Vector3(x, zona.yMax, 0f), Quaternion.identity);
+        j.Configurar(zona, suelo);
+        // Desafio en Dificil: un leve contorno rojizo para distinguirlo.
+        if (Desafio.Activo && Desafio.Dificil) j.gameObject.AddComponent<BrilloDificil>();
+        EnemyHealth salud = j.GetComponent<EnemyHealth>();
+        salud.AlCambiarVida += suBarra.Actualizar;
+        suBarra.PonerEstados(salud);
+        j.AlDerrotado += () =>
+        {
+            derrotados++;
+            if (suBarra != null && EsDuo) suBarra.Mostrar(false);
+            if (derrotados >= (EsDuo ? 2 : 1)) Victoria();
+        };
+        return j;
     }
 
     private void Sonar(AudioSource fuente, AudioClip clip, float inicio, Vector2 bucle, float vol, float entrada)
@@ -294,6 +329,7 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
         Fundir(0f, 3f);
         Fundir2(0f, 3f);
         if (barra != null) barra.Mostrar(false);
+        if (barra2 != null) barra2.Mostrar(false);
         StartCoroutine(TrasVictoria());
     }
 
@@ -355,6 +391,8 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
         PeligrosJefe.LimpiarTodo();
         if (jefe != null) Destroy(jefe.gameObject);
         if (barra != null) Destroy(barra.gameObject);
+        if (jefe2 != null) Destroy(jefe2.gameObject);
+        if (barra2 != null) Destroy(barra2.gameObject);
         Fundir(0f, 1f);
         Fundir2(0f, 1f);
         PonerNiebla(false);

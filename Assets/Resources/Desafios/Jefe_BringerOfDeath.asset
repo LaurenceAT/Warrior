@@ -1,0 +1,185 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f71912a9dcdf940876bbc943f6992b, type: 3}
+  m_Name: Jefe_BringerOfDeath
+  m_EditorClassIdentifier: 
+  id: bringer_of_death
+  nombre: Bringer of Death
+  escena: Cueva Bringer
+  orden: 3
+  imagen: {fileID: 21300000, guid: e77a19fd11ccfd843af4b28f18409dc0, type: 3}
+  afinidades:
+  - elemento: 3
+    multiplicador: 1.5
+    cuando: Fase 1
+    fase: 0
+  - elemento: 3
+    multiplicador: 1.8
+    cuando: Fase 2
+    fase: 0
+  - elemento: 0
+    multiplicador: 1.1
+    cuando: Siempre
+    fase: 0
+  - elemento: 4
+    multiplicador: 0.8
+    cuando: Siempre
+    fase: 0
+  - elemento: 2
+    multiplicador: 0.5
+    cuando: Siempre
+    fase: 0
+  notaAfinidades: "Mientras es humo no le entra nada. Dos parrys seguidos a su guada\xF1a
+    lo dejan aturdido."
+  informacion: 
+  historia: 
+  ataques:
+  - id: guadana
+    nombre: "Guada\xF1azo"
+    fase: 1
+    instakill: 0
+    descripcion: "Alza la guada\xF1a, la sostiene y barre todo lo que tiene delante.
+      A veces vuelve a cortar, y el segundo tajo llega tarde a prop\xF3sito."
+    consejo: 'El primer tajo se para con un parry; si lo consigues, se tambalea y
+      no hay segundo. Si lo esquivas, espera: el segundo corte castiga al que se
+      lanza enseguida.'
+    consejoSecreto: 
+  - id: mano
+    nombre: Mano del abismo
+    fase: 1
+    instakill: 0
+    descripcion: Abre un portal sobre ti que te sigue un momento. Cuando deja de
+      moverse, cae una mano negra.
+    consejo: Sigue andando mientras el portal te persigue; cuando se quede quieto
+      y brille, sal de debajo. En la fase 2 caen tres seguidas.
+    consejoSecreto: 
+  - id: mediaLuna
+    nombre: Media luna
+    fase: 1
+    instakill: 0
+    descripcion: Corta el aire y la hoja suelta una media luna verde que cruza la
+      arena, baja o alta.
+    consejo: La baja se salta; la alta pasa por encima si te quedas en el suelo.
+      Un parry la deshace.
+    consejoSecreto: 
+  - id: ola
+    nombre: Ola de almas
+    fase: 1
+    instakill: 0
+    descripcion: Clava la mirada en el suelo y una ola de almas verdes avanza hacia
+      ti, estallido tras estallido, hasta la pared.
+    consejo: "Salta justo cuando el estallido de delante va a tocarte. No intentes
+      correr m\xE1s que ella."
+    consejoSecreto: 
+  - id: desvanecer
+    nombre: Desvanecerse
+    fase: 1
+    instakill: 0
+    descripcion: "Se deshace en humo y vuelve a aparecer a tu espalda con la guada\xF1a
+      ya en alto."
+    consejo: Cuando se convierta en humo, date la vuelta. Su tajo por la espalda
+      avisa menos, pero se puede parar igual.
+    consejoSecreto: 
+  - id: cosecha
+    nombre: Cosecha
+    fase: 1
+    instakill: 0
+    descripcion: Llena la arena de portales. Solo quedan unos pocos huecos sin portal,
+      y las manos caen en barrido de un lado al otro.
+    consejo: Busca el hueco sin portal en cuanto aparezcan. En la fase 2 solo queda
+      uno.
+    consejoSecreto: 
+  - id: circulo
+    nombre: "C\xEDrculo de condena"
+    fase: 2
+    instakill: 0
+    descripcion: "Marca el suelo bajo tus pies con un anillo verde, y otro, y otro.
+      Cada uno revienta poco despu\xE9s."
+    consejo: 'No te quedes quieto: cada anillo te sigue a donde estabas, no a donde
+      vas.'
+    consejoSecreto: 
+  - id: espiritus
+    nombre: "Esp\xEDritus"
+    fase: 2
+    instakill: 0
+    descripcion: Suelta tres almas que te persiguen girando despacio hasta que se
+      apagan.
+    consejo: "Giran mal: un cambio de direcci\xF3n brusco las hace pasar de largo.
+      Un parry deshace una."
+    consejoSecreto: 
+  - id: cometas
+    nombre: Lluvia de cometas
+    fase: 2
+    instakill: 0
+    descripcion: "Cae una lluvia de cometas por toda la arena. Cada uno marca antes
+      el suelo, y alguno cae justo donde est\xE1s."
+    consejo: "Mira las marcas moradas y mu\xE9vete entre ellas; quedarse quieto es
+      esperar al cometa que va a por ti."
+    consejoSecreto: 
+  - id: esfera
+    nombre: "Esfera del vac\xEDo"
+    fase: 2
+    instakill: 0
+    descripcion: Abre una esfera de estrellas a tu lado que te arrastra hacia ella
+      y luego implosiona. Si te alcanza, te congela.
+    consejo: Tira hacia el lado contrario desde el primer momento y, al final, esquiva
+      o salta lejos.
+    consejoSecreto: 
+  - id: juicio
+    nombre: Juicio
+    fase: 2
+    instakill: 0
+    descripcion: 'Todo el suelo de la arena se llena de anillos, por tramos: estallan
+      unos, luego los de al lado, luego los primeros otra vez.'
+    consejo: "Ponte en un tramo sin anillo y cambia al de al lado justo despu\xE9s
+      de cada estallido."
+    consejoSecreto: 
+  - id: marea
+    nombre: Marea de almas
+    fase: 2
+    instakill: 0
+    descripcion: "Dos olas de almas salen de las dos paredes, una detr\xE1s de otra."
+    consejo: 'Son dos saltos: el de la primera ola y, enseguida, el de la segunda,
+      que viene del otro lado.'
+    consejoSecreto: 
+  fases:
+  - numero: 1
+    nombre: La siega
+    descripcion: "Camina hacia ti sin prisa y deja que la guada\xF1a haga el resto."
+  - numero: 2
+    nombre: El juicio
+    descripcion: "A media vida se detiene y conjura. Desde ah\xED todo va m\xE1s
+      r\xE1pido y la arena entera se vuelve suya."
+  fragmentosHistoria:
+  - id: h1
+    cuando: 0
+    texto: "En la cueva nadie lo llam\xF3. Lleg\xF3 igual."
+  - id: h2
+    cuando: 1
+    texto: 'Dicen que no mata: solo recoge lo que ya estaba a punto de caer. Por
+      eso no corre.'
+  - id: h3
+    cuando: 3
+    texto: Cuando se deshace en humo deja un ojo rojo flotando. Mira un momento.
+      Luego se apaga, como si hubiera visto lo que necesitaba.
+  - id: h4
+    cuando: 4
+    texto: "Volver\xE1. Siempre vuelve. Pero esta vez se fue con las manos vac\xEDas."
+  dialogoAlReiniciar: 0
+  almasCofre: 3000
+  multPrecios: 1
+  objetosCofre: 000000000200000004000000
+  multVida: 1.5
+  multDano: 1.3
+  multVelocidad: 1.35
+  secreto: 0
+  requisitos: []

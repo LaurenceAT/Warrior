@@ -481,3 +481,23 @@ MonoBehaviour:
   radioZona: 14
   sonidos: {fileID: 0}
   ajustes: {fileID: 11400000, guid: 76686fc7a209d204b82552ba1ca14e7e, type: 2}
+  fxOnda:
+    nombre: 
+    hoja: {fileID: 0}
+    anchoCelda: 64
+    altoCelda: 64
+    fila: 0
+    primero: 0
+    cantidad: 1
+    fps: 10
+    bucle: 1
+    alReves: 0
+    pivote: {x: 0.5, y: 0.4}
+    pixelesPorUnidad: 28
+    fotogramas: []
+    recorte:
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    pivotes: []
