@@ -1,0 +1,424 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c897291824f3cec438e51094db80efe8, type: 3}
+  m_Name: Ajustes Black Knight
+  m_EditorClassIdentifier: 
+  nombreMostrado: Black Knight
+  vidaFase1: 780
+  vidaFase2: 840
+  vidaFase3: 900
+  colorBarraFase2: {r: 0.95, g: 0.45, b: 0.12, a: 1}
+  colorBarraFase3: {r: 0.55, g: 0.25, b: 0.85, a: 1}
+  textoFase2: La hoja del caballero se enciende.
+  textoFase3: Las sombras de sus duelos pasados despiertan.
+  duracionCambioFase: 1.8
+  cuerpo: {x: 0.55, y: 1.05}
+  velocidadCorrer: 6.2
+  aceleracion: 30
+  frenada: 40
+  distanciaEstudio: {x: 2.4, y: 3.6}
+  tiempoMaxCorrer: 2.2
+  margenArena: 0.8
+  distanciaRodada: 3.4
+  rodadaInvulnerable: {x: 1, y: 8}
+  pausaFase1: {x: 0.45, y: 0.9}
+  pausaFase2: {x: 0.3, y: 0.7}
+  pausaFase3: {x: 0.2, y: 0.55}
+  velocidadFase2: 1.1
+  velocidadFase3: 1.2
+  reglas:
+    avisoMinLigero: 0.32
+    avisoMinPesado: 0.5
+    avisoMinFinal: 0.4
+    pausaMinEntreGolpes: 0.45
+    colorLigero: {r: 1, g: 0.55, b: 0.1, a: 1}
+    colorPesado: {r: 1, g: 0.12, b: 0.08, a: 1}
+    intensidadAviso: 0.6
+    parpadeoLigero: 9
+    parpadeoPesado: 2.5
+    maxGolpesSeguidos: 4
+    pausaRecuperacion: 0.6
+    topeDanoCombo: 0.45
+    paradaImagen: 0.04
+    colorChispas: {r: 1, g: 0.85, b: 0.45, a: 1}
+    colorChispas2: {r: 1, g: 0.45, b: 0.15, a: 1}
+    chispas: 14
+    tonoInicial: 1
+    subidaTono: 0.06
+    tonoMaximo: 1.5
+    tonoReiniciaAlFallar: 1
+    tonoReiniciaSegundos: 4
+  probRetraso: {x: 0.12, y: 0.2, z: 0.28}
+  retraso: {x: 0.25, y: 0.5}
+  golpes:
+  - nombre: Tajo alto
+    clip: ligero1
+    peso: 0
+    aviso: 0.35
+    dano: 20
+    cajaCentro: {x: 0.95, y: 0.75}
+    cajaTamano: {x: 1.9, y: 1.5}
+    cuadroAviso: 4
+    golpeDesde: 9
+    golpeHasta: 10
+    cortarEn: 12
+    avance: 0.4
+    amago: 0
+  - nombre: Arco
+    clip: ligero2
+    peso: 0
+    aviso: 0.32
+    dano: 18
+    cajaCentro: {x: 0.5, y: 0.9}
+    cajaTamano: {x: 2.6, y: 1.9}
+    cuadroAviso: 0
+    golpeDesde: 1
+    golpeHasta: 2
+    cortarEn: 4
+    avance: 0
+    amago: 0
+  - nombre: Estocada
+    clip: ligero3
+    peso: 0
+    aviso: 0.38
+    dano: 22
+    cajaCentro: {x: 1.6, y: 0.45}
+    cajaTamano: {x: 2.6, y: 0.8}
+    cuadroAviso: 3
+    golpeDesde: 5
+    golpeHasta: 7
+    cortarEn: 9
+    avance: 1.4
+    amago: 0
+  - nombre: Tajo pesado
+    clip: pesado1
+    peso: 1
+    aviso: 0.55
+    dano: 30
+    cajaCentro: {x: 1, y: 0.8}
+    cajaTamano: {x: 2.3, y: 1.7}
+    cuadroAviso: 2
+    golpeDesde: 3
+    golpeHasta: 4
+    cortarEn: 6
+    avance: 0.6
+    amago: 0
+  - nombre: Reves pesado
+    clip: pesado2
+    peso: 1
+    aviso: 0.5
+    dano: 30
+    cajaCentro: {x: 0.4, y: 0.9}
+    cajaTamano: {x: 2.6, y: 1.9}
+    cuadroAviso: 0
+    golpeDesde: 1
+    golpeHasta: 2
+    cortarEn: 5
+    avance: 0
+    amago: 0
+  - nombre: Barrido
+    clip: pesado3
+    peso: 1
+    aviso: 0.55
+    dano: 32
+    cajaCentro: {x: 0.2, y: 0.35}
+    cajaTamano: {x: 3.4, y: 0.8}
+    cuadroAviso: 4
+    golpeDesde: 6
+    golpeHasta: 7
+    cortarEn: 9
+    avance: 0
+    amago: 0
+  - nombre: Estocada de fuego
+    clip: pesado4
+    peso: 1
+    aviso: 0.7
+    dano: 34
+    cajaCentro: {x: 2.6, y: 0.5}
+    cajaTamano: {x: 4.2, y: 0.9}
+    cuadroAviso: 1
+    golpeDesde: 2
+    golpeHasta: 6
+    cortarEn: -1
+    avance: 0.8
+    amago: 0
+  - nombre: Desenvaine
+    clip: desenvainar
+    peso: 0
+    aviso: 0.4
+    dano: 28
+    cajaCentro: {x: 1, y: 0.6}
+    cajaTamano: {x: 2.2, y: 1.3}
+    cuadroAviso: 7
+    golpeDesde: 9
+    golpeHasta: 11
+    cortarEn: 12
+    avance: 3.2
+    amago: 0
+  - nombre: Amago
+    clip: pesado1
+    peso: 1
+    aviso: 0.3
+    dano: 0
+    cajaCentro: {x: 1, y: 0.8}
+    cajaTamano: {x: 2, y: 1.6}
+    cuadroAviso: 2
+    golpeDesde: 3
+    golpeHasta: 3
+    cortarEn: 2
+    avance: 0
+    amago: 1
+  - nombre: Estallido
+    clip: contra
+    peso: 1
+    aviso: 0.75
+    dano: 26
+    cajaCentro: {x: 0.5, y: 0.9}
+    cajaTamano: {x: 2.6, y: 2.1}
+    cuadroAviso: 1
+    golpeDesde: 2
+    golpeHasta: 4
+    cortarEn: -1
+    avance: 0
+    amago: 0
+  - nombre: Arte 1
+    clip: arte
+    peso: 0
+    aviso: 0.35
+    dano: 18
+    cajaCentro: {x: 1, y: 0.9}
+    cajaTamano: {x: 2.4, y: 1.8}
+    cuadroAviso: 1
+    golpeDesde: 3
+    golpeHasta: 4
+    cortarEn: -1
+    avance: 0
+    amago: 0
+  - nombre: Arte 2
+    clip: arte
+    peso: 0
+    aviso: 0.35
+    dano: 18
+    cajaCentro: {x: 0.3, y: 0.7}
+    cajaTamano: {x: 3, y: 1.4}
+    cuadroAviso: 8
+    golpeDesde: 10
+    golpeHasta: 11
+    cortarEn: -1
+    avance: 0
+    amago: 0
+  - nombre: Arte 3
+    clip: arte
+    peso: 0
+    aviso: 0.35
+    dano: 18
+    cajaCentro: {x: 1.2, y: 0.8}
+    cajaTamano: {x: 2.6, y: 1.4}
+    cuadroAviso: 13
+    golpeDesde: 15
+    golpeHasta: 16
+    cortarEn: -1
+    avance: 0.8
+    amago: 0
+  - nombre: Arte 4
+    clip: arte
+    peso: 1
+    aviso: 0.6
+    dano: 30
+    cajaCentro: {x: 0.3, y: 1.2}
+    cajaTamano: {x: 2.8, y: 2.6}
+    cuadroAviso: 21
+    golpeDesde: 23
+    golpeHasta: 25
+    cortarEn: -1
+    avance: 0
+    amago: 0
+  - nombre: Arte 5
+    clip: arte
+    peso: 1
+    aviso: 0.5
+    dano: 30
+    cajaCentro: {x: 1.1, y: 1}
+    cajaTamano: {x: 2.6, y: 2.2}
+    cuadroAviso: 26
+    golpeDesde: 27
+    golpeHasta: 28
+    cortarEn: -1
+    avance: 0
+    amago: 0
+  - nombre: Caida
+    clip: caer_golpe
+    peso: 1
+    aviso: 0.45
+    dano: 30
+    cajaCentro: {x: 0, y: 0.4}
+    cajaTamano: {x: 2.6, y: 0.9}
+    cuadroAviso: 0
+    golpeDesde: 1
+    golpeHasta: 2
+    cortarEn: -1
+    avance: 0
+    amago: 0
+  - nombre: Tajo por la espalda
+    clip: ligero2
+    peso: 0
+    aviso: 0.34
+    dano: 22
+    cajaCentro: {x: 0.5, y: 0.9}
+    cajaTamano: {x: 2.4, y: 1.9}
+    cuadroAviso: 0
+    golpeDesde: 1
+    golpeHasta: 2
+    cortarEn: -1
+    avance: 0
+    amago: 0
+  ataques:
+  - id: combo_ligero
+    nombre: Combo ligero
+    frecuencia: 1.4
+    faseMinima: 1
+    alcance: 1.7
+    golpes:
+    - Tajo alto
+    - Arco
+    - Estocada
+    probCortar: 0.25
+    recuperacion: 0.55
+  - id: combo_corto
+    nombre: Combo corto
+    frecuencia: 1
+    faseMinima: 1
+    alcance: 1.6
+    golpes:
+    - Arco
+    - Tajo alto
+    probCortar: 0
+    recuperacion: 0.45
+  - id: estocada
+    nombre: Estocada a distancia
+    frecuencia: 0.8
+    faseMinima: 1
+    alcance: 2.6
+    golpes:
+    - Estocada
+    probCortar: 0
+    recuperacion: 0.6
+  - id: combo_pesado
+    nombre: Combo pesado
+    frecuencia: 1
+    faseMinima: 1
+    alcance: 1.8
+    golpes:
+    - Tajo pesado
+    - Reves pesado
+    - Barrido
+    probCortar: 0.2
+    recuperacion: 0.8
+  - id: estocada_fuego
+    nombre: Estocada de fuego
+    frecuencia: 0.7
+    faseMinima: 1
+    alcance: 3.6
+    golpes:
+    - Estocada de fuego
+    probCortar: 0
+    recuperacion: 0.9
+  - id: amago
+    nombre: Amago
+    frecuencia: 0.7
+    faseMinima: 1
+    alcance: 1.6
+    golpes:
+    - Amago
+    - Arco
+    - Estocada
+    probCortar: 0
+    recuperacion: 0.5
+  - id: mixto
+    nombre: Mixto
+    frecuencia: 0.8
+    faseMinima: 2
+    alcance: 1.7
+    golpes:
+    - Tajo alto
+    - Arco
+    - Tajo pesado
+    - Barrido
+    probCortar: 0.2
+    recuperacion: 0.7
+  - id: arte
+    nombre: Arte del arma
+    frecuencia: 0.6
+    faseMinima: 3
+    alcance: 1.8
+    golpes:
+    - Arte 1
+    - Arte 2
+    - Arte 3
+    - Arte 4
+    - Arte 5
+    probCortar: 0
+    recuperacion: 1.1
+  frecuenciaRodadaEspalda: 0.6
+  frecuenciaSalto: 0.5
+  frecuenciaGuardia: 0.4
+  alturaSalto: 3.2
+  duracionSalto: 0.75
+  duracionGuardia: 1.1
+  abiertoTrasGuardia: 0.9
+  aturdirAlJugador: 0.35
+  colorGuardia: {r: 0.95, g: 0.95, b: 1, a: 1}
+  brilloGuardia: 0.35
+  golpesParaLeer: 2
+  probReaccion: {x: 0.35, y: 0.5, z: 0.6}
+  subidaPorMachacar: 0.05
+  topeAdaptacion: 0.25
+  pesosReaccion: {x: 1, y: 1, z: 0.6}
+  distanciaCastigoFrasco: 9
+  quietoParaSaltar: 2.2
+  probProvocar: 0.15
+  duracionProvocar: 1.6
+  aturdidoCombo: 1.6
+  multDanoAturdido: 1.3
+  textoAturdido: Aturdido
+  colorTextoAturdido: {r: 1, g: 0.85, b: 0.45, a: 1}
+  temblorAturdido: 0.04
+  probOndas: {x: 0.14, y: 0.12}
+  enfriamientoOndas: 22
+  empujon: {x: 11, y: 6}
+  danoEmpujon: 8
+  ondasMaximas: 14
+  duracionMaxOndas: 16
+  intervaloOndas: {x: 0.95, y: 1.25}
+  velocidadOnda: 8.5
+  danoOnda: 22
+  cajaOnda: {x: 0.55, y: 5.5}
+  tamanoOnda: {x: 1.6, y: 6}
+  colorOnda: {r: 1, g: 0.6, b: 0.15, a: 1}
+  colorOnda2: {r: 1, g: 0.92, b: 0.5, a: 1}
+  golpesParaCortar: 1
+  aturdidoAlCortar: 1.4
+  probSombras: 0.13
+  enfriamientoSombras: 26
+  duracionSombras: 10
+  pausaSombras: {x: 0.35, y: 0.6}
+  danoSombra: 0.8
+  danoClavado: 1
+  colorSombra: {r: 0.35, g: 0.25, b: 0.55, a: 0.75}
+  colorSombraBorde: {r: 0.75, g: 0.6, b: 1, a: 1}
+  distanciaSombra: 1.3
+  alturaSombraArriba: 4.5
+  fpsEspera: 9
+  fpsCorrer: 14
+  fpsAtaque: 14
+  fpsRodada: 16
+  fpsOtros: 12

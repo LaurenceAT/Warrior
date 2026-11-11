@@ -496,3 +496,23 @@ MonoBehaviour:
     fichaDesafio: {fileID: 0}
     asumeSueloPlano: 0
     avisoTerreno: 
+  - nombre: Black Knight
+    prefab: {fileID: 3448792025355470637, guid: eb2f26a0c3f14d744b1854cec01c221e, type: 3}
+    arena: 1
+    titulo: Jefe de prueba
+    config: {fileID: 0}
+    marcaFase: 0
+    barraPorFase: 1
+    colorBarraFase2: {r: 0.95, g: 0.45, b: 0.12, a: 1}
+    nombreFase2: 
+    luzFase2: {r: 1, g: 0.7, b: 0.5, a: 1}
+    textoFase2: 
+    particulasFase2A: {r: 1, g: 0.3, b: 0.2, a: 0.9}
+    particulasFase2B: {r: 1, g: 0.7, b: 0.3, a: 0.7}
+    particulasCaen: 0
+    bannerVictoria: "ENEMIGO CA\xCDDO"
+    ajustesCazadora: {fileID: 0}
+    vidaFase2: 0
+    fichaDesafio: {fileID: 0}
+    asumeSueloPlano: 0
+    avisoTerreno: 

@@ -19,8 +19,37 @@ public static class EfectosAmuletos
 
     private static AjustesAmuletos A => AjustesAmuletos.Get();
 
-    public static bool Lleva(string id) => Amuletos.HuecoDe(id) >= 0;
+    public static bool Lleva(string id) => Amuletos.HuecoDe(id) >= 0 && !EstaSellado(id);
     private static float Si(string id, float valor) => Lleva(id) ? valor : 1f;
+
+    // ------------------------------------------------------------------ Sello (un jefe anula un amuleto un rato)
+
+    // Mientras dura, ese amuleto sigue equipado pero no hace nada. Solo en memoria:
+    // se quita al acabar el tiempo, al morir el jefe que lo puso o al salir de la escena.
+    private static string sellado;
+    private static float selladoHasta = -1f;
+    public static string Sellado => EstaSellado(sellado) ? sellado : null;
+    public static float SegundosSello => Sellado != null ? selladoHasta - Time.time : 0f;
+    public static bool EstaSellado(string id) => !string.IsNullOrEmpty(id) && id == sellado && Time.time < selladoHasta;
+
+    public static void Sellar(string id, float segundos)
+    {
+        sellado = id;
+        selladoHasta = Time.time + Mathf.Max(0f, segundos);
+    }
+
+    public static void QuitarSello()
+    {
+        sellado = null;
+        selladoHasta = -1f;
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void Reiniciar()
+    {
+        QuitarSello();
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded += (_, __) => QuitarSello();
+    }
 
     // ------------------------------------------------------------------ Ataque
 

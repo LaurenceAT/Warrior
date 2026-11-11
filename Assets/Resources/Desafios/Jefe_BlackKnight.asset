@@ -1,0 +1,224 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52f71912a9dcdf940876bbc943f6992b, type: 3}
+  m_Name: Jefe_BlackKnight
+  m_EditorClassIdentifier: 
+  id: black_knight
+  nombre: Black Knight
+  escena: Bosque Black Knight
+  orden: 5
+  imagen: {fileID: 21300000, guid: 2364861d6f4d1724ea31833813d6dc29, type: 3}
+  afinidades:
+  - elemento: 1
+    multiplicador: 1.4
+    cuando: Siempre
+    fase: 0
+  - elemento: 3
+    multiplicador: 1.4
+    cuando: Siempre
+    fase: 0
+  - elemento: 0
+    multiplicador: 0.6
+    cuando: Siempre
+    fase: 0
+  - elemento: 2
+    multiplicador: 0.6
+    cuando: Siempre
+    fase: 0
+  - elemento: 4
+    multiplicador: 0.6
+    cuando: Siempre
+    fase: 0
+  notaAfinidades: 'Su hoja arde: cada golpe que te alcanza deja quemadura. Si le
+    pegas de frente con la guardia en alto, te para el golpe.'
+  informacion: 
+  historia: 
+  ataques:
+  - id: combo_ligero
+    nombre: Combo ligero
+    fase: 1
+    instakill: 0
+    descripcion: "Tres cortes seguidos: arriba, en arco y una estocada. A veces se
+      arrepiente a mitad y rueda hacia atr\xE1s."
+    consejo: Los tres se paran. Si los paras todos, se queda aturdido; si rueda a
+      medias, no lo persigas a ciegas.
+    consejoSecreto: 
+  - id: combo_corto
+    nombre: Combo corto
+    fase: 1
+    instakill: 0
+    descripcion: "Un arco y un tajo, r\xE1pidos y pegados."
+    consejo: Dos parrys seguidos y queda abierto.
+    consejoSecreto: 
+  - id: estocada
+    nombre: Estocada
+    fase: 1
+    instakill: 0
+    descripcion: Desde lejos, cruza la distancia de una estocada baja.
+    consejo: "Llega m\xE1s lejos de lo que parece: el parry vale m\xE1s que retroceder."
+    consejoSecreto: 
+  - id: combo_pesado
+    nombre: Combo pesado
+    fase: 1
+    instakill: 0
+    descripcion: "Tres golpes rojos: tajo, rev\xE9s y un barrido a ras de suelo."
+    consejo: 'Avisan despacio. No te adelantes: algunos se hacen esperar.'
+    consejoSecreto: 
+  - id: estocada_fuego
+    nombre: Estocada de fuego
+    fase: 1
+    instakill: 0
+    descripcion: Carga la hoja y lanza una estocada larga envuelta en llamas.
+    consejo: "Larga pero lenta: un parry a tiempo o un paso fuera de su l\xEDnea."
+    consejoSecreto: 
+  - id: amago
+    nombre: Amago
+    fase: 1
+    instakill: 0
+    descripcion: "Ense\xF1a un golpe pesado y lo deja a medias para cortarte r\xE1pido."
+    consejo: "El rojo era mentira: espera al naranja que viene detr\xE1s."
+    consejoSecreto: 
+  - id: rodada_espalda
+    nombre: Rodada a la espalda
+    fase: 1
+    instakill: 0
+    descripcion: "Rueda a trav\xE9s de ti y te corta por detr\xE1s."
+    consejo: 'Date la vuelta en cuanto ruede: el tajo de la espalda se para igual.'
+    consejoSecreto: 
+  - id: salto
+    nombre: Salto
+    fase: 1
+    instakill: 0
+    descripcion: Si te quedas quieto, salta y cae sobre ti con la espada.
+    consejo: "Se para mires hacia donde mires. Moverse tambi\xE9n sirve."
+    consejoSecreto: 
+  - id: guardia
+    nombre: Guardia
+    fase: 1
+    instakill: 0
+    descripcion: Levanta la espada y espera tu golpe. Si llega de frente, lo para
+      y responde con un estallido.
+    consejo: "No le pegues de frente con la espada en alto: espera a que la baje,
+      o p\xE1sale por detr\xE1s."
+    consejoSecreto: 
+  - id: desenvaine
+    nombre: Desenvaine
+    fase: 1
+    instakill: 0
+    descripcion: "Si bebes cerca de \xE9l, desenvaina y cruza la distancia de un
+      tajo."
+    consejo: Bebe lejos. Muy lejos.
+    consejoSecreto: 
+  - id: provocar
+    nombre: "Provocaci\xF3n"
+    fase: 1
+    instakill: 0
+    descripcion: Envaina y te mira. Si te acercas, desenvaina.
+    consejo: "Es una invitaci\xF3n. Ac\xE9rcate solo si vas a parar."
+    consejoSecreto: 
+  - id: retroceder
+    nombre: "Paso atr\xE1s"
+    fase: 1
+    instakill: 0
+    descripcion: Rueda lejos de ti cuando machacas el ataque.
+    consejo: "Cuanto m\xE1s machacas, m\xE1s te lee."
+    consejoSecreto: 
+  - id: mixto
+    nombre: Combo mixto
+    fase: 2
+    instakill: 0
+    descripcion: Ligeros y pesados mezclados en un mismo combo.
+    consejo: 'Mira el color de cada aviso: el ritmo cambia a mitad.'
+    consejoSecreto: 
+  - id: ondas_fuego
+    nombre: Ondas de fuego
+    fase: 2
+    instakill: 0
+    descripcion: Te empuja, se va al otro extremo y lanza ondas de fuego altas, una
+      tras otra.
+    consejo: "No se paran ni se saltan: atravi\xE9salas esquivando y, al llegar a
+      \xE9l, un golpe las corta."
+    consejoSecreto: 
+  - id: sello_amuleto
+    nombre: Sello
+    fase: 2
+    instakill: 0
+    descripcion: 'Hace su pose y te sella un amuleto durante unos segundos: sigue
+      puesto, pero no hace nada.'
+    consejo: "No se evita. Lleva m\xE1s de un amuleto para que no te deje sin nada."
+    consejoSecreto: 
+  - id: erupciones
+    nombre: Erupciones
+    fase: 2
+    instakill: 0
+    descripcion: "Se aleja y del suelo salen columnas de fuego de todos los tama\xF1os.
+      Al acabar, salta sobre ti."
+    consejo: "Cada columna avisa con una grieta que brilla. Ap\xE1rtate o esquiva
+      a trav\xE9s; al final, prep\xE1rate para su ca\xEDda."
+    consejoSecreto: 
+  - id: arte
+    nombre: Arte del arma
+    fase: 3
+    instakill: 0
+    descripcion: "Cinco golpes encadenados con fuego, el \xFAltimo en un gran arco."
+    consejo: "Los dos \xFAltimos son rojos y m\xE1s lentos: no te adelantes."
+    consejoSecreto: 
+  - id: sombras
+    nombre: Sombras espectrales
+    fase: 3
+    instakill: 0
+    descripcion: Clava la espada en el suelo y salen sombras con su figura, de una
+      en una, por los lados y desde arriba.
+    consejo: "Para o esquiva cada sombra. Mientras, \xE9l no se defiende: es tu momento
+      para pegarle."
+    consejoSecreto: 
+  fases:
+  - numero: 1
+    nombre: El duelo
+    descripcion: 'Esgrima pura: combos, amagos y su propia guardia. Te estudia mientras
+      pelea.'
+  - numero: 2
+    nombre: La hoja encendida
+    descripcion: Su espada arde. Se aleja para lanzar ondas y erupciones, y sella
+      tus amuletos.
+  - numero: 3
+    nombre: Los que cayeron
+    descripcion: "Las sombras de sus duelos pasados pelean con \xE9l. M\xE1s r\xE1pido
+      que nunca."
+  fragmentosHistoria:
+  - id: h1
+    cuando: 0
+    texto: Nadie le ha visto la cara. Pelea como alguien que ya ha perdido una vez
+      y no piensa repetirlo.
+  - id: h2
+    cuando: 1
+    texto: "La hoja no siempre ardi\xF3. Empez\xF3 a quemar el d\xEDa que dej\xF3
+      de dudar."
+  - id: h3
+    cuando: 2
+    texto: "Las sombras tienen su figura porque son \xE9l: cada vez que cay\xF3,
+      se levant\xF3 otro."
+  - id: h4
+    cuando: 3
+    texto: "Baj\xF3 la espada antes de caer. Un saludo, o una despedida."
+  - id: h5
+    cuando: 4
+    texto: En el bosque queda una marca de ceniza con la forma de un hombre de rodillas.
+  dialogoAlReiniciar: 0
+  almasCofre: 6500
+  multPrecios: 1
+  objetosCofre: 0000000002000000030000000500000004000000
+  multVida: 1.5
+  multDano: 1.3
+  multVelocidad: 1.35
+  secreto: 0
+  requisitos: []

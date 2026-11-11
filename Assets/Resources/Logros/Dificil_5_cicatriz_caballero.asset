@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0501a0a9ad8cb4196a4b884040fa45, type: 3}
+  m_Name: Dificil_5_cicatriz_caballero
+  m_EditorClassIdentifier: 
+  id: cicatriz_caballero
+  seccion: 2
+  orden: 5
+  nombre: Cicatriz de ceniza
+  descripcion: "Derrota a Black Knight en dificultad Dif\xEDcil."
+  icono: {fileID: -6909386608559996264, guid: 289b8a1d513d8dc46b53b6e4d72e5d9c, type: 3}
+  condicion: 4
+  parametro: black_knight
+  jefeSecreto: 
