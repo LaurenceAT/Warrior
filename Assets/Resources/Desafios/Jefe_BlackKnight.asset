@@ -139,6 +139,32 @@ MonoBehaviour:
     descripcion: Ligeros y pesados mezclados en un mismo combo.
     consejo: 'Mira el color de cada aviso: el ritmo cambia a mitad.'
     consejoSecreto: 
+  - id: cielo_partido
+    nombre: Cielo partido
+    fase: 1
+    instakill: 1
+    descripcion: "Una señal de peligro late sobre tu cabeza; al último parpadeo
+      aparece pegado a ti, te sube al cielo y te cruza con tajos naranjas."
+    consejo: "Ni la guardia ni el parry valen: solo la esquiva, justo en el último
+      parpadeo. Con la vida llena sales con 1; con menos, no sales."
+    consejoSecreto: 
+  - id: diezmo_sangre
+    nombre: Diezmo de sangre
+    fase: 2
+    instakill: 0
+    descripcion: Se va lejos, canaliza y cae del cielo sobre ti; si te atrapa te
+      roba un frasco de sangre y se cura con él.
+    consejo: "Mira dónde cae y no te quedes debajo. Si no te queda ningún frasco,
+      te manda por los aires de un golpe."
+    consejoSecreto: 
+  - id: arma_encendida
+    nombre: Arma encendida
+    fase: 1
+    instakill: 0
+    descripcion: "Enciende la espada de naranja: su siguiente golpe te prende del
+      todo al instante."
+    consejo: "Páralo con el parry: te libras y además se le apaga el arma."
+    consejoSecreto: 
   - id: ondas_fuego
     nombre: Ondas de fuego
     fase: 2

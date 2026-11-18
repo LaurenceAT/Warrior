@@ -60,6 +60,9 @@ public partial class JefeBlackKnight
         PlayerControler p = PC;
         if (p == null) return;
         ActualizarCamara();
+        ActualizarArma();
+        ActualizarMente();
+        ActualizarHielo();
 
         // Cada vez que empiezas un ataque (cuenta las de los ultimos 1,5 s).
         bool ataca = p.Atacando;
@@ -81,6 +84,7 @@ public partial class JefeBlackKnight
     private void AlAtacarJugador()
     {
         pulsaciones.Enqueue(Time.time);
+        ApuntarMachaque();
         bool machaca = pulsaciones.Count >= ajustes.golpesParaLeer;
         if (machaca) adaptacion = Mathf.Min(ajustes.topeAdaptacion, adaptacion + ajustes.subidaPorMachacar);
         if (!neutral || cambiando || Mathf.Abs(DxPlayer) > 2.8f) return;
@@ -91,6 +95,7 @@ public partial class JefeBlackKnight
     private void AlBeberJugador()
     {
         if (salud == null || salud.Muerto || cambiando || player == null) return;
+        ApuntarFrasco();
         if (Mathf.Abs(DxPlayer) <= ajustes.distanciaCastigoFrasco) pideCastigo = true;
     }
 

@@ -320,7 +320,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -339,7 +339,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -358,7 +358,7 @@ MonoBehaviour:
     bucle: 1
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -377,7 +377,7 @@ MonoBehaviour:
     bucle: 1
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -396,7 +396,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -415,7 +415,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -434,7 +434,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -453,7 +453,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -472,7 +472,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -491,7 +491,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -510,7 +510,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -529,7 +529,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -548,7 +548,7 @@ MonoBehaviour:
     bucle: 1
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -567,7 +567,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -586,7 +586,7 @@ MonoBehaviour:
     bucle: 1
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -605,7 +605,7 @@ MonoBehaviour:
     bucle: 1
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -624,7 +624,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -643,7 +643,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -662,7 +662,7 @@ MonoBehaviour:
     bucle: 1
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -681,7 +681,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -700,7 +700,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -719,7 +719,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -738,7 +738,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -757,7 +757,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0
@@ -776,7 +776,7 @@ MonoBehaviour:
     bucle: 0
     alReves: 0
     pivote: {x: 0.4826389, y: 0.015625}
-    pixelesPorUnidad: 28
+    pixelesPorUnidad: 23.333332
     fotogramas: []
     recorte:
       x: 0

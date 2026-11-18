@@ -106,7 +106,7 @@ public static class PruebaBlackKnight
         AnimadorHoja an = prefab != null ? prefab.GetComponentInChildren<AnimadorHoja>() : null;
         Comprobar(an != null && CrearBlackKnight.Tabla.All(t => an.clips.Any(k => k.nombre == t.nombre && k.hoja != null && k.cantidad == t.cuadros)),
                   $"el prefab tiene sus {CrearBlackKnight.Tabla.Length} clips con sus cuadros");
-        Comprobar(an != null && an.clips.All(k => Mathf.Approximately(k.pixelesPorUnidad, 28f) && k.pivote == CrearBlackKnight.Pivote),
+        Comprobar(an != null && an.clips.All(k => Mathf.Approximately(k.pixelesPorUnidad, CrearBlackKnight.PixelesPorUnidad) && k.pivote == CrearBlackKnight.Pivote),
                   "todos los clips a 28 px por unidad (como el jugador) y con el mismo anclaje");
     }
 
@@ -137,6 +137,8 @@ public static class PruebaBlackKnight
                   && aj.Afinidad(Elemento.Hielo) > 1f && aj.Afinidad(Elemento.Sagrado) > 1f && Mathf.Approximately(aj.Afinidad(Elemento.Natura), 1f),
                   $"resiste fuego/oscuridad/sangrado ({aj.multFuego}/{aj.multOscuridad}/{aj.multSangrado}), debil a hielo/luz ({aj.multHielo}/{aj.multSagrado}), natura neutral");
         Comprobar(aj.vidaFase1 >= 780 && aj.vidaFase2 >= 840 && aj.vidaFase3 >= 900, $"vida +50 %: {aj.vidaFase1}/{aj.vidaFase2}/{aj.vidaFase3}");
+        Comprobar(Mathf.Approximately(aj.escala, CrearBlackKnight.Escala),
+                  $"el jefe es un {(aj.escala - 1f) * 100f:0} % mas grande y sus cajas acompanan (ficha {aj.escala}, dibujo {CrearBlackKnight.Escala})");
         Comprobar(aj.quemaduraPorGolpe > 0f, $"cada golpe suyo acumula quemadura ({aj.quemaduraPorGolpe} de 100)");
         Comprobar(aj.intervaloOndas.x >= 0.85f, $"entre onda y onda da tiempo a recuperar la esquiva ({aj.intervaloOndas.x:0.00} s >= 0,85 s)");
         Comprobar(aj.cajaOnda.y >= 4f, $"la onda es mas alta que un salto ({aj.cajaOnda.y} u): solo se pasa esquivando");
@@ -362,6 +364,8 @@ public static class PruebaBlackKnight
             yield return Ataques(j);
             yield return SinBloquear(j);
             yield return Retroceso(j);
+            yield return CieloPrueba(j);
+            yield return CieloEsquivaPrueba(j);
             yield return Camara(j);
             yield return GuardiaDelJefe(j);
             yield return Frasco(j);
@@ -371,9 +375,16 @@ public static class PruebaBlackKnight
                       "el jefe usa sus afinidades de la ficha");
             yield return Sello(j);
             yield return ErupcionesPrueba(j);
+            yield return DiezmoPrueba(j);
+            yield return ArmaPrueba(j);
             yield return Ondas(j);
             yield return FaseTres(j);
             yield return Sombras(j);
+            // Estas tres mueven al jugador y juegan con el hielo: van al final,
+            // para no dejar la pelea rara a las que vienen detras.
+            yield return MentePrueba(j);
+            yield return PresionPrueba(j);
+            yield return HieloPrueba(j);
             Comprobar(maxActivos <= 1, $"nunca hay dos golpes activos a la vez (maximo {maxActivos})");
             Comprobar(avisosMal.Count == 0, $"todos los golpes avisan al menos el minimo de su peso ({avisosCortos} cortos)"
                                              + (avisosMal.Count > 0 ? ": " + string.Join(", ", avisosMal.Distinct().Take(5)) : ""));
@@ -448,15 +459,21 @@ public static class PruebaBlackKnight
             int vidaMax = P.VidaMaxima;
             EstadosPlayer es = P.GetComponent<EstadosPlayer>();
             if (es != null) es.Vaciar(EstadoPlayer.Quemadura);
+            bool quemado = false;
             foreach (string id in new[] { "combo_ligero", "combo_pesado" })
             {
+                int antesGolpes = j.GolpesActivos;
                 yield return UnAtaque(j, id);
+                EstadosPlayer e2 = EstadosPlayer.Instancia;
+                // Si el golpe venia encendido, prende del todo y la barra se vacia sola:
+                // vale con haberla visto en cualquier momento.
+                quemado |= e2 != null && (e2.Visible(EstadoPlayer.Quemadura) || e2.EnEfecto(EstadoPlayer.Quemadura));
                 float tope = j.Ajustes.reglas.topeDanoCombo * vidaMax + 1;
                 Comprobar(j.Ritmo.DanoCombo <= tope, $"{id} sin bloquear: {j.Ritmo.DanoCombo} de dano (tope {tope:0})");
             }
             es = P.GetComponent<EstadosPlayer>();
-            Comprobar(es != null && (es.Visible(EstadoPlayer.Quemadura) || es.EnEfecto(EstadoPlayer.Quemadura)),
-                      "sus golpes te acumulan quemadura (fase 1)");
+            quemado |= es != null && (es.Visible(EstadoPlayer.Quemadura) || es.EnEfecto(EstadoPlayer.Quemadura));
+            Comprobar(quemado, "sus golpes te acumulan quemadura (fase 1)");
             bot = 1;
         }
 
@@ -499,10 +516,21 @@ public static class PruebaBlackKnight
         }
 
         // Camara de combate: activa en la pelea, cerca si estas pegado al jefe, y os encuadra.
+        // Enciende el encuadre de combate (el clic central) si no lo esta ya.
+        private IEnumerator Fijar()
+        {
+            if (CamaraCombate.Fijado) yield break;
+            CamaraCombate.Alternar();
+            yield return null;
+            yield return null;
+        }
+
         private IEnumerator Camara(JefeBlackKnight j)
         {
             AjustesCamaraCombate aj = AjustesCamaraCombate.Get();
-            Comprobar(CamaraCombate.Activo && CamaraDinamica.EnModoCombate, "camara de combate activa durante la pelea");
+            Comprobar(!CamaraCombate.Fijado && !CamaraCombate.Activo, "la pelea empieza con la camara de siempre (el clic central no esta dado)");
+            yield return Fijar();
+            Comprobar(CamaraCombate.Activo && CamaraDinamica.EnModoCombate, "con el clic central se enciende la camara de combate");
             bot = 1;
             // Pegado a el: se acerca.
             float minimo = 99f;
@@ -515,6 +543,20 @@ public static class PruebaBlackKnight
             Camera c = Camera.main;
             Vector3 v = c.WorldToViewportPoint(j.transform.position + Vector3.up * 0.6f), vp = c.WorldToViewportPoint(P.transform.position);
             Comprobar(v.x > 0f && v.x < 1f && vp.x > 0f && vp.x < 1f && v.y > 0f && v.y < 1f, $"os encuadra a los dos (jefe {v.x:0.00}, tu {vp.x:0.00})");
+            Comprobar(CamaraCombate.Cabeis, "a esta distancia cabeis los dos en pantalla");
+            Comprobar(FindFirstObjectByType<MarcaFijado>() != null, "el jefe fijado lleva su marca de objetivo");
+            // Lejos: aunque no quepais los dos, no te pierde a ti y la marca pasa a flecha.
+            Vector3 donde = P.transform.position;
+            float lejos = j.transform.position.x + (donde.x >= j.transform.position.x ? 26f : -26f);
+            P.transform.position = new Vector3(lejos, donde.y, donde.z);
+            yield return new WaitForSeconds(1.2f);
+            Vector3 vTu = c.WorldToViewportPoint(P.transform.position);
+            MarcaFijado m = FindFirstObjectByType<MarcaFijado>();
+            Comprobar(!CamaraCombate.Cabeis && vTu.x > 0f && vTu.x < 1f,
+                      $"muy lejos, la camara no te pierde a ti (estas en {vTu.x:0.00})");
+            Comprobar(m != null && m.Fuera, "y la marca se queda en el borde apuntando al jefe");
+            P.transform.position = donde;
+            yield return new WaitForSeconds(0.8f);
         }
 
         // Su guardia: tu golpe de frente no entra, te aturde y responde.
@@ -535,8 +577,20 @@ public static class PruebaBlackKnight
             Comprobar(Salud.CurrentHealth == vida && j.ParrysDelJefe == parrys + 1 && P.Aturdido,
                       $"le pegas en guardia: no entra ({vida} -> {Salud.CurrentHealth}), para tu golpe y te aturde");
             bot = 1;
-            yield return Esperar(() => j.AccionesHechas.Contains(JefeBlackKnight.AccGuardia), 10f);
-            Comprobar(j.Resultados.Count == 1, "responde con el estallido (" + Lista(j.Resultados) + ")");
+            // El estallido deja su resultado; lo siguiente que haga lo borra, asi
+            // que se mira cada fotograma en vez de solo al final.
+            int resultados = 0;
+            var vistos = new List<string>();
+            Action<AjustesBlackKnight.Golpe, PlayerControler.ResultadoDano?> contar = (g, r) =>
+            {
+                resultados++;
+                vistos.Add(r.HasValue ? r.Value.ToString() : "fuera");
+            };
+            j.AlTerminarGolpe += contar;
+            float finG = Time.realtimeSinceStartup + 10f;
+            while (Time.realtimeSinceStartup < finG && !j.AccionesHechas.Contains(JefeBlackKnight.AccGuardia)) yield return null;
+            j.AlTerminarGolpe -= contar;
+            Comprobar(resultados == 1, "responde con el estallido (" + string.Join(", ", vistos) + ")");
         }
 
         // Bebes cerca: desenvaine.
@@ -594,6 +648,7 @@ public static class PruebaBlackKnight
             float dx = Mathf.Abs(j.transform.position.x - P.transform.position.x);
             Comprobar(j.EnOndas && dx > 5f, $"te empuja y se va al otro extremo (a {dx:0.0} u de ti)");
             yield return new WaitForSeconds(1.2f);
+            yield return Fijar();
             ComprobarCamara(j, "ondas");
             int vida = P.VidaActual;
             yield return Esperar(() => FindObjectsByType<OndaFuegoBK>(FindObjectsSortMode.None).Any(o => o.Tocada || o.Esquivada), 10f);
@@ -655,6 +710,351 @@ public static class PruebaBlackKnight
             Comprobar(EfectosAmuletos.Lleva(otro), "el otro amuleto sigue funcionando");
         }
 
+        // Cielo partido: avisa con la marca, te atrapa, te sube y te cruza a tajos.
+        // Con la vida llena tiene que dejarte justo con 1 de vida.
+        private IEnumerator CieloPrueba(JefeBlackKnight j)
+        {
+            // Con parry a todo: la guardia no salva de un agarre.
+            bot = 1;
+            yield return Esperar(() => j.AccionActual == "" && !j.Aturdido, 15f);
+            sala.VidaInfinita = true;
+            yield return null;
+            yield return null;
+            sala.VidaInfinita = false;
+            int vidaLlena = P.VidaActual;
+            int agarrados = j.CielosAgarrados, tajos = j.TajosCieloDados;
+            float y0 = P.transform.position.y;
+            sala.LanzarAtaque(JefeBlackKnight.AccCielo);
+            yield return Esperar(() => j.CielosAgarrados > agarrados || j.CielosFallados > 0, 25f);
+            Comprobar(j.CielosAgarrados > agarrados, "cielo partido: ni la guardia ni el parry lo paran, te atrapa igual");
+            if (j.CielosAgarrados == agarrados) { sala.VidaInfinita = true; yield break; }
+
+            float alto = y0;
+            int masALaVez = 0;
+            float fin = Time.realtimeSinceStartup + 25f;
+            while (Time.realtimeSinceStartup < fin && j.EnCielo)
+            {
+                if (P != null) alto = Mathf.Max(alto, P.transform.position.y);
+                masALaVez = Mathf.Max(masALaVez, FindObjectsByType<TajoCieloBK>(FindObjectsSortMode.None).Length);
+                yield return null;
+            }
+            int n = j.TajosCieloDados - tajos;
+            Comprobar(alto > y0 + j.Ajustes.alturaCielo * 0.6f, $"te sube al cielo ({alto - y0:0.0} u sobre el suelo)");
+            Comprobar(n >= j.Ajustes.tajosCielo, $"te cruza con {n} tajos (la ficha pide {j.Ajustes.tajosCielo})");
+            Comprobar(masALaVez >= 2, $"los tajos se encadenan: uno entra cuando el otro acaba ({masALaVez} a la vez)");
+            yield return Esperar(() => P == null || !P.Agarrado, 5f);
+            Comprobar(P != null && P.VidaActual == Mathf.Max(1, j.Ajustes.vidaRestanteCielo),
+                      $"con la vida llena ({vidaLlena}) te deja vivo con {(P != null ? P.VidaActual : 0)}");
+            yield return Esperar(() => j.AccionActual == "", 12f);
+            Comprobar(!j.Volando && !j.EnCielo, "al acabar vuelve al suelo y sigue la pelea");
+            sala.VidaInfinita = true;
+            bot = 1;
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        // Esquivar el Cielo partido: en la ventana del agarre, los fotogramas
+        // invulnerables de la esquiva lo libran y el jefe queda expuesto.
+        private IEnumerator CieloEsquivaPrueba(JefeBlackKnight j)
+        {
+            bot = 0;
+            yield return Esperar(() => j.AccionActual == "" && !j.Aturdido, 15f);
+            int fallados = j.CielosFallados, agarrados = j.CielosAgarrados;
+            sala.LanzarAtaque(JefeBlackKnight.AccCielo);
+            // Al llegar su ventana, el jugador esta en los fotogramas de la esquiva.
+            float fin = Time.realtimeSinceStartup + 25f;
+            while (Time.realtimeSinceStartup < fin && j.CielosFallados == fallados && j.CielosAgarrados == agarrados)
+            {
+                if (P != null) SetCampo(P, "hasIFrames", j.AvisoCielo || j.CieloCazando);
+                yield return null;
+            }
+            if (P != null) SetCampo(P, "hasIFrames", false);
+            Comprobar(j.CielosFallados > fallados && j.CielosAgarrados == agarrados,
+                      "esquivando en su ventana te libras del Cielo partido");
+            yield return Esperar(() => j.Aturdido || j.AccionActual == "", 6f);
+            Comprobar(j.Aturdimientos.Count > 0 && j.Aturdimientos.Last().tipo == "cielo", "al fallarlo se queda expuesto");
+            yield return Esperar(() => j.AccionActual == "" && !j.Aturdido, 12f);
+        }
+
+        // Diezmo de sangre: se va lejos, canaliza, cae sobre ti, te roba un frasco
+        // y se cura con el. Sin frascos, te manda por los aires.
+        private IEnumerator DiezmoPrueba(JefeBlackKnight j)
+        {
+            bot = 0;
+            yield return Esperar(() => j.AccionActual == "" && !j.Aturdido, 15f);
+            ReservaPociones reserva = ReservaPociones.Get();
+            reserva.Rellenar();
+            int frascos = reserva.Cargas;
+            sala.VidaInfinita = false;
+            // Con la vida a medias se nota la cura del jefe.
+            Salud.DanoEstado(Mathf.Max(1, Salud.CurrentHealth / 2));
+            int vidaJefe = Salud.CurrentHealth;
+            int robados = j.FrascosRobados;
+            float dxMax = 0f;
+            sala.LanzarAtaque(JefeBlackKnight.AccDiezmo);
+            yield return Esperar(() => j.EnDiezmo, 15f);
+            float fin = Time.realtimeSinceStartup + 12f;
+            while (Time.realtimeSinceStartup < fin && j.EnDiezmo && j.FrascosRobados == robados)
+            {
+                if (P != null) dxMax = Mathf.Max(dxMax, Mathf.Abs(j.transform.position.x - P.transform.position.x));
+                yield return null;
+            }
+            Comprobar(dxMax > 5f, $"diezmo: se teletransporta lejos a canalizar (a {dxMax:0.0} u de ti)");
+            yield return Esperar(() => j.FrascosRobados > robados || j.DiezmosFallados > 0 || j.AccionActual == "", 12f);
+            Comprobar(j.FrascosRobados > robados, "cae encima, te agarra y te roba el frasco");
+            Comprobar(reserva.Cargas == frascos - 1, $"te queda un frasco menos ({frascos} -> {reserva.Cargas})");
+            // La escena: tu quieto y sin control, el bebiendo y su vida subiendo poco a poco.
+            bool indicador = false, sinControl = false, subioPocoAPoco = false;
+            int vidaMedia = 0;
+            float finEscena = Time.realtimeSinceStartup + 20f;
+            while (Time.realtimeSinceStartup < finEscena && j.EnDiezmo)
+            {
+                indicador |= IndicadorRoboBK.Visible;
+                sinControl |= P != null && P.Agarrado;
+                if (Salud.CurrentHealth > vidaJefe && Salud.CurrentHealth < vidaJefe + Mathf.RoundToInt(P.VidaMaxima * Equipo.CuraFrasco) - 2)
+                {
+                    subioPocoAPoco = true;
+                    vidaMedia = Salud.CurrentHealth;
+                }
+                yield return null;
+            }
+            int esperado = Mathf.RoundToInt(P.VidaMaxima * Equipo.CuraFrasco * j.Ajustes.multCuraDiezmo);
+            Comprobar(Salud.CurrentHealth >= vidaJefe + esperado - 2 && Salud.CurrentHealth <= vidaJefe + esperado + 2,
+                      $"se cura lo que ese frasco te curaria a ti ({vidaJefe} -> {Salud.CurrentHealth}, esperado +{esperado})");
+            Comprobar(subioPocoAPoco, $"su vida sube a la vista mientras bebe (se le vio por {vidaMedia})");
+            Comprobar(sinControl, "mientras tanto estas agarrado y sin control");
+            Comprobar(indicador, "sale la animacion del frasco robado");
+            yield return Esperar(() => j.AccionActual == "" && !j.EnDiezmo, 12f);
+
+            // Sin frascos: te revienta y te manda por los aires.
+            while (reserva.Cargas > 0) reserva.Gastar(ReservaPociones.Tipo.Vida);
+            int sin = j.DiezmosSinFrasco;
+            float y0 = P != null ? P.transform.position.y : 0f;
+            float yMax = y0, lejosVuelo = 0f;
+            sala.LanzarAtaque(JefeBlackKnight.AccDiezmo);
+            fin = Time.realtimeSinceStartup + 25f;
+            while (Time.realtimeSinceStartup < fin && (j.DiezmosSinFrasco == sin || j.EnDiezmo))
+            {
+                if (P != null && j.DiezmosSinFrasco > sin)
+                {
+                    yMax = Mathf.Max(yMax, P.transform.position.y);
+                    lejosVuelo = Mathf.Max(lejosVuelo, Mathf.Abs(P.transform.position.x - j.transform.position.x));
+                }
+                yield return null;
+            }
+            // El vuelo sigue despues de que el acabe su animacion: se mira un rato mas.
+            float masTarde = Time.realtimeSinceStartup + 1.5f;
+            while (Time.realtimeSinceStartup < masTarde)
+            {
+                if (P != null)
+                {
+                    yMax = Mathf.Max(yMax, P.transform.position.y);
+                    lejosVuelo = Mathf.Max(lejosVuelo, Mathf.Abs(P.transform.position.x - j.transform.position.x));
+                }
+                yield return null;
+            }
+            Comprobar(j.DiezmosSinFrasco > sin, "sin frascos que robar, te golpea igual");
+            // Vale por alto o por lejos: segun donde pare, el vuelo sale mas plano.
+            Comprobar(yMax > y0 + 0.8f || lejosVuelo > 3.5f, $"y te manda por los aires ({yMax - y0:0.0} u de alto, {lejosVuelo:0.0} u de distancia)");
+            reserva.Rellenar();
+            sala.VidaInfinita = true;
+            yield return Esperar(() => j.AccionActual == "", 12f);
+        }
+
+        // Arma encendida: su siguiente golpe prende del todo; con parry se apaga.
+        private IEnumerator ArmaPrueba(JefeBlackKnight j)
+        {
+            // 1. Con parry: se le apaga y no te prende.
+            bot = 1;
+            yield return Esperar(() => j.AccionActual == "" && !j.Aturdido, 15f);
+            int apagadas = j.ApagadasPorParry;
+            sala.LanzarAtaque(JefeBlackKnight.AccEncender);
+            yield return Esperar(() => j.ArmaEncendida, 15f);
+            Comprobar(j.ArmaEncendida, "enciende el arma");
+            yield return Esperar(() => j.AccionActual == "", 6f);
+            sala.LanzarAtaque("combo_ligero");
+            yield return Esperar(() => j.ApagadasPorParry > apagadas || !j.ArmaEncendida, 25f);
+            Comprobar(j.ApagadasPorParry > apagadas && !j.ArmaEncendida, "parar el golpe encendido se la apaga");
+
+            // 2. Sin bloquear: el golpe encendido te prende de golpe.
+            bot = 3;
+            yield return Esperar(() => j.AccionActual == "" && !j.Aturdido, 15f);
+            int encendidos = j.GolpesEncendidos;
+            sala.LanzarAtaque(JefeBlackKnight.AccEncender);
+            yield return Esperar(() => j.ArmaEncendida, 15f);
+            // Y que pegue un golpe normal con ella (si no, se le apaga sola).
+            yield return Esperar(() => j.AccionActual == "", 6f);
+            sala.LanzarAtaque("combo_ligero");
+            float quemadura = 0f;
+            bool prendio = false;
+            float fin2 = Time.realtimeSinceStartup + 25f;
+            while (Time.realtimeSinceStartup < fin2 && (j.GolpesEncendidos == encendidos || !prendio))
+            {
+                EstadosPlayer es = EstadosPlayer.Instancia;
+                if (es != null)
+                {
+                    quemadura = Mathf.Max(quemadura, es.Fraccion(EstadoPlayer.Quemadura));
+                    prendio |= es.EnEfecto(EstadoPlayer.Quemadura);
+                }
+                yield return null;
+            }
+            Comprobar(j.GolpesEncendidos > encendidos, "su golpe encendido te alcanza");
+            Comprobar(prendio || quemadura > 0.9f, $"te prende del todo de un golpe (quemadura al {quemadura * 100f:0} %)");
+            bot = 1;
+            yield return Esperar(() => j.AccionActual == "", 12f);
+        }
+
+        // Congelarlo: cuesta mas, dura 2 s, no se recarga mientras dura y el
+        // revienta el hielo mandandote por los aires.
+        private IEnumerator HieloPrueba(JefeBlackKnight j)
+        {
+            bot = 0;
+            yield return Esperar(() => j.AccionActual == "" && !j.Aturdido && !j.Estallando, 15f);
+            EstadosEnemigo est = j.GetComponent<EstadosEnemigo>();
+            if (est == null) est = j.gameObject.AddComponent<EstadosEnemigo>();
+
+            // Cuantos golpes de hielo hacen falta: mas que los 4 de un enemigo normal.
+            int golpes = 0;
+            float fin = Time.realtimeSinceStartup + 10f;
+            while (!est.Congelado && Time.realtimeSinceStartup < fin && golpes < 30)
+            {
+                EstadosEnemigo.Aplicar(Salud, Elemento.Hielo, 10);
+                golpes++;
+                yield return null;
+            }
+            Comprobar(est.Congelado, $"se congela ({golpes} golpes de hielo)");
+            Comprobar(golpes > 4, $"le cuesta mas congelarse que a un enemigo normal ({golpes} golpes, antes 4)");
+
+            // Mientras esta helado, el hielo que le des no cuenta para nada.
+            int estallidos = j.EstallidosHielo;
+            for (int i = 0; i < 10; i++) { EstadosEnemigo.Aplicar(Salud, Elemento.Hielo, 10); yield return null; }
+
+            // Y revienta: te manda por los aires y se quita la congelacion.
+            // (Pegado a el todo el rato, hasta que reviente: si no, no te alcanza.)
+            float y0 = P != null ? P.transform.position.y : 0f, yMax = y0;
+            float fin2 = Time.realtimeSinceStartup + 8f;
+            while (Time.realtimeSinceStartup < fin2 && j.EstallidosHielo == estallidos)
+            {
+                if (P != null) P.transform.position = new Vector3(j.transform.position.x + 1.2f, y0, 0f);
+                yield return null;
+            }
+            float finVuelo = Time.realtimeSinceStartup + 2f;
+            while (Time.realtimeSinceStartup < finVuelo)
+            {
+                if (P != null) yMax = Mathf.Max(yMax, P.transform.position.y);
+                yield return null;
+            }
+            float fin3 = Time.realtimeSinceStartup + 1.5f;
+            while (Time.realtimeSinceStartup < fin3)
+            {
+                if (P != null) yMax = Mathf.Max(yMax, P.transform.position.y);
+                yield return null;
+            }
+            Comprobar(j.EstallidosHielo > estallidos, "al congelarlo, revienta el hielo");
+            Comprobar(!est.Congelado, "y se queda sin congelacion");
+            Comprobar(yMax > y0 + 0.8f, $"si estabas cerca, te manda por los aires ({yMax - y0:0.0} u)");
+
+            // Justo despues no se le puede volver a congelar enseguida.
+            for (int i = 0; i < 12; i++) { EstadosEnemigo.Aplicar(Salud, Elemento.Hielo, 10); yield return null; }
+            Comprobar(!est.Congelado, "y no se vuelve a congelar enseguida");
+            // Y se le quita todo el hielo: lo que viene detras lo necesita entero.
+            est.Limpiar();
+            yield return Esperar(() => !est.Congelado && !j.Estallando && j.AccionActual == "", 12f);
+            yield return new WaitForSeconds(1f);
+        }
+
+        // Presion: segun va la pelea sin tocarte, aprieta mas (pausas mas cortas).
+        private IEnumerator PresionPrueba(JefeBlackKnight j)
+        {
+            Comprobar(j.Ajustes.presionActiva, "la presion esta encendida en la ficha");
+            j.OlvidarLectura();
+            Comprobar(j.Presion < 0.01f, $"empieza sin presion ({j.Presion:0.00})");
+            bot = 1;
+            float fin = Time.realtimeSinceStartup + 14f;
+            while (Time.realtimeSinceStartup < fin)
+            {
+                if (P != null && Mathf.Abs(P.transform.position.x - j.transform.position.x) > 3f)
+                {
+                    float lado = P.transform.position.x >= j.transform.position.x ? 1f : -1f;
+                    P.transform.position = new Vector3(j.transform.position.x + lado * 1.6f, P.transform.position.y, P.transform.position.z);
+                }
+                yield return null;
+            }
+            Comprobar(j.Presion > 0.4f, $"parandole todo, la presion sube ({j.Resumen()})");
+            float conPresion = j.EnfriamientoConPresion(20f);
+            Comprobar(conPresion < 20f, $"y sus especiales vuelven antes (20 s -> {conPresion:0.0} s)");
+            bot = 1;
+            yield return Esperar(() => j.AccionActual == "", 10f);
+        }
+
+        // IA adaptativa: segun como peleas, cambia lo que elige.
+        private IEnumerator MentePrueba(JefeBlackKnight j)
+        {
+            Comprobar(j.Ajustes.iaAdaptativa, "la IA adaptativa esta encendida en la ficha");
+            // De cero y pegado a el: lo de las pruebas anteriores no cuenta.
+            yield return Esperar(() => j.AccionActual == "" && !j.Aturdido, 15f);
+            if (P != null) P.transform.position = new Vector3(j.transform.position.x + 1.6f, P.transform.position.y, P.transform.position.z);
+            j.OlvidarLectura();
+            yield return new WaitForSeconds(0.5f);
+
+            // 1. Parando todo: le sube el perfil de "paras todo" y pesa mas sus agarres.
+            bot = 1;
+            float fin = Time.realtimeSinceStartup + 14f;
+            while (Time.realtimeSinceStartup < fin)
+            {
+                // Pegado a el todo el rato (si se va lejos con un especial, vuelves).
+                if (P != null && Mathf.Abs(P.transform.position.x - j.transform.position.x) > 3f)
+                {
+                    float lado = P.transform.position.x >= j.transform.position.x ? 1f : -1f;
+                    P.transform.position = new Vector3(j.transform.position.x + lado * 1.6f, P.transform.position.y, P.transform.position.z);
+                }
+                yield return null;
+            }
+            float pesoAgarre = j.Peso(JefeBlackKnight.AccCielo), pesoLargo = j.Peso("combo_pesado");
+            Comprobar(j.PerfilParry > 0.5f, $"te lee como que paras todo ({j.Resumen()})");
+            Comprobar(pesoAgarre > 1.3f && pesoAgarre > pesoLargo,
+                      $"y pesa mas lo que no se para: agarre x{pesoAgarre:0.00} frente a combo largo x{pesoLargo:0.00}");
+
+            // 2. Quedandote lejos y sin bloquear: cambia a cosas de distancia.
+            bot = 3;
+            PlayerControler p = P;
+            Vector3 sitio = p.transform.position;
+            j.OlvidarLectura();
+            fin = Time.realtimeSinceStartup + 16f;
+            while (Time.realtimeSinceStartup < fin)
+            {
+                if (P != null && Mathf.Abs(P.transform.position.x - j.transform.position.x) < 9.5f)
+                {
+                    float lado = P.transform.position.x >= j.transform.position.x ? 1f : -1f;
+                    P.transform.position = new Vector3(j.transform.position.x + lado * 10.5f, P.transform.position.y, P.transform.position.z);
+                }
+                yield return null;
+            }
+            float pesoLejos = j.Peso(JefeBlackKnight.AccOndas), pesoCorto = j.Peso("combo_ligero");
+            Comprobar(j.PerfilLejania > 0.5f, $"te lee como que peleas de lejos ({j.Resumen()})");
+            Comprobar(pesoLejos > pesoCorto, $"y busca distancia: ondas x{pesoLejos:0.00} frente a combo corto x{pesoCorto:0.00}");
+
+            // 3. Los topes de la ficha se respetan siempre.
+            bool dentro = true;
+            foreach (string id in j.AtaquesPrueba)
+            {
+                float w = j.Peso(id);
+                if (w < j.Ajustes.topeMultiplicador.x - 0.001f || w > j.Ajustes.topeMultiplicador.y + 0.001f) dentro = false;
+            }
+            Comprobar(dentro, $"ningun peso se sale de los topes ({j.Ajustes.topeMultiplicador.x} a {j.Ajustes.topeMultiplicador.y})");
+
+            // 4. Apagada la IA, todo vuelve a pesar igual.
+            bool antes = j.Ajustes.iaAdaptativa;
+            j.Ajustes.iaAdaptativa = false;
+            Comprobar(Mathf.Approximately(j.Peso(JefeBlackKnight.AccCielo), 1f) && Mathf.Approximately(j.Peso("combo_ligero"), 1f),
+                      "con la IA apagada, todo pesa lo de siempre");
+            j.Ajustes.iaAdaptativa = antes;
+            // Y te devuelve a la pelea (las pruebas que vienen detras lo necesitan).
+            if (P != null) P.transform.position = sitio;
+            bot = 1;
+            yield return new WaitForSeconds(1f);
+            yield return Esperar(() => j.AccionActual == "", 12f);
+        }
+
         // Erupciones: se aleja, columnas de fuego de distintos tamanos (no se paran) y salta sobre ti.
         private IEnumerator ErupcionesPrueba(JefeBlackKnight j)
         {
@@ -669,6 +1069,7 @@ public static class PruebaBlackKnight
             float dx = Mathf.Abs(j.transform.position.x - P.transform.position.x);
             Comprobar(j.EnErupciones && dx > 5f, $"erupciones: se va lejos (a {dx:0.0} u) y hace la pose del buff");
             yield return new WaitForSeconds(0.8f);
+            yield return Fijar();
             ComprobarCamara(j, "erupciones");
             float fin = Time.realtimeSinceStartup + 25f;
             while (Time.realtimeSinceStartup < fin && j.AccionesHechas.Count(a => a == JefeBlackKnight.AccErupciones) == hechas)
@@ -710,6 +1111,7 @@ public static class PruebaBlackKnight
             yield return Esperar(() => j.Clavado, 15f);
             Comprobar(j.Clavado, "clava la espada en el suelo");
             yield return new WaitForSeconds(1f);
+            yield return Fijar();
             Comprobar(j.CamaraAmplia && CamaraCombate.Activo, "sombras: la camara de combate os encuadra mientras tiene la espada clavada");
             int vida = Salud.CurrentHealth;
             Pegar();
@@ -779,7 +1181,8 @@ public static class PruebaBlackKnight
             Comprobar(J != null && FindObjectsByType<JefeBlackKnight>(FindObjectsSortMode.None).Length == 1, "5 reapariciones seguidas: un solo jefe y vuelve a actuar");
             sala.Limpiar();
             yield return null;
-            Comprobar(FindFirstObjectByType<OndaFuegoBK>() == null && FindFirstObjectByType<SombraBK>() == null, "al limpiar la sala no queda nada suyo");
+            Comprobar(FindFirstObjectByType<OndaFuegoBK>() == null && FindFirstObjectByType<SombraBK>() == null && FindFirstObjectByType<TajoCieloBK>() == null,
+                      "al limpiar la sala no queda nada suyo");
         }
     }
 }

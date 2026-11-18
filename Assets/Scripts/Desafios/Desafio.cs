@@ -55,6 +55,8 @@ public static class Desafio
         Ficha = f;
         Dificil = dificil && DificilDesbloqueado(f);
         Reiniciado = false;
+        // Desafio nuevo: el Black Knight no sabe nada de ti todavia.
+        JefeBlackKnight.OlvidarMemoria();
         DeCero();
         Activo = true;
         PantallaCarga.Cargar(f.escena, 1.2f);
@@ -124,6 +126,7 @@ public static class Desafio
         Activo = false;
         Reiniciado = Reiniciando = false;
         Progreso.Aislado = false;
+        JefeBlackKnight.OlvidarMemoria();
         Partida.Descargar();
         Equipo.Reiniciar();
         Amuletos.Reiniciar();

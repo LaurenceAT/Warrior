@@ -4416,6 +4416,23 @@ public class PlayerControler : MonoBehaviour
         GameManager.Instance.RespawnPlayer();
     }
 
+    // El ultimo corte de un agarre que sentencia (Cielo partido del Black Knight):
+    // deja la vida justo en "vidaRestante" si "perdonar" (llegabas con la vida
+    // llena); si no, mata. No pasa por la resistencia: el numero tiene que ser exacto.
+    public void CorteAgarreFinal(int vidaRestante, bool perdonar)
+    {
+        if (!isAgarrado || currentHealth <= 0) return;
+        Bitacora.GolpeRecibido();
+        currentHealth = perdonar ? Mathf.Clamp(vidaRestante, 1, maxHealth) : 0;
+        PlayerHud.Get().Damage(currentHealth, maxHealth);
+        Sonido.Reproducir("dano_player", 1f);
+        Destello(new Color(1f, 0.4f, 0.4f), 0.12f);
+        if (currentHealth > 0) return;
+        isAgarrado = false;
+        Die();
+        GameManager.Instance.RespawnPlayer();
+    }
+
     // Tine el cuerpo un instante; al acabar, LateUpdate vuelve al color base.
     private void Destello(Color color, float segundos)
     {

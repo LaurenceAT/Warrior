@@ -95,8 +95,13 @@ public class AjustesBlackKnight : ScriptableObject
     [Range(0f, 0.45f)] public float subirEncuadre = 0.3f;
     [Tooltip("En ondas y erupciones se aleja hasta el otro extremo, pero nunca a mas de esto de ti (unidades).")]
     [Min(4f)] public float distanciaAlejarse = 14f;
+    [Tooltip("Cuando se aleja para un ataque no corre: se teletransporta. Lo que tarda en irse y volver a aparecer (segundos).")]
+    [Min(0.05f)] public float tiempoTeleport = 0.22f;
+    public Color colorTeleport = new Color(0.55f, 0.35f, 0.95f, 1f);
 
     [Header("Cuerpo")]
+    [Tooltip("Lo grande que es (1 = el tamano de siempre). Multiplica su cuerpo, sus cajas de golpe, sus avances y sus alcances; el dibujo se agranda en el generador (Warrior > Black Knight).")]
+    [Min(0.5f)] public float escala = 1.2f;
     [Tooltip("Caja del cuerpo (ancho y alto, unidades), apoyada en los pies. Es la que recibe tus golpes.")]
     public Vector2 cuerpo = new Vector2(0.55f, 1.05f);
 
@@ -319,12 +324,182 @@ public class AjustesBlackKnight : ScriptableObject
     public Color colorErupcion = new Color(1f, 0.45f, 0.1f, 1f);
     public Color colorErupcion2 = new Color(1f, 0.9f, 0.45f, 1f);
 
+    [Header("Especial: cielo partido (desde la fase 1)")]
+    [Tooltip("Probabilidad de elegirlo en cada decision (fase 1-2 y fase 3), con un enfriamiento largo.")]
+    public Vector2 probCielo = new Vector2(0.09f, 0.12f);
+    [Min(0f)] public float enfriamientoCielo = 40f;
+    [Tooltip("Aviso antes de caerte encima (segundos): la senal de peligro parpadea sobre tu cabeza.")]
+    [Min(0.3f)] public float avisoCielo = 1.1f;
+    [Tooltip("Veces que parpadea la senal (cada vez mas rapido).")]
+    [Min(1)] public int parpadeosCielo = 3;
+    [Tooltip("Tamano de la senal de peligro sobre tu cabeza (unidades) y a que altura va.")]
+    [Min(0.3f)] public float tamanoSenalCielo = 1.3f;
+    [Min(0.5f)] public float alturaSenalCielo = 2.2f;
+    [Tooltip("Aparece a esta distancia de ti al teletransportarse (unidades).")]
+    [Min(0.3f)] public float distanciaTeleportCielo = 1.1f;
+    [Tooltip("Lo que tarda el teletransporte, desde que se desvanece hasta que alza (segundos).")]
+    [Min(0.05f)] public float embestidaCielo = 0.2f;
+    [Tooltip("Caja del agarre (ancho y alto, unidades).")]
+    public Vector2 alcanceCielo = new Vector2(2.6f, 2.4f);
+    [Tooltip("Si lo esquivas, se queda expuesto (segundos).")]
+    [Min(0f)] public float aturdidoCieloFallado = 1.5f;
+    [Tooltip("Altura a la que te sube (unidades sobre donde te agarro) y lo que tarda.")]
+    [Min(1f)] public float alturaCielo = 5.5f;
+    [Min(0.1f)] public float subidaCielo = 0.45f;
+    [Tooltip("Cuantos tajos te da en el aire.")]
+    [Min(1)] public int tajosCielo = 8;
+    [Tooltip("Tiempo entre un tajo y el siguiente (segundos): cuando uno acaba ya entra el otro.")]
+    [Min(0.02f)] public float intervaloTajoCielo = 0.13f;
+    [Tooltip("Lo que tarda cada tajo en cruzar la pantalla (segundos), lo que se queda y lo que tarda en apagarse.")]
+    [Min(0.01f)] public float trazoTajoCielo = 0.07f;
+    [Min(0f)] public float quietoTajoCielo = 0.05f;
+    [Min(0.01f)] public float salidaTajoCielo = 0.22f;
+    [Tooltip("Largo y grosor de cada tajo (unidades). Largo = de sobra para cruzar la pantalla entera.")]
+    [Min(5f)] public float largoTajoCielo = 34f;
+    [Min(0.05f)] public float grosorTajoCielo = 0.45f;
+    [Tooltip("Lo que se abre la camara mientras estas en el aire.")]
+    [Min(3f)] public float camaraCielo = 7.5f;
+    [Tooltip("Vida que te deja al acabar: con la vida llena sobrevives con esto; con menos, te mata.")]
+    [Min(1)] public int vidaRestanteCielo = 1;
+    public Color colorTajoCielo = new Color(1f, 0.45f, 0.08f, 1f);
+    public Color colorTajoCielo2 = new Color(1f, 0.93f, 0.6f, 1f);
+
+    [Header("Especial: diezmo de sangre (roba un frasco, desde la fase 2)")]
+    [Tooltip("Probabilidad de elegirlo en cada decision (fase 2 y fase 3), con su enfriamiento.")]
+    public Vector2 probDiezmo = new Vector2(0.12f, 0.14f);
+    [Min(0f)] public float enfriamientoDiezmo = 35f;
+    [Tooltip("Lo que tarda canalizando en la lejania antes de caer (segundos).")]
+    [Min(0.5f)] public float canalizarDiezmo = 1.5f;
+    [Tooltip("Lo que tarda en caer sobre ti desde el cielo (segundos) y desde que altura.")]
+    [Min(0.15f)] public float caidaDiezmo = 0.5f;
+    [Min(2f)] public float alturaDiezmo = 9f;
+    [Tooltip("Caja de la caida (ancho y alto): si estas dentro, te atrapa.")]
+    public Vector2 cajaDiezmo = new Vector2(2.4f, 2.2f);
+    [Tooltip("Lo que te tiene agarrado mientras te roba el frasco (segundos).")]
+    [Min(0.3f)] public float agarreDiezmo = 1.6f;
+    [Tooltip("Lo que dura la escena de el bebiendo tu frasco (segundos): su vida sube durante todo ese rato.")]
+    [Min(0.4f)] public float escenaDiezmo = 1.8f;
+    [Tooltip("Lo cerca que se pone la camara durante esa escena (menos = mas cerca).")]
+    [Min(1.5f)] public float camaraDiezmo = 3.2f;
+    [Min(0)] public int danoDiezmo = 18;
+    [Tooltip("Sin frascos que robar: te lanza por los aires con este impulso (x, y) y este dano.")]
+    public Vector2 impulsoDiezmo = new Vector2(13f, 11f);
+    [Min(0)] public int danoDiezmoSinFrasco = 30;
+    [Tooltip("Se cura lo que el frasco te curaria a ti (en puntos de vida), por este numero. 1 = lo mismo; 2 = el doble.")]
+    [Min(0.1f)] public float multCuraDiezmo = 1f;
+    public Color colorDiezmo = new Color(0.85f, 0.1f, 0.2f, 1f);
+    public string textoDiezmo = "Frasco robado";
+    public string textoDiezmoVacio = "No te queda nada";
+
+    [Header("Especial: arma encendida (desde la fase 1)")]
+    [Tooltip("Probabilidad de elegirlo en cada decision (fases 1-2 y fase 3).")]
+    public Vector2 probEncender = new Vector2(0.14f, 0.16f);
+    [Min(0f)] public float enfriamientoEncender = 20f;
+    [Tooltip("Lo que tarda en encender el arma (segundos).")]
+    [Min(0.2f)] public float avisoEncender = 0.7f;
+    [Tooltip("Lo que dura encendida si no llega a golpear (segundos).")]
+    [Min(1f)] public float duracionEncendida = 12f;
+    [Tooltip("Quemadura que mete de golpe el primer golpe encendido (de 100: 100 = prende al instante).")]
+    [Min(1f)] public float quemaduraEncendida = 100f;
+    [Tooltip("Dano extra del golpe encendido (1,2 = un 20 % mas).")]
+    [Min(1f)] public float multDanoEncendido = 1.2f;
+    public Color colorEncendida = new Color(1f, 0.35f, 0.1f, 1f);
+    public string textoEncendida = "Arma encendida";
+
+    [Header("Presion (lo que le hace mas duro segun va la pelea)")]
+    [Tooltip("Apagado: pelea siempre al mismo ritmo.")]
+    public bool presionActiva = true;
+    [Tooltip("Lo que sube la presion por segundo mientras no te toca (0 a 1).")]
+    [Min(0f)] public float presionPorSegundo = 0.035f;
+    [Tooltip("Lo que sube de golpe cuando le paras, le esquivas o le pegas (te lo esta leyendo).")]
+    [Min(0f)] public float presionPorLeerte = 0.07f;
+    [Tooltip("Lo que BAJA cuando consigue darte (respira un poco).")]
+    [Min(0f)] public float presionAlDarte = 0.35f;
+    [Tooltip("Con la presion al maximo, la pausa entre acciones se queda en esta parte (0,45 = menos de la mitad).")]
+    [Range(0.2f, 1f)] public float pausaConPresion = 0.45f;
+    [Tooltip("Con la presion al maximo, los enfriamientos de sus especiales se quedan en esta parte.")]
+    [Range(0.2f, 1f)] public float enfriamientoConPresion = 0.5f;
+    [Tooltip("Pausa minima entre dos acciones (segundos), por mucha presion que tenga: en ese hueco te estudia y te lee.")]
+    [Min(0.05f)] public float pausaMinima = 0.2f;
+    [Tooltip("Con la presion al maximo, probabilidad de encadenar otra accion casi sin pausa.")]
+    [Range(0f, 1f)] public float probEncadenar = 0.55f;
+    [Tooltip("Cuanto sube su velocidad de ataque con la presion al maximo (1,2 = un 20 % mas rapido).")]
+    [Min(1f)] public float velocidadConPresion = 1.2f;
+
+    [Header("Estallido de escarcha (cuando lo congelas)")]
+    [Tooltip("Apagado: congelarlo le frena y ya (como cualquier enemigo).")]
+    public bool estallidoAlCongelar = true;
+    [Tooltip("Lo que aguanta helado antes de reventar (segundos): tu tiempo para apartarte.")]
+    [Min(0.1f)] public float avisoEstallido = 0.55f;
+    [Tooltip("Radio del estallido (unidades): si estas dentro, te manda por los aires.")]
+    [Min(0.5f)] public float radioEstallido = 3.2f;
+    [Min(0)] public int danoEstallido = 14;
+    [Tooltip("Impulso con el que te manda lejos (x, y).")]
+    public Vector2 empujonEstallido = new Vector2(12f, 10f);
+    [Tooltip("Tiempo minimo entre dos estallidos (segundos).")]
+    [Min(0f)] public float enfriamientoEstallido = 6f;
+    public Color colorEstallido = new Color(0.6f, 0.9f, 1f, 1f);
+    public string textoEstallido = "¡Estalla el hielo!";
+
+    [Header("IA adaptativa (aprende como peleas)")]
+    [Tooltip("Apagado: elige como antes, solo por frecuencia y azar.")]
+    public bool iaAdaptativa = true;
+    [Tooltip("Cuanto cambia su forma de pelear (1 = normal, 2 = se adapta a tope).")]
+    [Min(0f)] public float fuerzaAdaptacion = 2f;
+    [Tooltip("Segundos en los que lo que hiciste pesa la mitad: menos = solo mira lo ultimo.")]
+    [Min(1f)] public float ventanaLectura = 12f;
+    [Tooltip("Ataques tuyos seguidos (con olvido) para darte del todo el perfil de machacon.")]
+    [Min(1f)] public float machaqueParaPerfil = 6f;
+    [Tooltip("Distancias (unidades) para saber si peleas pegado o de lejos.")]
+    [Min(0.5f)] public float distanciaCorta = 2.2f;
+    [Min(1f)] public float distanciaLarga = 7f;
+    [Tooltip("Topes del multiplicador: nunca elige algo menos ni mas que esto.")]
+    public Vector2 topeMultiplicador = new Vector2(0.2f, 4f);
+    [Tooltip("Lo que pierde de peso cada vez que repite algo (0,55 = casi la mitad), hasta este tope de repeticiones.")]
+    [Range(0.2f, 1f)] public float castigoRepetir = 0.55f;
+    [Min(1)] public int topeRepetir = 3;
+    [Tooltip("Cuanto recuerda de ti al reintentar el desafio (0 = empieza de cero, 1 = te conoce entero). Solo en memoria.")]
+    [Range(0f, 1f)] public float memoriaEntreIntentos = 0.6f;
+    [Tooltip("Si paras y bloqueas todo: lo que hace mas (y menos) de cada cosa.")]
+    public PesosMano contraParry = new PesosMano { rapidos = 0.8f, largos = 0.5f, agarres = 2.6f, distancia = 1.4f, defensivos = 0.7f, encender = 1.3f };
+    [Tooltip("Si esquivas mucho.")]
+    public PesosMano contraEsquiva = new PesosMano { rapidos = 1.8f, largos = 1.5f, agarres = 0.6f, distancia = 0.7f, defensivos = 0.9f, encender = 1.1f };
+    [Tooltip("Si machacas el ataque.")]
+    public PesosMano contraMachaque = new PesosMano { rapidos = 1.2f, largos = 0.8f, agarres = 1.1f, distancia = 0.6f, defensivos = 2.4f, encender = 1.2f };
+    [Tooltip("Si te quedas lejos.")]
+    public PesosMano contraLejania = new PesosMano { rapidos = 0.7f, largos = 0.6f, agarres = 1.2f, distancia = 2.8f, defensivos = 0.5f, encender = 0.9f };
+
     [Header("Animacion (cuadros por segundo)")]
     [Min(1f)] public float fpsEspera = 9f;
     [Min(1f)] public float fpsCorrer = 14f;
     [Min(1f)] public float fpsAtaque = 14f;
     [Min(1f)] public float fpsRodada = 16f;
     [Min(1f)] public float fpsOtros = 12f;
+
+    // Lo que multiplica cada tipo de cosa que sabe hacer (1 = igual que siempre).
+    [System.Serializable]
+    public class PesosMano
+    {
+        [Min(0f)] public float rapidos = 1f;
+        [Min(0f)] public float largos = 1f;
+        [Min(0f)] public float agarres = 1f;
+        [Min(0f)] public float distancia = 1f;
+        [Min(0f)] public float defensivos = 1f;
+        [Min(0f)] public float encender = 1f;
+
+        public float De(JefeBlackKnight.Mano m)
+        {
+            switch (m)
+            {
+                case JefeBlackKnight.Mano.Rapidos: return rapidos;
+                case JefeBlackKnight.Mano.Largos: return largos;
+                case JefeBlackKnight.Mano.Agarres: return agarres;
+                case JefeBlackKnight.Mano.Distancia: return distancia;
+                case JefeBlackKnight.Mano.Defensivos: return defensivos;
+                default: return encender;
+            }
+        }
+    }
 
     public float Afinidad(Elemento e)
     {

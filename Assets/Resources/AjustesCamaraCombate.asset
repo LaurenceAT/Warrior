@@ -13,10 +13,20 @@ MonoBehaviour:
   m_Name: AjustesCamaraCombate
   m_EditorClassIdentifier: 
   activo: 1
-  tamanoCerca: 3.1
-  tamanoLejos: 7
-  margenX: 2.6
+  tamanoCerca: 3.8
+  tamanoLejos: 9
+  margenX: 3
   margenY: 1.8
   pesoCentro: 0.9
   subir: 0.15
   alturaJefe: 1
+  alturaJugador: 0.62
+  sueloEnPantalla: 0.22
+  margenJugador: 0.36
+  tiraHaciaJefe: 1
+  mostrarMarca: 1
+  tamanoMarca: 0.75
+  alturaMarca: 2.6
+  flechaFuera: 1
+  colorMarca: {r: 1, g: 0.92, b: 0.75, a: 0.9}
+

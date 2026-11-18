@@ -31,7 +31,8 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
     // Acciones que no son ataques de la lista (tambien se lanzan desde la sala).
     public const string AccRodadaEspalda = "rodada_espalda", AccSalto = "salto", AccGuardia = "guardia", AccDesenvaine = "desenvaine",
                         AccProvocar = "provocar", AccRetroceder = "retroceder", AccOndas = "ondas_fuego", AccSombras = "sombras",
-                        AccSello = "sello_amuleto", AccErupciones = "erupciones";
+                        AccSello = "sello_amuleto", AccErupciones = "erupciones", AccCielo = "cielo_partido",
+                        AccDiezmo = "diezmo_sangre", AccEncender = "arma_encendida";
 
     [SerializeField] private AjustesBlackKnight ajustes;
 
@@ -67,7 +68,9 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
     public int CombosCortados { get; private set; }
     public int Amagos { get; private set; }
 
-    private float Vel => ajustes.Velocidad(fase);
+    private float Vel => ajustes.Velocidad(fase) * (ajustes.presionActiva ? Mathf.Lerp(1f, ajustes.velocidadConPresion, Presion) : 1f);
+    // Lo grande que es: multiplica cuerpo, cajas, avances y alcances.
+    private float Esc => ajustes != null ? Mathf.Max(0.1f, ajustes.escala) : 1f;
 
     // ------------------------------------------------------------------ Sala de pruebas
 
@@ -78,7 +81,7 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
             var l = new List<string>();
             if (ajustes == null) return l.ToArray();
             foreach (AjustesBlackKnight.Ataque a in ajustes.ataques) if (a != null && !string.IsNullOrEmpty(a.id)) l.Add(a.id);
-            l.AddRange(new[] { AccRodadaEspalda, AccSalto, AccGuardia, AccDesenvaine, AccProvocar, AccRetroceder, AccOndas, AccSombras, AccSello, AccErupciones });
+            l.AddRange(new[] { AccRodadaEspalda, AccSalto, AccGuardia, AccDesenvaine, AccProvocar, AccRetroceder, AccOndas, AccSombras, AccSello, AccErupciones, AccCielo, AccDiezmo, AccEncender });
             return l.ToArray();
         }
     }
@@ -108,7 +111,7 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
         armadura = true;
         salud.Inamovible = true;
         BoxCollider2D caja = GetComponent<BoxCollider2D>();
-        if (caja != null) { caja.size = ajustes.cuerpo; caja.offset = new Vector2(0f, ajustes.cuerpo.y * 0.5f); }
+        if (caja != null) { caja.size = ajustes.cuerpo * Esc; caja.offset = new Vector2(0f, ajustes.cuerpo.y * Esc * 0.5f); }
         srCaballero = visual != null ? visual.GetComponent<SpriteRenderer>() : null;
         // Rueda y embiste rapido: colision continua para no atravesar el suelo.
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
@@ -123,6 +126,7 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
     protected override void Start()
     {
         salud.Revivir(VidaDesafio(ajustes.vidaFase1));
+        EmpezarMente();
         base.Start();
     }
 
@@ -175,10 +179,13 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
         while (true)
         {
             Vector2 p = ajustes.Pausa(fase);
-            yield return Estudiar(PausaPrueba(PausaDesafio(Random.Range(p.x, p.y))));
+            // Con presion alta casi no te deja respirar, y a veces ni eso: encadena.
+            float pausa = Mathf.Max(ajustes.pausaMinima, Encadena() ? 0f : ConPresion(Random.Range(p.x, p.y)));
+            yield return Estudiar(PausaPrueba(PausaDesafio(pausa)));
             string accion = ElegirAccion();
             if (string.IsNullOrEmpty(accion)) continue;
             AccionActual = accion;
+            ApuntarElegida(accion);
             AnunciarAtaque(accion);
             yield return Hacer(accion);
             AccionesHechas.Add(accion);
@@ -228,22 +235,40 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
         string leido = AccionLeida();
         if (leido != null) return leido;
 
+        // Acaba de encender el arma: lo siguiente es un ataque de verdad, no un
+        // agarre ni un especial (si no, la desperdicia y no se entiende nada).
+        if (armaEncendida && ultimoElegido == AccEncender)
+        {
+            string golpe = AtaqueNormal();
+            if (golpe != null) return ultimoElegido = golpe;
+        }
+
+        // Enciende el arma antes de atacar (desde la fase 1).
+        if (!armaEncendida && Time.time >= finEnfriamientoEncender
+            && Random.value < (fase >= 3 ? ajustes.probEncender.y : ajustes.probEncender.x) * Peso(AccEncender))
+            return ultimoElegido = AccEncender;
+        // Diezmo de sangre: se va lejos, canaliza y cae sobre ti (desde la fase 2).
+        if (fase >= 2 && Time.time >= finEnfriamientoDiezmo && Random.value < (fase >= 3 ? ajustes.probDiezmo.y : ajustes.probDiezmo.x) * Peso(AccDiezmo))
+            return ultimoElegido = AccDiezmo;
+        // Su sentencia: desde la fase 1, con un enfriamiento largo.
+        if (Time.time >= finEnfriamientoCielo && Random.value < (fase >= 3 ? ajustes.probCielo.y : ajustes.probCielo.x) * Peso(AccCielo))
+            return ultimoElegido = AccCielo;
         if (fase >= 2 && Time.time >= finEnfriamientoSello && AmuletoParaSellar() != null
-            && Random.value < (fase >= 3 ? ajustes.probSello.y : ajustes.probSello.x))
+            && Random.value < (fase >= 3 ? ajustes.probSello.y : ajustes.probSello.x) * Peso(AccSello))
             return ultimoElegido = AccSello;
-        if (fase >= 2 && Time.time >= finEnfriamientoErupciones && Random.value < (fase >= 3 ? ajustes.probErupciones.y : ajustes.probErupciones.x))
+        if (fase >= 2 && Time.time >= finEnfriamientoErupciones && Random.value < (fase >= 3 ? ajustes.probErupciones.y : ajustes.probErupciones.x) * Peso(AccErupciones))
             return ultimoElegido = AccErupciones;
-        if (fase >= 2 && Time.time >= finEnfriamientoOndas && Random.value < (fase >= 3 ? ajustes.probOndas.y : ajustes.probOndas.x))
+        if (fase >= 2 && Time.time >= finEnfriamientoOndas && Random.value < (fase >= 3 ? ajustes.probOndas.y : ajustes.probOndas.x) * Peso(AccOndas))
             return ultimoElegido = AccOndas;
-        if (fase >= 3 && Time.time >= finEnfriamientoSombras && Random.value < ajustes.probSombras)
+        if (fase >= 3 && Time.time >= finEnfriamientoSombras && Random.value < ajustes.probSombras * Peso(AccSombras))
             return ultimoElegido = AccSombras;
 
         var opciones = new List<(string id, float peso)>();
         foreach (AjustesBlackKnight.Ataque a in ajustes.ataques)
-            if (a != null && a.frecuencia > 0f && a.faseMinima <= fase && a.golpes.Count > 0) opciones.Add((a.id, a.frecuencia));
-        opciones.Add((AccRodadaEspalda, ajustes.frecuenciaRodadaEspalda));
-        opciones.Add((AccSalto, ajustes.frecuenciaSalto));
-        opciones.Add((AccGuardia, ajustes.frecuenciaGuardia));
+            if (a != null && a.frecuencia > 0f && a.faseMinima <= fase && a.golpes.Count > 0) opciones.Add((a.id, a.frecuencia * Peso(a.id)));
+        opciones.Add((AccRodadaEspalda, ajustes.frecuenciaRodadaEspalda * Peso(AccRodadaEspalda)));
+        opciones.Add((AccSalto, ajustes.frecuenciaSalto * Peso(AccSalto)));
+        opciones.Add((AccGuardia, ajustes.frecuenciaGuardia * Peso(AccGuardia)));
         if (opciones.Count > 1) opciones.RemoveAll(o => o.id == ultimoElegido);
         float total = 0f;
         foreach (var o in opciones) total += o.peso;
@@ -254,6 +279,25 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
             if (r <= 0f) return ultimoElegido = o.id;
         }
         return opciones.Count > 0 ? ultimoElegido = opciones[opciones.Count - 1].id : null;
+    }
+
+    // Uno de sus ataques normales (por frecuencia y con los pesos de su cabeza).
+    private string AtaqueNormal()
+    {
+        var opciones = new List<(string id, float peso)>();
+        foreach (AjustesBlackKnight.Ataque a in ajustes.ataques)
+            if (a != null && a.frecuencia > 0f && a.faseMinima <= fase && a.golpes.Count > 0)
+                opciones.Add((a.id, a.frecuencia * Peso(a.id)));
+        float total = 0f;
+        foreach (var o in opciones) total += o.peso;
+        if (total <= 0f) return opciones.Count > 0 ? opciones[0].id : null;
+        float r = Random.value * total;
+        foreach (var o in opciones)
+        {
+            r -= o.peso;
+            if (r <= 0f) return o.id;
+        }
+        return opciones[opciones.Count - 1].id;
     }
 
     private bool ExisteAccion(string id)
@@ -279,6 +323,9 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
             case AccSombras: yield return SombrasEspectrales(); break;
             case AccSello: yield return SelloAmuleto(); break;
             case AccErupciones: yield return Erupciones(); break;
+            case AccCielo: yield return CieloPartido(); break;
+            case AccDiezmo: yield return Diezmo(); break;
+            case AccEncender: yield return EncenderArma(); break;
         }
     }
 
@@ -427,7 +474,7 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
     // combo a medias y rueda hacia atras. Parar todos (2 o mas) lo aturde.
     private IEnumerator HacerAtaque(AjustesBlackKnight.Ataque a)
     {
-        yield return Acercarse(a.alcance);
+        yield return Acercarse(a.alcance * Esc);
         ritmo.QuitarAviso();
         ritmo.Empezar();
         Resultados.Clear();
@@ -527,13 +574,17 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
         if (g.avance > 0f)
         {
             // Avanza, pero nunca te atraviesa (se queda delante de ti).
-            float hasta = player != null ? (PosPlayer.x - mirada * 0.55f - x0) * mirada : g.avance;
-            xF = LimitarX(x0 + mirada * Mathf.Clamp(Mathf.Min(g.avance, hasta), 0f, g.avance));
+            float avance = g.avance * Esc;
+            float hasta = player != null ? (PosPlayer.x - mirada * 0.55f * Esc - x0) * mirada : avance;
+            xF = LimitarX(x0 + mirada * Mathf.Clamp(Mathf.Min(avance, hasta), 0f, avance));
         }
 
         PlayerControler pc = player != null ? player.GetComponent<PlayerControler>() : null;
         int vidaAntes = pc != null ? pc.VidaActual : 0;
         int dano = ritmo.DanoPermitido(g.dano, pc);
+        // Con el arma encendida pega algo mas fuerte y prende del todo.
+        bool encendido = armaEncendida;
+        if (encendido) dano = Mathf.RoundToInt(dano * ajustes.multDanoEncendido);
         PlayerControler.ResultadoDano? r = null;
         int hecho = 0;
         float t = 0f;
@@ -549,19 +600,22 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
             if (!r.HasValue)
             {
                 ritmo.AntesDeGolpear();
-                Vector2 centro = (Vector2)transform.position + new Vector2(g.cajaCentro.x * mirada, g.cajaCentro.y);
+                Vector2 centro = (Vector2)transform.position + new Vector2(g.cajaCentro.x * mirada * Esc, g.cajaCentro.y * Esc);
                 // Cada golpe que te alcanza acumula quemadura (bloqueado, un 30 %; con parry, nada).
-                r = GolpeCazadora.Caja(centro, g.cajaTamano, dano, this, PlayerControler.TipoDano.Fisico,
-                                       EstadoPlayer.Quemadura, ajustes.quemaduraPorGolpe, desdeArriba: desdeArriba);
+                r = GolpeCazadora.Caja(centro, g.cajaTamano * Esc, dano, this, PlayerControler.TipoDano.Fisico,
+                                       EstadoPlayer.Quemadura,
+                                       encendido ? ajustes.quemaduraEncendida : ajustes.quemaduraPorGolpe, desdeArriba: desdeArriba);
                 ritmo.DespuesDeGolpear();
+                if (encendido) GolpeConArma(r);
                 // El dano se mide en el mismo instante (despues algo puede curarte).
                 if (r.HasValue && pc != null) hecho = Mathf.Max(0, vidaAntes - pc.VidaActual);
-                if (DepuracionCazadora.VerCajas) CajaDebug.Mostrar(centro, g.cajaTamano, ajustes.reglas.ColorAviso(g.peso), 0.03f);
+                if (DepuracionCazadora.VerCajas) CajaDebug.Mostrar(centro, g.cajaTamano * Esc, ajustes.reglas.ColorAviso(g.peso), 0.03f);
             }
             yield return null;
         }
         Parar();
         Resultados.Add(r);
+        ApuntarResultado(r);
         Vector2 punto = player != null ? (Vector2)player.position + new Vector2(-mirada * 0.3f, 0.5f) : (Vector2)transform.position;
         float tono = ritmo.TonoParry;
         if (ritmo.Registrar(r, hecho, punto, mirada > 0 ? 20f : 160f))
@@ -676,6 +730,8 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
         // Tras cambiar de fase, si estabas a punto de algo, nada se arrastra.
         finEnfriamientoOndas = Time.time + 4f;
         finEnfriamientoSombras = Time.time + 4f;
+        finEnfriamientoCielo = Mathf.Max(finEnfriamientoCielo, Time.time + 6f);
+        finEnfriamientoDiezmo = Time.time + 6f;
         Pensar();
     }
 
@@ -684,12 +740,14 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
     {
         GolpesActivos = 0;
         GolpeEnCurso = null;
-        enGuardia = clavado = enOndas = retirandose = aturdido = invulnerable = camaraAmplia = enErupciones = false;
+        enGuardia = clavado = enOndas = retirandose = aturdido = invulnerable = camaraAmplia = enErupciones = enCielo = enDiezmo = CieloCazando = AvisoCielo = estallando = false;
         aturdimientoPendiente = 0f;
         PlayerControler.TonoSiguienteParry = 1f;
         PlayerControler.SiguienteOrigenX = float.NaN;
         if (ritmo != null) ritmo.QuitarAviso();
         if (visual != null) visual.localPosition = Vector3.zero;
+        if (srCaballero != null) { Color c = srCaballero.color; srCaballero.color = new Color(c.r, c.g, c.b, 1f); }
+        ApagarArma();
         TerminarVuelo();
         AtravesarPlayer(false);
         LimpiarEfectos();
@@ -699,6 +757,7 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
 
     protected override void AlMorir()
     {
+        GuardarMemoria();
         Limpiar();
         QuitarMiSello();
         base.AlMorir();
@@ -708,6 +767,7 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
 
     protected override void OnDestroy()
     {
+        GuardarMemoria();
         base.OnDestroy();
         LimpiarEfectos();
         QuitarMiSello();

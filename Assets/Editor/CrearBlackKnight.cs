@@ -32,7 +32,10 @@ public static class CrearBlackKnight
     private const string MaterialFlash = "Assets/Materiales/Enemy_Flash.mat";
 
     public const int AnchoCelda = 144, AltoCelda = 64, Columnas = 18, Filas = 18;
-    public const float PixelesPorUnidad = 28f;
+    // Un 20 % mas grande que el resto (lo pidio el usuario): menos pixeles por
+    // unidad = dibujo mas grande. Las cajas y alcances se escalan en la ficha.
+    public const float Escala = 1.2f;
+    public const float PixelesPorUnidad = 28f / Escala;
     // Pies: x = 69,5 de 144; y = el borde de abajo de la fila 62 (1 px desde abajo).
     public static readonly Vector2 Pivote = new Vector2(69.5f / AnchoCelda, 1f / AltoCelda);
 

@@ -192,7 +192,12 @@ public static class PruebaDesafioBlackKnight
             if (j == null) yield break;
             float suelo = new SerializedObject(arena).FindProperty("suelo").floatValue;
             Comprobar(new SerializedObject(arena).FindProperty("config").objectReferenceValue != null, "jugando, la arena tiene su Config Nivel (de ahi saca la musica)");
-            Comprobar(CamaraCombate.Activo, "la camara de combate encuadra la pelea en el bosque");
+            // El encuadre de combate se enciende con el clic central (aqui, a mano).
+            Comprobar(!CamaraCombate.Fijado && !CamaraCombate.Activo, "la pelea empieza con la camara de siempre");
+            CamaraCombate.Alternar();
+            yield return null;
+            yield return null;
+            Comprobar(CamaraCombate.Activo, "con el clic central, la camara de combate encuadra la pelea en el bosque");
             Comprobar(Mathf.Abs(j.transform.position.y - suelo) < 1f, $"aparece en el suelo de la arena (y = {j.transform.position.y:0.0}, suelo {suelo:0.0})");
             EnemyHealth s = j.GetComponent<EnemyHealth>();
             Comprobar(s.MaxHealth == j.Ajustes.vidaFase1, $"fase 1 con {s.MaxHealth} de vida");
@@ -207,6 +212,7 @@ public static class PruebaDesafioBlackKnight
             j.ForzarAtaque(JefeBlackKnight.AccOndas);
             for (float t = 0f; t < 15f && !(j.EnOndas && !j.Retirandose); t += Time.deltaTime) yield return null;
             yield return new WaitForSeconds(1.5f);
+            if (!CamaraCombate.Fijado) { CamaraCombate.Alternar(); yield return null; yield return null; }
             Camera cam = Camera.main;
             Vector3 v = cam != null ? cam.WorldToViewportPoint(j.transform.position) : Vector3.zero;
             Vector3 vp = cam != null ? cam.WorldToViewportPoint(p.transform.position) : Vector3.zero;

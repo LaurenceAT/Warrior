@@ -208,3 +208,96 @@ public class SombraBK : MonoBehaviour
         sr.SetPropertyBlock(bloque);
     }
 }
+
+// Tajo del cielo (ataque "Cielo partido"): una hoja larguisima y afilada, naranja,
+// con el nucleo claro. Se dibuja de golpe (como una estrella fugaz), se queda un
+// instante y se apaga. Es solo imagen: el dano lo pone el jefe, que te tiene
+// agarrado en el aire. Se dibuja una vez y se reutiliza, como la onda de fuego.
+public class TajoCieloBK : MonoBehaviour
+{
+    private const float Ppu = 28f;
+    private const int Ancho = 256, Alto = 24;
+    private static Sprite dibujo;
+
+    private SpriteRenderer sr;
+    private float edad, trazo, quieto, salida;
+    private Vector3 escala;
+
+    // "angulo" en grados, "largo" y "grosor" en unidades.
+    public static TajoCieloBK Lanzar(Vector2 centro, float angulo, float largo, float grosor,
+                                     AjustesBlackKnight aj, float trazo, float quieto, float salida)
+    {
+        GameObject go = new GameObject("TajoCieloBK");
+        go.transform.position = centro;
+        go.transform.rotation = Quaternion.Euler(0f, 0f, angulo);
+        TajoCieloBK t = go.AddComponent<TajoCieloBK>();
+        t.sr = DibujosCazadora.Renderer(go, "VFX", 45);
+        t.sr.sprite = Dibujo(aj);
+        t.trazo = Mathf.Max(0.01f, trazo);
+        t.quieto = Mathf.Max(0f, quieto);
+        t.salida = Mathf.Max(0.01f, salida);
+        Vector2 nativo = new Vector2(Ancho / Ppu, Alto / Ppu);
+        t.escala = new Vector3(largo / nativo.x, grosor / nativo.y, 1f);
+        go.transform.localScale = new Vector3(t.escala.x * 0.12f, t.escala.y, 1f);
+        PeligrosJefe.Registrar(go);
+        return t;
+    }
+
+    private void Update()
+    {
+        edad += Time.deltaTime;
+        if (edad < trazo)
+        {
+            // Se estira a lo largo en un suspiro: el tajo "pasa" por la pantalla.
+            float u = Mathf.Sqrt(edad / trazo);
+            transform.localScale = new Vector3(escala.x * Mathf.Lerp(0.12f, 1f, u), escala.y, 1f);
+            sr.color = Color.white;
+        }
+        else if (edad < trazo + quieto)
+        {
+            transform.localScale = escala;
+            sr.color = Color.white;
+        }
+        else
+        {
+            float f = (edad - trazo - quieto) / salida;
+            // Al apagarse se afina (como una brasa que se cierra).
+            transform.localScale = new Vector3(escala.x * (1f + 0.04f * f), escala.y * (1f - 0.8f * f), 1f);
+            sr.color = new Color(1f, 1f, 1f, 1f - f);
+            if (f >= 1f) Destroy(gameObject);
+        }
+    }
+
+    // La hoja: puntiaguda en los dos extremos, mas ancha un poco antes del medio,
+    // con el nucleo claro por dentro y el borde encendido.
+    private static Sprite Dibujo(AjustesBlackKnight aj)
+    {
+        if (dibujo != null) return dibujo;
+        var tex = new Texture2D(Ancho, Alto, TextureFormat.RGBA32, false) { filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp };
+        var px = new Color32[Ancho * Alto];
+        Color cuerpo = aj.colorTajoCielo, nucleo = aj.colorTajoCielo2;
+        float medio = (Alto - 1) * 0.5f;
+        for (int x = 0; x < Ancho; x++)
+        {
+            float t = (x + 0.5f) / Ancho;                       // 0 a 1 a lo largo
+            // Perfil de hoja: nace en punta, engorda antes del medio y muere en punta.
+            float perfil = Mathf.Pow(Mathf.Sin(Mathf.Pow(t, 0.8f) * Mathf.PI), 1.3f);
+            float semi = perfil * medio;
+            if (semi < 0.5f) continue;
+            int y0 = Mathf.RoundToInt(medio - semi), y1 = Mathf.RoundToInt(medio + semi);
+            for (int y = y0; y <= y1; y++)
+            {
+                if (y < 0 || y >= Alto) continue;
+                float d = Mathf.Abs(y - medio) / Mathf.Max(0.5f, semi);   // 0 centro, 1 borde
+                Color c = d < 0.45f ? nucleo : Color.Lerp(nucleo, cuerpo, Mathf.InverseLerp(0.45f, 1f, d));
+                c.a = cuerpo.a * (d > 0.85f ? 0.75f : 1f);
+                px[y * Ancho + x] = c;
+            }
+        }
+        tex.SetPixels32(px);
+        tex.Apply();
+        dibujo = Sprite.Create(tex, new Rect(0, 0, Ancho, Alto), new Vector2(0.5f, 0.5f), Ppu, 0, SpriteMeshType.FullRect);
+        dibujo.name = "TajoCieloBK";
+        return dibujo;
+    }
+}

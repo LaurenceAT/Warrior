@@ -43,6 +43,13 @@ public class EstadosEnemigo : MonoBehaviour
     [SerializeField] private float congeladoDuracion = 1.4f;
     // Tras congelarse no se vuelve a congelar en un rato (se puede ralentizar).
     [SerializeField] private float inmuneCongelar = 5f;
+    [Header("Escarcha en jefes")]
+    [Tooltip("A los jefes les cuesta mas congelarse: las cargas que hacen falta se multiplican por esto.")]
+    [Min(1f)] [SerializeField] private float jefeCargasExtra = 2.5f;
+    [Tooltip("Lo que dura la congelacion en un jefe (segundos).")]
+    [Min(0.1f)] [SerializeField] private float jefeCongeladoDuracion = 2f;
+    [Tooltip("Mientras esta congelado no acumula nada de escarcha; al descongelarse empieza de cero.")]
+    [SerializeField] private bool sinAcumularCongelado = true;
 
     // El contador de sangrado se llena en 100 (luego sube con cada sangrado).
     private const float SangradoMaximo = 100f;
@@ -129,9 +136,14 @@ public class EstadosEnemigo : MonoBehaviour
 
             case Elemento.Hielo:
                 finLento = ahora + lentoDuracion;
+                // Congelado: ni se acumula (lo que le des no cuenta) ni se recuenta
+                // hasta que acabe. Al descongelarse empieza de cero.
+                if (sinAcumularCongelado && ahora < finCongelado) break;
                 if (ahora - ultimaEscarcha > 3f) cargasEscarcha = 0;
                 ultimaEscarcha = ahora;
-                if (ahora >= finInmuneCongelar && ++cargasEscarcha >= Mathf.CeilToInt(cargasParaCongelar / (acum * EfectosAmuletos.MultCongelar) - 0.001f)) Congelar();
+                if (ahora < finInmuneCongelar) break;
+                cargasEscarcha++;
+                if (cargasEscarcha >= CargasNecesarias(acum)) Congelar();
                 break;
 
             case Elemento.Sagrado:
@@ -185,14 +197,31 @@ public class EstadosEnemigo : MonoBehaviour
         salud.DanoEstado(dano);
     }
 
+    // Cargas de escarcha que hacen falta ahora (a los jefes les cuesta mas).
+    private int CargasNecesarias(float acum)
+    {
+        float cargas = cargasParaCongelar / Mathf.Max(0.01f, acum * EfectosAmuletos.MultCongelar);
+        if (salud != null && salud.Inamovible) cargas *= Mathf.Max(1f, jefeCargasExtra);
+        return Mathf.Max(1, Mathf.CeilToInt(cargas - 0.001f));
+    }
+
+    // Quita la congelacion antes de tiempo (el Black Knight la rompe estallando).
+    public void RomperCongelacion()
+    {
+        if (Time.time >= finCongelado) return;
+        finCongelado = Time.time;
+        cargasEscarcha = 0;
+        finInmuneCongelar = Mathf.Max(finInmuneCongelar, Time.time + inmuneCongelar);
+    }
+
     private void Congelar()
     {
         cargasEscarcha = 0;
-        float dur = congeladoDuracion;
-        // Los enemigos que no se mueven con los golpes (jefes) se congelan menos.
-        if (salud.Inamovible) dur *= 0.4f;
+        // Los jefes se congelan lo que diga su numero; los demas, lo de siempre.
+        float dur = salud != null && salud.Inamovible ? jefeCongeladoDuracion : congeladoDuracion;
         finCongelado = Time.time + dur;
-        finInmuneCongelar = Time.time + inmuneCongelar;
+        // La inmunidad se cuenta desde que ACABA la congelacion.
+        finInmuneCongelar = finCongelado + inmuneCongelar;
         salud.Stagger(dur);
         Sonido.Reproducir("hielo_congelar");
         TextoFlotante.Mostrar("¡Congelado!", Encima(0.5f), Elementos.Color(Elemento.Hielo), 0.95f);

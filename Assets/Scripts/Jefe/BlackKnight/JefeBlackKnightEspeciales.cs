@@ -35,7 +35,7 @@ public partial class JefeBlackKnight
 
     private IEnumerator OndasDeFuego()
     {
-        finEnfriamientoOndas = Time.time + ajustes.enfriamientoOndas;
+        finEnfriamientoOndas = Time.time + EnfriamientoConPresion(ajustes.enfriamientoOndas);
         BuscarPlayer();
         golpesDuranteOndas = 0;
 
@@ -67,22 +67,7 @@ public partial class JefeBlackKnight
         retirandose = true;
         camaraAmplia = true;
         invulnerable = true;
-        BuscarPlayer();
-        float destino = DestinoAlejarse();
-        int dir = destino > transform.position.x ? 1 : -1;
-        Mirar(dir);
-        anim.Reproducir(ClipCorrer, true);
-        AtravesarPlayer(true);
-        for (float t = 0f; t < 3f && (destino - transform.position.x) * dir > 0.15f; t += Time.deltaTime)
-        {
-            Mirar(dir);
-            float v = ajustes.velocidadCorrer * 1.7f;
-            velX = dir * v;
-            rb.linearVelocity = new Vector2(velX, rb.linearVelocity.y);
-            if (HayParedHacia(dir, 0.4f, 0.5f)) break;
-            yield return null;
-        }
-        AtravesarPlayer(false);
+        yield return Teleportar(DestinoAlejarse());
         Parar();
         invulnerable = false;
         retirandose = false;
@@ -143,7 +128,7 @@ public partial class JefeBlackKnight
 
     private IEnumerator SombrasEspectrales()
     {
-        finEnfriamientoSombras = Time.time + ajustes.enfriamientoSombras;
+        finEnfriamientoSombras = Time.time + EnfriamientoConPresion(ajustes.enfriamientoSombras);
         BuscarPlayer();
         MirarYa();
         Parar();
@@ -308,5 +293,6 @@ public partial class JefeBlackKnight
         foreach (SombraBK s in sombras) if (s != null) Destroy(s.gameObject);
         sombras.Clear();
         LimpiarErupciones();
+        LimpiarTajosCielo();
     }
 }

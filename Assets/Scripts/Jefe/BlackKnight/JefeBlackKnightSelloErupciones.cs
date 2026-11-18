@@ -78,7 +78,7 @@ public partial class JefeBlackKnight
 
     private IEnumerator SelloAmuleto()
     {
-        finEnfriamientoSello = Time.time + ajustes.enfriamientoSello;
+        finEnfriamientoSello = Time.time + EnfriamientoConPresion(ajustes.enfriamientoSello);
         BuscarPlayer();
         MirarYa();
         Parar();
@@ -124,7 +124,7 @@ public partial class JefeBlackKnight
 
     private IEnumerator Erupciones()
     {
-        finEnfriamientoErupciones = Time.time + ajustes.enfriamientoErupciones;
+        finEnfriamientoErupciones = Time.time + EnfriamientoConPresion(ajustes.enfriamientoErupciones);
         enErupciones = true;
         camaraAmplia = true;
         yield return IrAlExtremo();
@@ -177,28 +177,36 @@ public partial class JefeBlackKnight
         ErupcionesLanzadas++;
     }
 
-    // Se va al extremo de la arena mas lejano a ti, corriendo y sin que le entre nada.
+    // Se va al extremo de la arena mas lejano a ti. Ya no corre: se desvanece y
+    // aparece alli (asi no se le puede perseguir ni castigar la retirada).
     private IEnumerator IrAlExtremo()
     {
         retirandose = true;
         invulnerable = true;
-        BuscarPlayer();
-        float destino = DestinoAlejarse();
-        int dir = destino > transform.position.x ? 1 : -1;
-        anim.Reproducir(ClipCorrer, true);
-        AtravesarPlayer(true);
-        for (float t = 0f; t < 3f && (destino - transform.position.x) * dir > 0.15f; t += Time.deltaTime)
-        {
-            Mirar(dir);
-            velX = dir * ajustes.velocidadCorrer * 1.7f;
-            rb.linearVelocity = new Vector2(velX, rb.linearVelocity.y);
-            if (HayParedHacia(dir, 0.4f, 0.5f)) break;
-            yield return null;
-        }
-        AtravesarPlayer(false);
-        Parar();
+        yield return Teleportar(DestinoAlejarse());
         invulnerable = false;
         retirandose = false;
+    }
+
+    // El teletransporte comun: se desvanece donde esta, aparece en "x" mirandote
+    // y suelta su chispazo. Lo usan todos los ataques en los que se aleja.
+    private IEnumerator Teleportar(float x)
+    {
+        BuscarPlayer();
+        AtravesarPlayer(true);
+        Parar();
+        anim.Reproducir(ClipQuieto, true);
+        ParticulasFx.Rafaga((Vector2)transform.position + Vector2.up * 1f, 10, ajustes.colorTeleport, Color.white,
+                            new Vector2(1f, 3f), -0.4f, new Vector2(0.05f, 0.1f), new Vector2(0.2f, 0.45f));
+        yield return FundirCaballero(ajustes.tiempoTeleport * 0.5f, false);
+        float destino = LimitarX(x);
+        Colocar(new Vector2(destino, PeligrosJefe.SueloBajo(new Vector2(destino, PosPlayer.y + 1f), suelo)));
+        MirarYa();
+        Sonar("jefe_aparicion", 0.6f, 1.1f);
+        ParticulasFx.Rafaga((Vector2)transform.position + Vector2.up * 1f, 12, ajustes.colorTeleport, Color.white,
+                            new Vector2(1.5f, 4f), -0.4f, new Vector2(0.05f, 0.11f), new Vector2(0.2f, 0.5f));
+        yield return FundirCaballero(ajustes.tiempoTeleport * 0.5f, true);
+        AtravesarPlayer(false);
     }
 
     private void LimpiarErupciones()
