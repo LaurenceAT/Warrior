@@ -104,15 +104,15 @@ MonoBehaviour:
   ambiente: {fileID: 8300000, guid: 9c7ddc6cf102efb43847ca58e25fa198, type: 3}
   volumenAmbiente: 0.35
   jefeFase1:
-    pista: {fileID: 8300000, guid: bb88fc8ccdd779d4c907a440cdfc23ff, type: 3}
-    volumen: 0.6
-    inicio: 0
-    bucle: {x: 0, y: 0}
+    pista: {fileID: 8300000, guid: b13cbcbbbb13c1643b4463e504731f31, type: 3}
+    volumen: 0.706
+    inicio: 1
+    bucle: {x: 15, y: 120}
   jefeFase2:
-    pista: {fileID: 0}
+    pista: {fileID: 8300000, guid: b13cbcbbbb13c1643b4463e504731f31, type: 3}
     volumen: 0.6
     inicio: 0
-    bucle: {x: 0, y: 0}
+    bucle: {x: 15, y: 0}
   sonidos: []
   frasesMuerte: []
   frasesJefe: []

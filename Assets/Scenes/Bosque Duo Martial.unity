@@ -748,7 +748,7 @@ MonoBehaviour:
   nieblaAbierta: {r: 0.8, g: 0.15, b: 0.2, a: 0.25}
   nieblaCerrada: {r: 0.9, g: 0.1, b: 0.15, a: 0.75}
   salida: {fileID: 0}
-  config: {fileID: 0}
+  config: {fileID: 11400000, guid: 340931900bdc5eb4090f85a73ab94d26, type: 2}
   musica: {fileID: 0}
   volumen: 0.6
   inicioFase1: 0
@@ -28621,7 +28621,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adcee8430c3cbe04ebe3718dfee891ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  config: {fileID: 0}
+  config: {fileID: 11400000, guid: 340931900bdc5eb4090f85a73ab94d26, type: 2}
   frasesMuerte: []
   musica: {fileID: 0}
   volumenMusica: 0.35

@@ -18559,7 +18559,7 @@ MonoBehaviour:
   nieblaAbierta: {r: 0.8, g: 0.15, b: 0.2, a: 0.25}
   nieblaCerrada: {r: 0.9, g: 0.1, b: 0.15, a: 0.75}
   salida: {fileID: 654260164}
-  config: {fileID: 0}
+  config: {fileID: 11400000, guid: 9f13e0d505c24f5439a51f6be8ec6d63, type: 2}
   musica: {fileID: 0}
   volumen: 0.6
   inicioFase1: 0

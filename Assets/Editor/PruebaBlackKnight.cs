@@ -216,6 +216,7 @@ public static class PruebaBlackKnight
         // 3 = sin bloquear, 6 = esquiva las ondas (hacia el jefe).
         private int bot;
         private int maxActivos, avisosCortos;
+        private float escalaSello;
         private string alActivar = "";
         private readonly List<string> avisosMal = new List<string>();
 
@@ -254,11 +255,12 @@ public static class PruebaBlackKnight
                 if (cerca && !p.Esquivando) { GatherInput gi = p.GetComponent<GatherInput>(); if (gi != null) gi.IsDodging = true; }
                 return;
             }
-            // Parry: mira a la sombra que ataca (si la hay) o al jefe.
+            // Parry (1) o bloqueo normal (2): mira a la sombra que ataca (si la hay) o al jefe.
             SombraBK s = Object.FindFirstObjectByType<SombraBK>();
             Mirar(p, s != null ? s.transform.position.x : j.transform.position.x);
             SetCampo(p, "isBlocking", true);
-            SetCampo(p, "tBloqueo", 0f);
+            SetCampo(p, "tBloqueo", bot == 2 ? 1f : 0f);
+            if (escalaSello < IndicadorSelloBK.Escala) escalaSello = IndicadorSelloBK.Escala;
             SetCampo(p, "ventanaParryActual", Campo(p, "parryWindow"));
         }
 
@@ -359,6 +361,8 @@ public static class PruebaBlackKnight
             sala.VidaInfinita = true;
             yield return Ataques(j);
             yield return SinBloquear(j);
+            yield return Retroceso(j);
+            yield return Camara(j);
             yield return GuardiaDelJefe(j);
             yield return Frasco(j);
             yield return Machacar(j);
@@ -454,6 +458,63 @@ public static class PruebaBlackKnight
             Comprobar(es != null && (es.Visible(EstadoPlayer.Quemadura) || es.EnEfecto(EstadoPlayer.Quemadura)),
                       "sus golpes te acumulan quemadura (fase 1)");
             bot = 1;
+        }
+
+        // Retroceso: al bloquear sin parry te deslizas un poco hacia atras; con parry, nada.
+        private IEnumerator Retroceso(JefeBlackKnight j)
+        {
+            GatherInput gi = P.GetComponent<GatherInput>();
+            var bloqueos = new List<float>();
+            var parrys = new List<float>();
+            float x0 = 0f;
+            Action<AjustesBlackKnight.Golpe, float, float> alActivar = (g, a, h) => x0 = P.transform.position.x;
+            Action<AjustesBlackKnight.Golpe, PlayerControler.ResultadoDano?> alTerminar = (g, r) =>
+            {
+                if (r == PlayerControler.ResultadoDano.Bloqueado) StartCoroutine(Medir(x0, bloqueos));
+                else if (r == PlayerControler.ResultadoDano.Parry) StartCoroutine(Medir(x0, parrys));
+            };
+            j.AlActivarGolpe += alActivar;
+            j.AlTerminarGolpe += alTerminar;
+            // Bloqueo normal, con la guardia mantenida (como el boton pulsado).
+            SetCampo(gi, "_isKickHeld", true);
+            bot = 2;
+            yield return UnAtaque(j, "combo_corto");
+            yield return UnAtaque(j, "combo_corto");
+            yield return new WaitForSeconds(0.5f);
+            bot = 1;
+            yield return UnAtaque(j, "combo_corto");
+            yield return new WaitForSeconds(0.5f);
+            SetCampo(gi, "_isKickHeld", false);
+            j.AlActivarGolpe -= alActivar;
+            j.AlTerminarGolpe -= alTerminar;
+            float mb = bloqueos.Count > 0 ? bloqueos.Average() : -1f, mp = parrys.Count > 0 ? parrys.Average() : -1f;
+            Comprobar(bloqueos.Count > 0 && mb >= 0.35f && mb <= 1.1f, $"bloquear sin parry te hace retroceder un poco ({mb:0.00} u de media en {bloqueos.Count} golpes: {string.Join(" / ", bloqueos.Select(x => x.ToString("0.00")))})");
+            Comprobar(parrys.Count > 0 && mp < 0.12f, $"con parry no te mueves ({mp:0.00} u de media en {parrys.Count} golpes)");
+        }
+
+        private IEnumerator Medir(float x0, List<float> lista)
+        {
+            yield return new WaitForSeconds(0.35f);
+            if (P != null) lista.Add(Mathf.Abs(P.transform.position.x - x0));
+        }
+
+        // Camara de combate: activa en la pelea, cerca si estas pegado al jefe, y os encuadra.
+        private IEnumerator Camara(JefeBlackKnight j)
+        {
+            AjustesCamaraCombate aj = AjustesCamaraCombate.Get();
+            Comprobar(CamaraCombate.Activo && CamaraDinamica.EnModoCombate, "camara de combate activa durante la pelea");
+            bot = 1;
+            // Pegado a el: se acerca.
+            float minimo = 99f;
+            for (float t = 0f; t < 4f; t += Time.deltaTime)
+            {
+                if (Mathf.Abs(P.transform.position.x - j.transform.position.x) < 2.2f) minimo = Mathf.Min(minimo, CamaraDinamica.TamanoActual);
+                yield return null;
+            }
+            Comprobar(minimo <= aj.tamanoCerca + 0.6f, $"cerca del jefe la camara se acerca (tamano {minimo:0.00}; lo mas cerca {aj.tamanoCerca}, fuera de combate 3,33)");
+            Camera c = Camera.main;
+            Vector3 v = c.WorldToViewportPoint(j.transform.position + Vector3.up * 0.6f), vp = c.WorldToViewportPoint(P.transform.position);
+            Comprobar(v.x > 0f && v.x < 1f && vp.x > 0f && vp.x < 1f && v.y > 0f && v.y < 1f, $"os encuadra a los dos (jefe {v.x:0.00}, tu {vp.x:0.00})");
         }
 
         // Su guardia: tu golpe de frente no entra, te aturde y responde.
@@ -565,8 +626,9 @@ public static class PruebaBlackKnight
             float aspecto = c != null ? c.aspect : 1.78f;
             float dx = Mathf.Abs(j.transform.position.x - P.transform.position.x);
             float hace = (dx * 0.5f + j.Ajustes.margenCamara) / aspecto;
-            bool aTope = hace > j.Ajustes.tamanoMaxCamara && c != null && c.orthographicSize >= j.Ajustes.tamanoMaxCamara - 0.3f;
-            Comprobar(j.CamaraAmplia && (dentro || aTope), $"{que}: la camara se abre (tamano {(c != null ? c.orthographicSize : 0f):0.0}, pantalla {aspecto:0.00}) y se ven los dos (jefe en {v.x:0.00}, tu en {vp.x:0.00})"
+            float tope = AjustesCamaraCombate.Get().tamanoLejos;
+            bool aTope = hace > tope && c != null && c.orthographicSize >= tope - 0.3f;
+            Comprobar(CamaraCombate.Activo && (dentro || aTope), $"{que}: la camara se abre (tamano {(c != null ? c.orthographicSize : 0f):0.0}, pantalla {aspecto:0.00}) y se ven los dos (jefe en {v.x:0.00}, tu en {vp.x:0.00})"
                       + (aTope && !dentro ? $"; en 16:9 bastaria {(dx * 0.5f + j.Ajustes.margenCamara) / 1.78f:0.0}" : ""));
         }
 
@@ -586,6 +648,9 @@ public static class PruebaBlackKnight
             Comprobar(s != null && !EfectosAmuletos.Lleva(s) && Amuletos.HuecoDe(s) >= 0, "el sellado sigue equipado pero no hace nada");
             Comprobar(EfectosAmuletos.SegundosSello > j.Ajustes.duracionSello - 3f && IndicadorSelloBK.Visible,
                       $"dura {j.Ajustes.duracionSello} s y se ve en pantalla (quedan {EfectosAmuletos.SegundosSello:0})");
+            yield return Esperar(() => IndicadorSelloBK.Asentado, 5f);
+            Comprobar(escalaSello >= 0.95f && IndicadorSelloBK.Asentado && Mathf.Abs(IndicadorSelloBK.Escala - 0.5f) < 0.05f,
+                      $"sello: el amuleto aparece en grande arriba (escala {escalaSello:0.00}), se sella y queda el indicador pequeno ({IndicadorSelloBK.Escala:0.00})");
             string otro = s == EfectosAmuletos.Pluma ? EfectosAmuletos.Vigia : EfectosAmuletos.Pluma;
             Comprobar(EfectosAmuletos.Lleva(otro), "el otro amuleto sigue funcionando");
         }
@@ -619,7 +684,7 @@ public static class PruebaBlackKnight
             Comprobar(n >= 8 && tamanos.Count >= 4, $"salen {n} erupciones de distintos tamanos ({tamanos.Count} distintos)");
             Comprobar(tocadas > 0, $"con parry a todo, las erupciones te alcanzan igual: no se paran ({tocadas})");
             Comprobar(j.AccionesHechas.Count(a => a == JefeBlackKnight.AccErupciones) > hechas && j.Resultados.Count == 1 && !j.CamaraAmplia,
-                      "al acabar salta sobre ti (" + Lista(j.Resultados) + ") y la camara vuelve");
+                      "al acabar salta sobre ti (" + Lista(j.Resultados) + ")");
         }
 
         private IEnumerator FaseTres(JefeBlackKnight j)
@@ -645,7 +710,7 @@ public static class PruebaBlackKnight
             yield return Esperar(() => j.Clavado, 15f);
             Comprobar(j.Clavado, "clava la espada en el suelo");
             yield return new WaitForSeconds(1f);
-            Comprobar(j.CamaraAmplia, "sombras: la camara se abre mientras tiene la espada clavada");
+            Comprobar(j.CamaraAmplia && CamaraCombate.Activo, "sombras: la camara de combate os encuadra mientras tiene la espada clavada");
             int vida = Salud.CurrentHealth;
             Pegar();
             Comprobar(Salud.CurrentHealth < vida, $"con la espada clavada le entra dano ({vida} -> {Salud.CurrentHealth})");

@@ -368,7 +368,14 @@ public class PlayerControler : MonoBehaviour
     [Range(0f, 1f)] [SerializeField] private float blockDamageFactor = 0.25f;
     // Estamina que devuelve un parry.
     [SerializeField] private float parryStaminaGain = 12f;
+    [Tooltip("Sin uso: el retroceso al bloquear lo dan los dos valores de abajo.")]
     [SerializeField] private float blockPushback = 2f;
+    [Header("Retroceso al bloquear (sin parry)")]
+    [Tooltip("Lo que se desliza hacia atras al parar un golpe con la guardia sin parry (unidades). Con parry no se mueve.")]
+    [Min(0f)] [SerializeField] private float distanciaRetroBloqueo = 0.6f;
+    [Tooltip("Lo que dura ese deslizamiento (segundos).")]
+    [Min(0.05f)] [SerializeField] private float tiempoRetroBloqueo = 0.22f;
+    private float finRetroBloqueo = -1f, inicioRetroBloqueo, dirRetroBloqueo;
     [SerializeField] private float blockHitStop = 0.05f;
     [SerializeField] private float blockShake = 0.08f;
     // Parry: cuanto queda aturdido el enemigo, y el impacto.
@@ -3089,8 +3096,17 @@ public class PlayerControler : MonoBehaviour
                 TerminarBloqueo();
                 return;
             }
-            // Quieto, frenando lo que traia (el empujon de un golpe parado tambien).
-            float vx = Mathf.MoveTowards(m_rigitbody2D.linearVelocityX, 0f, attackDrag * dt);
+            // Quieto, frenando lo que traia. Tras un golpe bloqueado se desliza hacia
+            // atras: la velocidad baja con el tiempo hasta 0 (se marca en cada paso,
+            // asi el rozamiento del suelo no se come el retroceso).
+            float vx;
+            if (Time.time < finRetroBloqueo)
+            {
+                float t = Mathf.Max(0.05f, tiempoRetroBloqueo);
+                float k = Mathf.Clamp01((Time.time - inicioRetroBloqueo) / t);
+                vx = dirRetroBloqueo * (2f * distanciaRetroBloqueo / t) * (1f - k);
+            }
+            else vx = Mathf.MoveTowards(m_rigitbody2D.linearVelocityX, 0f, attackDrag * dt);
             m_rigitbody2D.linearVelocity = new Vector2(vx, m_rigitbody2D.linearVelocityY);
             return;
         }
@@ -3145,6 +3161,9 @@ public class PlayerControler : MonoBehaviour
 
         ventanaContra = counterWindow;
         estamina.Recuperar(parryStaminaGain);
+        // Con parry no se retrocede: se queda clavado en el sitio.
+        finRetroBloqueo = -1f;
+        m_rigitbody2D.linearVelocity = new Vector2(0f, m_rigitbody2D.linearVelocityY);
         // Totem de ciervo: cada parry justo devuelve algo de mana.
         if (EfectosAmuletos.ManaPorParry > 0f && mana != null) mana.Recuperar(EfectosAmuletos.ManaPorParry);
         // Choque metalico fuerte y, encima, el anillo de la hoja: el parry tiene
@@ -3169,11 +3188,17 @@ public class PlayerControler : MonoBehaviour
         ultimaPulsacionBloqueo = -10f;
     }
 
-    // Bloqueo normal: sin dano, pero empuja hacia atras y gasta estamina.
+    // Bloqueo normal: sin dano, pero empuja hacia atras y gasta estamina. El
+    // retroceso es un deslizamiento corto que frena hasta parar (distancia y
+    // tiempo en el Inspector): sale con la velocidad justa para recorrerlo.
     private void GolpeBloqueado()
     {
         Sonido.ReproducirCanal("espada", "bloqueo", 0.8f);
-        m_rigitbody2D.linearVelocity = new Vector2(-direction * blockPushback, m_rigitbody2D.linearVelocityY);
+        float v0 = 2f * distanciaRetroBloqueo / Mathf.Max(0.05f, tiempoRetroBloqueo);
+        dirRetroBloqueo = -direction;
+        m_rigitbody2D.linearVelocity = new Vector2(dirRetroBloqueo * v0, m_rigitbody2D.linearVelocityY);
+        inicioRetroBloqueo = Time.time;
+        finRetroBloqueo = Time.time + tiempoRetroBloqueo;
         StartCoroutine(HitStop(blockHitStop));
         Sacudir(blockShake);
     }

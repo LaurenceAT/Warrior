@@ -223,6 +223,10 @@ public static class CrearDesafioBlackKnight
             if (!AssetDatabase.CopyAsset(EscenaBosque, Escena)) { Debug.LogError("[DesafioBlackKnight] No se pudo copiar " + EscenaBosque); return; }
         }
         Scene e = EditorSceneManager.OpenScene(Escena, OpenSceneMode.Single);
+        // Al abrir la escena Unity descarga las fichas que nada usaba: hay que volver
+        // a cargarlas despues (si no, la referencia se guarda vacia y no suena la musica).
+        config = AssetDatabase.LoadAssetAtPath<ConfigNivel>(RutaConfig);
+        aj = AssetDatabase.LoadAssetAtPath<AjustesBlackKnight>(CrearBlackKnight.RutaFicha);
         ArenaJefe arena = Object.FindFirstObjectByType<ArenaJefe>(FindObjectsInactive.Include);
         if (arena == null)
         {

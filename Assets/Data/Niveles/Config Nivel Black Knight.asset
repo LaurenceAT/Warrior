@@ -29,7 +29,7 @@ MonoBehaviour:
   ambiente: {fileID: 0}
   volumenAmbiente: 0.4
   jefeFase1:
-    pista: {fileID: 0}
+    pista: {fileID: 8300000, guid: fe92b0a6807fe224d8f0a531894ef4c6, type: 3}
     volumen: 0.6
     inicio: 0
     bucle: {x: 0, y: 0}

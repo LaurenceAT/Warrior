@@ -59,6 +59,10 @@ public class CamaraDinamica : MonoBehaviour
     private float pesoEncuadre;
     private float encuadreHasta = -1f;
     private float maximoEncuadre = 6f;
+    // Modo combate (CamaraCombate): mientras dure, su tamano manda sobre el de la
+    // zona (la arena) y el encuadre sigue su punto; los Ampliar y Acercar siguen valiendo.
+    private float tamanoCombate;
+    private float combateHasta = -1f;
     private CinemachineImpulseSource sacudidor;
 
     private void Awake()
@@ -93,6 +97,7 @@ public class CamaraDinamica : MonoBehaviour
         pulsos.Clear();
         acercamientos.Clear();
         encuadreHasta = -1f;
+        combateHasta = -1f;
     }
 
     private void OnDestroy()
@@ -127,6 +132,21 @@ public class CamaraDinamica : MonoBehaviour
         instancia.pesoEncuadre = Mathf.Clamp01(peso);
         instancia.encuadreHasta = Time.time + segundos;
     }
+
+    // Modo combate durante "segundos" (se renueva cada fotograma mientras dura la
+    // pelea): la camara toma este tamano en vez del de la zona y se va hacia "punto"
+    // con su peso, hasta "maximo" en horizontal.
+    public static void Combate(float tamano, Vector2 punto, float peso, float maximo, float segundos)
+    {
+        if (instancia == null) return;
+        instancia.tamanoCombate = tamano;
+        instancia.combateHasta = Time.time + segundos;
+        Encuadrar(punto, peso, segundos, maximo);
+    }
+
+    public static bool EnModoCombate => instancia != null && Time.time < instancia.combateHasta;
+    // Tamano que tiene la camara ahora (lo leen las pruebas).
+    public static float TamanoActual => instancia != null ? instancia.tamanoActual : 0f;
 
     // Camara lenta un momento (tiempo real). No toca nada si el juego esta en pausa.
     public static void CamaraLenta(float escala, float segundos)
@@ -178,6 +198,8 @@ public class CamaraDinamica : MonoBehaviour
         float objetivo = tamanoBase;
         // La ultima zona en la que se ha entrado manda (las zonas se solapan poco).
         if (zonas.Count > 0) objetivo = zonas[zonas.Count - 1].Tamano;
+        // En combate contra un jefe manda el encuadre del combate (mas cerca o mas lejos que la arena).
+        if (Time.time < combateHasta) objetivo = tamanoCombate;
 
         pulsos.RemoveAll(p => Time.time >= p.hasta);
         foreach (var p in pulsos) objetivo = Mathf.Max(objetivo, p.tamano);

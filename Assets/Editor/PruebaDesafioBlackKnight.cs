@@ -54,6 +54,8 @@ public static class PruebaDesafioBlackKnight
         SessionState.SetInt(Clave + "ok", 0);
         SessionState.SetInt(Clave + "fallos", 0);
         string antes = Huella(Bosque);
+        CrearCamaraCombate.Crear();
+        CrearDesafiosNuevos.Crear();
         CrearDesafioBlackKnight.Crear();
         string despues = Huella(Bosque);
         Comprobar(antes == despues, "el generador no toca Bosque Cazadora");
@@ -75,8 +77,19 @@ public static class PruebaDesafioBlackKnight
         foreach (string id in new[] { CrearDesafioBlackKnight.LogroNormal, CrearDesafioBlackKnight.LogroDificil })
             Comprobar(logros.Any(l => l.id == id && l.icono != null && l.parametro == CrearDesafioBlackKnight.Id), "logro " + id);
         Comprobar(EditorBuildSettings.scenes.Any(s => s.path == CrearDesafioBlackKnight.Escena && s.enabled), "la escena en Build Settings");
+        // Musica: la arena de cada escena de desafio apunta a su Config Nivel (antes quedaba vacia).
+        string guidArena = AssetDatabase.AssetPathToGUID("Assets/Scripts/Jefe/ArenaJefe.cs");
+        foreach (var (escena, ficha) in new[] { (CrearDesafioBlackKnight.Escena, CrearDesafioBlackKnight.RutaConfig),
+                                                (CrearDesafiosNuevos.EscenaBringer, CrearDesafiosNuevos.ConfigBringer),
+                                                (CrearDesafiosNuevos.EscenaDuo, CrearDesafiosNuevos.ConfigDuo) })
+        {
+            string guid = AssetDatabase.AssetPathToGUID(ficha);
+            bool bien = File.ReadAllText(escena).Split(new[] { "--- !u!" }, System.StringSplitOptions.None)
+                            .Any(b => b.Contains(guidArena) && b.Contains("config: {fileID: 11400000, guid: " + guid));
+            Comprobar(bien, $"{Path.GetFileNameWithoutExtension(escena)}: su arena usa {Path.GetFileNameWithoutExtension(ficha)} (la musica que pongas ahi suena)");
+        }
         ConfigNivel c = AssetDatabase.LoadAssetAtPath<ConfigNivel>(CrearDesafioBlackKnight.RutaConfig);
-        Comprobar(c != null && c.jefeFase1.pista == null, "su Config Nivel existe y no tiene musica (la pones tu)");
+        Comprobar(c != null, "su Config Nivel existe" + (c != null && c.jefeFase1.pista != null ? " con musica: " + c.jefeFase1.pista.name : " (sin musica todavia)"));
 
         SessionState.SetString(Clave + "Modo", "jugar");
         EditorSceneManager.OpenScene("Assets/Scenes/Menu Principal.unity");
@@ -178,6 +191,8 @@ public static class PruebaDesafioBlackKnight
             Comprobar(j != null && FindObjectsByType<BarraJefe>(FindObjectsSortMode.None).Length == 1, "aparece el Black Knight con una barra");
             if (j == null) yield break;
             float suelo = new SerializedObject(arena).FindProperty("suelo").floatValue;
+            Comprobar(new SerializedObject(arena).FindProperty("config").objectReferenceValue != null, "jugando, la arena tiene su Config Nivel (de ahi saca la musica)");
+            Comprobar(CamaraCombate.Activo, "la camara de combate encuadra la pelea en el bosque");
             Comprobar(Mathf.Abs(j.transform.position.y - suelo) < 1f, $"aparece en el suelo de la arena (y = {j.transform.position.y:0.0}, suelo {suelo:0.0})");
             EnemyHealth s = j.GetComponent<EnemyHealth>();
             Comprobar(s.MaxHealth == j.Ajustes.vidaFase1, $"fase 1 con {s.MaxHealth} de vida");
@@ -196,7 +211,7 @@ public static class PruebaDesafioBlackKnight
             Vector3 v = cam != null ? cam.WorldToViewportPoint(j.transform.position) : Vector3.zero;
             Vector3 vp = cam != null ? cam.WorldToViewportPoint(p.transform.position) : Vector3.zero;
             float dx = Mathf.Abs(j.transform.position.x - p.transform.position.x);
-            Comprobar(j.CamaraAmplia && v.x > 0f && v.x < 1f && vp.x > 0f && vp.x < 1f && dx <= j.Ajustes.distanciaAlejarse + 1.5f,
+            Comprobar(CamaraCombate.Activo && v.x > 0f && v.x < 1f && vp.x > 0f && vp.x < 1f && dx <= j.Ajustes.distanciaAlejarse + 1.5f,
                       $"ondas en el bosque: se aleja {dx:0.0} u, la camara se abre (tamano {(cam != null ? cam.orthographicSize : 0f):0.0}) y se ven los dos (jefe {v.x:0.00}, tu {vp.x:0.00})");
             yield return Captura("desafio_black_knight_ondas");
 

@@ -407,6 +407,9 @@ public static class CrearDesafiosNuevos
             if (!AssetDatabase.CopyAsset(EscenaCueva, EscenaBringer)) { Debug.LogError("[DesafiosNuevos] No se pudo copiar " + EscenaCueva); return; }
         }
         Scene e = EditorSceneManager.OpenScene(EscenaBringer, OpenSceneMode.Single);
+        // Al abrir la escena Unity descarga las fichas que nada usaba: se vuelve a
+        // cargar (si no, la referencia se guardaba vacia y la musica no sonaba).
+        config = AssetDatabase.LoadAssetAtPath<ConfigNivel>(ConfigBringer);
         ArenaJefe arena = Object.FindObjectsByType<ArenaJefe>(FindObjectsInactive.Include, FindObjectsSortMode.None).FirstOrDefault(a => a.EsPrincipal);
         if (arena == null) { Debug.LogError("[DesafiosNuevos] La cueva no tiene la arena del jefe"); return; }
         GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(CrearBringerOfDeath.RutaPrefab);
@@ -444,6 +447,8 @@ public static class CrearDesafiosNuevos
             if (!AssetDatabase.CopyAsset(EscenaBosque, EscenaDuo)) { Debug.LogError("[DesafiosNuevos] No se pudo copiar " + EscenaBosque); return; }
         }
         Scene e = EditorSceneManager.OpenScene(EscenaDuo, OpenSceneMode.Single);
+        // Igual que arriba: la ficha se vuelve a cargar tras abrir la escena.
+        config = AssetDatabase.LoadAssetAtPath<ConfigNivel>(ConfigDuo);
         ArenaJefe arena = Object.FindFirstObjectByType<ArenaJefe>(FindObjectsInactive.Include);
         if (arena == null)
         {

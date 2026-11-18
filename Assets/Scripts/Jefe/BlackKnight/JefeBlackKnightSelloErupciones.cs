@@ -36,7 +36,8 @@ public partial class JefeBlackKnight
     // (con margen y tope) y lo centra entre ambos.
     private void ActualizarCamara()
     {
-        if (!camaraAmplia || player == null) return;
+        // En una arena con la camara de combate, esa ya os encuadra a los dos.
+        if (!camaraAmplia || player == null || CamaraCombate.Activo) return;
         Camera c = Camera.main;
         float aspecto = c != null ? Mathf.Max(0.5f, c.aspect) : 16f / 9f;
         float dx = Mathf.Abs(DxPlayer), dy = Mathf.Abs(transform.position.y - PosPlayer.y);
