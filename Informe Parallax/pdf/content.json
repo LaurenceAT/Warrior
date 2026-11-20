@@ -1,0 +1,123 @@
+[
+ {
+  "type": "h1",
+  "text": "Objetivo"
+ },
+ {
+  "type": "body",
+  "text": "El objetivo es que el efecto parallax del fondo se note con claridad al recorrer el nivel. Lo trabajé en el nivel de nieve de Warrior, un juego de plataformas 2D que estoy desarrollando en Unity."
+ },
+ {
+  "type": "h1",
+  "text": "Análisis del fondo"
+ },
+ {
+  "type": "body",
+  "text": "El fondo del nivel tiene siete capas: cielo, montañas lejanas, castillo de hielo, dos neblinas, montañas medias y montañas cercanas. Con los valores básicos todas se movían a un ritmo muy parecido. La capa más cercana avanzaba apenas un 24 % de lo que avanza el suelo, y el cielo un 1,5 %. Con una diferencia tan pequeña el ojo no distingue capas. Ve una sola imagen pegada a la cámara. En vertical pasaba algo parecido, porque todas subían y bajaban exactamente igual."
+ },
+ {
+  "type": "h1",
+  "text": "Ajuste de las capas"
+ },
+ {
+  "type": "body",
+  "text": "Lo que hace notorio al parallax es la diferencia de velocidad entre capas. Por eso repartí las velocidades en un rango mucho más amplio. El cielo apenas se mueve, el castillo avanza un 23 % y las montañas cercanas llegan casi a dos tercios de lo que recorre el suelo. A esto se suma un valor de <b>intensidad</b> que multiplica el efecto de todas las capas a la vez. En este nivel vale 1,15 y se puede cambiar desde el Inspector."
+ },
+ {
+  "type": "body",
+  "text": "En vertical cada capa tiene también su propio ritmo. Al saltar o caer, las montañas cercanas se desplazan hasta un 24 % respecto a la cámara y el cielo solo un 5,5 %, así que los saltos también transmiten profundidad. Delante del personaje pasan siluetas de pinos a 1,7 veces la velocidad del escenario. Como van más rápido que el suelo, parecen estar muy cerca de la cámara."
+ },
+ {
+  "type": "chart",
+  "chart_type": "bar",
+  "labels": [
+   "Mont. cercanas",
+   "Neblina cer.",
+   "Mont. medias",
+   "Neblina lej.",
+   "Castillo",
+   "Mont. lejanas",
+   "Cielo"
+  ],
+  "datasets": [
+   {
+    "label": "Básico",
+    "values": [
+     24,
+     20,
+     16,
+     11,
+     8,
+     5,
+     1.5
+    ]
+   },
+   {
+    "label": "Reforzado",
+    "values": [
+     63,
+     52,
+     44,
+     32,
+     23,
+     14,
+     3.5
+    ]
+   }
+  ],
+  "y_label": "% del movimiento del suelo",
+  "figure": false,
+  "caption": "Movimiento horizontal de cada capa respecto al suelo, de la más cercana a la más lejana."
+ },
+ {
+  "type": "h1",
+  "text": "Código"
+ },
+ {
+  "type": "body",
+  "text": "El fondo lo mueve el script <b>ParallaxCueva.cs</b>. Estos dos valores controlan la fuerza del efecto y aparecen en el Inspector:"
+ },
+ {
+  "type": "code",
+  "language": "C#",
+  "text": "// Multiplica lo que cada capa se queda atras respecto a la camara.\n// 1 = normal; mas = las capas se separan mas entre si.\n[Range(0f, 2f)] public float intensidad = 1f;\n// Parallax vertical por capa: al saltar o caer, las capas cercanas\n// se quedan mas atras que las lejanas (0 = todas igual).\n[Range(0f, 1f)] public float profundidadVertical;"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "body",
+  "text": "Este método coloca cada capa en cada fotograma. Para cada una calcula cuánto se queda atrás respecto a la cámara, en horizontal y en vertical. Cuanto más cerca está la capa, mayor es ese atraso y más se mueve en pantalla. La función Repeat hace que la imagen vuelva a empezar al terminar una copia, y así el fondo nunca se acaba."
+ },
+ {
+  "type": "code",
+  "language": "C#",
+  "text": "public void Colocar(Vector3 c, float dt)\n{\n    for (int i = 0; i < capas.Length; i++)\n    {\n        Capa capa = capas[i];\n        if (capa.raiz == null || capa.ancho <= 0f) continue;\n\n        recorrido[i] += capa.deriva * dt;\n        // Cuanto se queda atras la capa:\n        // 0 = pegada a la camara, 1 = como el suelo.\n        float atrasoX = Mathf.Clamp01((1f - capa.seguimiento) * intensidad);\n        float atrasoY = Mathf.Clamp01((1f - seguimientoVertical)\n                      + (1f - capa.seguimiento) * profundidadVertical);\n        // Centrado en la camara: las copias cubren lo mismo a cada lado.\n        float desplazado = c.x * atrasoX - recorrido[i];\n        float x = c.x - Mathf.Repeat(desplazado + capa.ancho * 0.5f, capa.ancho)\n                + capa.ancho * 0.5f;\n        float y = inicioCamara.y + (c.y - inicioCamara.y) * (1f - atrasoY);\n        capa.raiz.position = new Vector3(x, y, capa.raiz.position.z);\n    }\n}"
+ },
+ {
+  "type": "h1",
+  "text": "Resultados"
+ },
+ {
+  "type": "body",
+  "text": "Para comprobarlo coloqué la cámara en el mismo punto del nivel y la desplacé 10 metros a la derecha. El suelo, la estatua y la tienda se mueven igual con las dos configuraciones. La diferencia está en el fondo. Con el parallax reforzado las montañas cercanas pasan por delante del castillo, mientras el cielo casi no cambia de sitio."
+ },
+ {
+  "type": "image",
+  "path": "C:/Users/chino/Documents/GitHub/Warrior/Informe Parallax/pdf/comparar_horizontal.png",
+  "caption": "Cámara desplazada 10 metros en horizontal."
+ },
+ {
+  "type": "image",
+  "path": "C:/Users/chino/Documents/GitHub/Warrior/Informe Parallax/pdf/comparar_vertical.png",
+  "caption": "Cámara elevada 6 metros. Con el parallax reforzado las montañas cercanas bajan más que el castillo y el cielo."
+ },
+ {
+  "type": "h1",
+  "text": "Conclusión"
+ },
+ {
+  "type": "body",
+  "text": "El parallax depende sobre todo de la diferencia de velocidad entre capas, más que de la velocidad de cada una. Con un rango amplio y un ritmo propio también en vertical, el nivel de nieve gana profundidad al caminar y al saltar. Todo sigue siendo ajustable desde el Inspector."
+ }
+]

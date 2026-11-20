@@ -1,0 +1,578 @@
+[
+ {
+  "type": "h1",
+  "text": "1. Presentación del videojuego"
+ },
+ {
+  "type": "body",
+  "text": "Warrior es un videojuego de acción y plataformas 2D en pixel art, hecho en Unity. El jugador controla a un caballero que avanza por dos niveles, la Nieve y la Cueva, y al final de cada uno se enfrenta a un jefe con dos fases. El combate se inspira en los juegos souls. Hay que medir cada golpe, bloquear o hacer parry en el momento justo y administrar la estamina."
+ },
+ {
+  "type": "body",
+  "text": "Al derrotar enemigos se ganan almas. Con ellas se sube de nivel en las hogueras, que también sirven como punto de reaparición. Si el jugador muere, vuelve a la última hoguera que usó. Además existe un modo Desafíos para repetir los jefes con un personaje nuevo, y ahí se esconde un jefe secreto, The Blind Huntress."
+ },
+ {
+  "type": "table",
+  "headers": [
+   "Elemento",
+   "Descripción"
+  ],
+  "col_widths": [
+   0.28,
+   0.72
+  ],
+  "rows": [
+   [
+    "Objetivo",
+    "Superar la Nieve y la Cueva y derrotar a sus dos jefes."
+   ],
+   [
+    "Progresión",
+    "Almas para subir de nivel; piedras de forja y lágrimas para mejorar la espada y los frascos."
+   ],
+   [
+    "Muerte",
+    "Se reaparece en la última hoguera y las almas quedan en el lugar de la muerte."
+   ],
+   [
+    "Jefes",
+    "Sombra de los Humedales, Crimson Wraith y The Blind Huntress."
+   ],
+   [
+    "Temas del curso",
+    "Máquinas de estado, patrones de diseño y parallax."
+   ]
+  ]
+ },
+ {
+  "type": "h1",
+  "text": "2. Requisitos y puesta en marcha"
+ },
+ {
+  "type": "body",
+  "text": "El proyecto usa Unity 6000.0.71f1 con el renderizador URP 2D. También necesita Cinemachine 3, el nuevo Input System, Tilemap con Tilemap Extras y TextMesh Pro. Todos estos paquetes vienen declarados en el proyecto y Unity los descarga solo al abrirlo."
+ },
+ {
+  "type": "numbered",
+  "text": "Abrir Unity Hub y agregar la carpeta Warrior como proyecto."
+ },
+ {
+  "type": "numbered",
+  "text": "Esperar a que termine la importación inicial, que la primera vez tarda varios minutos."
+ },
+ {
+  "type": "numbered",
+  "text": "Abrir la escena Menu Principal dentro de Assets/Scenes."
+ },
+ {
+  "type": "numbered",
+  "text": "Presionar Play y elegir Nueva partida."
+ },
+ {
+  "type": "body",
+  "text": "En Build Settings las escenas van en este orden: Menu Principal, Nivel Nieve y Nivel Cueva. Entre niveles se pasa por portales con carga asíncrona."
+ },
+ {
+  "type": "h1",
+  "text": "3. Estructura del proyecto"
+ },
+ {
+  "type": "body",
+  "text": "Casi toda la interfaz se construye por código y los valores que se ajustan seguido viven en fichas ScriptableObject, así que se editan desde el Inspector sin tocar los scripts. Los scripts están agrupados por sistema."
+ },
+ {
+  "type": "code",
+  "language": "Assets/",
+  "text": "Scenes/        Menu Principal, Nivel Nieve, Nivel Cueva, Bosque Cazadora\nScripts/\n  PlayerControler.cs   movimiento, espada, bloqueo, parry y frascos\n  GatherInput.cs       lectura de teclas y mando\n  Enemigos/            EnemigoBase y cada tipo de enemigo\n  Jefe/                JefeBase, JefeSombra, JefeWraith, ArenaJefe\n  Cazadora/            jefe secreto\n  RPG/                 almas, niveles, equipo, estados, imbuir\n  NivelNieve/          piezas propias de la nieve\n  NivelCueva/          piezas de la cueva y ParallaxCueva\n  Niveles/             ConfigNivel\n  UI/  Menu/  Desafios/  Bestiario/  Guardado/\nData/          fichas de enemigos, niveles, jefes y sonidos\nResources/     ajustes globales que se cargan en tiempo de ejecución"
+ },
+ {
+  "type": "table",
+  "headers": [
+   "Script",
+   "Responsabilidad",
+   "Relación"
+  ],
+  "col_widths": [
+   0.27,
+   0.45,
+   0.28
+  ],
+  "rows": [
+   [
+    "PlayerControler",
+    "Movimiento, ataque, bloqueo, parry, daño y frascos.",
+    "Componente principal"
+   ],
+   [
+    "GatherInput",
+    "Traduce teclas y mando a acciones.",
+    "Separa entrada y lógica"
+   ],
+   [
+    "EnemigoBase",
+    "IA común de los enemigos normales.",
+    "Máquina de estados"
+   ],
+   [
+    "JefeBase",
+    "Base de los jefes y sus fases.",
+    "Herencia de EnemigoBase"
+   ],
+   [
+    "ArenaJefe",
+    "Inicio del combate, música, barra y recompensa.",
+    "Observer y estados"
+   ],
+   [
+    "GameManager",
+    "Pausa, reaparición y flujo general.",
+    "Singleton"
+   ],
+   [
+    "ConfigNivel",
+    "Tiles, parallax, música y frases de cada nivel.",
+    "ScriptableObject"
+   ],
+   [
+    "ParallaxCueva",
+    "Mueve las capas del fondo según la cámara.",
+    "Componente de parallax"
+   ]
+  ]
+ },
+ {
+  "type": "h1",
+  "text": "4. Controles"
+ },
+ {
+  "type": "body",
+  "text": "Los controles usan el nuevo Input System. Las acciones principales están en el archivo Controls.inputactions y GatherInput lee directamente las teclas de los frascos y de interacción."
+ },
+ {
+  "type": "table",
+  "headers": [
+   "Acción",
+   "Teclado y ratón",
+   "Uso"
+  ],
+  "col_widths": [
+   0.25,
+   0.3,
+   0.45
+  ],
+  "rows": [
+   [
+    "Moverse",
+    "A / D",
+    "Caminar a izquierda y derecha."
+   ],
+   [
+    "Saltar",
+    "Espacio",
+    "Saltar y alcanzar plataformas."
+   ],
+   [
+    "Atacar",
+    "Clic izquierdo",
+    "Combo de espada."
+   ],
+   [
+    "Bloquear",
+    "Clic derecho",
+    "Bloqueo; al inicio del bloqueo es parry."
+   ],
+   [
+    "Correr",
+    "Shift",
+    "Sprint, gasta estamina."
+   ],
+   [
+    "Barrido",
+    "C",
+    "Barrido con un instante de invulnerabilidad."
+   ],
+   [
+    "Frasco de sangre",
+    "Q",
+    "Recupera vida."
+   ],
+   [
+    "Frasco de maná",
+    "R",
+    "Recupera maná."
+   ],
+   [
+    "Interactuar",
+    "F",
+    "Hogueras, cofres, estatuas y antorchas."
+   ],
+   [
+    "Imbuir",
+    "E",
+    "Rueda para dar un elemento a la espada."
+   ],
+   [
+    "Pausa",
+    "Esc",
+    "Menú de pausa."
+   ]
+  ]
+ },
+ {
+  "type": "h1",
+  "text": "5. Mecánica principal: el combate"
+ },
+ {
+  "type": "body",
+  "text": "Todo gira alrededor del combate cuerpo a cuerpo. Atacar, correr, hacer el barrido y bloquear gasta estamina, y cuando se acaba el personaje queda vulnerable. El bloqueo reduce el daño, pero si el jugador presiona justo antes del golpe hace un parry, que aturde al enemigo y deja una ventana para castigarlo."
+ },
+ {
+  "type": "body",
+  "text": "La espada puede imbuirse con cinco elementos: fuego, hielo, oscuridad, sagrado y sangrado. Cada uno gasta maná y aplica un estado distinto. Los enemigos y los jefes resisten o sufren más según el elemento, y en el caso de los jefes esa resistencia cambia en la segunda fase. Por eso conviene probar cada elemento contra cada rival."
+ },
+ {
+  "type": "h1",
+  "text": "6. Máquinas de estado"
+ },
+ {
+  "type": "body",
+  "text": "Una máquina de estados divide el comportamiento de un objeto en situaciones separadas. En cada momento el objeto está en un solo estado y solo cambia a otro cuando se cumple una condición. En Warrior este patrón aparece en tres lugares: la IA de los enemigos, la arena de cada jefe y las fases de los jefes."
+ },
+ {
+  "type": "h2",
+  "text": "6.1 Estados de los enemigos"
+ },
+ {
+  "type": "body",
+  "text": "Todos los enemigos normales heredan de EnemigoBase. Sus estados están en la enumeración EstadoEnemigo, así que el compilador no deja escribir un estado que no exista. Un enemigo empieza patrullando su zona. Cuando ve al jugador pasa a Alerta, muestra un signo de exclamación y luego lo persigue. Al llegar a distancia de golpe se prepara, ataca y se recupera. Si pierde al jugador o sale de su zona, regresa y vuelve a patrullar."
+ },
+ {
+  "type": "image",
+  "path": "C:/Users/chino/Documents/GitHub/Warrior/Manual Warrior/estados_enemigo.png",
+  "caption": "Ciclo principal de estados de un enemigo."
+ },
+ {
+  "type": "table",
+  "headers": [
+   "Estado",
+   "Cuándo ocurre"
+  ],
+  "col_widths": [
+   0.25,
+   0.75
+  ],
+  "rows": [
+   [
+    "Regreso",
+    "Pierde al jugador o se aleja demasiado de su zona; al llegar vuelve a Patrulla."
+   ],
+   [
+    "Reposición, Salto, Retirada",
+    "Se coloca mejor, salta un obstáculo o huye, y luego vuelve a perseguir."
+   ],
+   [
+    "Golpeado",
+    "Recibe un golpe que lo interrumpe, desde cualquier estado."
+   ],
+   [
+    "Dormido",
+    "Está lejos de la cámara; no piensa ni se mueve para ahorrar rendimiento."
+   ],
+   [
+    "Muerto",
+    "Estado final. De aquí no se sale."
+   ]
+  ]
+ },
+ {
+  "type": "body",
+  "text": "Todos los cambios pasan por un único método, CambiarEstado. Guarda el estado anterior y el momento del cambio, llama a los métodos de salida y de entrada y avisa con un evento. Así cada enemigo reacciona a sus estados sin repetir la lógica común."
+ },
+ {
+  "type": "code",
+  "language": "C#  EnemigoBase.cs",
+  "text": "protected void CambiarEstado(EstadoEnemigo nuevo)\n{\n    if (nuevo == Estado || Estado == EstadoEnemigo.Muerto) return;\n    EstadoEnemigo anterior = Estado;\n    AlSalirEstado(anterior);\n    EstadoAnterior = anterior;\n    Estado = nuevo;\n    inicioEstado = Time.time;\n    AlEntrarEstado(nuevo);\n    EstadoCambiado?.Invoke(this, anterior, nuevo);\n}"
+ },
+ {
+  "type": "h2",
+  "text": "6.2 Arena y fases de los jefes"
+ },
+ {
+  "type": "body",
+  "text": "La arena de cada jefe tiene su propia máquina de estados con tres valores: Esperando, Combate y Vencido. Mientras espera, el jugador entra y sale libremente. Al cruzar el activador pasa a Combate, se levanta un muro de niebla detrás y suena la música del jefe. Si el jugador gana, la arena queda en Vencido y la niebla no vuelve. Si muere, la arena regresa a Esperando cuando reaparece."
+ },
+ {
+  "type": "body",
+  "text": "Los jefes además cambian de fase. Al bajar su vida hasta una marca de la barra pasan a la fase 2, con ataques nuevos y resistencias distintas. El Crimson Wraith, por ejemplo, resiste casi del todo la oscuridad y el sangrado en su segunda fase, pero recibe casi el doble de daño sagrado."
+ },
+ {
+  "type": "h1",
+  "text": "7. Patrones de diseño"
+ },
+ {
+  "type": "body",
+  "text": "Además de la máquina de estados, el proyecto aplica varios patrones para que cada script tenga una responsabilidad clara y los sistemas no dependan unos de otros más de lo necesario."
+ },
+ {
+  "type": "table",
+  "headers": [
+   "Patrón",
+   "Dónde se aplica",
+   "Qué resuelve"
+  ],
+  "col_widths": [
+   0.22,
+   0.43,
+   0.35
+  ],
+  "rows": [
+   [
+    "Singleton",
+    "GameManager, EstadosPlayer, OscuridadCueva",
+    "Una sola instancia accesible desde cualquier script."
+   ],
+   [
+    "Observer",
+    "ArenaJefe.AlVencer, EnemyHealth.AlMorir, Hoguera.AlDescansar",
+    "Avisar sucesos sin conocer a quien escucha."
+   ],
+   [
+    "Template Method",
+    "EnemigoBase y JefeBase",
+    "La base define el ciclo; cada enemigo completa su cerebro."
+   ],
+   [
+    "Interfaces",
+    "IGolpeable, IInteractuable, IAturdible",
+    "Tratar igual a objetos muy distintos."
+   ],
+   [
+    "Object Pool",
+    "EfectosCazadora",
+    "Reutilizar olas y marcas en vez de crearlas y destruirlas."
+   ],
+   [
+    "ScriptableObject",
+    "ConfigNivel, AjustesProgreso, fichas de enemigos",
+    "Separar datos ajustables del código."
+   ]
+  ]
+ },
+ {
+  "type": "h2",
+  "text": "7.1 Observer al vencer a un jefe"
+ },
+ {
+  "type": "body",
+  "text": "Cuando un jefe muere, ArenaJefe solo lanza el evento AlVencer. No sabe quién lo escucha. La partida guarda la bandera del jefe vencido, los logros comprueban si se cumplió alguno, la Bitácora registra la victoria y el modo Desafío termina el reto. Para agregar otra reacción basta con suscribirse al evento."
+ },
+ {
+  "type": "code",
+  "language": "C#",
+  "text": "// ArenaJefe.cs\npublic static event System.Action AlVencer;\n\n// Partida.cs\nArenaJefe.AlVencer += () => PonerBandera(\"jefe_\" + escena);\n// ModoDesafio.cs\nArenaJefe.AlVencer += Vencido;"
+ },
+ {
+  "type": "h2",
+  "text": "7.2 Singleton de los estados del jugador"
+ },
+ {
+  "type": "body",
+  "text": "EstadosPlayer lleva los estados alterados del jugador, como quemadura o congelación. Como solo existe un jugador, guarda una referencia estática a sí mismo al despertar y cualquier enemigo puede aplicarle un estado sin buscarlo en la escena."
+ },
+ {
+  "type": "code",
+  "language": "C#  EstadosPlayer.cs",
+  "text": "public static EstadosPlayer Instancia { get; private set; }\n\nprivate void Awake()\n{\n    player = GetComponent<PlayerControler>();\n    Instancia = this;\n}"
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "h1",
+  "text": "8. Efecto parallax"
+ },
+ {
+  "type": "body",
+  "text": "El parallax da sensación de profundidad moviendo cada capa del fondo a una velocidad distinta. Lo lejano casi no se mueve y lo cercano se mueve más, igual que cuando uno mira por la ventana de un carro. En Warrior lo controla el script ParallaxCueva, que se usa tanto en la Cueva como en la Nieve. El Bosque de la Cazadora tiene su propio ParallaxBosque."
+ },
+ {
+  "type": "body",
+  "text": "El fondo de la Nieve tiene siete capas. Lo que hace que el efecto se note es la diferencia entre ellas: el cielo casi no avanza y las montañas cercanas llegan a casi dos tercios del movimiento del suelo. Delante del personaje pasan siluetas de pinos más rápido que el escenario, y por eso parecen pegadas a la cámara. En vertical cada capa también tiene su ritmo, así que los saltos transmiten profundidad."
+ },
+ {
+  "type": "table",
+  "headers": [
+   "Capa",
+   "Movimiento respecto al suelo"
+  ],
+  "col_widths": [
+   0.5,
+   0.5
+  ],
+  "rows": [
+   [
+    "Pinos en primer plano",
+    "170 %"
+   ],
+   [
+    "Montañas cercanas",
+    "63 %"
+   ],
+   [
+    "Neblina cercana",
+    "52 %"
+   ],
+   [
+    "Montañas medias",
+    "44 %"
+   ],
+   [
+    "Neblina lejana",
+    "32 %"
+   ],
+   [
+    "Castillo de hielo",
+    "23 %"
+   ],
+   [
+    "Montañas lejanas",
+    "14 %"
+   ],
+   [
+    "Cielo",
+    "3,5 %"
+   ]
+  ]
+ },
+ {
+  "type": "body",
+  "text": "Cada capa tiene un valor de seguimiento. Con ese valor el script calcula cuánto se queda atrás respecto a la cámara, en horizontal y en vertical. La función Repeat hace que la imagen empiece otra vez al terminar una copia, y así el fondo nunca se acaba. La intensidad general se edita en Config Nivel; en la Nieve vale 1,15."
+ },
+ {
+  "type": "code",
+  "language": "C#  ParallaxCueva.cs",
+  "text": "float atrasoX = Mathf.Clamp01((1f - capa.seguimiento) * intensidad);\nfloat atrasoY = Mathf.Clamp01((1f - seguimientoVertical)\n              + (1f - capa.seguimiento) * profundidadVertical);\nfloat desplazado = c.x * atrasoX - recorrido[i];\nfloat x = c.x - Mathf.Repeat(desplazado + capa.ancho * 0.5f, capa.ancho)\n        + capa.ancho * 0.5f;\nfloat y = inicioCamara.y + (c.y - inicioCamara.y) * (1f - atrasoY);\ncapa.raiz.position = new Vector3(x, y, capa.raiz.position.z);"
+ },
+ {
+  "type": "image",
+  "path": "C:/Users/chino/Documents/GitHub/Warrior/Informe Parallax/imagenes/despues_h1.png",
+  "caption": "Fondo de la Nieve con sus capas de montañas, castillo y cielo."
+ },
+ {
+  "type": "h1",
+  "text": "9. Mecánicas secundarias"
+ },
+ {
+  "type": "body",
+  "text": "Las mecánicas secundarias acompañan al combate y le dan variedad al recorrido. Las hogueras se usan con F y abren un menú para descansar, subir de nivel y aplicar mejoras. Descansar llena la vida, el maná, la estamina y los frascos, y limpia los estados alterados."
+ },
+ {
+  "type": "body",
+  "text": "Los objetos de mejora se esconden en cofres y zonas secretas. Las piedras de forja mejoran la espada y las lágrimas mejoran los frascos. Ninguna se aplica al momento; quedan en un inventario pendiente hasta la siguiente hoguera. En la Nieve hay sellos elementales que solo se abren con la espada imbuida del elemento correcto, y las pistas para descubrirlo están en estatuas que se leen con F. La Cueva tiene zonas oscuras donde hay que encender antorchas, suelos falsos y paredes ilusorias."
+ },
+ {
+  "type": "body",
+  "text": "El modo Desafíos permite volver a pelear contra los jefes con un personaje nuevo y dos dificultades. Antes de cada combate hay un tótem que funciona como tienda. Los logros, los mejores tiempos, la Bitácora de jefes y el Bestiario se guardan aparte de las partidas, así que lo descubierto se conserva aunque se empiece de cero."
+ },
+ {
+  "type": "pagebreak"
+ },
+ {
+  "type": "h1",
+  "text": "10. Niveles y jefes"
+ },
+ {
+  "type": "table",
+  "headers": [
+   "Nivel",
+   "Características",
+   "Jefe"
+  ],
+  "col_widths": [
+   0.18,
+   0.52,
+   0.3
+  ],
+  "rows": [
+   [
+    "Nieve",
+    "10 zonas, 23 enemigos con emboscadas, 5 sellos, ventisca con refugios, hielo quebradizo y un atajo.",
+    "Sombra de los Humedales"
+   ],
+   [
+    "Cueva",
+    "7 zonas, 2 zonas oscuras con antorchas, suelos falsos, grietas mortales y un atajo.",
+    "Crimson Wraith"
+   ],
+   [
+    "Bosque",
+    "Solo en Desafíos. Oscuridad, ilusiones y ataques que matan de un golpe.",
+    "The Blind Huntress"
+   ]
+  ]
+ },
+ {
+  "type": "body",
+  "text": "Los enemigos normales tienen cuatro roles: débil, común, pesado y élite. Su vida y su daño se calculan a partir de cuántos golpes debe necesitar el jugador para matarlos y qué porcentaje de su vida le quitan en cada zona. Por eso la Cueva resulta más dura que la Nieve sin que haya que ajustar enemigo por enemigo."
+ },
+ {
+  "type": "h1",
+  "text": "11. Interfaz"
+ },
+ {
+  "type": "body",
+  "text": "El HUD se dibuja por código y está dividido en zonas para que nada se solape en ninguna resolución. Arriba a la izquierda están las barras de vida, estamina y maná, junto al anillo que muestra el elemento de la espada. Abajo a la derecha aparecen las almas, los frascos y el aviso de mejoras por aplicar. Durante un combate de jefe se muestra abajo una barra larga con su nombre y las marcas de sus fases. Al morir, la pantalla de muerte elige una frase según la causa, por ejemplo una caída, un estado alterado o una racha de muertes seguidas."
+ },
+ {
+  "type": "h1",
+  "text": "12. Pruebas"
+ },
+ {
+  "type": "body",
+  "text": "El proyecto tiene pruebas automáticas que se ejecutan en Unity sin abrir la ventana. Recorren los niveles con los controles reales, comprueban los saltos clave, el movimiento de los enemigos y sus estados, los jefes, los menús y el guardado. Estas pruebas usan una carpeta de guardado aparte, así que nunca tocan el progreso real. Para probar a mano conviene seguir este recorrido:"
+ },
+ {
+  "type": "numbered",
+  "text": "Iniciar una partida nueva y comprobar movimiento, salto, ataque, bloqueo y barrido."
+ },
+ {
+  "type": "numbered",
+  "text": "Acercarse a un enemigo y ver cómo pasa de patrullar a la alerta y a la persecución."
+ },
+ {
+  "type": "numbered",
+  "text": "Alejarse hasta que lo pierda y comprobar que regresa a su zona."
+ },
+ {
+  "type": "numbered",
+  "text": "Caminar y saltar mirando el fondo para notar el parallax entre capas."
+ },
+ {
+  "type": "numbered",
+  "text": "Usar una hoguera, subir de nivel y aplicar una mejora."
+ },
+ {
+  "type": "numbered",
+  "text": "Imbuir la espada y abrir un sello elemental."
+ },
+ {
+  "type": "numbered",
+  "text": "Entrar en la arena del jefe, verificar el muro de niebla y el cambio de fase."
+ },
+ {
+  "type": "numbered",
+  "text": "Morir una vez y comprobar la reaparición en la hoguera."
+ },
+ {
+  "type": "h1",
+  "text": "13. Referencias y créditos"
+ },
+ {
+  "type": "body",
+  "text": "Motor y herramientas: Unity 6 con URP 2D, Cinemachine, Input System, Tilemap y TextMesh Pro. La documentación oficial de Unity sirvió de referencia para la física 2D, el Input System y los ScriptableObject."
+ },
+ {
+  "type": "body",
+  "text": "Recursos gráficos y de sonido: paquetes de pixel art para el personaje, los enemigos y los escenarios, entre ellos Pixel Fantasy para la roca de la cueva. Código, diseño de niveles y jefes: proyecto Warrior para el curso Diseño y Desarrollo de Juegos Interactivos 2."
+ }
+]

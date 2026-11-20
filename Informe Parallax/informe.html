@@ -1,0 +1,110 @@
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; line-height: 1.35; }
+  h1 { font-size: 20pt; color: #1F3864; margin-bottom: 2pt; }
+  h2 { font-size: 14pt; color: #2E5597; margin-top: 16pt; }
+  p.sub { color: #555555; margin-top: 0; }
+  table.datos { border-collapse: collapse; }
+  table.datos td, table.datos th { border: 1px solid #9DB0D0; padding: 3pt 8pt; font-size: 10pt; }
+  table.datos th { background: #DCE6F4; }
+  table.fotos td { padding: 3pt; text-align: center; font-size: 9pt; color: #444444; vertical-align: top; }
+  pre { font-family: Consolas, monospace; font-size: 8.5pt; background: #F2F2F2; border: 1px solid #CCCCCC; padding: 6pt; }
+  p.pie { font-size: 9pt; color: #555555; text-align: center; margin-top: 2pt; }
+</style>
+</head>
+<body>
+
+<h1>Informe: más notoriedad para el efecto parallax</h1>
+<p class="sub">Semana 8. Parallax y mecánicas<br>Nombre: ______________________ &nbsp;&nbsp; Fecha: 4 de octubre</p>
+<h1>Informe: más notoriedad para el efecto parallax</h1>
+<p class="sub">Nombre: ______________________</p>
+
+<h2>1. Objetivo</h2>
+<p>Hacer más notorio el efecto parallax del fondo, de modo que se note la diferencia de profundidad entre capas. Lo apliqué al nivel de nieve de mi juego Warrior, hecho en Unity.</p>
+
+<h2>2. Problema</h2>
+<p>El fondo tiene siete capas, pero se movían casi a la misma velocidad: la más cercana solo un 24 % de lo que se mueve el suelo y el cielo un 1,5 %. Además, en vertical todas las capas se movían igual. Por eso el fondo parecía una sola imagen.</p>
+
+<h2>3. Cambios</h2>
+<ol>
+  <li><b>Más diferencia entre capas:</b> las lejanas se mueven poco y las cercanas mucho más.</li>
+  <li><b>Intensidad:</b> un valor nuevo que multiplica el efecto de todas las capas (en la nieve, 1,15).</li>
+  <li><b>Parallax vertical:</b> al saltar o caer, las capas cercanas se desplazan más que las lejanas.</li>
+  <li><b>Primer plano más rápido:</b> los pinos que pasan delante del personaje van a 1,7 veces la velocidad del escenario (antes 1,45).</li>
+</ol>
+<p>Movimiento de cada capa comparado con el suelo (100 %):</p>
+<table class="datos">
+  <tr><th>Capa (de lejos a cerca)</th><th>Antes</th><th>Después</th></tr>
+  <tr><td>Cielo</td><td>1,5 %</td><td>3,5 %</td></tr>
+  <tr><td>Montañas lejanas</td><td>5 %</td><td>14 %</td></tr>
+  <tr><td>Castillo de hielo</td><td>8 %</td><td>23 %</td></tr>
+  <tr><td>Neblina lejana</td><td>11 %</td><td>32 %</td></tr>
+  <tr><td>Montañas medias</td><td>16 %</td><td>44 %</td></tr>
+  <tr><td>Neblina cercana</td><td>20 %</td><td>52 %</td></tr>
+  <tr><td>Montañas cercanas</td><td>24 %</td><td>63 %</td></tr>
+  <tr><td>Suelo y personaje</td><td>100 %</td><td>100 %</td></tr>
+  <tr><td>Primer plano (pinos delante)</td><td>145 %</td><td>170 %</td></tr>
+</table>
+<p>En vertical, antes todas las capas se movían un 5 % distinto que la cámara; ahora va de 5,5 % en el cielo a 24 % en las montañas cercanas.</p>
+
+<h2>4. Código</h2>
+<p>Valores nuevos en ParallaxCueva.cs, editables desde el Inspector:</p>
+<pre>
+// Multiplica lo que cada capa se queda atras respecto a la camara.
+// 1 = como estaba; mas = las capas se separan mas entre si.
+[Range(0f, 2f)] public float intensidad = 1f;
+// Parallax vertical por capa: al saltar o caer, las capas cercanas se quedan
+// mas atras que las lejanas (0 = todas suben y bajan igual, como antes).
+[Range(0f, 1f)] public float profundidadVertical;</pre>
+<p>Cálculo de la posición de cada capa en cada fotograma. Cuanto más cercana es la capa, más se queda atrás respecto a la cámara y más se mueve en pantalla:</p>
+<pre>public void Colocar(Vector3 c, float dt)
+{
+    for (int i = 0; i &lt; capas.Length; i++)
+    {
+        Capa capa = capas[i];
+        if (capa.raiz == null || capa.ancho &lt;= 0f) continue;
+
+        recorrido[i] += capa.deriva * dt;
+        // Cuanto se queda atras la capa: 0 = pegada a la camara, 1 = como el suelo.
+        float atrasoX = Mathf.Clamp01((1f - capa.seguimiento) * intensidad);
+        float atrasoY = Mathf.Clamp01((1f - seguimientoVertical)
+                      + (1f - capa.seguimiento) * profundidadVertical);
+        // Centrado en la camara: las copias cubren lo mismo a cada lado.
+        float desplazado = c.x * atrasoX - recorrido[i];
+        float x = c.x - Mathf.Repeat(desplazado + capa.ancho * 0.5f, capa.ancho) + capa.ancho * 0.5f;
+        float y = inicioCamara.y + (c.y - inicioCamara.y) * (1f - atrasoY);
+        capa.raiz.position = new Vector3(x, y, capa.raiz.position.z);
+    }
+}</pre>
+
+<h2>5. Resultado</h2>
+<p>Cámara movida 10 metros a la derecha. Antes, el fondo se desplazaba en bloque; después, las montañas cercanas pasan por delante del castillo y el cielo casi no se mueve.</p>
+<table class="fotos">
+  <tr>
+    <td><img src="imagenes/antes_h1.png" width="300" height="169"><br>Antes, posición inicial</td>
+    <td><img src="imagenes/antes_h2.png" width="300" height="169"><br>Antes, 10 metros a la derecha</td>
+  </tr>
+  <tr>
+    <td><img src="imagenes/despues_h1.png" width="300" height="169"><br>Después, posición inicial</td>
+    <td><img src="imagenes/despues_h2.png" width="300" height="169"><br>Después, 10 metros a la derecha</td>
+  </tr>
+</table>
+<p>Cámara subida 6 metros. Antes, todo el fondo bajaba junto; después, las montañas cercanas bajan más que el castillo y el cielo.</p>
+<table class="fotos">
+  <tr>
+    <td><img src="imagenes/antes_v1.png" width="300" height="169"><br>Antes, abajo</td>
+    <td><img src="imagenes/antes_v2.png" width="300" height="169"><br>Antes, 6 metros más arriba</td>
+  </tr>
+  <tr>
+    <td><img src="imagenes/despues_v1.png" width="300" height="169"><br>Después, abajo</td>
+    <td><img src="imagenes/despues_v2.png" width="300" height="169"><br>Después, 6 metros más arriba</td>
+  </tr>
+</table>
+
+<h2>6. Conclusión</h2>
+<p>Al aumentar la diferencia de velocidad entre capas y añadir el parallax vertical, el fondo de la nieve se percibe con más profundidad, tanto al caminar como al saltar.</p>
+
+</body>
+</html>
