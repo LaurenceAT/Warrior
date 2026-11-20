@@ -47,7 +47,7 @@ public class IndicadorInventario : MonoBehaviour
         // Abajo a la derecha, encima de los frascos (pegado al borde derecho).
         ind.caja.anchorMin = ind.caja.anchorMax = new Vector2(1f, 0f);
         ind.caja.pivot = new Vector2(1f, 0.5f);
-        ind.caja.anchoredPosition = new Vector2(-ai.margen, ai.alturaAvisoColumna + 24f);
+        ind.caja.anchoredPosition = new Vector2(-ai.margen, ai.alturaAvisoColumna + 24f + ai.Subida);
         ind.caja.sizeDelta = new Vector2(ai.anchoAviso, 48f);
 
         ind.halo = EstiloMenu.Caja("Halo", ind.caja, new Color(1f, 0.8f, 0.45f, 0f));

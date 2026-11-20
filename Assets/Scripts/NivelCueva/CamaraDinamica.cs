@@ -63,6 +63,14 @@ public class CamaraDinamica : MonoBehaviour
     // zona (la arena) y el encuadre sigue su punto; los Ampliar y Acercar siguen valiendo.
     private float tamanoCombate;
     private float combateHasta = -1f;
+    // Mirada libre: en movil, arrastrando el dedo por donde no hay botones se
+    // asoma uno un poco alrededor. Se suma a todo lo demas y vuelve sola a cero.
+    private Vector2 miradaLibre;
+    private Vector2 miradaLibreSuave;
+    [Header("Mirada libre (movil)")]
+    [SerializeField] private float maximoMiradaX = 6f;
+    [SerializeField] private float maximoMiradaY = 4f;
+    [SerializeField] private float rapidezMirada = 7f;
     private CinemachineImpulseSource sacudidor;
 
     private void Awake()
@@ -103,6 +111,16 @@ public class CamaraDinamica : MonoBehaviour
     private void OnDestroy()
     {
         if (instancia == this) instancia = null;
+    }
+
+    // Los controles tactiles: cuanto se asoma la camara por el arrastre del dedo
+    // (en unidades del mundo). Con Vector2.zero vuelve sola al sitio.
+    public static void MirarLibre(Vector2 desplazamiento)
+    {
+        if (instancia == null) return;
+        instancia.miradaLibre = new Vector2(
+            Mathf.Clamp(desplazamiento.x, -instancia.maximoMiradaX, instancia.maximoMiradaX),
+            Mathf.Clamp(desplazamiento.y, -instancia.maximoMiradaY, instancia.maximoMiradaY));
     }
 
     // Abre el plano hasta "tamano" durante "segundos" (luego vuelve solo).
@@ -253,6 +271,8 @@ public class CamaraDinamica : MonoBehaviour
 
         offsetActual.x = Mathf.Lerp(offsetActual.x, x, 1f - Mathf.Exp(-rapidezAdelanto * dt));
         offsetActual.y = Mathf.Lerp(offsetActual.y, y, 1f - Mathf.Exp(-rapidezVertical * dt));
-        composer.TargetOffset = offsetBase + (Vector3)offsetActual;
+        // La mirada del dedo se suma encima, y vuelve sola al soltar.
+        miradaLibreSuave = Vector2.Lerp(miradaLibreSuave, miradaLibre, 1f - Mathf.Exp(-rapidezMirada * dt));
+        composer.TargetOffset = offsetBase + (Vector3)(offsetActual + miradaLibreSuave);
     }
 }

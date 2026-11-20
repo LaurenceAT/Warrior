@@ -62,7 +62,10 @@ public static class EstiloMenu
         if (Object.FindFirstObjectByType<EventSystem>() == null)
         {
             GameObject es = new GameObject("EventSystem", typeof(EventSystem));
-            es.AddComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
+            var modulo = es.AddComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
+            // Las acciones de serie (raton, mando y DEDO): sin esto, en un movil
+            // los menus no responderian al toque.
+            if (modulo.actionsAsset == null) modulo.AssignDefaultActions();
         }
         CanvasGroup g = go.AddComponent<CanvasGroup>();
         g.alpha = 0f;

@@ -30,3 +30,9 @@ MonoBehaviour:
   margenArribaDeseo: 30
   puntosPorSegundo: 5
   maximoPuntos: 7
+  subidaMovil: 560
+  apartarEstadoMovil: 170
+  filaArribaMovil: 34
+  bajarDeseoMovil: 100
+  alturaBarraMovil: 70
+  reservaDerechaMovil: 440

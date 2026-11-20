@@ -196,27 +196,26 @@ public class ContadorPociones : MonoBehaviour
 
         RecursosRPG rec = RecursosRPG.Get();
         Sprite vida = rec.Icono("pocion");
-        // Abajo a la derecha, encima de las almas (y debajo del aviso de objetos por
-        // aplicar): AjustesInterfaz. Sangre a la izquierda y mana a la derecha.
-        AjustesInterfaz ai = AjustesInterfaz.Get();
-        cp.huecos[0] = cp.NuevoHueco(go.transform, "Vida", vida != null ? vida : ReservaPociones.Frasco(), new Vector2(-ai.margen - 206f, ai.alturaFrascosColumna));
-        cp.huecos[1] = cp.NuevoHueco(go.transform, "Mana", rec.Icono("pocion_mana"), new Vector2(-ai.margen, ai.alturaFrascosColumna));
+        // En PC: columna de abajo a la derecha, encima de las almas (y debajo del
+        // aviso de objetos por aplicar). En movil: en fila arriba a la derecha, a
+        // la izquierda de las almas (sangre, mana y almas).
+        cp.huecos[0] = cp.NuevoHueco(go.transform, "Vida", vida != null ? vida : ReservaPociones.Frasco(), 206f, 420f);
+        cp.huecos[1] = cp.NuevoHueco(go.transform, "Mana", rec.Icono("pocion_mana"), 0f, 240f);
 
         ReservaPociones.AlCambiarAlgo += cp.Actualizar;
         ReservaPociones.AlBeber += cp.Pulso;
         cp.Actualizar();
     }
 
-    private Hueco NuevoHueco(Transform padre, string nombre, Sprite icono, Vector2 pos)
+    private Hueco NuevoHueco(Transform padre, string nombre, Sprite icono, float xColumna, float xFila)
     {
         Hueco h = new Hueco();
         h.caja = new GameObject(nombre).AddComponent<RectTransform>();
         h.caja.SetParent(padre, false);
         // Abajo a la derecha, encima de las almas (arriba, bajo las barras, van los
         // estados que se acumulan).
-        h.caja.anchorMin = h.caja.anchorMax = new Vector2(1f, 0f);
-        h.caja.pivot = new Vector2(1f, 0f);
-        h.caja.anchoredPosition = pos;
+        AjustesInterfaz ai = AjustesInterfaz.Get();
+        ai.ColocarColumna(h.caja, xColumna, ai.alturaFrascosColumna, xFila);
         h.caja.sizeDelta = new Vector2(200f, 70f);
 
         h.icono = new GameObject("Frasco").AddComponent<Image>();
@@ -261,7 +260,10 @@ public class ContadorPociones : MonoBehaviour
             string tecla = t == ReservaPociones.Tipo.Vida ? "Q" : "R";
             int cargas = reserva.CargasDe(t);
             bool quedan = cargas > 0;
-            h.texto.text = $"{cargas}/{reserva.MaximoDe(t)} <size=60%><color=#bbbbbb>[{tecla}]</color></size>";
+            // En movil no hay teclas que recordar: solo las cargas.
+            h.texto.text = ModoMovil.Activo
+                ? $"{cargas}/{reserva.MaximoDe(t)}"
+                : $"{cargas}/{reserva.MaximoDe(t)} <size=60%><color=#bbbbbb>[{tecla}]</color></size>";
             float a = elegida ? 1f : 0.55f;
             h.icono.color = quedan ? new Color(1f, 1f, 1f, a) : new Color(0.4f, 0.4f, 0.4f, 0.8f * a);
             Color tc = quedan ? (t == ReservaPociones.Tipo.Vida ? new Color(1f, 0.92f, 0.85f) : new Color(0.8f, 0.9f, 1f)) : new Color(0.6f, 0.6f, 0.6f);

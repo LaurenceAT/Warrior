@@ -29,18 +29,23 @@ MonoBehaviour:
   ambiente: {fileID: 0}
   volumenAmbiente: 0.4
   jefeFase1:
-    pista: {fileID: 8300000, guid: fe92b0a6807fe224d8f0a531894ef4c6, type: 3}
-    volumen: 0.6
+    pista: {fileID: 8300000, guid: e7989762e141c524d9066c66e83da2c2, type: 3}
+    volumen: 0.858
     inicio: 0
     bucle: {x: 0, y: 0}
   jefeFase2:
-    pista: {fileID: 0}
-    volumen: 0.6
+    pista: {fileID: 8300000, guid: fe92b0a6807fe224d8f0a531894ef4c6, type: 3}
+    volumen: 0.892
+    inicio: 0
+    bucle: {x: 0, y: 0}
+  jefeFase3:
+    pista: {fileID: 8300000, guid: 2654a98a3cae06f408556610a8d792cb, type: 3}
+    volumen: 0.843
     inicio: 0
     bucle: {x: 0, y: 0}
   sonidos: []
   frasesMuerte:
-  - En el bosque sin hojas, todo se oye.
+  - Fue ps
   - "Respira m\xE1s despacio."
   - "Ella no te vio. Te oy\xF3."
   - "Las hojas cayeron hace mucho. T\xFA, ahora."

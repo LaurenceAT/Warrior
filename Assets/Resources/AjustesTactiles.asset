@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce6ef57915558034eba05edcfa488a11, type: 3}
+  m_Name: AjustesTactiles
+  m_EditorClassIdentifier:
+  opacidad: 0.22
+  opacidadPulsado: 0.65
+  suavizado: 0.08
+  colorBoton: {r: 0.08, g: 0.07, b: 0.08, a: 0.85}
+  colorFilo: {r: 0.72, g: 0.58, b: 0.36, a: 0.9}
+  colorIcono: {r: 0.96, g: 0.9, b: 0.78, a: 1}
+  zonaSegura: 1
+  centroJoystick: {x: 300, y: 270}
+  tamanoBase: 340
+  tamanoPomo: 150
+  zonaMuerta: 0.18
+  seguirDedo: 0
+  margenJoystick: 1.25
+  zonaJoystick:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0.45
+    height: 0.72
+  empujeParaCorrer: 0.9
+  fotogramasObjetivo: 60
+  bajarSolo: 1
+  fotogramasMinimos: 45
+  escalaBaja: 0.8
+  posicionVolver: {x: 120, y: 120}
+  tamanoVolver: 110
+  camaraConDedo: 1
+  alcanceCamara: 5
+  arrastreMinimo: 18
+  camaraVertical: 1
+  botones:
+  - accion: 0
+    activo: 1
+    anclaje: 1
+    posicion: {x: 280, y: 200}
+    tamano: 280
+    icono: ctrl_espada
+    etiqueta:
+    mantener: 0
+  - accion: 1
+    activo: 1
+    anclaje: 1
+    posicion: {x: 445, y: 375}
+    tamano: 110
+    icono: ctrl_saltar
+    etiqueta:
+    mantener: 0
+  - accion: 2
+    activo: 1
+    anclaje: 1
+    posicion: {x: 320, y: 460}
+    tamano: 120
+    icono: ctrl_esquiva
+    etiqueta:
+    mantener: 0
+  - accion: 3
+    activo: 1
+    anclaje: 1
+    posicion: {x: 110, y: 450}
+    tamano: 170
+    icono: ctrl_bloqueo
+    etiqueta:
+    mantener: 1
+  - accion: 5
+    activo: 1
+    anclaje: 1
+    posicion: {x: 75, y: 200}
+    tamano: 110
+    icono: objeto_frasco_mana
+    etiqueta:
+    mantener: 0
+  - accion: 4
+    activo: 1
+    anclaje: 1
+    posicion: {x: 75, y: 80}
+    tamano: 110
+    icono: objeto_frasco_sangre
+    etiqueta:
+    mantener: 0
+  - accion: 7
+    activo: 1
+    anclaje: 0
+    posicion: {x: 455, y: 480}
+    tamano: 115
+    icono: ctrl_rueda
+    etiqueta:
+    mantener: 0
+  - accion: 8
+    activo: 1
+    anclaje: 0
+    posicion: {x: 520, y: 185}
+    tamano: 78
+    icono:
+    etiqueta: FIJAR
+    mantener: 0
+  - accion: 9
+    activo: 1
+    anclaje: 2
+    posicion: {x: 95, y: 95}
+    tamano: 100
+    icono: ctrl_pausa
+    etiqueta:
+    mantener: 0
+  - accion: 6
+    activo: 0
+    anclaje: 1
+    posicion: {x: 640, y: 285}
+    tamano: 140
+    icono: ctrl_interactuar
+    etiqueta:
+    mantener: 0
+  - accion: 10
+    activo: 0
+    anclaje: 0
+    posicion: {x: 640, y: 230}
+    tamano: 130
+    icono: ctrl_correr
+    etiqueta:
+    mantener: 1

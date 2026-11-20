@@ -8,6 +8,10 @@ using UnityEngine.UI;
 // a camara lenta. Se elige apuntando con el raton, con la direccion (WASD /
 // flechas / stick) o con las teclas 1-6; se confirma con clic, E, Enter o el
 // boton sur del mando, y se cancela con clic derecho, Escape o el boton este.
+//
+// Con el dedo (movil): tocar un elemento lo elige y lo imbuye de una vez, y
+// tocar fuera de la rueda la cierra. En el Editor, con el modo movil encendido,
+// el raton cuenta como un dedo para poder probarlo.
 public class RuedaImbuir : MonoBehaviour
 {
     private const float Radio = 190f;
@@ -18,6 +22,7 @@ public class RuedaImbuir : MonoBehaviour
     private int cerradaEnFrame = -1;
     public static float UltimoCierre { get; private set; } = -10f;
 
+    private Canvas lienzo;
     private CanvasGroup grupo;
     private RectTransform centro;
     private readonly Image[] fondos = new Image[Elementos.CantidadRueda];
@@ -99,8 +104,26 @@ public class RuedaImbuir : MonoBehaviour
                         || (g != null && g.buttonEast.wasPressedThisFrame);
 
         if (cancelar) { SonidoMenu.Cancelar(); CerrarInterno(); return; }
-        if (!confirmar) return;
 
+        // Con el dedo: un toque dentro de la rueda elige e imbuye; fuera, cierra.
+        if (listo && LeerToque(out Vector2 toque))
+        {
+            int r = RanuraEn(toque);
+            if (r == Fuera) { SonidoMenu.Cancelar(); CerrarInterno(); return; }
+            if (r == Nada) return;              // el centro de la rueda no hace nada
+            if (r != elegido) { elegido = r; SonidoMenu.Mover(); }
+            Refrescar();
+            Confirmar();
+            return;
+        }
+
+        if (!confirmar) return;
+        Confirmar();
+    }
+
+    // Imbuye lo que este elegido. Si no se puede, lo dice y deja la rueda abierta.
+    private void Confirmar()
+    {
         if (elegido < 0) { CerrarInterno(); return; }
         string motivo = impedimento != null ? impedimento(Seleccionado) : null;
         if (motivo != null)
@@ -113,6 +136,49 @@ public class RuedaImbuir : MonoBehaviour
         Elemento e = Elementos.Rueda[elegido];
         CerrarInterno();
         alElegir?.Invoke(e);
+    }
+
+    // ------------------------------------------------------------------ Con el dedo
+
+    private const int Fuera = -1;   // el toque cayo fuera de la rueda
+    private const int Nada = -2;    // en el centro: ni elige ni cierra
+
+    // El dedo que se acaba de posar (o el raton, con el modo movil encendido).
+    private bool LeerToque(out Vector2 punto)
+    {
+        punto = Vector2.zero;
+        Touchscreen ts = Touchscreen.current;
+        if (ts != null)
+            foreach (UnityEngine.InputSystem.Controls.TouchControl t in ts.touches)
+                if (t.press.wasPressedThisFrame) { punto = t.position.ReadValue(); return true; }
+
+        Mouse m = Mouse.current;
+        if (ModoMovil.Activo && m != null && m.leftButton.wasPressedThisFrame)
+        {
+            punto = m.position.ReadValue();
+            return true;
+        }
+        return false;
+    }
+
+    // Que ranura hay en ese punto de la pantalla. Vale toda la porcion de la
+    // rueda, no solo el circulito: con el dedo acertar un circulo pequeno cuesta.
+    private int RanuraEn(Vector2 pantalla)
+    {
+        float escala = lienzo != null ? Mathf.Max(0.01f, lienzo.scaleFactor) : 1f;
+        Vector2 d = (pantalla - new Vector2(Screen.width * 0.5f, Screen.height * 0.5f)) / escala;
+        float dist = d.magnitude;
+        if (dist > Radio * 1.35f) return Fuera;
+        if (dist < Radio * 0.4f) return Nada;
+
+        float mejor = -2f;
+        int cual = Nada;
+        for (int i = 0; i < Elementos.CantidadRueda; i++)
+        {
+            float p = Vector2.Dot(d.normalized, Direccion(i));
+            if (p > mejor) { mejor = p; cual = i; }
+        }
+        return cual;
     }
 
     private void LeerSeleccion()
@@ -228,6 +294,7 @@ public class RuedaImbuir : MonoBehaviour
         cs.referenceResolution = new Vector2(1920, 1080);
         cs.matchWidthOrHeight = 0.5f;
         RuedaImbuir r = go.AddComponent<RuedaImbuir>();
+        r.lienzo = c;
         r.grupo = go.AddComponent<CanvasGroup>();
         r.grupo.blocksRaycasts = false;
 
@@ -288,7 +355,10 @@ public class RuedaImbuir : MonoBehaviour
         r.aviso = Texto("", r.centro, 22, new Color(1f, 0.75f, 0.45f));
         r.aviso.rectTransform.anchoredPosition = new Vector2(0f, -Radio * 1.45f);
 
-        TextMeshProUGUI ayuda = Texto("Clic / E: imbuir     Clic derecho / Esc: cancelar", go.transform, 22, new Color(0.8f, 0.8f, 0.8f, 0.7f));
+        string textoAyuda = ModoMovil.Activo
+            ? "Toca un elemento para imbuir     Toca fuera para cerrar"
+            : "Clic / E: imbuir     Clic derecho / Esc: cancelar";
+        TextMeshProUGUI ayuda = Texto(textoAyuda, go.transform, 22, new Color(0.8f, 0.8f, 0.8f, 0.7f));
         ayuda.rectTransform.anchorMin = ayuda.rectTransform.anchorMax = new Vector2(0.5f, 0.07f);
         ayuda.rectTransform.sizeDelta = new Vector2(1200f, 40f);
 

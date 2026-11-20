@@ -64,6 +64,43 @@ public class AjustesInterfaz : ScriptableObject
     [Tooltip("Cuanto varia la velocidad de letra a letra (0 = todas iguales, 0.3 = hasta un 30 % mas rapida o lenta).")]
     [Range(0f, 0.6f)] public float variacionEscritura = 0.25f;
 
+    [Header("Movil (con los controles en pantalla)")]
+    [Tooltip("Lo que sube TODO lo de abajo (almas, frascos, aviso y barra del jefe) para quedar por encima del joystick y los botones.")]
+    public float subidaMovil = 560f;
+    [Tooltip("Lo que se aparta a la derecha el estado del player, para dejar sitio al boton de menu de arriba a la izquierda.")]
+    public float apartarEstadoMovil = 170f;
+    [Tooltip("En movil las almas y los frascos pasan a una FILA arriba a la derecha: su altura desde el borde de arriba.")]
+    public float filaArribaMovil = 34f;
+    [Tooltip("En movil, lo que baja el deseo del totem para no quedar debajo de esa fila.")]
+    public float bajarDeseoMovil = 100f;
+    [Tooltip("En movil la barra del jefe va abajo del todo, por debajo del boton FIJAR y del joystick: su altura desde el borde de abajo.")]
+    public float alturaBarraMovil = 70f;
+    [Tooltip("En movil, lo que se le deja libre a la derecha: el boton de atacar llega a 420 px del borde, asi que 440 deja la barra justo a su lado.")]
+    public float reservaDerechaMovil = 440f;
+
+    // Valen 0 cuando no hay controles en pantalla, asi que en PC nada cambia.
+    public float Subida => ModoMovil.Activo ? subidaMovil : 0f;
+    public float ApartarEstado => ModoMovil.Activo ? apartarEstadoMovil : 0f;
+    public float ArribaDeseo => margenArribaDeseo + (ModoMovil.Activo ? bajarDeseoMovil : 0f);
+
+    // Donde va una caja de la columna de abajo a la derecha (almas y frascos).
+    // En movil los controles ocupan todo lo de abajo, asi que esa columna pasa a
+    // ser una FILA arriba a la derecha: "xFila" es cuanto se corre a la izquierda
+    // dentro de la fila (0 = pegada al borde derecho).
+    public void ColocarColumna(RectTransform r, float xColumna, float alturaAbajo, float xFila)
+    {
+        if (ModoMovil.Activo)
+        {
+            r.anchorMin = r.anchorMax = new Vector2(1f, 1f);
+            r.pivot = new Vector2(1f, 1f);
+            r.anchoredPosition = new Vector2(-margen - xFila, -filaArribaMovil);
+            return;
+        }
+        r.anchorMin = r.anchorMax = new Vector2(1f, 0f);
+        r.pivot = new Vector2(1f, 0f);
+        r.anchoredPosition = new Vector2(-margen - xColumna, alturaAbajo + Subida);
+    }
+
     [Header("Subtitulos de la Cazadora")]
     [Tooltip("Separacion entre la barra del jefe y sus frases (para no tapar la barra ni las marcas I II III).")]
     public float separacionSubtitulo = 95f;
@@ -98,6 +135,16 @@ public class AjustesInterfaz : ScriptableObject
         x = Mathf.Max(margen, anchoLienzo * inicioBarra);
         // Hasta la columna de la derecha.
         ancho = anchoLienzo - margen - anchoColumna - holgura - x;
+        // En movil va abajo del todo: por debajo del joystick (que empieza mas
+        // arriba) y del boton FIJAR, y acaba antes del boton grande de atacar.
+        if (ModoMovil.Activo)
+        {
+            altura = alturaBarraMovil;
+            // Llega hasta el boton de atacar (no hay columna abajo que esquivar).
+            ancho = anchoLienzo - reservaDerechaMovil - x;
+            if (ancho < anchoBarraMinimo) ancho = anchoLienzo - 2f * x;
+            return;
+        }
         altura = alturaBarra;
         if (ancho >= anchoBarraMinimo) return;
         // No cabe: por encima de la columna, con el mismo largo relativo.

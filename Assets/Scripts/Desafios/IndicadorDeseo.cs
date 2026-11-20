@@ -40,7 +40,8 @@ public class IndicadorDeseo : MonoBehaviour
         RectTransform rc = caja.rectTransform;
         rc.anchorMin = rc.anchorMax = new Vector2(1f, 1f);
         rc.pivot = new Vector2(1f, 1f);
-        rc.anchoredPosition = new Vector2(-ai.margen, -ai.margenArribaDeseo);
+        // En movil baja un poco: arriba a la derecha estan las almas y los frascos.
+        rc.anchoredPosition = new Vector2(-ai.margen, -ai.ArribaDeseo);
         rc.sizeDelta = new Vector2(ai.anchoDeseo, 72f);
         Image borde = EstiloMenu.Caja("Borde", caja.transform, new Color(0.78f, 0.72f, 0.58f, 0.8f));
         borde.rectTransform.anchorMin = new Vector2(0f, 0f);

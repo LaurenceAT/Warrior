@@ -515,7 +515,8 @@ public class PlayerHud : MonoBehaviour
         raiz = Crear("HUD", transform, out GameObject raizGo);
         raiz.anchorMin = raiz.anchorMax = new Vector2(0f, 1f);
         raiz.pivot = new Vector2(0f, 1f);
-        raiz.anchoredPosition = new Vector2(margin.x, -margin.y);
+        // En movil se aparta a la derecha para no quedar debajo del boton de menu.
+        raiz.anchoredPosition = new Vector2(margin.x + AjustesInterfaz.Get().ApartarEstado, -margin.y);
 
         grupo = raizGo.AddComponent<CanvasGroup>();
         grupo.interactable = false;

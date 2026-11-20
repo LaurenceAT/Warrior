@@ -111,6 +111,9 @@ public class PantallaMuerte : MonoBehaviour
         if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame) return true;
         Mouse m = Mouse.current;
         if (m != null && (m.leftButton.wasPressedThisFrame || m.rightButton.wasPressedThisFrame)) return true;
+        // En movil no hay teclas: con tocar la pantalla basta.
+        Touchscreen ts = Touchscreen.current;
+        if (ts != null && ts.primaryTouch.press.wasPressedThisFrame) return true;
         Gamepad g = Gamepad.current;
         if (g != null)
             foreach (var control in g.allControls)

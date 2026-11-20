@@ -109,9 +109,12 @@ public class CuadroPista : MonoBehaviour
         if (Time.frameCount == abiertoEnFrame) return;
         Keyboard k = Keyboard.current;
         Gamepad g = Gamepad.current;
-        bool f = (k != null && k.fKey.wasPressedThisFrame) || (g != null && g.buttonSouth.wasPressedThisFrame);
-        bool esc = (k != null && k.escapeKey.wasPressedThisFrame) || (g != null && g.buttonEast.wasPressedThisFrame)
-                   || (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame);
+        // Con el dedo, tocar la pantalla hace lo mismo que la F (mostrar todo y,
+        // si ya esta todo, cerrar); el boton de volver cierra.
+        bool toque = ModoMovil.Activo && UnityEngine.InputSystem.Touchscreen.current != null
+                     && UnityEngine.InputSystem.Touchscreen.current.primaryTouch.press.wasPressedThisFrame;
+        bool f = (k != null && k.fKey.wasPressedThisFrame) || (g != null && g.buttonSouth.wasPressedThisFrame) || toque;
+        bool esc = CapasMenu.PulsadoAtras();
         if (esc) { Cerrar(); return; }
         if (f)
         {

@@ -108,6 +108,8 @@ public class GameManager : MonoBehaviour
         // Con la pantalla de muerte, Escape es "cualquier boton" para continuar.
         Keyboard k = Keyboard.current;
         bool tecla = k != null && (k.escapeKey.wasPressedThisFrame || k.tabKey.wasPressedThisFrame);
+        // En movil, el boton de pausa de los controles de pantalla cuenta como Esc.
+        if (ControlesTactiles.ConsumirPausa()) tecla = true;
         if (isPaused && Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame) tecla = true;
         if (tecla && !PantallaMuerte.Activa
             && !RuedaImbuir.Abierta && !MenuHoguera.Abierto && !CuadroPista.Abierto && !MenuPausa.LibroAbierto

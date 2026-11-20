@@ -112,12 +112,12 @@ public class MenuPrincipal : MonoBehaviour
         ActualizarLuz();
         if (estadoCopia != null && borrarEstadoCopia > 0f && Time.unscaledTime > borrarEstadoCopia) { estadoCopia.text = ""; borrarEstadoCopia = 0f; }
 
-        // Atras: Esc, clic derecho o el boton este del mando.
+        // Atras: Esc, clic derecho, el boton este del mando o, en movil, el
+        // boton de volver de la pantalla (todos pasan por CapasMenu).
         Keyboard k = Keyboard.current;
-        Mouse m = Mouse.current;
-        Gamepad g = Gamepad.current;
-        bool atras = (k != null && k.escapeKey.wasPressedThisFrame) || (m != null && m.rightButton.wasPressedThisFrame)
-                     || (g != null && g.buttonEast.wasPressedThisFrame)
+        // En movil el boton de volver sale cuando no estamos en el menu de inicio.
+        BotonVolver.Pedido = !panelPrincipal.activeSelf && !saliendo;
+        bool atras = CapasMenu.PulsadoAtras()
                      || (k != null && k.tabKey.wasPressedThisFrame && panelControles.activeSelf);
         // (En Desafios y el Bestiario, atras vuelve un paso: de la ficha a la lista.)
         if (atras && !panelPrincipal.activeSelf && !saliendo && !(panelDesafios.activeSelf && menuDesafios.Atras()) && !(panelBestiario.activeSelf && menuBestiario.Atras()))

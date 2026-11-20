@@ -1326,6 +1326,9 @@ MonoBehaviour:
   mirarAbajo: 1.8
   velocidadCaidaMinima: 9
   rapidezVertical: 2.5
+  maximoMiradaX: 6
+  maximoMiradaY: 4
+  rapidezMirada: 7
 --- !u!1001 &6247900155578371489
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -154,7 +154,7 @@ public class GuiaDesafio : MonoBehaviour
         if (Time.frameCount == abiertaEnFrame) return;
         Keyboard k = Keyboard.current;
         Gamepad g = Gamepad.current;
-        if ((k != null && (k.escapeKey.wasPressedThisFrame || k.tabKey.wasPressedThisFrame)) || (g != null && g.buttonEast.wasPressedThisFrame))
+        if (CapasMenu.PulsadoAtras() || (k != null && k.tabKey.wasPressedThisFrame))
         {
             SonidoMenu.Cancelar();
             Terminar();

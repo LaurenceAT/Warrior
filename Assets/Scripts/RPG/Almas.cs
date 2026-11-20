@@ -141,9 +141,8 @@ public class ContadorAlmas : MonoBehaviour
         caja.transform.SetParent(transform, false);
         caja.color = new Color(0.03f, 0.03f, 0.05f, 0.7f);
         RectTransform rc = caja.rectTransform;
-        rc.anchorMin = rc.anchorMax = new Vector2(1f, 0f);
-        rc.pivot = new Vector2(1f, 0f);
-        rc.anchoredPosition = new Vector2(-40f, 36f);
+        // En PC, abajo a la derecha. En movil, la derecha de la fila de arriba.
+        AjustesInterfaz.Get().ColocarColumna(rc, 0f, 36f, 0f);
         rc.sizeDelta = new Vector2(250f, 58f);
         Image borde = new GameObject("Borde").AddComponent<Image>();
         borde.transform.SetParent(caja.transform, false);
@@ -172,9 +171,19 @@ public class ContadorAlmas : MonoBehaviour
         ganancia = Texto(caja.transform, 26, TextAlignmentOptions.BottomRight);
         ganancia.color = new Color(0.8f, 0.93f, 1f);
         RectTransform rg = ganancia.rectTransform;
-        rg.anchorMin = new Vector2(0f, 1f); rg.anchorMax = new Vector2(1f, 1f);
-        rg.pivot = new Vector2(1f, 0f);
-        rg.offsetMin = new Vector2(0f, 4f); rg.offsetMax = new Vector2(-16f, 40f);
+        if (ModoMovil.Activo)
+        {
+            // Arriba del todo no cabe nada encima: el "+120" sale por debajo.
+            rg.anchorMin = new Vector2(0f, 0f); rg.anchorMax = new Vector2(1f, 0f);
+            rg.pivot = new Vector2(1f, 1f);
+            rg.offsetMin = new Vector2(0f, -40f); rg.offsetMax = new Vector2(-16f, -4f);
+        }
+        else
+        {
+            rg.anchorMin = new Vector2(0f, 1f); rg.anchorMax = new Vector2(1f, 1f);
+            rg.pivot = new Vector2(1f, 0f);
+            rg.offsetMin = new Vector2(0f, 4f); rg.offsetMax = new Vector2(-16f, 40f);
+        }
         grupoGanancia = ganancia.gameObject.AddComponent<CanvasGroup>();
         grupoGanancia.alpha = 0f;
 

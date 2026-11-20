@@ -7,6 +7,10 @@ public abstract class JefeBase : EnemigoBase
 {
     public event System.Action AlAterrizar;
     public event System.Action AlCambiarFase;
+    // Igual que el anterior pero diciendo a que fase pasa (2, 3...): lo usa la
+    // arena para la musica, porque los jefes de 3 barras no avisan de la tercera
+    // con AlCambiarFase (esa se la pinta el propio jefe).
+    public event System.Action<int> AlFaseNueva;
     public event System.Action AlDerrotado;
     // La musica baja casi del todo (el jefe cae y parece muerto antes de revivir).
     public event System.Action AlSilencio;
@@ -73,7 +77,12 @@ public abstract class JefeBase : EnemigoBase
     {
         AlCambiarFase?.Invoke();
         Bitacora.Fase(FichaBitacora, ++faseBitacora);
+        AlFaseNueva?.Invoke(faseBitacora);
     }
+
+    // Para la fase 3 en adelante (el jefe se encarga de su barra y su Bitacora):
+    // solo avisa a la arena para que cambie la musica.
+    protected void AvisarFaseExtra(int fase) => AlFaseNueva?.Invoke(fase);
     protected void AvisarDerrota() => AlDerrotado?.Invoke();
     protected void AvisarSilencio() => AlSilencio?.Invoke();
 }

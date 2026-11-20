@@ -105,6 +105,13 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
     [SerializeField] private float inicioFase2;
     [SerializeField] private Vector2 bucleFase2;
 
+    [Header("Musica: fase 3 (solo jefes de 3 barras)")]
+    [Tooltip("Vacio: sigue sonando la de la fase 2 (o la de la 1 si la 2 estaba vacia).")]
+    [SerializeField] private AudioClip musicaFase3;
+    [Range(0f, 1f)] [SerializeField] private float volumenFase3 = 0.7f;
+    [SerializeField] private float inicioFase3;
+    [SerializeField] private Vector2 bucleFase3;
+
     [Header("Fase 2")]
     [SerializeField] private Color luzFase2 = new Color(1f, 0.55f, 0.55f, 1f);
     [SerializeField] private string textoFase2 = "El Espectro Carmesí revela su verdadera forma...";
@@ -122,6 +129,8 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
     private AudioSource audioSrc, audioFase2;
     private Vector2 bucleActual;
     private AudioSource fuenteActual;
+    // El volumen de la pista que suena ahora (cambia con la fase).
+    private float volumenActual = 0.6f;
     private Light2D luzGlobal;
     private Color luzOriginal;
     private float intensidadOriginal;
@@ -147,6 +156,11 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
             {
                 musicaFase2 = config.jefeFase2.pista; volumenFase2 = config.jefeFase2.volumen;
                 inicioFase2 = config.jefeFase2.inicio; bucleFase2 = config.jefeFase2.bucle;
+            }
+            if (config.jefeFase3.pista != null)
+            {
+                musicaFase3 = config.jefeFase3.pista; volumenFase3 = config.jefeFase3.volumen;
+                inicioFase3 = config.jefeFase3.inicio; bucleFase3 = config.jefeFase3.bucle;
             }
             if (config.frasesJefe != null && config.frasesJefe.Length > 0) burlas = config.frasesJefe;
         }
@@ -198,7 +212,7 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
     private void AjustarVolumen()
     {
         if (estado != Estado.Combate || fundido != null || fundido2 != null || fuenteActual == null) return;
-        fuenteActual.volume = (fuenteActual == audioFase2 ? volumenFase2 : volumen) * ControlVolumen.Musica;
+        fuenteActual.volume = volumenActual * ControlVolumen.Musica;
     }
 
     private void MarcarPocion()
@@ -249,6 +263,7 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
         barra = BarraJefe.Crear(duo && !string.IsNullOrEmpty(nombreJefe1) ? nombreJefe1 : nombre, barraPorFase ? 0f : marcaFase);
         jefe = Aparecer(prefabJefe, zona.center.x - dx, barra);
         jefe.AlCambiarFase += Fase2;
+        jefe.AlFaseNueva += OtraFase;
         jefe.AlSilencio += Silencio;
         bool titulado = false;
         void Titulo()
@@ -293,6 +308,7 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
         fuente.Play();
         fuenteActual = fuente;
         bucleActual = bucle;
+        volumenActual = vol;
         if (fuente == audioFase2) Fundir2(vol * ControlVolumen.Musica, entrada);
         else Fundir(vol * ControlVolumen.Musica, entrada);
     }
@@ -300,7 +316,8 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
     // El jefe cae y parece muerto: la musica casi se apaga (la fase 2 entra despues).
     private void Silencio()
     {
-        if (fuenteActual == audioSrc) Fundir(volumen * ControlVolumen.Musica * 0.12f, 1.2f);
+        if (fuenteActual == audioSrc) Fundir(volumenActual * ControlVolumen.Musica * 0.12f, 1.2f);
+        else if (fuenteActual == audioFase2) Fundir2(volumenActual * ControlVolumen.Musica * 0.12f, 1.2f);
     }
 
     private void Fase2()
@@ -317,7 +334,22 @@ public class ArenaJefe : MonoBehaviour, IArenaJefe
             Fundir(0f, 0.8f);
             Sonar(audioFase2, musicaFase2, inicioFase2, bucleFase2, volumenFase2, 0.6f);
         }
-        else if (fuenteActual == audioSrc) Fundir(volumen * ControlVolumen.Musica, 0.8f);
+        else if (fuenteActual == audioSrc) Fundir(volumenActual * ControlVolumen.Musica, 0.8f);
+    }
+
+    // Fase 3 en adelante (Black Knight): si hay musica propia, entra; si no,
+    // sigue sonando la de antes (solo se le devuelve el volumen).
+    private void OtraFase(int fase)
+    {
+        if (fase < 3) return;            // la 2 ya la lleva Fase2()
+        if (musicaFase3 != null)
+        {
+            Fundir2(0f, 0.8f);
+            Sonar(audioSrc, musicaFase3, inicioFase3, bucleFase3, volumenFase3, 0.6f);
+            return;
+        }
+        if (fuenteActual == audioSrc) Fundir(volumenActual * ControlVolumen.Musica, 0.8f);
+        else if (fuenteActual == audioFase2) Fundir2(volumenActual * ControlVolumen.Musica, 0.8f);
     }
 
     private void Victoria()

@@ -31,10 +31,18 @@ public class CapasMenu
 
     public void Vaciar() => pila.Clear();
 
+    // El boton de volver de la version de movil (BotonVolver) pide "atras" por
+    // aqui: asi vale para todos los menus sin tocar ninguno.
+    private static int pedido = -10;
+    public static void PedirAtras() => pedido = Time.frameCount;
+
     // Se pidio volver atras este fotograma. El clic derecho es opcional: en la
     // partida es el bloqueo, asi que la pausa no lo usa para cerrarse.
     public static bool PulsadoAtras(bool clicDerecho = true)
     {
+        // Dos fotogramas de margen: el boton se pulsa en el EventSystem, que no
+        // tiene por que ir antes que el Update del menu.
+        if (Time.frameCount - pedido <= 1) { pedido = -10; return true; }
         Keyboard k = Keyboard.current;
         Mouse m = Mouse.current;
         Gamepad g = Gamepad.current;

@@ -709,6 +709,8 @@ public partial class JefeBlackKnight : JefeBase, IModificadorDano, IAturdible, I
                 if (b != null) b.NuevaFase(ajustes.colorBarraFase3, "");
                 // La arena solo sabe de la fase 2: la 3 la anota el propio jefe en la Bitacora.
                 Bitacora.Fase(FichaBitacora, 3);
+                // Pero si que le avisa, para que suene la musica de la fase 3.
+                AvisarFaseExtra(fase);
             }
         }
         string texto = fase >= 3 ? ajustes.textoFase3 : ajustes.textoFase2;

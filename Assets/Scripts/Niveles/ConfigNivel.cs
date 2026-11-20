@@ -102,8 +102,11 @@ public class ConfigNivel : ScriptableObject
     [Range(0f, 1f)] public float volumenAmbiente = 0.4f;
 
     [Header("Musica del jefe")]
+    [Tooltip("Si una fase se deja sin pista, sigue sonando la de la fase anterior (no hay corte).")]
     public MusicaFase jefeFase1 = new MusicaFase();
     public MusicaFase jefeFase2 = new MusicaFase();
+    [Tooltip("Solo para jefes de 3 barras (Black Knight).")]
+    public MusicaFase jefeFase3 = new MusicaFase();
 
     [Header("Sonidos propios del nivel")]
     [Tooltip("Misma clave que en Resources/RecursosRPG: en este nivel suena esto en su lugar. " +

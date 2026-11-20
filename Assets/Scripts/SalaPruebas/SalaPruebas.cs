@@ -285,6 +285,7 @@ public class SalaPruebas : MonoBehaviour
         so.FindProperty("config").objectReferenceValue = Ajustes.musica ? e.config : null;
         so.FindProperty("musica").objectReferenceValue = null;
         so.FindProperty("musicaFase2").objectReferenceValue = null;
+        so.FindProperty("musicaFase3").objectReferenceValue = null;
         so.FindProperty("luzFase2").colorValue = e.luzFase2;
         so.FindProperty("textoFase2").stringValue = e.textoFase2 ?? "";
         so.FindProperty("particulasFase2A").colorValue = e.particulasFase2A;

@@ -76,6 +76,18 @@ public class GatherInput : MonoBehaviour
     [Tooltip("Apagado: la tecla del arco no hace nada (el sistema del arco sigue en el juego).")]
     [SerializeField] private bool arcoActivo = false;
 
+    // Lo que mandan los controles de pantalla (version de movil). Los botones de
+    // un toque (atacar, saltar, frascos...) ya tienen su propiedad publica; esto
+    // es solo para lo que dura mientras se mantiene el dedo: el joystick, correr
+    // y la guardia. Si no hay controles tactiles, nadie llama a esto y el teclado
+    // sigue mandando igual que siempre.
+    public void AplicarTactil(Vector2 mover, bool correr, bool bloquear)
+    {
+        _value = mover;
+        _isSprinting = correr;
+        _isKickHeld = bloquear;
+    }
+
     // Q, R y F se leen directamente del teclado (no estan en el mapa de acciones).
     private void Update()
     {

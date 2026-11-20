@@ -75,6 +75,10 @@ public class PantallaControles : MonoBehaviour
 
     private static ScrollRect Desplazable(RectTransform zona)
     {
+        // Un fondo invisible que si recibe toques: sin el, el dedo no tiene de
+        // donde agarrar para arrastrar la lista (las piezas de EstiloMenu no
+        // reciben toques).
+        zona.gameObject.AddComponent<Image>().color = new Color(0f, 0f, 0f, 0.001f);
         zona.gameObject.AddComponent<RectMask2D>();
         ScrollRect sr = zona.gameObject.AddComponent<ScrollRect>();
         sr.horizontal = false;

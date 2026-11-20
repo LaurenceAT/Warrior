@@ -87,6 +87,8 @@ public class AvisoInteraccion : MonoBehaviour
         alfa = Mathf.MoveTowards(alfa, activo || forzando ? 1f : 0f, Time.unscaledDeltaTime * 5f);
         if (texto == null) return;
         string t = forzando ? forzado : duenio.TextoInteraccion;
+        // En movil no hay tecla F: se usa con el boton grande (que marca un "!").
+        if (ModoMovil.Activo) t = t.Replace("Presiona F para", "Toca para").Replace("Presiona F", "Toca");
         if (texto.text != t) texto.text = t;
         Color c = texto.color;
         c.a = alfa;

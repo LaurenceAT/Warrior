@@ -109,10 +109,15 @@ MonoBehaviour:
     inicio: 1
     bucle: {x: 15, y: 120}
   jefeFase2:
-    pista: {fileID: 8300000, guid: b13cbcbbbb13c1643b4463e504731f31, type: 3}
+    pista: {fileID: 0}
     volumen: 0.6
     inicio: 0
     bucle: {x: 15, y: 0}
+  jefeFase3:
+    pista: {fileID: 0}
+    volumen: 0.6
+    inicio: 0
+    bucle: {x: 0, y: 0}
   sonidos: []
   frasesMuerte: []
   frasesJefe: []
